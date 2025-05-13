@@ -1,0 +1,252 @@
+.signup-wrapper {
+  display: flex;
+  gap: 20px;
+  /* align-items: flex-start; */
+  height: 94vh;
+}
+.sineUp-step-sidebar,
+.signUp-form-container {
+  background-color: #ffffff;
+  height: 94vh;
+  overflow: hidden;
+}
+.sineUp-step-sidebar {
+  width: 513px;
+  border-radius: 12px;
+  margin: 20px 0 20px 20px;
+  overflow-y: auto;
+  position: relative;
+}
+.signUp-form-container {
+  margin: 20px 20px 20px 0px;
+  border-radius: 8px;
+  width: 100%;
+}
+.signUp-form-container.step-3 {
+  overflow: auto;
+}
+.sineUp-step-sidebar img {
+  width: 123px;
+  margin-top: 44px;
+}
+.signUp-form {
+  max-width: 451px;
+  margin: auto;
+}
+.form-title-txt h1 {
+  font-size: 35px;
+  font-weight: 500;
+  margin-bottom: 12px;
+  text-align: center;
+}
+.form-title-txt p {
+  font-size: 20px;
+  color: #838383;
+  margin: 0;
+  text-align: center;
+  margin-bottom: 36px;
+}
+.signUp-label {
+  border: 1px solid #f0f0f0;
+  border-radius: 8px;
+  padding: 12px;
+  background-color: #fcfcfc;
+  margin-top: 8px;
+}
+label {
+  font-size: 12px;
+}
+.signUp-form input {
+  width: 100%;
+  margin: 8px 0 16px 0;
+  height: 37px;
+  border-radius: 6px;
+  padding-left: 12px;
+}
+.signUp-buttons {
+  display: flex;
+  margin-top: 16px;
+}
+.signUp-next-btn {
+  background-color: #ea3958;
+  border-radius: 6px;
+  padding: 12px 16px;
+  border: none;
+  color: #fff;
+  width: 100%;
+  cursor: pointer;
+}
+
+.signUp-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  column-gap: 16px;
+  position: relative;
+}
+.signUp-form-grid input {
+  width: 100%;
+  /* margin-bottom: 0; */
+}
+.signUp-dropdown-trigger {
+  margin: 8px 0 16px 0;
+  width: 100%;
+}
+.logout-btn {
+  border: none;
+  background-color: #ea3958;
+  border-radius: 6px;
+  padding: 8px 16px;
+  margin: 30px 30px 0 auto;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+}
+.logout-btn svg {
+  width: 24px;
+  margin-right: 8px;
+  height: 24px;
+}
+.step-active p {
+  color: #202020;
+}
+.step-active svg {
+  color: #dc3e42;
+}
+.step-active small {
+  color: #838383;
+}
+.signup-step {
+  display: flex;
+  margin-left: 20px;
+  margin-bottom: 26px;
+  color: #bbbbbb;
+  margin-right: 10px;
+}
+.signup-step svg {
+  width: 24px;
+  height: 24px;
+  margin-right: 8px;
+}
+.signup-step p {
+  margin: 0;
+  font-weight: 500;
+}
+.signUp-phone-input input {
+  width: 100% !important;
+}
+.signUp-imgUpload {
+  width: 100%;
+  height: 138px;
+  border-radius: 8px;
+  margin-top: 12px;
+  margin-bottom: 36px;
+}
+.signUp-identity-imgUpload img {
+  width: 40px;
+}
+.signUp-identity-imgUpload {
+  columns: 10px;
+  margin-top: 12px;
+  margin-bottom: 36px;
+  height: 160px;
+  padding: 12px;
+}
+.signUp-pending-div {
+  margin: auto;
+  text-align: center;
+  margin-top: 36px;
+}
+.signUp-pending-div h3 {
+  font-size: 24px;
+  font-weight: 500;
+}
+.signUp-pending-div p {
+  color: #838383;
+}
+.signUp-pending-div b {
+  color: #202020;
+}
+.verificationEmail-txt {
+  background: #f9f9f9;
+  color: #838383;
+  padding: 10px 24px;
+  text-align: center;
+  line-height: 25px;
+}
+.verificationEmail-txt p {
+  margin: 0;
+}
+.signUp-resend-txt {
+  font-size: 14px;
+  color: #838383;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.signUp-resend-txt a {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  color: #ea3958;
+  text-decoration: none;
+  font-weight: 500;
+}
+.signUp-resend-txt a svg {
+  width: 26px;
+  height: 26px;
+}
+.verification-code {
+  width: 40px;
+  height: 40px;
+  border-radius: 6px;
+  border: 1px solid rgba(0, 9, 50, 0.12);
+  box-shadow: inset 0 1.5px 2px rgba(0, 9, 50, 0.12);
+  margin: 24px 12px;
+}
+
+@media screen and (max-width: 840px) {
+  .sineUp-step-sidebar {
+    width: 450px;
+  }
+}
+@media screen and (max-width: 800px) {
+  .sineUp-step-sidebar {
+    display: none;
+  }
+  .signUp-form-container {
+    margin: 20px;
+  }
+}
+@media screen and (max-width: 520px) {
+  .signUp-radio-group {
+    display: block;
+  }
+  .signup-wrapper {
+    /* display: block; */
+    height: 100%;
+  }
+
+  .signUp-form-container {
+    height: 100%;
+    overflow: auto;
+    padding-bottom: 20px;
+  }
+  .signUp-form {
+    max-width: 350px;
+  }
+  .signUp-form-grid {
+    display: block;
+  }
+}
+@media screen and (max-width: 520px) {
+  .signUp-form {
+    max-width: 100%;
+    padding: 15px;
+  }
+}
+
+.mehediInput{
+  height: 10px !important;
+  width: 50px !important;
+}

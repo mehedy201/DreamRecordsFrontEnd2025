@@ -1,0 +1,165 @@
+.lables-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+.lables-card {
+  width: calc(20% - 42px);
+  /* min-width: 216px; */
+  border-radius: 8px;
+  border: 1px solid #f0f0f0;
+  background-color: #fff;
+  margin-top: 20px;
+  padding: 12px;
+  text-decoration: none;
+  color: #202020;
+}
+.lables-card img {
+  display: block;
+  margin: 0 auto 16px auto;
+  margin-top: 34px;
+  /* width: 100%; */
+}
+
+/* single lable */
+.lable-details {
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 20px;
+}
+.lable-img-row {
+  display: flex;
+  margin-bottom: 32px;
+}
+.lable-img-txt {
+  margin-left: 24px;
+}
+.lable-img-txt .card-type-txt {
+  font-size: 16px;
+  padding: 4px 8px;
+}
+.lable-img-txt h1 {
+  font-size: 35px;
+  font-weight: 500;
+  margin: 12px 0 12px 0;
+}
+.lable-img-txt h4,
+.lables-description h4,
+.singleLable-social-div h4,
+.editLable-info h4 {
+  color: #838383;
+  font-size: 20px;
+  font-weight: 500;
+  margin: 0 0 16px 0;
+}
+.lables-description {
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  padding: 16px;
+}
+.lables-description p {
+  color: #202020;
+}
+.singleLable-social-div {
+  background-color: #fff;
+  padding: 16px 16px 0 16px;
+  border-radius: 8px;
+  border: 1px solid #e8e8e8;
+  margin-left: 20px;
+}
+
+.singleLabel-social-row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+.singleLabel-dropdown-btn {
+  margin-right: 0 !important;
+}
+@media screen and (max-width: 1240px) {
+  .lables-card img {
+    width: 134px;
+  }
+}
+@media screen and (max-width: 1160px) {
+  .lables-card {
+    width: calc(25% - 41px);
+  }
+}
+@media screen and (max-width: 980px) {
+  .lables-card {
+    width: calc(33% - 38px);
+  }
+}
+@media screen and (max-width: 885px) {
+  .lable-img-txt h1 {
+    font-size: 30px;
+  }
+  .lable-img-txt h4 {
+    font-size: 18px;
+  }
+}
+@media screen and (max-width: 830px) {
+  .lables-card {
+    width: calc(25% - 41px);
+  }
+}
+@media screen and (max-width: 775px) {
+  .lables-card img {
+    width: 124px;
+  }
+}
+@media screen and (max-width: 700px) {
+  .lables-card {
+    width: calc(33% - 38px);
+  }
+}
+@media screen and (max-width: 650px) {
+  .lable-img-txt h1 {
+    font-size: 28px;
+  }
+  .singleLabel-social-row {
+    display: block;
+  }
+  .singleArtist-info {
+    margin-bottom: 20px !important;
+  }
+}
+@media screen and (max-width: 560px) {
+  .lables-card {
+    width: calc(50% - 36px);
+  }
+  .singleLabel-image {
+    width: 124px;
+  }
+  .lable-img-txt h1 {
+    font-size: 24px;
+  }
+  .lable-img-txt h4 {
+    font-size: 16px;
+  }
+  .lable-img-txt {
+    margin-left: 16px;
+  }
+}
+@media screen and (max-width: 475px) {
+  .lable-img-row {
+    display: block;
+    margin: auto;
+    text-align: center;
+    position: relative;
+  }
+  .singleLabel-dropdown-btn {
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+}
+@media screen and (max-width: 410px) {
+  .lables-container {
+    gap: 12px;
+  }
+  .lables-card {
+    width: calc(50% - 32px);
+  }
+}
