@@ -21,8 +21,7 @@ function Profile() {
   const [image, setImage] = useState(null);
 
   // const dispatch = useDispatch();
-  const userData = useSelector((state) => state.userData.userData);
-  console.log(userData)
+  const {userData, userNameIdRoll} = useSelector((state) => state.userData);
 
   // Handle Image Upload
   const handleImageChange = (event) => {

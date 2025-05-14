@@ -10,7 +10,7 @@ import { useAuthState, useSignOut } from "react-firebase-hooks/auth";
 import auth from "../../firebase.config";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import { setUserData } from "../redux/features/userDataHandleSlice/userDataHandleSlice";
+import { setUserData, setUserNameIdRoll } from "../redux/features/userDataHandleSlice/userDataHandleSlice";
 
 const Navbar = ({ toggleMobileMenu }) => {
 
@@ -25,6 +25,7 @@ const Navbar = ({ toggleMobileMenu }) => {
   useEffect(() => {
     if (user) {
       const userNameIdRoll = user?.displayName?.split("'__'");
+      dispatch(setUserNameIdRoll(userNameIdRoll));
       axios.get(`http://localhost:5000/api/v1/users/${userNameIdRoll[1]}`)
         .then((res) => {
           if (res.status === 200) {
