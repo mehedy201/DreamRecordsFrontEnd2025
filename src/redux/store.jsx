@@ -1,7 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
 
+import userDataHandleReducer from "./features/userDataHandleSlice/userDataHandleSlice";
+
 const store = configureStore({
-    reducer: {}
+    reducer: {
+        userData: userDataHandleReducer,
+    }
 })
 
 export default store;

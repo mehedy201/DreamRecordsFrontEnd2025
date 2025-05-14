@@ -2,7 +2,7 @@ import { Flex } from "@radix-ui/themes";
 import { useForm } from "react-hook-form";
 import "./logIn.css";
 import auth from "../../../firebase.config";
-import { useAuthState, useSignInWithEmailAndPassword, useSignOut, } from 'react-firebase-hooks/auth';
+import { useSignInWithEmailAndPassword } from 'react-firebase-hooks/auth';
 import { useNavigate } from "react-router-dom";
 
 function LogIn() {
@@ -11,11 +11,9 @@ function LogIn() {
 
   const [
     signInWithEmailAndPassword,
-    user,
     loading,
     error,
   ] = useSignInWithEmailAndPassword(auth);
-  const [user1, loading1] = useAuthState(auth);
 
 
   const { register, handleSubmit, formState: { errors } } = useForm();
@@ -26,7 +24,7 @@ function LogIn() {
     .then((res) => {
       if(res.user){
         navigate('/')
-      }
+        }
     })
   };
 
@@ -43,12 +41,6 @@ function LogIn() {
           Login to release and distribute your content, check to streamline data
           & revenue.
         </h5>
-        {
-          loading && <p>Loading.....</p>
-        }
-        {
-          user1 && <h1 style={{cursor: 'pointer'}} onClick={() => signOut()}>sign out</h1>
-        }
         <form onSubmit={handleSubmit(onSubmit)}>
           <label>Email</label>
           <input type="email" {...register("email", { required: true })}/>
@@ -66,6 +58,9 @@ function LogIn() {
           </Flex>
           <input type="password" className="password-input" {...register("password", { required: true })}/>
           {errors.password && <span>Password Required</span>}
+          {
+            loading && <p>Loading.....</p>
+          }
           <button
             type="submit"
             className="theme-btn"
