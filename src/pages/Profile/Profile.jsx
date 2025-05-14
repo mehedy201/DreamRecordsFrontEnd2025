@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Flex } from "@radix-ui/themes";
 import "./Profile.css";
 import * as Dialog from "@radix-ui/react-dialog";

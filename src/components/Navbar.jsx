@@ -39,14 +39,14 @@ const Navbar = ({ toggleMobileMenu }) => {
         <Menu />
       </div>
       <DropdownMenu.Root onOpenChange={setOpen}>
-        <DropdownMenu.Trigger style={{ border: "none", background: "none" }}>
-          <button className="nav-dropdown">{userFirstName?.slice(0,1)}</button>{" "}
+        <DropdownMenu.Trigger style={{ border: "none", background: "none", display: 'flex', alignItems:'center' }}>
+          <p style={{display: 'flex', justifyContent:'center', alignItems:'center'}}  className="nav-dropdown">{userFirstName?.slice(0,1)}</p>{" "}
           <ChevronDown className={`${open ? "rotate" : ""}`} />
         </DropdownMenu.Trigger>
         <DropdownMenu.Content className="dropdown-content navbar-dropdown-content">
           <div className="d-flex">
-          <button className="nav-dropdown">{userFirstName?.slice(0,1)}</button>
-            <div>
+          <p style={{display: 'flex', justifyContent:'center', alignItems:'center'}} className="nav-dropdown">{userFirstName?.slice(0,1)}</p>
+            <div style={{paddingLeft: '5px'}}>
               <p>{userFirstName}</p>
               <small>{user?.email}</small>
             </div>
