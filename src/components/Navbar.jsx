@@ -20,7 +20,7 @@ const Navbar = ({ toggleMobileMenu }) => {
   const [user] = useAuthState(auth);
 
   const dispatch = useDispatch();
-  const userData = useSelector((state) => state.userData.userData);
+  const {userData} = useSelector((state) => state.userData);
 
   useEffect(() => {
     if (user) {

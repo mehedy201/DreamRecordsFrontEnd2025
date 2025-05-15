@@ -7,8 +7,12 @@ import { Flex } from "@radix-ui/themes";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 
 const Home = ({ artistsItems, releaseItems }) => {
+
+  const {userData} = useSelector((state) => state.userData);
+
   const [artistVisibleCount, setArtistVisibleCount] = useState(
     getInitialCount()
   );
@@ -69,13 +73,13 @@ const Home = ({ artistsItems, releaseItems }) => {
       </div>
       <section className="hero">
         <div>
-          <h1>Hi, Subhamay</h1>
+          <h1>Hi, {userData?.first_name}</h1>
           <p>Welcome to Dream Records</p>
         </div>
       </section>
       <Flex as="span" className="artists-flex">
         <p>Artists</p>
-        <Link href="#">See All</Link>
+        <Link href="/artists">See All</Link>
       </Flex>
       <br />
       <ArtistCard artistsItems={artistsItems.slice(0, artistVisibleCount)} />

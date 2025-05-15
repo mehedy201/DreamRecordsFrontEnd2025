@@ -161,7 +161,7 @@ function App() {
             }
           />
           <Route
-            path="/Artists"
+            path="/artists"
             element={<Artists artistsItems={artistsItems} />}
           />
           <Route
