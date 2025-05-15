@@ -8,10 +8,11 @@ import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import axios from "axios";
 
-const Home = ({ artistsItems, releaseItems }) => {
+const Home = ({ releaseItems }) => {
 
-  const {userData} = useSelector((state) => state.userData);
+  const {userData, userNameIdRoll} = useSelector((state) => state.userData);
 
   const [artistVisibleCount, setArtistVisibleCount] = useState(
     getInitialCount()
@@ -61,6 +62,23 @@ const Home = ({ artistsItems, releaseItems }) => {
 
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+
+  const [artistData, setArtistData] = useState()
+  useEffect( () => {
+    if(userNameIdRoll){
+      axios.get(`http://localhost:5000/api/v1/artist/${userNameIdRoll[1]}?page=1&limit=${artistVisibleCount}`)
+        .then( res => {
+          if(res.status == 200){
+            setArtistData(res.data.data);
+          }
+        })
+        .catch(er => console.log(er));
+    }
+  },[userNameIdRoll])
+
+
+
   return (
     <div className="main-content">
       <div className="home-notice">
@@ -79,10 +97,10 @@ const Home = ({ artistsItems, releaseItems }) => {
       </section>
       <Flex as="span" className="artists-flex">
         <p>Artists</p>
-        <Link href="/artists">See All</Link>
+        <Link to={'/artists'}>See All</Link>
       </Flex>
       <br />
-      <ArtistCard artistsItems={artistsItems.slice(0, artistVisibleCount)} />
+      <ArtistCard artistsItems={artistData} />
       <Flex as="span" className="artists-flex">
         <p>Latest Releases</p>
         <Link href="#">See All</Link>

@@ -116,7 +116,7 @@ function App() {
           <Route
             path="/"
             element={
-              <Home artistsItems={artistsItems} releaseItems={releaseItems} />
+              <Home releaseItems={releaseItems} />
             }
           />
           <Route
