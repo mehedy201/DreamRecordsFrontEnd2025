@@ -43,7 +43,6 @@ const Artists = () => {
           .then( res => {
             if(res.status == 200){
               setArtistData(res.data.data);
-              console.log('without Search', res.data.data)
               const p = Math.max(1, Math.ceil(res.data.dataCount / parseInt(perPageArtist)));
               setTotalPages(p)
             }
@@ -54,7 +53,6 @@ const Artists = () => {
           .then( res => {
             if(res.status == 200){
               setArtistData(res.data.data);
-              console.log('dataCount', res.data.dataCount)
               const p = Math.max(1, Math.ceil(res.data.dataCount / parseInt(perPageArtist)));
               setTotalPages(p)
               console.log('with Search', res.data.data)
