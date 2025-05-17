@@ -161,8 +161,12 @@ function App() {
             }
           />
           <Route
-            path="/artists"
-            element={<Artists artistsItems={artistsItems} />}
+            path="/artist/:pageNumber/:perPageArtist"
+            element={<Artists />}
+          />
+          <Route
+            path="/artist/:pageNumber/:perPageArtist/:search"
+            element={<Artists />}
           />
           <Route
             path="/single-artist"

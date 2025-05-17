@@ -97,7 +97,7 @@ const Home = ({ releaseItems }) => {
       </section>
       <Flex as="span" className="artists-flex">
         <p>Artists</p>
-        <Link to={'/artists'}>See All</Link>
+        <Link to={'/artist/1/10'}>See All</Link>
       </Flex>
       <br />
       <ArtistCard artistsItems={artistData} />

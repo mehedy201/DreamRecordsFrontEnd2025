@@ -4,7 +4,7 @@ import "./Global.css";
 const menuItems = [
   { name: "Home", path: "/", icon: "home.png" },
   { name: "Releases", path: "/releases", icon: "Releases.png" },
-  { name: "Artists", path: "/artists", icon: "group.png" },
+  { name: "Artists", path: "/artist/1/10", icon: "group.png" },
   { name: "Lables", path: "/Lables", icon: "Labels.png" },
   {
     name: "Service Request",

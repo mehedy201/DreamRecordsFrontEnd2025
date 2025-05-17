@@ -23,7 +23,7 @@ const Dropdown = ({ label, options, onSelect, select, className }) => {
           <DropdownMenu.Item
             key={index}
             className="dropdown-item"
-            // onSelect={() => onSelect(option)}
+            onSelect={() => onSelect(option)}
           >
             {option}
           </DropdownMenu.Item>
