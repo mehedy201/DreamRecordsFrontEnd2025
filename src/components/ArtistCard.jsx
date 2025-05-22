@@ -7,7 +7,7 @@ const ArtistCard = ({ artistsItems }) => {
     <div className="artists-container" style={{ display: "flex" }}>
       {artistsItems?.map((item, index) => (
         <Link
-          to="/single-artist"
+          to={`/artist-details/${item?._id}/1/10/All`}
           state={{ artist: item }}
           key={index}
           className="artists-card"

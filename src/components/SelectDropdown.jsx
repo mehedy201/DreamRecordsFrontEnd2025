@@ -1,16 +1,19 @@
 import * as Select from "@radix-ui/react-select";
 import { ChevronDown, Check } from "lucide-react";
 import PropTypes from "prop-types";
+import React from "react";
 
 const SelectDropdown = ({
-  // selected,
-  // setSelected,
+  filterByYear,
   options,
   placeholder,
   className,
 }) => {
+
+  // const [value, setValue] = React.useState()
+  // console.log(value)
   return (
-    <Select.Root>
+    <Select.Root onValueChange={e => filterByYear(e)}>
       <Select.Trigger className={`dropdown-trigger ${className || ""}`}>
         <Select.Value placeholder={placeholder || "Select an option"} />
         <Select.Icon className="select-icon">
@@ -45,6 +48,7 @@ SelectDropdown.propTypes = {
   options: PropTypes.arrayOf(PropTypes.string).isRequired,
   placeholder: PropTypes.string,
   className: PropTypes.string,
+  filterByYear: PropTypes.func
 };
 
 export default SelectDropdown;

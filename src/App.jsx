@@ -120,7 +120,7 @@ function App() {
             }
           />
           <Route
-            path="/releases"
+            path="/releases/:pageNumber/:perPageItem/:status"
             element={<Release releaseItems={releaseItems} />}
           />
           <Route
@@ -160,23 +160,17 @@ function App() {
               />
             }
           />
+
+
+
           <Route
-            path="/artist/:pageNumber/:perPageArtist"
+            path="/artist/:pageNumber/:perPageItem/"
             element={<Artists />}
           />
           <Route
-            path="/artist/:pageNumber/:perPageArtist/:search"
-            element={<Artists />}
-          />
-          <Route
-            path="/single-artist"
-            element={
-              <SingleArtist
-                releaseItems={releaseItems}
-                artistSocialItems={artistSocialItems}
-              />
-            }
-          />
+            path="/artist-details/:id/:pageNumber/:perPageItem/:status"
+            element={<SingleArtist/>}/>
+
           <Route
             path="/create-artist"
             element={<EditSingleArtist data={artistSocialItems} />}

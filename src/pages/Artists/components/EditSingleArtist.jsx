@@ -1,12 +1,12 @@
 import PropTypes from "prop-types";
 import ImageUpload from "../../../components/ImageUpload";
 import { useState } from "react";
-import demoImg from '../../../assets/artists/artist1.png'
 
 
 function EditSingleArtist({ data }) {
-  console.log(data)
-  const [artistSocialUrl, setArtistSocialUrl] = useState(data.socialLinks);
+
+  
+  const [artistSocialUrl, setArtistSocialUrl] = useState(data?.socialLinks);
   const [officialName, setOfficialName] = useState(data?.officialName);
   const [image, setImage] = useState(data?.image);
 

@@ -2,40 +2,42 @@ import { Flex } from "@radix-ui/themes";
 import PropTypes from "prop-types";
 import "./Global.css";
 import { Link } from "react-router-dom";
-const ReleaseCard = ({ releaseItems }) => {
+const ReleaseCard = ({ releaseData }) => {
   return (
     <div className="release-container">
-      {releaseItems.map((item, index) => (
+      {releaseData?.map((item, index) => (
         <Link
           to="/single-release"
           state={{ release: item }}
           key={index}
           className="release-card"
         >
-          <img src={`src/assets/${item.img}`} alt="" />
+          <img src={`${item?.imgUrl}`} alt="" />
           <div style={{ paddingTop: "12px" }}>
             <Flex style={{ display: "flex" }}>
               <div
                 className="card-type-txt"
                 style={
-                  item.type == "Takedown"
+                  item?.status == "Takedown"
                     ? { background: "#FEEBEC", color: "#E5484D" }
-                    : item.type == "Pending"
+                    : item?.status == "Pending"
                     ? { background: "#FFEBD8", color: "#FFA552" }
-                    : item.type == "Review"
+                    : item?.status == "Review"
                     ? { background: "#D5EFFF", color: "#0090FF" }
-                    : item.type == "Error"
+                    : item?.status == "Error"
                     ? { background: "#E8E8E8", color: "#8D8D8D" }
                     : { background: "#E6F6EB", color: "#2B9A66" }
                 }
               >
-                {item.type}
+                {item?.status}
               </div>
-              <div className="card-date-txt">{item.date}</div>
+              <div className="card-date-txt">date</div>
             </Flex>
-            <small>{item.name}</small>
+            <small>{item?.releaseTitle}</small>
             <br />
-            <small>{item.artist}</small>
+            {
+              item?.artist.map((a) => <span><small>{a?.artistName}</small></span>)
+            }
           </div>
         </Link>
       ))}

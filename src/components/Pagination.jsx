@@ -2,7 +2,8 @@ import { Button } from "@radix-ui/themes";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Dropdown from "./Dropdown";
 
-const Pagination = ({totalPages, currentPage, setCurrentPage, select, setSelect, handlePageChange}) => {
+const Pagination = ({totalPages, currentPage, perPageItem, setCurrentPage, handlePageChange, customFunDropDown}) => {
+
   
   const handlePrev = () => {
     if (currentPage > 1) {
@@ -53,10 +54,9 @@ const Pagination = ({totalPages, currentPage, setCurrentPage, select, setSelect,
       </Button>
       <div className="pagination-dropdown-div">
         <Dropdown
-          select={select}
-          setSelect={setSelect}
-          label="10 Per Page"
-          options={[10, 20, 30]}
+          label={`${perPageItem} Per Page`}
+          options={[5,10, 20, 30, 40, 50,]}
+          customFunDropDown={customFunDropDown}
         />
       </div>
     </div>

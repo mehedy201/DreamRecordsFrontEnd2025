@@ -17,12 +17,14 @@ const ImageUpload = ({
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     if (file) validateAndSetImage(file);
+    console.log('handleFileChange', file)
   };
 
   const handleDrop = (event) => {
     event.preventDefault();
     const file = event.dataTransfer.files[0];
     if (file) validateAndSetImage(file);
+    console.log('handleDrop', file)
   };
 
   const validateAndSetImage = (file) => {
@@ -74,24 +76,20 @@ const ImageUpload = ({
           </label>
         )}
       </div>
+
+      <div>
+        <div   style={{height: '100px', width: '100px', background: 'black'}} >
+          <input  type="text" />
+        </div>
+      </div>
+
       {error && <p className="error-text">{error}</p>}
       {title && description ? (
         <>
           <div className="img-upload-info">
             <h3 style={{ fontWeight: "500" }}>{title}</h3>
             <p style={{ color: "#838383" }}>{description}</p>
-            {/* <button
-              className="img-upload-btn"
-              onClick={() => document.querySelector(".file-input").click()}
-            >
-              Upload Image
-            </button> */}
           </div>
-          {/* {title === "Album Artwork *" ? (
-            ""
-          ) : (
-            <button className="imgUpload-save-btn">Save</button>
-          )} */}
         </>
       ) : (
         ""
