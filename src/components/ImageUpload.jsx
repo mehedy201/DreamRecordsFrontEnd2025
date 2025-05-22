@@ -20,12 +20,7 @@ const ImageUpload = ({
     console.log('handleFileChange', file)
   };
 
-  const handleDrop = (event) => {
-    event.preventDefault();
-    const file = event.dataTransfer.files[0];
-    if (file) validateAndSetImage(file);
-    console.log('handleDrop', file)
-  };
+
 
   const validateAndSetImage = (file) => {
     if (file.size > 2 * 1024 * 1024) {
@@ -40,8 +35,6 @@ const ImageUpload = ({
   return (
     <div
       className="upload-container"
-      onDragOver={(e) => e.preventDefault()}
-      onDrop={handleDrop}
     >
       <div className={`upload-box ${className || ""}`}>
         {image ? (
@@ -55,32 +48,28 @@ const ImageUpload = ({
             </button>
           </div>
         ) : (
-          <label className="upload-label">
-            <img
-              src={`src/assets/icons/${placeholderImg}`}
-              alt="upload-img"
-              className="upload-icon"
-            />
-            <p>
-              {placeholderTxt} or &nbsp;
-              <span className="browse-file">Browse File</span>
-            </p>
-            <p style={{ color: "#BBBBBB" }}>Max. File size: 2MB</p>
+          <label style={{height: '256px', width: '256px', margin: 'auto', position: 'relative'}} className="upload-label">
+            <div style={{position: 'absolute', top: '50%', left: '50%', transform:'translate(-50%, -50%)'}}>
+              <img
+                src={`src/assets/icons/${placeholderImg}`}
+                alt="upload-img"
+                className="upload-icon"
+              />
+              <p>
+                {placeholderTxt} or &nbsp;
+                <span className="browse-file">Browse File</span>
+              </p>
+              <p style={{ color: "#BBBBBB" }}>Max. File size: 2MB</p>
+            </div>
             <input
+              style={{height: '256px', width: '256px', opacity: '0'}}
               type="file"
               accept="image/*"
               onChange={handleFileChange}
-              hidden
               className="file-input"
             />
           </label>
         )}
-      </div>
-
-      <div>
-        <div   style={{height: '100px', width: '100px', background: 'black'}} >
-          <input  type="text" />
-        </div>
       </div>
 
       {error && <p className="error-text">{error}</p>}
