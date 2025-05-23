@@ -23,6 +23,7 @@ import artistDemoImg from '../../../assets/artists/artist4.png'
 import { useSelector } from "react-redux";
 import useQueryParams from "../../../hooks/useQueryParams";
 import threedotPng from '../../../assets/icons/vertical-threeDots.png'
+import localDate from "../../../hooks/localDate";
 
 const SingleArtist = () => {
 
@@ -135,8 +136,8 @@ const SingleArtist = () => {
               <div style={{ margin: "auto auto auto 0" }}>
                 <h1>{artist?.artistName}</h1>
                 {
-                  artist?.createDate && 
-                  <p>{artist?.createDate}</p>
+                  artist?.date && 
+                  <p>Created on {localDate(artist?.date) }</p>
                 }
               </div>
               <DropdownMenu.Root>
