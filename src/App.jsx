@@ -57,6 +57,7 @@ import MobileMenu from "./components/MobileMenu";
 import MobileFooter from "./components/MobileFooter";
 import AlbumInformation from "./pages/Release/components/AlbumInformation";
 import ReleaseOverview from "./pages/Release/components/ReleaseOverview";
+import CreateArtist from "./pages/Artists/components/CreateArtist";
 
 function Layout() {
   const location = useLocation();
@@ -173,12 +174,15 @@ function App() {
 
           <Route
             path="/create-artist"
-            element={<EditSingleArtist data={artistSocialItems} />}
+            element={<CreateArtist />}
           />
           <Route
-            path="/edit-artist"
+            path="/edit-artist/:id"
             element={<EditSingleArtist data={completeArtistData}/>}
           />
+
+
+          
           <Route
             path="/Lables"
             element={<Lables LablesItems={LablesItems} />}

@@ -154,7 +154,7 @@ const SingleArtist = () => {
                 >
                   <DropdownMenu.Item className="dropdown-item">
                     <Link
-                      to="/edit-artist"
+                      to={`/edit-artist/${id}`}
                       // state={{ artistSocialItems }}
                       style={{
                         cursor: "pointer",
