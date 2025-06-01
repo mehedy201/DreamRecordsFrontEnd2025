@@ -183,12 +183,16 @@ function App() {
 
           {/* Label Route Start __________________________________ */}
           <Route
-            path="/lables/:pageNumber/:perPageItem/:status"
-            element={<Lables LablesItems={LablesItems} />}
+            path="/labels/:pageNumber/:perPageItem/:status"
+            element={<Lables />}
           />
           <Route
-            path="/single-lable"
-            element={<SingleLable releaseItems={releaseItems} />}
+            path="/labels/:id/:pageNumber/:perPageItem/:status"
+            element={<SingleLable />}
+          />
+          <Route
+            path="/labels"
+            element={<SingleLable />}
           />
           <Route
             path="/edit-lable"

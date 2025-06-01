@@ -1,9 +1,8 @@
 import { Button, Flex } from "@radix-ui/themes";
 import { useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import ReleaseCard from "../../../components/ReleaseCard";
 import Dropdown from "../../../components/Dropdown";
-import PropTypes from "prop-types";
 import { InfoCircledIcon } from "@radix-ui/react-icons";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import * as Dialog from "@radix-ui/react-dialog";
@@ -12,13 +11,90 @@ import Modal from "../../../components/Modal";
 import { AiOutlineDelete } from "react-icons/ai";
 import { ChevronRight } from "lucide-react";
 import { HiOutlineAdjustmentsHorizontal } from "react-icons/hi2";
+import { useSelector } from "react-redux";
+import useQueryParams from "../../../hooks/useQueryParams";
+import axios from "axios";
+import Pagination from "../../../components/Pagination";
+import demoLabelImage from "../../../assets/lables/lables-placeholder.png"
+import threedotPng from '../../../assets/icons/vertical-threeDots.png'
+import instagramImg from '../../../assets/social/instagram.png';
+import facebookImg from '../../../assets/social/facebook.png';
+import youtubeImg from '../../../assets/social/youtube-icon.png'
 
-function SingleLable({ releaseItems }) {
-  const [selectedOption1, setSelectedOption1] = useState(false);
-  const [selectedOption2, setSelectedOption2] = useState(false);
+
+function SingleLable() {
+
+  const navigate = useNavigate();
+  const {id, pageNumber, perPageItem, status} = useParams();
+  const { yearsList, releaseStatusList } = useSelector(state => state.yearsAndStatus);
+
+  // Filter Query Paramitars_____________________
+  const { navigateWithParams } = useQueryParams();
+  const [filterParams] = useSearchParams();
+  const search = filterParams.get('search') || '';
+  const years = filterParams.get('years') || '';
+
+  const [label, setLabel] = useState({labelName: 'label'});
+  const [deleteLoading, setDeleteLoading] = useState(false)
+  useEffect(() => {
+    axios.get(`http://localhost:5000/api/v1/labels/single-labels/${id}`)
+      .then(res => {
+        if(res.status == 200) {
+          setLabel(res.data.data[0])
+          console.log(res.data.data[0])
+        }
+      })
+  },[id, deleteLoading])
+
+  // Delete Label________________________
+  const deleteLabel = (id, imgKey) => {
+      setDeleteLoading(true)
+      axios.delete(`http://localhost:5000/api/v1/artist/delete-artist/${id}?imgKey=${imgKey}`)
+      .then( res => {
+          if(res.status == 200){
+              setDeleteLoading(false)
+              navigate('/labels/1/10/All')
+          }else{
+            setDeleteLoading(false)
+          }
+      })
+      .catch(er => console.log(er));
+  }
+
+
+
+  // Release Under Label __________________________________________________________
+  const [currentPage, setCurrentPage] = useState(parseInt(pageNumber));
+  const [releaseData, setReleaseData] = useState();
+  const [totalCount, setTotalCount] = useState();
+  const [filteredCount, setFilteredCount] = useState();
+  const [totalPages, setTotalPages] = useState();
+  // Get Release List ______________________________________________________________
+    useEffect(() => {
+      axios.get(`http://localhost:5000/api/v1/release/labels/${id}?page=${pageNumber}&limit=${perPageItem}&status=${status}&search=${search ? search : ''}&years=${years ? years: ''}`)
+        .then( res => {
+          if(res.status == 200){
+            setTotalCount(res.data.totalCount)
+            setFilteredCount(res.data.filteredCount)
+            setReleaseData(res.data.data);
+            setTotalPages(res.data.totalPages);
+          }
+        })
+        .catch(er => console.log(er));
+    }, [pageNumber, status, id, perPageItem, search, years]);
+
+
+
+
+
+
+
+
+
+
+
   const location = useLocation();
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 700);
-  const [lable, setLable] = useState(null);
   const [socialItems, setSocialItems] = useState([]);
   useEffect(() => {
     const handleResize = () => {
@@ -28,28 +104,76 @@ function SingleLable({ releaseItems }) {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
-  const dropdownItem = (
-    <>
-      <Dropdown
-        label="All time"
-        options={["Option 1", "Option 2", "Option 3"]}
-        onSelect={setSelectedOption1}
-        select={selectedOption1}
-      />
-      {isMobile && <br />}
-      <Dropdown
-        label="All Releases"
-        options={["Option A", "Option B", "Option C"]}
-        onSelect={setSelectedOption2}
-        select={selectedOption2}
-      />
-    </>
-  );
-  useEffect(() => {
-    if (location.state?.lable) {
-      setLable(location.state.lable);
+  // const dropdownItem = (
+  //   <>
+  //     <Dropdown
+  //       label="All time"
+  //       options={["Option 1", "Option 2", "Option 3"]}
+  //       onSelect={setSelectedOption1}
+  //       select={selectedOption1}
+  //     />
+  //     {isMobile && <br />}
+  //     <Dropdown
+  //       label="All Releases"
+  //       options={["Option A", "Option B", "Option C"]}
+  //       onSelect={setSelectedOption2}
+  //       select={selectedOption2}
+  //     />
+  //   </>
+  // );
+
+
+
+    // Years and status Dropdown__________________________
+    const handleYearDropDown = (yearValue) => {
+      navigateWithParams(`/labels/${id}/1/${perPageItem}/${status}`, { search: search, years: yearValue });
     }
-  }, [location.state]);
+  
+    const handleStatusDropDown = (statusValue) => {
+      navigateWithParams(`/labels/${id}/1/${perPageItem}/${statusValue}`, { search: search, years: years });
+    }
+  
+    const dropdownItem = (
+      <>
+        <Dropdown
+          label={years ? years : "All Time"}
+          options={yearsList}
+          customFunDropDown={handleYearDropDown}
+        />
+        {isMobile && <br />}
+        <Dropdown
+          label={status}
+          options={releaseStatusList}
+          customFunDropDown={handleStatusDropDown}
+        />
+      </>
+    );
+
+
+    //  This Function For Label Release Section 
+  // Handle Page Change ________________________________
+  const handlePageChange = (page) => {
+    navigateWithParams(`/labels/${id}/${page}/${perPageItem}/${status}`, { search: search, years: years });
+  }
+  // Search _____________________________________________
+  const [searchText, setSearchText] = useState();
+  const handleKeyPress = (event) => {
+    if (event.key === 'Enter') {
+      navigateWithParams(`/labels/${id}/1/${perPageItem}/${status}`, { search: searchText, years: years });
+    }
+  };
+  // Handle Per Page Item _______________________________
+  const handlePerPageItem = (perPageItemValue) => {
+    navigateWithParams(`/labels/${id}/${pageNumber}/${perPageItemValue}/${status}`, { search: search, years: years });
+  }
+
+
+
+  // useEffect(() => {
+  //   if (location.state?.lable) {
+  //     setLable(location.state.lable);
+  //   }
+  // }, [location.state]);
 
   useEffect(() => {
     const stored = localStorage.getItem("labelSocialUrl");
@@ -62,16 +186,14 @@ function SingleLable({ releaseItems }) {
   return (
     <div className="main-content">
       <div className="lable-details">
-        {lable ? (
+        {label ? (
           <>
-            {lable.type === "Reject" && (
+            {label?.status === "Rejected" && (
               <>
                 <div className="home-notice" style={{ fontSize: "12px" }}>
                   <InfoCircledIcon />
                   <p>
-                    We are upgrading our platform to enhance your experience.
-                    You may notice new user interfaces appearing periodically.
-                    Thank you for your patience as we make these improvements.
+                    {label?.actionRequired}
                   </p>
                 </div>
                 <br />
@@ -81,9 +203,10 @@ function SingleLable({ releaseItems }) {
               <div>
                 {" "}
                 <img
-                  src={`src/assets/lables/${lable.img}`}
+                  style={{width: '148px', height: '148px', borderRadius: '50%', objectFit: 'cover', objectPosition: 'center'}}
+                  src={label?.imgUrl ? label.imgUrl : demoLabelImage}
                   className="singleLabel-image"
-                  alt=""
+                  alt={label?.labelName}
                 />
               </div>
               <div className="lable-img-txt">
@@ -91,24 +214,24 @@ function SingleLable({ releaseItems }) {
                 <span
                   className="card-type-txt"
                   style={
-                    lable.type == "Reject"
+                    label.status == "Rejected"
                       ? { background: "#FEEBEC", color: "#E5484D" }
-                      : lable.type == "Pending"
+                      : label.status == "Pending"
                       ? { background: "#FFEBD8", color: "#FFA552" }
                       : { background: "#E6F6EB", color: "#2B9A66" }
                   }
                 >
-                  {lable.type}
+                  {label.status}
                 </span>
                 <div style={{ margin: "auto auto auto 0" }}>
-                  <h1>Warner Music Group</h1>
-                  <h4>Created on Sept 21, 2024</h4>
+                  <h1>{label?.labelName}</h1>
+                  <h4>Created on {label?.date ? label.date : 'Date'}</h4>
                 </div>
               </div>
               <DropdownMenu.Root>
                 <DropdownMenu.Trigger asChild>
                   <button className="dropdown-trigger singleLabel-dropdown-btn">
-                    <img src="src/assets/icons/vertical-threeDots.png" />
+                    <img src={threedotPng} />
                   </button>
                 </DropdownMenu.Trigger>
 
@@ -120,7 +243,6 @@ function SingleLable({ releaseItems }) {
                   <DropdownMenu.Item className="dropdown-item">
                     <Link
                       to="/edit-lable"
-                      // state={{ artistSocialItems }}
                       style={{
                         cursor: "pointer",
                         color: "#202020",
@@ -168,8 +290,8 @@ function SingleLable({ releaseItems }) {
             <div className="singleLabel-social-row">
               <div className="singleArtist-info" style={{ marginBottom: 0 }}>
                 <h4>Total Releases</h4>
-                <h1>122</h1>
-                <Button className="singleArtist-pg-allRelease-btn">
+                <h1>{totalCount}</h1>
+                <Button onClick={() => navigate('/release/1/10/All')} style={{cursor: 'pointer'}} className="singleArtist-pg-allRelease-btn">
                   All Releases &nbsp;&nbsp; <ChevronRight />
                 </Button>
               </div>
@@ -179,14 +301,18 @@ function SingleLable({ releaseItems }) {
               >
                 <h4>label Profiles</h4>
                 <div className="d-flex single-pg-social">
-                  {socialItems.map((item, index) => (
-                    <div key={index} className="social-div">
-                      <img
-                        src={`src/assets/social/${item.img}`}
-                        alt={item.name}
-                      />
-                    </div>
-                  ))}
+                    {
+                        label?.instagramId &&
+                        <a className="social-div" target='_blank' href={`https://www.instagram.com/${label.instagramId}`}><img src={instagramImg} alt={''} /></a>
+                    }
+                    {
+                        label?.facebook &&
+                        <a className="social-div" target='_blank' href={label.facebook}><img src={facebookImg} alt={''} /></a>
+                    }
+                    {
+                        label?.youtube &&
+                        <a className="social-div" target='_blank' href={label.youtube}><img src={youtubeImg} alt={''} /></a>
+                    }
                 </div>
               </div>
             </div>
@@ -206,7 +332,7 @@ function SingleLable({ releaseItems }) {
         Releases under this artist
       </h4>
       <div className="search-setion">
-        <input type="text" placeholder="Search..." />
+        <input onKeyPress={handleKeyPress} onChange={e => setSearchText(e.target.value)}  type="text" placeholder="Search..." />
         {isMobile ? (
           <DropdownMenu.Root>
             <DropdownMenu.Trigger asChild>
@@ -236,13 +362,19 @@ function SingleLable({ releaseItems }) {
           dropdownItem
         )}
       </div>
-      <ReleaseCard releaseItems={releaseItems.slice(0, 5)} />
+      <ReleaseCard releaseData={releaseData} />
+      <Pagination 
+        totalDataCount={filteredCount} 
+        totalPages={totalPages}
+        currentPage={currentPage} 
+        perPageItem={perPageItem} 
+        setCurrentPage={setCurrentPage} 
+        handlePageChange={handlePageChange}
+        customFunDropDown={handlePerPageItem}/>
       <br />
       <br />
     </div>
   );
 }
-SingleLable.propTypes = {
-  releaseItems: PropTypes.array.isRequired, // Ensure artistsItems is an array
-};
+
 export default SingleLable;
