@@ -59,7 +59,6 @@ const Artists = () => {
             setTotalCount(res.data.totalCount);
             setFilteredCount(res.data.filteredCount);
             setTotalPages(res.data.totalPages);
-            console.log(res.data.data)
           }
         })
         .catch(er => console.log(er));
