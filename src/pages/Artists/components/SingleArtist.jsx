@@ -165,8 +165,8 @@ const SingleArtist = () => {
               <div style={{ margin: "auto auto auto 0" }}>
                 <h1>{artist?.artistName}</h1>
                 {
-                  artist?.date && 
-                  <p>Created on {localDate(artist?.date) }</p>
+                  artist?.date ?
+                  <p>Created on {localDate(artist?.date) }</p> : <p>Created on Date Not Found</p> 
                 }
               </div>
               <DropdownMenu.Root>

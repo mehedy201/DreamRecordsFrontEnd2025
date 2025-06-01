@@ -20,6 +20,7 @@ import threedotPng from '../../../assets/icons/vertical-threeDots.png'
 import instagramImg from '../../../assets/social/instagram.png';
 import facebookImg from '../../../assets/social/facebook.png';
 import youtubeImg from '../../../assets/social/youtube-icon.png'
+import localDate from "../../../hooks/localDate";
 
 
 function SingleLable() {
@@ -80,7 +81,16 @@ function SingleLable() {
       .catch(er => console.log(er));
   }, [pageNumber, status, id, perPageItem, search, years]);
 
+  // Responsive Code __________________________________________________
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 700);
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 700);
+    };
 
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   // Years and status Dropdown__________________________
   const handleYearDropDown = (yearValue) => {
@@ -122,16 +132,7 @@ function SingleLable() {
     navigateWithParams(`/labels/${id}/${pageNumber}/${perPageItemValue}/${status}`, { search: search, years: years });
   }
 
-   // Responsive Code __________________________________________________
-  const [isMobile, setIsMobile] = useState(window.innerWidth <= 700);
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth <= 700);
-    };
-
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+   
 
 
   return (
@@ -176,7 +177,7 @@ function SingleLable() {
                 </span>
                 <div style={{ margin: "auto auto auto 0" }}>
                   <h1>{label?.labelName}</h1>
-                  <h4>Created on {label?.date ? label.date : 'Date'}</h4>
+                  <h4>Created on {label?.date ? localDate(label.date) : 'Date Not Found'}</h4>
                 </div>
               </div>
               <DropdownMenu.Root>
