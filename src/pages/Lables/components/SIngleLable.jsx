@@ -1,6 +1,6 @@
 import { Button, Flex } from "@radix-ui/themes";
 import { useEffect, useState } from "react";
-import { Link, useLocation, useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import ReleaseCard from "../../../components/ReleaseCard";
 import Dropdown from "../../../components/Dropdown";
 import { InfoCircledIcon } from "@radix-ui/react-icons";
@@ -23,7 +23,6 @@ import youtubeImg from '../../../assets/social/youtube-icon.png'
 
 
 function SingleLable() {
-
   const navigate = useNavigate();
   const {id, pageNumber, perPageItem, status} = useParams();
   const { yearsList, releaseStatusList } = useSelector(state => state.yearsAndStatus);
@@ -61,8 +60,6 @@ function SingleLable() {
       .catch(er => console.log(er));
   }
 
-
-
   // Release Under Label __________________________________________________________
   const [currentPage, setCurrentPage] = useState(parseInt(pageNumber));
   const [releaseData, setReleaseData] = useState();
@@ -70,87 +67,45 @@ function SingleLable() {
   const [filteredCount, setFilteredCount] = useState();
   const [totalPages, setTotalPages] = useState();
   // Get Release List ______________________________________________________________
-    useEffect(() => {
-      axios.get(`http://localhost:5000/api/v1/release/labels/${id}?page=${pageNumber}&limit=${perPageItem}&status=${status}&search=${search ? search : ''}&years=${years ? years: ''}`)
-        .then( res => {
-          if(res.status == 200){
-            setTotalCount(res.data.totalCount)
-            setFilteredCount(res.data.filteredCount)
-            setReleaseData(res.data.data);
-            setTotalPages(res.data.totalPages);
-          }
-        })
-        .catch(er => console.log(er));
-    }, [pageNumber, status, id, perPageItem, search, years]);
-
-
-
-
-
-
-
-
-
-
-
-  const location = useLocation();
-  const [isMobile, setIsMobile] = useState(window.innerWidth <= 700);
-  const [socialItems, setSocialItems] = useState([]);
   useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth <= 700);
-    };
-
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-  // const dropdownItem = (
-  //   <>
-  //     <Dropdown
-  //       label="All time"
-  //       options={["Option 1", "Option 2", "Option 3"]}
-  //       onSelect={setSelectedOption1}
-  //       select={selectedOption1}
-  //     />
-  //     {isMobile && <br />}
-  //     <Dropdown
-  //       label="All Releases"
-  //       options={["Option A", "Option B", "Option C"]}
-  //       onSelect={setSelectedOption2}
-  //       select={selectedOption2}
-  //     />
-  //   </>
-  // );
+    axios.get(`http://localhost:5000/api/v1/release/labels/${id}?page=${pageNumber}&limit=${perPageItem}&status=${status}&search=${search ? search : ''}&years=${years ? years: ''}`)
+      .then( res => {
+        if(res.status == 200){
+          setTotalCount(res.data.totalCount)
+          setFilteredCount(res.data.filteredCount)
+          setReleaseData(res.data.data);
+          setTotalPages(res.data.totalPages);
+        }
+      })
+      .catch(er => console.log(er));
+  }, [pageNumber, status, id, perPageItem, search, years]);
 
 
 
-    // Years and status Dropdown__________________________
-    const handleYearDropDown = (yearValue) => {
-      navigateWithParams(`/labels/${id}/1/${perPageItem}/${status}`, { search: search, years: yearValue });
-    }
-  
-    const handleStatusDropDown = (statusValue) => {
-      navigateWithParams(`/labels/${id}/1/${perPageItem}/${statusValue}`, { search: search, years: years });
-    }
-  
-    const dropdownItem = (
-      <>
-        <Dropdown
-          label={years ? years : "All Time"}
-          options={yearsList}
-          customFunDropDown={handleYearDropDown}
-        />
-        {isMobile && <br />}
-        <Dropdown
-          label={status}
-          options={releaseStatusList}
-          customFunDropDown={handleStatusDropDown}
-        />
-      </>
-    );
+  // Years and status Dropdown__________________________
+  const handleYearDropDown = (yearValue) => {
+    navigateWithParams(`/labels/${id}/1/${perPageItem}/${status}`, { search: search, years: yearValue });
+  }
+  const handleStatusDropDown = (statusValue) => {
+    navigateWithParams(`/labels/${id}/1/${perPageItem}/${statusValue}`, { search: search, years: years });
+  }
+  const dropdownItem = (
+    <>
+      <Dropdown
+        label={years ? years : "All Time"}
+        options={yearsList}
+        customFunDropDown={handleYearDropDown}
+      />
+      {isMobile && <br />}
+      <Dropdown
+        label={status}
+        options={releaseStatusList}
+        customFunDropDown={handleStatusDropDown}
+      />
+    </>
+  );
 
-
-    //  This Function For Label Release Section 
+  //  This Function For Label Release Section 
   // Handle Page Change ________________________________
   const handlePageChange = (page) => {
     navigateWithParams(`/labels/${id}/${page}/${perPageItem}/${status}`, { search: search, years: years });
@@ -167,22 +122,18 @@ function SingleLable() {
     navigateWithParams(`/labels/${id}/${pageNumber}/${perPageItemValue}/${status}`, { search: search, years: years });
   }
 
-
-
-  // useEffect(() => {
-  //   if (location.state?.lable) {
-  //     setLable(location.state.lable);
-  //   }
-  // }, [location.state]);
-
+   // Responsive Code __________________________________________________
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 700);
   useEffect(() => {
-    const stored = localStorage.getItem("labelSocialUrl");
-    if (stored) {
-      const parsed = JSON.parse(stored);
-      const filtered = parsed.filter((item) => item.url.trim() !== "");
-      setSocialItems(filtered);
-    }
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 700);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+
   return (
     <div className="main-content">
       <div className="lable-details">
