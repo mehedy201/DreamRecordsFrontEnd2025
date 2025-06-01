@@ -156,7 +156,7 @@ const SingleArtist = () => {
             <Flex className="artist-image-row">
               <div>
                 <img
-                  style={{width: '148px', height: '148px', border: '1px solid #dbdbdb', padding: '4px'}}
+                  style={{width: '148px', height: '148px', borderRadius: '50%', objectFit: 'cover', objectPosition: 'center'}}
                   className="singleArtist-image"
                   src={`${artist?.imgUrl ? artist.imgUrl : artistDemoImg}`}
                   alt={artist?.artistName}
