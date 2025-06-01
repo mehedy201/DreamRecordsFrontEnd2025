@@ -24,6 +24,7 @@ import { useSelector } from "react-redux";
 import useQueryParams from "../../../hooks/useQueryParams";
 import threedotPng from '../../../assets/icons/vertical-threeDots.png'
 import localDate from "../../../hooks/localDate";
+import LoadingScreen from "../../../components/LoadingScreen";
 
 const SingleArtist = () => {
 
@@ -38,6 +39,7 @@ const SingleArtist = () => {
   const years = filterParams.get('years') || '';
 
   const [artist, setArtist] = useState();
+  const [deleteLoading, setDeleteLoading] = useState(false)
   useEffect(() => {
     axios.get(`http://localhost:5000/api/v1/artist/single-artist/${id}`)
       .then(res => {
@@ -45,7 +47,24 @@ const SingleArtist = () => {
           setArtist(res.data.data[0])
         }
       })
-  },[id])
+  },[id, deleteLoading])
+
+  // Delete Artist________________________
+  const deleteArtist = (id, imgKey) => {
+      setDeleteLoading(true)
+      axios.delete(`http://localhost:5000/api/v1/artist/delete-artist/${id}?imgKey=${imgKey}`)
+      .then( res => {
+          if(res.status == 200){
+              setDeleteLoading(false)
+              navigate('/artist/1/10')
+          }else{
+            setDeleteLoading(false)
+          }
+      })
+      .catch(er => console.log(er));
+  }
+
+
 
   // Release Under Artist __________________________________________________________
   const [currentPage, setCurrentPage] = useState(parseInt(pageNumber));
@@ -66,6 +85,10 @@ const SingleArtist = () => {
         })
         .catch(er => console.log(er));
     }, [pageNumber, status, id, perPageItem, search, years]);
+
+
+
+  
 
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 700);
   useEffect(() => {
@@ -102,7 +125,7 @@ const SingleArtist = () => {
     </>
   );
 
-
+//  This Function For Artist Release Section 
   // Handle Page Change ________________________________
   const handlePageChange = (page) => {
     navigateWithParams(`/artist-details/${id}/${page}/${perPageItem}/${status}`, { search: search, years: years });
@@ -118,6 +141,12 @@ const SingleArtist = () => {
   const handlePerPageItem = (perPageItemValue) => {
     navigateWithParams(`/artist-details/${id}/${pageNumber}/${perPageItemValue}/${status}`, { search: search, years: years });
   }
+
+
+  if(deleteLoading == true) {
+    return <LoadingScreen/>
+  }
+
 
   return (
     <div className="main-content">
@@ -190,7 +219,7 @@ const SingleArtist = () => {
                             <br />
                             <div className="singleArtist-deleteModal-btns">
                               <Button>No</Button>
-                              <Button>Yes, Delete</Button>
+                              <Button onClick={() => deleteArtist(artist._id, artist?.imgKey)}>Yes, Delete</Button>
                             </div>
                           </Modal>
                         </Dialog.Content>

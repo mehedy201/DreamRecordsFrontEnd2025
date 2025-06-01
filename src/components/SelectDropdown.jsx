@@ -4,16 +4,15 @@ import PropTypes from "prop-types";
 import React from "react";
 
 const SelectDropdown = ({
-  filterByYear,
+  filterByYearAndStatus,
   options,
   placeholder,
   className,
 }) => {
 
-  // const [value, setValue] = React.useState()
-  // console.log(value)
+
   return (
-    <Select.Root onValueChange={e => filterByYear(e)}>
+    <Select.Root onValueChange={e => filterByYearAndStatus(e)}>
       <Select.Trigger className={`dropdown-trigger ${className || ""}`}>
         <Select.Value placeholder={placeholder || "Select an option"} />
         <Select.Icon className="select-icon">

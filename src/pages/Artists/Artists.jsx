@@ -5,13 +5,12 @@ import Pagination from "../../components/Pagination";
 import ArtistCard from "../../components/ArtistCard";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { HiOutlineAdjustmentsHorizontal } from "react-icons/hi2";
-import { Link, useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { Link, useParams, useSearchParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import useQueryParams from "../../hooks/useQueryParams";
 const Artists = () => {
 
-  const navigate = useNavigate();
   // Get Data Form Redux ________________________
   const {userNameIdRoll} = useSelector((state) => state.userData);
   const { yearsList } = useSelector(state => state.yearsAndStatus);
@@ -41,7 +40,7 @@ const Artists = () => {
     <SelectDropdown
       options={yearsList}
       placeholder={`${years ? years : 'All Time'}`}
-      filterByYear={filterByYear}
+      filterByYearAndStatus={filterByYear}
     />
   );
 
@@ -60,6 +59,7 @@ const Artists = () => {
             setTotalCount(res.data.totalCount);
             setFilteredCount(res.data.filteredCount);
             setTotalPages(res.data.totalPages);
+            console.log(res.data.data)
           }
         })
         .catch(er => console.log(er));
@@ -82,6 +82,8 @@ const Artists = () => {
   const handlePerPageItem = (perPageItem) => {
     navigateWithParams(`/artist/${pageNumber}/${perPageItem}`, { search: search, years: years });
   }
+
+
 
 
   return (

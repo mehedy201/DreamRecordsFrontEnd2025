@@ -41,13 +41,16 @@ function EditSingleArtist() {
       axios.put(`http://localhost:5000/api/v1/artist/update-artist/${id}`, formData)
       .then(res => {
         if(res.status == 200){
-          axios.patch(`http://localhost:5000/api/v1/artist/update-release-artist`, formData)
-            .then(res => {
-                if(res.status == 200){
-                    setUploadedImage()
-                    navigate('/artist/1/10')
-                }
-            })
+          setUploadedImage()
+          navigate('/artist/1/10')
+          console.log(res)
+          // axios.patch(`http://localhost:5000/api/v1/artist/update-release-artist`, formData)
+          //   .then(res => {
+          //       if(res.status == 200){
+          //           setUploadedImage()
+          //           navigate('/artist/1/10')
+          //       }
+          //   })
         }
       })
       .catch(er => console.log(er))    

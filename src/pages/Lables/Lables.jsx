@@ -2,12 +2,40 @@ import { Flex } from "@radix-ui/themes";
 import Pagination from "../../components/Pagination";
 import { useEffect, useState } from "react";
 import "./Lables.css";
-import { Link } from "react-router-dom";
+import { Link, useParams, useSearchParams } from "react-router-dom";
 import PropTypes from "prop-types";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { HiOutlineAdjustmentsHorizontal } from "react-icons/hi2";
 import SelectDropdown from "../../components/SelectDropdown";
-const Lables = ({ LablesItems }) => {
+import { useSelector } from "react-redux";
+import useQueryParams from "../../hooks/useQueryParams";
+import axios from "axios";
+import labelDemoImg from '../../assets/lables/lables-placeholder.png'
+const Lables = () => {
+
+  // Get Data Form Redux ________________________
+  const {userNameIdRoll} = useSelector((state) => state.userData);
+  const { yearsList,labelStatusList } = useSelector(state => state.yearsAndStatus);
+  // Main Params ________________________________
+  const {pageNumber, perPageItem, status} = useParams();
+  // Filter Query Paramitars_____________________
+  const { navigateWithParams } = useQueryParams();
+  const [filterParams] = useSearchParams();
+  const search = filterParams.get('search') || '';
+  const years = filterParams.get('years') || '';
+
+  const filterByYear = (yearValue) => {
+    navigateWithParams(`/lables/1/10/${status}`, { search: search, years: yearValue });
+  }
+  const filterByStatus = (statusValue) => {
+    navigateWithParams(`/lables/1/10/${statusValue}`, { search: search, years: years });
+  }
+
+
+
+
+
+
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 700);
   useEffect(() => {
     const handleResize = () => {
@@ -20,17 +48,66 @@ const Lables = ({ LablesItems }) => {
   const dropdownItem = (
     <>
       <SelectDropdown
-        options={["Option 1", "Option 2", "Option 3"]}
-        placeholder="All time"
+        options={yearsList}
+        placeholder={`${years ? years : 'All Time'}`}
+        filterByYearAndStatus={filterByYear}
       />
 
       {isMobile && <br />}
       <SelectDropdown
-        options={["Option 1", "Option 2", "Option 3"]}
-        placeholder="All Releases"
+        options={labelStatusList}
+        placeholder={status}
+        filterByYearAndStatus={filterByStatus}
       />
     </>
   );
+
+
+
+
+   // Fatch Artist Data _______________________________________________
+  const [currentPage, setCurrentPage] = useState(parseInt(pageNumber));
+  const [labelData, setLabelData] = useState()
+  const [totalCount, setTotalCount] = useState();
+  const [filteredCount, setFilteredCount] = useState();
+  const [totalPages, setTotalPages] = useState();
+  useEffect( () => {
+    if(userNameIdRoll){
+      axios.get(`http://localhost:5000/api/v1/labels/${userNameIdRoll[1]}?page=${pageNumber}&limit=${perPageItem}&status=${status}&search=${search}&years=${years}`)
+        .then( res => {
+          if(res.status == 200){
+            setLabelData(res.data.data);
+            setTotalCount(res.data.totalCount);
+            setFilteredCount(res.data.filteredCount);
+            setTotalPages(res.data.totalPages);
+            console.log(res.data.data)
+          }
+        })
+        .catch(er => console.log(er));
+    }
+  },[userNameIdRoll, pageNumber, perPageItem, search, years]);
+
+  // Handle Page Change ________________________________
+  const handlePageChange = (page) => {
+    navigateWithParams(`/lables/${page}/${perPageItem}/${status}`, { search: search, years: years });
+  }
+  // Search _____________________________________________
+  const [searchText, setSearchText] = useState();
+  const handleKeyPress = (event) => {
+    if (event.key === 'Enter') {
+      navigateWithParams(`/lables/1/${perPageItem}/${status}`, { search: searchText, years: years });
+    }
+  };
+
+  // Handle Per Page Item _______________________________
+  const handlePerPageItem = (perPageItem) => {
+    navigateWithParams(`/lables/${pageNumber}/${perPageItem}/${status}`, { search: search, years: years });
+  }
+
+
+
+
+
 
   return (
     <div className="main-content">
@@ -51,7 +128,7 @@ const Lables = ({ LablesItems }) => {
       </Flex>
 
       <div className="search-setion">
-        <input type="text" placeholder="Search..." />
+        <input onKeyPress={handleKeyPress} onChange={e => setSearchText(e.target.value)} type="text" placeholder="Search..." />
         {isMobile ? (
           <DropdownMenu.Root>
             <DropdownMenu.Trigger asChild>
@@ -82,7 +159,7 @@ const Lables = ({ LablesItems }) => {
         )}
       </div>
       <div className="lables-container">
-        {LablesItems.map((item, index) => (
+        { labelData && labelData.map((item, index) => (
           <Link
             to="/single-lable"
             state={{ lable: item }}
@@ -90,42 +167,42 @@ const Lables = ({ LablesItems }) => {
             className="lables-card"
           >
             <img
-              src={`src/assets/lables/${item.img}`}
-              alt={`src/assets/lables/${item.img}`}
+              style={{width: '148px', height: '148px', borderRadius: '50%', objectFit: 'cover', objectPosition: 'center'}}
+              src={item?.imgUrl ? item.imgUrl : labelDemoImg}
+              alt={item.labelName}
+
             />
             <Flex style={{ display: "flex" }}>
               <div
                 className="card-type-txt"
                 style={
-                  item.type == "Reject"
+                  item.status == "Reject"
                     ? { background: "#FEEBEC", color: "#E5484D" }
-                    : item.type == "Pending"
+                    : item.status == "Pending"
                     ? { background: "#FFEBD8", color: "#FFA552" }
                     : { background: "#E6F6EB", color: "#2B9A66" }
                 }
               >
-                {item.type}
+                {item.status}
               </div>
-              <div className="card-date-txt">{item.date}</div>
+              <div className="card-date-txt">{item?.date ? item.data : '01-01-2024'}</div>
             </Flex>
-            <p style={{ fontWeight: "500" }}>{item.name}</p>
+            <p style={{ fontWeight: "500" }}>{item.labelName}</p>
           </Link>
         ))}
       </div>
-      <Pagination />
+      <Pagination 
+        totalDataCount={filteredCount} 
+        totalPages={totalPages}
+        currentPage={currentPage} 
+        perPageItem={perPageItem} 
+        setCurrentPage={setCurrentPage} 
+        handlePageChange={handlePageChange}
+        customFunDropDown={handlePerPageItem}/>
     </div>
   );
 };
 
 export default Lables;
 
-Lables.propTypes = {
-  LablesItems: PropTypes.arrayOf(
-    PropTypes.shape({
-      name: PropTypes.string.isRequired,
-      type: PropTypes.string.isRequired,
-      img: PropTypes.string.isRequired,
-      date: PropTypes.string.isRequired,
-    })
-  ).isRequired,
-};
+

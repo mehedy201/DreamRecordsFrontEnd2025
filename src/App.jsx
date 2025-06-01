@@ -162,8 +162,7 @@ function App() {
             }
           />
 
-
-
+          {/* Artist Route Start ___________________________________ */}
           <Route
             path="/artist/:pageNumber/:perPageItem/"
             element={<Artists />}
@@ -178,13 +177,13 @@ function App() {
           />
           <Route
             path="/edit-artist/:id"
-            element={<EditSingleArtist data={completeArtistData}/>}
+            element={<EditSingleArtist/>}
           />
+          {/* Artist Route End ___________________________________ */}
 
-
-          
+          {/* Label Route Start __________________________________ */}
           <Route
-            path="/Lables"
+            path="/lables/:pageNumber/:perPageItem/:status"
             element={<Lables LablesItems={LablesItems} />}
           />
           <Route
@@ -195,6 +194,9 @@ function App() {
             path="/edit-lable"
             element={<EditLable labelSocialItems={labelSocialItems} />}
           />
+          {/* Label Route End __________________________________ */}
+
+
           <Route
             path="/Transaction"
             element={<Transaction transactions={transactions} />}

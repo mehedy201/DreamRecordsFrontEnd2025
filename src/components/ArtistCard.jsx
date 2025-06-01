@@ -13,7 +13,7 @@ const ArtistCard = ({ artistsItems }) => {
           className="artists-card"
           style={{ cursor: "pointer" }}
         >
-          <img src={item?.imgUrl ? item?.imgUrl : artistDemoImg} alt={item?.artistName} />
+          <img style={{width: '148px', height: '148px', borderRadius: '50%', objectFit: 'cover', objectPosition: 'center'}} src={item?.imgUrl ? item?.imgUrl : artistDemoImg} alt={item?.artistName} />
           <p>{item?.artistName}</p>
         </Link>
       ))}
