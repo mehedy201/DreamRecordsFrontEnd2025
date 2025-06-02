@@ -11,6 +11,7 @@ import { useSelector } from "react-redux";
 import useQueryParams from "../../hooks/useQueryParams";
 import axios from "axios";
 import labelDemoImg from '../../assets/lables/lables-placeholder.png'
+import useStatusStyle from "../../hooks/useStatusStyle";
 const Lables = () => {
 
   // Get Data Form Redux ________________________
@@ -175,13 +176,7 @@ const Lables = () => {
             <Flex style={{ display: "flex" }}>
               <div
                 className="card-type-txt"
-                style={
-                  item.status == "Reject"
-                    ? { background: "#FEEBEC", color: "#E5484D" }
-                    : item.status == "Pending"
-                    ? { background: "#FFEBD8", color: "#FFA552" }
-                    : { background: "#E6F6EB", color: "#2B9A66" }
-                }
+                style={{...useStatusStyle(item?.status)}}
               >
                 {item.status}
               </div>

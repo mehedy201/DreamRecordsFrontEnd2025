@@ -12,6 +12,8 @@ const useStatusStyle = (status) => {
       return { background: "#FEEBEC", color: "#E5484D" };
     case 'ReSubmitted':
       return { background: '#E1F5FE', color: '#0277BD' };
+    case 'Rejected':
+      return { background: "#FEEBEC", color: "#E5484D" };
     case 'All':
       return { background: '#F5F5F5', color: '#616161' };
     default:
