@@ -1,5 +1,5 @@
 import { Button, Flex } from "@radix-ui/themes";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import { Link, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import ReleaseCard from "../../../components/ReleaseCard";
 import Dropdown from "../../../components/Dropdown";
@@ -21,6 +21,7 @@ import instagramImg from '../../../assets/social/instagram.png';
 import facebookImg from '../../../assets/social/facebook.png';
 import youtubeImg from '../../../assets/social/youtube-icon.png'
 import localDate from "../../../hooks/localDate";
+import useStatusStyle from "../../../hooks/useStatusStyle";
 
 
 function SingleLable() {
@@ -165,13 +166,7 @@ function SingleLable() {
                 <br />
                 <span
                   className="card-type-txt"
-                  style={
-                    label.status == "Rejected"
-                      ? { background: "#FEEBEC", color: "#E5484D" }
-                      : label.status == "Pending"
-                      ? { background: "#FFEBD8", color: "#FFA552" }
-                      : { background: "#E6F6EB", color: "#2B9A66" }
-                  }
+                  style={{...useStatusStyle(label?.status)}}
                 >
                   {label.status}
                 </span>

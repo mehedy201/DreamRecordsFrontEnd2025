@@ -191,10 +191,6 @@ function App() {
             element={<SingleLable />}
           />
           <Route
-            path="/labels"
-            element={<SingleLable />}
-          />
-          <Route
             path="/edit-lable"
             element={<EditLable labelSocialItems={labelSocialItems} />}
           />
