@@ -43,7 +43,6 @@ function SingleLable() {
       .then(res => {
         if(res.status == 200) {
           setLabel(res.data.data[0])
-          console.log(res.data.data[0])
         }
       })
   },[id])
@@ -192,7 +191,7 @@ function SingleLable() {
                 >
                   <DropdownMenu.Item className="dropdown-item">
                     <Link
-                      to="/edit-label"
+                      to={`/edit-label/${id}`}
                       style={{
                         cursor: "pointer",
                         color: "#202020",

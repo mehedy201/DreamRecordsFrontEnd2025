@@ -196,13 +196,10 @@ function App() {
             element={<CreateLabel />}
           />
           <Route
-            path="/edit-label"
-            element={<EditLable labelSocialItems={labelSocialItems} />}
+            path="/edit-label/:id"
+            element={<EditLable/>}
           />
-          <Route
-            path="/edit-lable"
-            element={<EditLable labelSocialItems={labelSocialItems} />}
-          />
+
           {/* Label Route End __________________________________ */}
 
 
