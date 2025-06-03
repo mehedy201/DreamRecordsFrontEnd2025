@@ -19,7 +19,6 @@ import ServiceRequest from "./pages/ServiceRequest/ServiceRequest";
 import SingleArtist from "./pages/Artists/components/SingleArtist";
 import Profile from "./pages/Profile/Profile";
 import EditSingleArtist from "./pages/Artists/components/EditSingleArtist";
-import SingleLable from "./pages/Lables/components/SingleLable";
 import EditLable from "./pages/Lables/components/EditLable";
 import Settings from "./pages/Settings/Settings";
 import Support from "./pages/Support/Support";
@@ -39,9 +38,6 @@ import {
   chartData,
   singleReleaseARevenueData,
   releaseCredits,
-  artistSocialItems,
-  labelSocialItems,
-  completeArtistData,
 } from "./data";
 // import { IoEyeOutline } from "react-icons/io5";
 import LogIn from "./pages/LogIn/LogIn";
@@ -59,6 +55,7 @@ import AlbumInformation from "./pages/Release/components/AlbumInformation";
 import ReleaseOverview from "./pages/Release/components/ReleaseOverview";
 import CreateArtist from "./pages/Artists/components/CreateArtist";
 import CreateLabel from "./pages/Lables/components/CreateLabel";
+import SingleLable from "./pages/Lables/components/SIngleLable";
 
 function Layout() {
   const location = useLocation();
