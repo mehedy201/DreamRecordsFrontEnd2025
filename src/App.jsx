@@ -58,6 +58,7 @@ import MobileFooter from "./components/MobileFooter";
 import AlbumInformation from "./pages/Release/components/AlbumInformation";
 import ReleaseOverview from "./pages/Release/components/ReleaseOverview";
 import CreateArtist from "./pages/Artists/components/CreateArtist";
+import CreateLabel from "./pages/Lables/components/CreateLabel";
 
 function Layout() {
   const location = useLocation();
@@ -189,6 +190,14 @@ function App() {
           <Route
             path="/labels/:id/:pageNumber/:perPageItem/:status"
             element={<SingleLable />}
+          />
+          <Route
+            path="/create-label"
+            element={<CreateLabel />}
+          />
+          <Route
+            path="/edit-label"
+            element={<EditLable labelSocialItems={labelSocialItems} />}
           />
           <Route
             path="/edit-lable"

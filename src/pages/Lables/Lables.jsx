@@ -12,6 +12,7 @@ import useQueryParams from "../../hooks/useQueryParams";
 import axios from "axios";
 import labelDemoImg from '../../assets/lables/lables-placeholder.png'
 import useStatusStyle from "../../hooks/useStatusStyle";
+import localDate from "../../hooks/localDate";
 const Lables = () => {
 
   // Get Data Form Redux ________________________
@@ -115,7 +116,7 @@ const Lables = () => {
       <Flex className="page-heading">
         <h2>Lables</h2>
         <Link
-          to="/edit-lable"
+          to="/create-label"
           className="theme-btn"
           style={{
             textDecoration: "none",
@@ -180,7 +181,7 @@ const Lables = () => {
               >
                 {item.status}
               </div>
-              <div className="card-date-txt">{item?.date ? item.data : '01-01-2024'}</div>
+              <div className="card-date-txt">{item?.date ? localDate(item.date) : '01-01-2024'}</div>
             </Flex>
             <p style={{ fontWeight: "500" }}>{item.labelName}</p>
           </Link>

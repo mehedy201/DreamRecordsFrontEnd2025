@@ -22,6 +22,7 @@ import facebookImg from '../../../assets/social/facebook.png';
 import youtubeImg from '../../../assets/social/youtube-icon.png'
 import localDate from "../../../hooks/localDate";
 import useStatusStyle from "../../../hooks/useStatusStyle";
+import LoadingScreen from "../../../components/LoadingScreen";
 
 
 function SingleLable() {
@@ -45,12 +46,12 @@ function SingleLable() {
           console.log(res.data.data[0])
         }
       })
-  },[id, deleteLoading])
+  },[id])
 
   // Delete Label________________________
   const deleteLabel = (id, imgKey) => {
       setDeleteLoading(true)
-      axios.delete(`http://localhost:5000/api/v1/artist/delete-artist/${id}?imgKey=${imgKey}`)
+      axios.delete(`http://localhost:5000/api/v1/labels/delete-labels/${id}?imgKey=${imgKey}`)
       .then( res => {
           if(res.status == 200){
               setDeleteLoading(false)
@@ -133,7 +134,9 @@ function SingleLable() {
     navigateWithParams(`/labels/${id}/${pageNumber}/${perPageItemValue}/${status}`, { search: search, years: years });
   }
 
-   
+   if(deleteLoading == true) {
+    return <LoadingScreen/>
+  }
 
 
   return (
@@ -189,7 +192,7 @@ function SingleLable() {
                 >
                   <DropdownMenu.Item className="dropdown-item">
                     <Link
-                      to="/edit-lable"
+                      to="/edit-label"
                       style={{
                         cursor: "pointer",
                         color: "#202020",
@@ -208,15 +211,15 @@ function SingleLable() {
                     <Dialog.Root>
                       <Dialog.Trigger asChild>
                         <span>
-                          <AiOutlineDelete /> Delete Artist
+                          <AiOutlineDelete /> Delete Label
                         </span>
                       </Dialog.Trigger>
                       <Dialog.Portal>
                         <Dialog.Overlay className="dialog-overlay" />
                         <Dialog.Content className="dialog-content">
-                          <Modal title="Delete Artist Profile?">
+                          <Modal title="Delete Label Profile?">
                             <p className="modal-description">
-                              Are you sure you want to delete this artist
+                              Are you sure you want to delete this Label
                               profile? This action is irreversible, and all
                               associated data, including music releases and
                               analytics, will be permanently removed.
@@ -224,7 +227,7 @@ function SingleLable() {
                             <br />
                             <div className="singleArtist-deleteModal-btns">
                               <Button>No</Button>
-                              <Button>Yes, Delete</Button>
+                              <Button onClick={() => deleteLabel(id, label?.imgkey)}>Yes, Delete</Button>
                             </div>
                           </Modal>
                         </Dialog.Content>
@@ -249,8 +252,8 @@ function SingleLable() {
                 <h4>label Profiles</h4>
                 <div className="d-flex single-pg-social">
                     {
-                        label?.instagramId &&
-                        <a className="social-div" target='_blank' href={`https://www.instagram.com/${label.instagramId}`}><img src={instagramImg} alt={''} /></a>
+                        label?.instagram &&
+                        <a className="social-div" target='_blank' href={`https://www.instagram.com/${label.instagram}`}><img src={instagramImg} alt={''} /></a>
                     }
                     {
                         label?.facebook &&

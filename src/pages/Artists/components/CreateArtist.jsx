@@ -15,8 +15,8 @@ function CreateArtist() {
 
   const navigate = useNavigate();
   const {userNameIdRoll} = useSelector(state => state.userData)
-  const [imgLink, setImgLink] = useState(imgUrl);
-  const [uploadedImage, setUploadedImage] = useState({imgUrl, key});
+  const [imgLink, setImgLink] = useState();
+  const [uploadedImage, setUploadedImage] = useState();
 
 
   const {register, handleSubmit, formState: {errors}} = useForm()
