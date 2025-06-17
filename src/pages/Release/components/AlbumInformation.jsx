@@ -3,7 +3,7 @@ import SearchDropdown from "../../../components/SearchDropdown";
 
 import PropTypes from "prop-types";
 import { useState } from "react";
-import SelectDropdown from "../../../components/SelectDropdown";
+import SelectDropdownForCreateRelease from "../../../components/SelectDropdownForCreateRelease";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import ReleaseImgUpload from "../../../components/ReleaseImgUpload";
 
@@ -89,7 +89,7 @@ function AlbumInformation({ artistsItems, LablesItems, step, setStep, steps, han
           <div>
             <label htmlFor="">Genre *</label>
 
-            <SelectDropdown
+            <SelectDropdownForCreateRelease
               options={["Option 1", "Option 2", "Option 3"]}
               placeholder="Select genre..."
               className="createRelease-dropdown"
@@ -97,7 +97,7 @@ function AlbumInformation({ artistsItems, LablesItems, step, setStep, steps, han
           </div>
           <div>
             <label htmlFor="">Sub-Genre *</label>
-            <SelectDropdown
+            <SelectDropdownForCreateRelease
               options={["Option 1", "Option 2", "Option 3"]}
               placeholder="Select sub-genre..."
               className="createRelease-dropdown"
@@ -116,7 +116,7 @@ function AlbumInformation({ artistsItems, LablesItems, step, setStep, steps, han
         <div className="form-grid release-form-grid">
           <div>
             <label htmlFor="">Production Year *</label>
-            <SelectDropdown
+            <SelectDropdownForCreateRelease
               options={["Option 1", "Option 2", "Option 3"]}
               placeholder="Select a year..."
               className="createRelease-dropdown"
