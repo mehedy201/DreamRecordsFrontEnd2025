@@ -1,4 +1,3 @@
-import ImageUpload from "../../../components/ImageUpload";
 import * as RadioGroup from "@radix-ui/react-radio-group";
 import SearchDropdown from "../../../components/SearchDropdown";
 
@@ -6,8 +5,12 @@ import PropTypes from "prop-types";
 import { useState } from "react";
 import SelectDropdown from "../../../components/SelectDropdown";
 import { ArrowLeft, ArrowRight } from "lucide-react";
+import ReleaseImgUpload from "../../../components/ReleaseImgUpload";
 
 function AlbumInformation({ artistsItems, LablesItems, step, setStep, steps, handleNext, handlePrev }) {
+  const [imgLink, setImgLink] = useState();
+  const [uploadedImage, setUploadedImage] = useState();
+
   const [isVariousArtists, setIsVariousArtists] = useState("no");
   const [isUPC, setIsUPC] = useState("yes");
 
@@ -16,7 +19,12 @@ function AlbumInformation({ artistsItems, LablesItems, step, setStep, steps, han
       <h3 className="create-release-heading">Fill Album Information</h3>
       <div className="createRelease-content-div">
         {" "}
-        <ImageUpload
+        <ReleaseImgUpload
+          link={`http://localhost:5000/api/v1/release/upload-release-img`}
+          setImgLink={setImgLink}
+          imgLink={imgLink}
+          uploadedImage={uploadedImage}
+          setUploadedImage={setUploadedImage}
           title="Album Artwork *"
           description="This will be displayed on Release profile"
           placeholderImg="upload-img.png"
