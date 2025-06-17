@@ -7,7 +7,8 @@ import { MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
 import Modal from "../../../components/Modal";
 import { Collapsible } from "radix-ui";
 import { useLocation } from "react-router-dom";
-function ReleaseOverview({ releaseAlbumInfo, releaseTrackDetails }) {
+import { ArrowLeft, ArrowRight } from "lucide-react";
+function ReleaseOverview({ releaseAlbumInfo, releaseTrackDetails, step, setStep, steps, handleNext, handlePrev }) {
   const [albumOverviewSong, setAlbumOverviewSong] = useState(false);
   const location = useLocation();
   const supportMessage = location.state?.supportMessage;
@@ -148,6 +149,41 @@ function ReleaseOverview({ releaseAlbumInfo, releaseTrackDetails }) {
           </Collapsible.Root>
         </div>
       </div>
+      {step === 4 || (
+        <div className="createRelease-btns">
+          {step > 0 && (
+            <button
+              className="theme-btn2"
+              style={{
+                display: "flex",
+                alignItems: "center",
+              }}
+              onClick={handlePrev}
+            >
+              <ArrowLeft />
+              &nbsp; Back
+            </button>
+          )}
+          <button
+            style={{
+              margin: "auto",
+              background: "none",
+              border: "none",
+            }}
+          >
+            cancel
+          </button>
+          {step < steps.length - 1 ? (
+            <button className="theme-btn" onClick={handleNext}>
+              Next &nbsp; <ArrowRight />
+            </button>
+          ) : (
+            <button className="theme-btn" onClick={() => setStep(4)}>
+              Submit &nbsp; <ArrowRight />
+            </button>
+          )}
+        </div>
+      )}
     </div>
   );
 }

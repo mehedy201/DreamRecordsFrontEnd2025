@@ -1,6 +1,7 @@
 import * as RadioGroup from "@radix-ui/react-radio-group";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 
-function ReleaseDate() {
+function ReleaseDate({step, setStep, steps, handleNext, handlePrev}) {
   return (
     <>
       <h3 className="create-release-heading">Release start date</h3>
@@ -37,6 +38,41 @@ function ReleaseDate() {
           </div>
         </RadioGroup.Root>
       </div>
+      {step === 4 || (
+        <div className="createRelease-btns">
+          {step > 0 && (
+            <button
+              className="theme-btn2"
+              style={{
+                display: "flex",
+                alignItems: "center",
+              }}
+              onClick={handlePrev}
+            >
+              <ArrowLeft />
+              &nbsp; Back
+            </button>
+          )}
+          <button
+            style={{
+              margin: "auto",
+              background: "none",
+              border: "none",
+            }}
+          >
+            cancel
+          </button>
+          {step < steps.length - 1 ? (
+            <button className="theme-btn" onClick={handleNext}>
+              Next &nbsp; <ArrowRight />
+            </button>
+          ) : (
+            <button className="theme-btn" onClick={() => setStep(4)}>
+              Submit &nbsp; <ArrowRight />
+            </button>
+          )}
+        </div>
+      )}
     </>
   );
 }

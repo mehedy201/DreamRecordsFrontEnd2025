@@ -9,7 +9,8 @@ import { Slider } from "radix-ui";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import { IoPlayCircleOutline } from "react-icons/io5";
 import SelectDropdown from "../../../components/SelectDropdown";
-function TracksInformation({ artistsItems, albumTrackList }) {
+import { ArrowLeft, ArrowRight } from "lucide-react";
+function TracksInformation({ artistsItems, albumTrackList, step, setStep, steps, handleNext, handlePrev }) {
   const [tracktFormat, setTrackFormat] = useState("Singles");
   const [addAlbumInstrument, setAddAlbumInstrument] = useState("No");
 
@@ -420,6 +421,41 @@ function TracksInformation({ artistsItems, albumTrackList }) {
           </>
         )}
       </div>
+      {step === 4 || (
+        <div className="createRelease-btns">
+          {step > 0 && (
+            <button
+              className="theme-btn2"
+              style={{
+                display: "flex",
+                alignItems: "center",
+              }}
+              onClick={handlePrev}
+            >
+              <ArrowLeft />
+              &nbsp; Back
+            </button>
+          )}
+          <button
+            style={{
+              margin: "auto",
+              background: "none",
+              border: "none",
+            }}
+          >
+            cancel
+          </button>
+          {step < steps.length - 1 ? (
+            <button className="theme-btn" onClick={handleNext}>
+              Next &nbsp; <ArrowRight />
+            </button>
+          ) : (
+            <button className="theme-btn" onClick={() => setStep(4)}>
+              Submit &nbsp; <ArrowRight />
+            </button>
+          )}
+        </div>
+      )}
     </>
   );
 }

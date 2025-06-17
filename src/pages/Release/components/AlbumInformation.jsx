@@ -5,8 +5,9 @@ import SearchDropdown from "../../../components/SearchDropdown";
 import PropTypes from "prop-types";
 import { useState } from "react";
 import SelectDropdown from "../../../components/SelectDropdown";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 
-function AlbumInformation({ artistsItems, LablesItems }) {
+function AlbumInformation({ artistsItems, LablesItems, step, setStep, steps, handleNext, handlePrev }) {
   const [isVariousArtists, setIsVariousArtists] = useState("no");
   const [isUPC, setIsUPC] = useState("yes");
 
@@ -167,6 +168,44 @@ function AlbumInformation({ artistsItems, LablesItems }) {
           )}
         </div>
       </div>
+
+      {step === 4 || (
+        <div className="createRelease-btns">
+          {step > 0 && (
+            <button
+              className="theme-btn2"
+              style={{
+                display: "flex",
+                alignItems: "center",
+              }}
+              onClick={handlePrev}
+            >
+              <ArrowLeft />
+              &nbsp; Back
+            </button>
+          )}
+          <button
+            style={{
+              margin: "auto",
+              background: "none",
+              border: "none",
+            }}
+          >
+            cancel
+          </button>
+          {step < steps.length - 1 ? (
+            <button className="theme-btn" onClick={handleNext}>
+              Next &nbsp; <ArrowRight />
+            </button>
+          ) : (
+            <button className="theme-btn" onClick={() => setStep(4)}>
+              Submit &nbsp; <ArrowRight />
+            </button>
+          )}
+        </div>
+      )}
+
+
     </div>
   );
 }

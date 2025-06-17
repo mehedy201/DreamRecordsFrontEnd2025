@@ -78,25 +78,46 @@ function CreateRelease({
         <AlbumInformation
           artistsItems={artistsItems}
           LablesItems={LablesItems}
+          step={step}
+          steps={steps}
+          setStep={setStep}
+          handleNext={handleNext}
+          handlePrev={handlePrev}
         />
       )}
       {step === 1 && (
         <TracksInformation
           artistsItems={artistsItems}
           albumTrackList={albumTrackList}
+          step={step}
+          steps={steps}
+          setStep={setStep}
+          handleNext={handleNext}
+          handlePrev={handlePrev}
         />
       )}
-      {step === 2 && <ReleaseDate />}
+      {step === 2 && 
+      <ReleaseDate
+          step={step}
+          steps={steps}
+          setStep={setStep}
+          handleNext={handleNext}
+          handlePrev={handlePrev}/>}
       {step === 3 && (
         <ReleaseOverview
           releaseAlbumInfo={releaseAlbumInfo}
           releaseTrackDetails={releaseTrackDetails}
+          step={step}
+          steps={steps}
+          setStep={setStep}
+          handleNext={handleNext}
+          handlePrev={handlePrev}
         />
       )}
 
       <br />
       <br />
-      {step === 4 || (
+      {/* {step === 4 || (
         <div className="createRelease-btns">
           {step > 0 && (
             <button
@@ -130,7 +151,7 @@ function CreateRelease({
             </button>
           )}
         </div>
-      )}
+      )} */}
     </div>
   );
 }
