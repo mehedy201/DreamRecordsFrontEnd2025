@@ -81,7 +81,6 @@ function CreateRelease({
           step={step}
           steps={steps}
           setStep={setStep}
-          handleNext={handleNext}
           handlePrev={handlePrev}
         />
       )}

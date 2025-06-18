@@ -46,6 +46,8 @@ const SearchDropdown = ({
       )
     ) {
       setSelectedItems([...selectedItems, item]);
+      const selectItem = [...selectedItems, item];
+      onSelect(selectItem)
     }
 
     // Slight delay to ensure input is cleared properly
@@ -65,7 +67,6 @@ const SearchDropdown = ({
   const filteredItems = items.filter((item) =>
     item[itemKey]?.toLowerCase().includes(searchQuery.toLowerCase())
   );
-  console.log(selectedItems);
   return (
     <div>
       <div style={{ display: "flex", position: "relative", width: "100%" }}>
