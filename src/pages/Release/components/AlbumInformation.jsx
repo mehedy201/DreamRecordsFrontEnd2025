@@ -7,14 +7,16 @@ import SelectDropdownForCreateRelease from "../../../components/SelectDropdownFo
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import ReleaseImgUpload from "../../../components/ReleaseImgUpload";
 import { Controller, useForm } from "react-hook-form";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
+import { setReleaseAlbumInfo } from "../../../redux/features/releaseDataHandleSlice/releaseDataHandleSlice";
 
 function AlbumInformation({ artistsItems, LablesItems, step, setStep, steps, handlePrev }) {
     
   const {userNameIdRoll} = useSelector((state) => state.userData);
   const { yearsList } = useSelector(state => state.yearsAndStatus);
-  // console.log(yearsList)
+  const { releaseAlbumInfo } = useSelector(state => state.releaseData);
+  const dispatch = useDispatch()
 
   const [imgLink, setImgLink] = useState();
   const [uploadedImage, setUploadedImage] = useState();
@@ -48,16 +50,11 @@ function AlbumInformation({ artistsItems, LablesItems, step, setStep, steps, han
 
 
   const {register, handleSubmit, setValue, watch, control, formState: {errors}} = useForm({
-    defaultValues: {
-      releaseTitle: "Release Title Default Value",
-      subTitle: 'Sub Title Default Value',
-      globalGenre: "",
-      isVariousArtists: isVariousArtists,
-      haveUPCean: isUPC,
-  }
+    defaultValues: releaseAlbumInfo
   })
   const onSubmit = async (data) => {
-    console.log(data)         
+    console.log(data)  
+    dispatch(setReleaseAlbumInfo(data))       
     if (step < steps.length - 1) {
       setStep(step + 1);
     }
