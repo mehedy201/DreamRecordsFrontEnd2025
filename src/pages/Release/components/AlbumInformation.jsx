@@ -86,10 +86,6 @@ function AlbumInformation({ artistsItems, LablesItems, step, setStep, steps, han
           imgLink={imgLink}
           uploadedImage={uploadedImage}
           setUploadedImage={setUploadedImage}
-          title="Album Artwork *"
-          description="This will be displayed on Release profile"
-          placeholderImg="upload-img.png"
-          placeholderTxt="Drop your image here"
         />
         {
           imgNotFoundErr && <p style={{color: '#ea3958'}}>{imgNotFoundErr}</p>

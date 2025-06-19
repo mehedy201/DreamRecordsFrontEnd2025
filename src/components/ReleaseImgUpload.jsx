@@ -2,17 +2,14 @@
 import { useState } from "react";
 import PropTypes from "prop-types"; // ✅ Import PropTypes
 import { X } from "lucide-react";
-import placeholderImg from "../assets/icons/upload-img.png";
 import axios from "axios";
+import demoImg from '../assets/icons/upload-img.png'
 
 const ReleaseImgUpload = ({
   link,
   imgLink,
   setImgLink,
-  title,
-  description,
   className,
-  placeholderTxt,
   setUploadedImage,
   uploadedImage,
 }) => {
@@ -110,15 +107,14 @@ const ReleaseImgUpload = ({
               }}
             >
               <img
-                src={placeholderImg}
+                src={demoImg}
                 alt="upload-img"
                 className="upload-icon"
               />
               <p>
-                {placeholderTxt} or &nbsp;
+                Drop your image here or &nbsp;
                 <span className="browse-file">Browse File</span>
               </p>
-              <p style={{ color: "#BBBBBB" }}>Max. File size: 2MB</p>
             </div>
             {uploadLoading && (
               <div
@@ -147,16 +143,13 @@ const ReleaseImgUpload = ({
       </div>
 
       {error && <p className="error-text">{error}</p>}
-      {title && description ? (
-        <>
+      
           <div className="img-upload-info">
-            <h3 style={{ fontWeight: "500" }}>{title}</h3>
-            <p style={{ color: "#838383" }}>{description}</p>
+            <h3 style={{ fontWeight: "500" }}>Album Artwork *</h3>
+            <p style={{ color: "#838383" }}>This will be displayed on Release profile</p>
           </div>
-        </>
-      ) : (
-        ""
-      )}
+      
+      
     </div>
   );
 };
