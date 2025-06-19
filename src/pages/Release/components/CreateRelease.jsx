@@ -19,7 +19,7 @@ function CreateRelease({
   releaseTrackDetails,
   albumTrackList,
 }) {
-  const [step, setStep] = useState(0);
+  const [step, setStep] = useState(1);
   const handleNext = () => {
     if (step < steps.length - 1) {
       setStep(step + 1);

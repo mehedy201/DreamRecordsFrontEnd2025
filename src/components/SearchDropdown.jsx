@@ -7,6 +7,8 @@ import * as Dialog from "@radix-ui/react-dialog";
 import Modal from "./Modal";
 import EditSingleArtist from "../pages/Artists/components/EditSingleArtist";
 import EditLable from "../pages/Lables/components/EditLable";
+import CreateArtist from "../pages/Artists/components/CreateArtist";
+import CreateLabel from "../pages/Lables/components/CreateLabel";
 const SearchDropdown = ({
   items,
   itemKey,
@@ -16,29 +18,16 @@ const SearchDropdown = ({
   searchTxt = "Search...",
   itemName,
   artistSocialItems,
+  value
 }) => {
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedItems, setSelectedItems] = useState([]);
+  const [selectedItems, setSelectedItems] = useState(value ? value : []);
   const [showResults, setShowResults] = useState(false);
   const handleSearch = (e) => {
     setSearchQuery(e.target.value);
     setShowResults(true);
   };
 
-  // const handleItemClick = (item) => {
-  //   if (
-  //     !selectedItems.some(
-  //       (selectedItem) => selectedItem[itemKey] === item[itemKey]
-  //     )
-  //   ) {
-  //     const newSelectedItems = [...selectedItems, item];
-  //     setSelectedItems(newSelectedItems);
-  //     onSelect(newSelectedItems);
-  //   }
-  //   setSearchQuery("");
-  //   setShowResults(false);
-
-  // };
   const handleItemClick = (item) => {
     if (
       !selectedItems.some(
@@ -67,6 +56,9 @@ const SearchDropdown = ({
   const filteredItems = items.filter((item) =>
     item[itemKey]?.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+
+
   return (
     <div>
       <div style={{ display: "flex", position: "relative", width: "100%" }}>
@@ -118,7 +110,7 @@ const SearchDropdown = ({
                       Create New {itemName} +
                     </Dialog.Trigger>
                     <Modal className="searchDropdown-modal-content">
-                      <EditSingleArtist socialItems={artistSocialItems} />
+                      <CreateArtist/>
                     </Modal>
                   </Dialog.Root>
                 ) : itemName === "Label" ? (
@@ -127,7 +119,7 @@ const SearchDropdown = ({
                       Create New {itemName} +
                     </Dialog.Trigger>
                     <Modal className="searchDropdown-modal-content">
-                      <EditLable />
+                      <CreateLabel />
                     </Modal>
                   </Dialog.Root>
                 ) : (
@@ -140,10 +132,10 @@ const SearchDropdown = ({
       </div>
 
       {/* Display selected items */}
-      {selectedItems.length > 0 && (
+      {value && (
         <div className="selected-items-list">
           <div className="selected-items">
-            {selectedItems.map((item, index) => (
+            {value.map((item, index) => (
               <div key={index} className="selected-item">
                 {imageKey && (
                   <img

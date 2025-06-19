@@ -18,8 +18,11 @@ function AlbumInformation({ artistsItems, LablesItems, step, setStep, steps, han
   const { releaseAlbumInfo } = useSelector(state => state.releaseData);
   const dispatch = useDispatch()
 
-  const [imgLink, setImgLink] = useState();
-  const [uploadedImage, setUploadedImage] = useState();
+
+  const [imgLink, setImgLink] = useState(releaseAlbumInfo ? releaseAlbumInfo?.imgUrl : '');
+  const defaultImgURL = releaseAlbumInfo.imgURL;
+  const defaultKey = releaseAlbumInfo.key
+  const [uploadedImage, setUploadedImage] = useState({imgURL: defaultImgURL, key: defaultKey});
 
   const [allGenre, setAllGenre] = useState()
   useEffect(() => {
@@ -45,16 +48,28 @@ function AlbumInformation({ artistsItems, LablesItems, step, setStep, steps, han
     // }
   }, [])
 
-  const [isVariousArtists, setIsVariousArtists] = useState("no");
-  const [isUPC, setIsUPC] = useState("yes");
+  const [isVariousArtists, setIsVariousArtists] = useState(releaseAlbumInfo ? releaseAlbumInfo?.isVariousArtists : "no");
+  const [isUPC, setIsUPC] = useState(releaseAlbumInfo ? releaseAlbumInfo?.haveUPCean : "yes");
 
 
   const {register, handleSubmit, setValue, watch, control, formState: {errors}} = useForm({
     defaultValues: releaseAlbumInfo
   })
+
+  const [imgNotFoundErr, setImgNotFoundErr] = useState()
   const onSubmit = async (data) => {
-    console.log(data)  
-    dispatch(setReleaseAlbumInfo(data))       
+    setImgNotFoundErr('')
+    if(!uploadedImage) {
+      setImgNotFoundErr('Please Add Image')
+      return;
+    };
+    if(data.haveUPCean === 'no') delete data?.UPC
+    if(data.isVariousArtists === 'no') delete data?.globalArtist
+    const albumInfoData = {...data, ...uploadedImage}
+
+    console.log(albumInfoData)  
+    dispatch(setReleaseAlbumInfo(albumInfoData))     
+
     if (step < steps.length - 1) {
       setStep(step + 1);
     }
@@ -76,6 +91,9 @@ function AlbumInformation({ artistsItems, LablesItems, step, setStep, steps, han
           placeholderImg="upload-img.png"
           placeholderTxt="Drop your image here"
         />
+        {
+          imgNotFoundErr && <p style={{color: '#ea3958'}}>{imgNotFoundErr}</p>
+        }
         <br />
         <form onSubmit={handleSubmit(onSubmit)}>
           <label>Release Tittle *</label>
@@ -126,7 +144,7 @@ function AlbumInformation({ artistsItems, LablesItems, step, setStep, steps, han
                   searchTxt="Search and select artist"
                   itemName="Artist"
                   onSelect={(items) => setValue("globalArtist", items, { shouldValidate: true })}
-                  register={{...register("globalArtist", { required: true})}}
+                  value={watch("globalArtist")} // Pass current value
                 />
                 {errors.globalArtist && <span style={{color: '#ea3958'}}>Please Select Artist</span>}
               </div>
@@ -141,6 +159,7 @@ function AlbumInformation({ artistsItems, LablesItems, step, setStep, steps, han
             itemName="Artist"
             searchTxt="Search and select Genre"
             onSelect={(items) => setValue("globalFeatureing", items, { shouldValidate: true })}
+            value={watch("globalFeatureing")}
           />
          
           <div className="form-grid release-form-grid">
@@ -182,6 +201,7 @@ function AlbumInformation({ artistsItems, LablesItems, step, setStep, steps, han
             searchTxt="Search and select label"
             onSelect={(items) => setValue("globalLabel", items, { shouldValidate: true })}
             register={{...register("globalLabel", { required: true})}}
+            value={watch("globalLabel")}
           />
           {errors.globalLabel && <span style={{color: '#ea3958'}}>Please Select Label</span>}
 
@@ -216,38 +236,18 @@ function AlbumInformation({ artistsItems, LablesItems, step, setStep, steps, han
           <div className="form-grid release-form-grid">
             <div>
               <label htmlFor="">℗ line *</label>
-              <input type="text" defaultValue={'P Line'} {...register("pLine", { required: true})}/>
+              <input type="text" {...register("pLine", { required: true})}/>
               {errors.pLine && <span style={{color: '#ea3958'}}>P Line Required</span>}
             </div>
             <div>
               <label htmlFor="">© line *</label>
-              <input type="text" defaultValue={'C Line'} {...register("cLine", { required: true})}/>
+              <input type="text" {...register("cLine", { required: true})}/>
               {errors.cLine && <span style={{color: '#ea3958'}}>C Line Required</span>}
             </div>
           </div>
           <div className="form-grid release-form-grid">
             <div>
               <label htmlFor="">Do you already have a UPC/EAN? *</label>
-
-              {/* <RadioGroup.Root
-                {...register("haveUPCean", { required: true})}
-                className="radio-group"
-                value={isUPC}
-                onValueChange={value =>setIsUPC(value)}
-              >
-                <label className="radio-label">
-                  <span>
-                    <RadioGroup.Item className="radio-item" value="no" />
-                    &nbsp; No
-                  </span>
-                </label>
-                <label className="radio-label">
-                  <span>
-                    <RadioGroup.Item className="radio-item" value="yes" />
-                    &nbsp; Yes
-                  </span>
-                </label>
-              </RadioGroup.Root> */}
 
               <Controller
                 name="haveUPCean"
