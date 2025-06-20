@@ -1,7 +1,6 @@
 import * as Select from "@radix-ui/react-select";
 import { ChevronDown, Check } from "lucide-react";
 import PropTypes from "prop-types";
-import React from "react";
 
 const SelectDropdown = ({
   filterByYearAndStatus,
@@ -26,7 +25,7 @@ const SelectDropdown = ({
           style={{ padding: 0, overflowY: "auto" }}
         >
           <Select.Viewport>
-            {options.map((option, index) => (
+            {options?.map((option, index) => (
               <Select.Item key={index} value={option} className="select-item">
                 <Select.ItemText>{option}</Select.ItemText>
                 <Select.ItemIndicator className="select-item-indicator">

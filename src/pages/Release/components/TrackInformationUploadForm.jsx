@@ -1,12 +1,35 @@
 import * as RadioGroup from "@radix-ui/react-radio-group";
 import ReleaseAudioUpload from "../../../components/ReleaseAudioUpload";
 import SearchDropdown from "../../../components/SearchDropdown";
-import SelectDropdown from "../../../components/SelectDropdown";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { useForm } from "react-hook-form";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import SelectDropdownForCreateRelease from "../../../components/SelectDropdownForCreateRelease";
+import { useSelector } from "react-redux";
 
 const TrackInformationUploadForm = ({artistsItems, lablesItems, trackFormat, step, setStep, steps,setShowForm, handlePrev}) => {
 
+    const { yearsList } = useSelector(state => state.yearsAndStatus);
+    // Genre and Language Data Get Form API ____________________________
+    const [allGenre, setAllGenre] = useState()
+    const [language, setLanguage] = useState()
+    useEffect(() => {
+        axios.get(`http://localhost:5000/admin/api/v1/genre`)
+        .then(res => {
+            const data = res.data.data;
+            const genreArray = data.map(item => item.genre);
+            setAllGenre(genreArray);
+        })
+        axios.get('http://localhost:5000/admin/api/v1/language')
+        .then(res => {
+            const data = res.data.data
+            const l = data.map(item => item.language);
+            console.log(l)
+            setLanguage(l);
+        })
+    }, [])
+    
     const {register, handleSubmit, setValue, watch, control, formState: {errors}} = useForm()
     
     const onSubmit = async (data) => {
@@ -18,12 +41,10 @@ const TrackInformationUploadForm = ({artistsItems, lablesItems, trackFormat, ste
         }else{
             console.log(data)  
             setShowForm(false)
-        }
-    
-        
-    
-        
+        }        
     }
+
+
   return (
     <div>
       <>
@@ -34,7 +55,7 @@ const TrackInformationUploadForm = ({artistsItems, lablesItems, trackFormat, ste
             {errors.tittle && <span style={{color: '#ea3958', marginTop: '5px'}}> Tittle Required</span>}
 
             <label>Version/Subtittle</label>
-            <input type="text" />
+            <input type="text" {...register("versionSubtittle")}/>
             <div className="form-grid release-form-grid">
             <div>
                 <label htmlFor="">Primary Artist *</label>
@@ -88,42 +109,57 @@ const TrackInformationUploadForm = ({artistsItems, lablesItems, trackFormat, ste
             </div>
             <div>
                 <label>Arranger</label>
-                <input type="text" />
+                <input type="text" {...register("arranger")}/>
             </div>
             <div>
                 <label>Producer</label>
-                <input type="text" />
+                <input type="text" {...register("producer")}/>
             </div>
             </div>
             <label>Publisher</label>
-            <input type="text" />
+            <input type="text" {...register("publisher")}/>
             <div className="form-grid release-form-grid">
             <div>
                 <label htmlFor="">Genre *</label>
-                <SelectDropdown
-                options={["Option 1", "Option 2", "Option 3"]}
-                placeholder="Select genre..."
-                className="createRelease-dropdown"
+                <SelectDropdownForCreateRelease
+                    options={allGenre}
+                    placeholder="Select genre..."
+                    className="createRelease-dropdown"
+                    register={{...register("genre", { required: true})}}
+                    dataName='genre'
+                    setValue={setValue}
+                    defaultValue={watch("genre")}
+                    errors={errors}
                 />
             </div>
             <div>
                 <label htmlFor="">Sub-Genre *</label>
-                <SelectDropdown
-                options={["Option 1", "Option 2", "Option 3"]}
-                placeholder="Select sub-genre..."
-                className="createRelease-dropdown"
+                <SelectDropdownForCreateRelease
+                    options={allGenre}
+                    placeholder="Select sub-genre..."
+                    className="createRelease-dropdown"
+                    register={{...register("subGenre", { required: true})}}
+                    dataName='subGenre'
+                    setValue={setValue}
+                    defaultValue={watch("subGenre")}
+                    errors={errors}
                 />
             </div>
             <div>
                 <label>℗ line *</label>
-                <input type="text" />
+                <input type="text" {...register("pLine", { required: true})}/>
             </div>
             <div>
                 <label htmlFor="">Production Year *</label>
-                <SelectDropdown
-                options={["Option 1", "Option 2", "Option 3"]}
-                placeholder="Select a year..."
-                className="createRelease-dropdown"
+                <SelectDropdownForCreateRelease
+                    options={yearsList.map(String)}
+                    placeholder="Select a year..."
+                    className="createRelease-dropdown"
+                    register={{...register("productionYear", { required: true})}}
+                    dataName='productionYear'
+                    setValue={setValue}
+                    defaultValue={watch("productionYear")}
+                    errors={errors}
                 />
             </div>
             <div>
@@ -145,7 +181,7 @@ const TrackInformationUploadForm = ({artistsItems, lablesItems, trackFormat, ste
             </div>
             <div>
                 <label>ISRC *</label>
-                <input type="text" />
+                <input type="text" {...register("ISRC", { required: true})}/>
             </div>
             <div>
                 <label htmlFor="">Parental advisory *</label>
@@ -172,18 +208,23 @@ const TrackInformationUploadForm = ({artistsItems, lablesItems, trackFormat, ste
             </div>
             <div>
                 <label htmlFor="">Preview start </label>
-                <input type="number" />
+                <input type="number" {...register("previewStart")}/>
             </div>
             </div>
             <label htmlFor="">Lyrics Language *</label>
-            <SelectDropdown
-            options={["Option 1", "Option 2", "Option 3"]}
-            placeholder="Select language..."
-            className="createRelease-dropdown"
+            <SelectDropdownForCreateRelease
+                options={language}
+                placeholder="Select language..."
+                className="createRelease-dropdown"
+                register={{...register("language", { required: true})}}
+                dataName='language'
+                setValue={setValue}
+                defaultValue={watch("language")}
+                errors={errors}
             />
 
             <label htmlFor="">Lyrics</label>
-            <textarea></textarea>
+            <textarea {...register("text")}></textarea>
             <br />
             <br />
             {
