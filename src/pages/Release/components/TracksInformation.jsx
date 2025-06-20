@@ -10,6 +10,7 @@ import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import { IoPlayCircleOutline } from "react-icons/io5";
 import SelectDropdown from "../../../components/SelectDropdown";
 import { ArrowLeft, ArrowRight } from "lucide-react";
+import ReleaseAudioUpload from "../../../components/ReleaseAudioUpload";
 function TracksInformation({ artistsItems, albumTrackList, step, setStep, steps, handleNext, handlePrev }) {
   const [tracktFormat, setTrackFormat] = useState("Singles");
   const [addAlbumInstrument, setAddAlbumInstrument] = useState("No");
@@ -47,10 +48,9 @@ function TracksInformation({ artistsItems, albumTrackList, step, setStep, steps,
         {tracktFormat === "Singles" ? (
           <>
             {" "}
-            <ImageUpload
-              placeholderImg="upload-img.png"
-              placeholderTxt="Drop your image here"
-              className="release-img-upload"
+
+            <ReleaseAudioUpload
+
             />
             <label htmlFor="">Instrumental *</label>
             <RadioGroup.Root
