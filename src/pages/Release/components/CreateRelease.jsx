@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import { ArrowLeft, ArrowRight } from "lucide-react";
 import AlbumInformation from "./AlbumInformation";
 import TracksInformation from "./TracksInformation";
 import ReleaseDate from "./ReleaseDate";
 import ReleaseOverview from "./ReleaseOverview";
+import { useSelector } from "react-redux";
+import axios from "axios";
 const steps = [
   "Album Information",
   "Tracks Information",
@@ -13,12 +14,14 @@ const steps = [
 ];
 
 function CreateRelease({
-  artistsItems,
-  LablesItems,
   releaseAlbumInfo,
   releaseTrackDetails,
   albumTrackList,
 }) {
+
+  const {userNameIdRoll} = useSelector((state) => state.userData);
+
+
   const [step, setStep] = useState(1);
   const handleNext = () => {
     if (step < steps.length - 1) {
@@ -31,6 +34,31 @@ function CreateRelease({
       setStep(step - 1);
     }
   };
+
+
+  // Artist Data Get Form API ____________________________
+    const [artist, setArtist] = useState()
+    useEffect(() => {
+      if(userNameIdRoll){
+        axios.get(`http://localhost:5000/api/v1/artist/for-release/${userNameIdRoll[1]}`)
+        .then(res => {
+            setArtist(res.data.data)
+            console.log(res.data.data)
+        })
+      }
+    }, [])
+    // Label Data Get Form API ____________________________
+    const [lebel, setLabel] = useState()
+    useEffect(() => {
+      if(userNameIdRoll){
+        axios.get(`http://localhost:5000/api/v1/labels/for-release/${userNameIdRoll[1]}`)
+        .then(res => {
+            setLabel(res.data.data);
+            console.log(res.data.data)
+        })
+      }
+
+    }, [])
 
   return (
     <div
@@ -76,8 +104,8 @@ function CreateRelease({
 
       {step === 0 && (
         <AlbumInformation
-          artistsItems={artistsItems}
-          LablesItems={LablesItems}
+          artistsItems={artist}
+          LablesItems={lebel}
           step={step}
           steps={steps}
           setStep={setStep}
@@ -86,7 +114,8 @@ function CreateRelease({
       )}
       {step === 1 && (
         <TracksInformation
-          artistsItems={artistsItems}
+          artistsItems={artist}
+          lablesItems={lebel}
           albumTrackList={albumTrackList}
           step={step}
           steps={steps}

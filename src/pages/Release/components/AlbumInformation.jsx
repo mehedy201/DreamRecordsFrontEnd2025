@@ -1,6 +1,5 @@
 import * as RadioGroup from "@radix-ui/react-radio-group";
 import SearchDropdown from "../../../components/SearchDropdown";
-
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import SelectDropdownForCreateRelease from "../../../components/SelectDropdownForCreateRelease";
@@ -13,7 +12,6 @@ import { setReleaseAlbumInfo } from "../../../redux/features/releaseDataHandleSl
 
 function AlbumInformation({ artistsItems, LablesItems, step, setStep, steps, handlePrev }) {
     
-  const {userNameIdRoll} = useSelector((state) => state.userData);
   const { yearsList } = useSelector(state => state.yearsAndStatus);
   const { releaseAlbumInfo } = useSelector(state => state.releaseData);
   const dispatch = useDispatch()
@@ -24,38 +22,26 @@ function AlbumInformation({ artistsItems, LablesItems, step, setStep, steps, han
   const defaultKey = releaseAlbumInfo.key
   const [uploadedImage, setUploadedImage] = useState({imgURL: defaultImgURL, key: defaultKey});
 
+  // Genre Data Get Form API ____________________________
   const [allGenre, setAllGenre] = useState()
   useEffect(() => {
-
     axios.get(`http://localhost:5000/admin/api/v1/genre`)
     .then(res => {
         const data = res.data.data;
         const genreArray = data.map(item => item.genre);
         setAllGenre(genreArray);
     })
-
-
-
-
-    // if(userNameIdRoll){
-    //   axios.get(`http://localhost:5000/api/v1/release/${userNameIdRoll[1]}?page=1&limit=6&status=All`)
-    //           .then( res => {
-    //             if(res.status == 200){
-    //               console.log(res.data.data)
-    //             }
-    //           })
-    //           .catch(er => console.log(er));
-    // }
   }, [])
+
+
 
   const [isVariousArtists, setIsVariousArtists] = useState(releaseAlbumInfo ? releaseAlbumInfo?.isVariousArtists : "no");
   const [isUPC, setIsUPC] = useState(releaseAlbumInfo ? releaseAlbumInfo?.haveUPCean : "yes");
 
-
+  // Form For Submit Album Information ____________________________________________________
   const {register, handleSubmit, setValue, watch, control, formState: {errors}} = useForm({
     defaultValues: releaseAlbumInfo
   })
-
   const [imgNotFoundErr, setImgNotFoundErr] = useState()
   const onSubmit = async (data) => {
     setImgNotFoundErr('')
@@ -94,7 +80,7 @@ function AlbumInformation({ artistsItems, LablesItems, step, setStep, steps, han
         <form onSubmit={handleSubmit(onSubmit)}>
           <label>Release Tittle *</label>
           <input type="text" {...register("releaseTitle", { required: true})}/>
-          {errors.releaseTitle && <span style={{color: '#ea3958'}}>Release Tittle Name Required</span>}
+          {errors.releaseTitle && <span style={{color: '#ea3958'}}>Release Tittle Required</span>}
 
           <label>Version/subtittle</label>
           <input type="text" {...register("subTitle")}/>
@@ -134,11 +120,9 @@ function AlbumInformation({ artistsItems, LablesItems, step, setStep, steps, han
                 <label htmlFor="">Select Artist *</label>
                 <SearchDropdown
                   items={artistsItems}
-                  itemKey="name"
-                  imagePath="artists/"
-                  imageKey="img"
                   searchTxt="Search and select artist"
                   itemName="Artist"
+                  register={{...register("globalArtist", { required: true})}}
                   onSelect={(items) => setValue("globalArtist", items, { shouldValidate: true })}
                   value={watch("globalArtist")} // Pass current value
                 />
@@ -149,15 +133,12 @@ function AlbumInformation({ artistsItems, LablesItems, step, setStep, steps, han
           <label htmlFor="">Featuring</label>
           <SearchDropdown
             items={artistsItems}
-            itemKey="name"
-            imagePath="artists/"
-            imageKey="img"
             itemName="Artist"
             searchTxt="Search and select Genre"
             onSelect={(items) => setValue("globalFeatureing", items, { shouldValidate: true })}
             value={watch("globalFeatureing")}
           />
-         
+
           <div className="form-grid release-form-grid">
             <div>
               <label htmlFor="">Genre *</label>
@@ -190,9 +171,6 @@ function AlbumInformation({ artistsItems, LablesItems, step, setStep, steps, han
           <label htmlFor="">Label Name *</label>
           <SearchDropdown
             items={LablesItems}
-            itemKey="name"
-            imagePath="lables/"
-            imageKey="img"
             itemName="Label"
             searchTxt="Search and select label"
             onSelect={(items) => setValue("globalLabel", items, { shouldValidate: true })}

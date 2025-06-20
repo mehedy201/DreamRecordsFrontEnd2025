@@ -5,24 +5,20 @@ import { Cross1Icon } from "@radix-ui/react-icons";
 import { ChevronDown } from "lucide-react";
 import * as Dialog from "@radix-ui/react-dialog";
 import Modal from "./Modal";
-import EditSingleArtist from "../pages/Artists/components/EditSingleArtist";
-import EditLable from "../pages/Lables/components/EditLable";
 import CreateArtist from "../pages/Artists/components/CreateArtist";
 import CreateLabel from "../pages/Lables/components/CreateLabel";
 const SearchDropdown = ({
   items,
-  itemKey,
-  imageKey,
   onSelect,
-  imagePath = "",
   searchTxt = "Search...",
   itemName,
-  artistSocialItems,
   value
 }) => {
+  // const [data, setData] = useState(items)
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedItems, setSelectedItems] = useState(value ? value : []);
   const [showResults, setShowResults] = useState(false);
+
   const handleSearch = (e) => {
     setSearchQuery(e.target.value);
     setShowResults(true);
@@ -31,7 +27,7 @@ const SearchDropdown = ({
   const handleItemClick = (item) => {
     if (
       !selectedItems.some(
-        (selectedItem) => selectedItem[itemKey] === item[itemKey]
+        (selectedItem) => selectedItem._id === item._id
       )
     ) {
       setSelectedItems([...selectedItems, item]);
@@ -47,15 +43,22 @@ const SearchDropdown = ({
   };
   const handleRemoveItem = (keyValue) => {
     const updatedItems = selectedItems.filter(
-      (item) => item[itemKey] !== keyValue
+      (item) => item._id !== keyValue
     );
     setSelectedItems(updatedItems);
     onSelect(updatedItems);
   };
 
-  const filteredItems = items.filter((item) =>
-    item[itemKey]?.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+const filteredItems = items?.filter((item) => {
+  if(itemName === 'Artist'){
+    const newItem = item.artistName?.toLowerCase().includes(searchQuery.toLowerCase())
+    return newItem
+  }
+  if(itemName === 'Label'){
+    const newItem = item.labelName?.toLowerCase().includes(searchQuery.toLowerCase())
+    return newItem
+  }
+});
 
 
 
@@ -77,13 +80,14 @@ const SearchDropdown = ({
           </Popover.Trigger>
 
           <Popover.Content className="popover-content">
-            {items.map((item, index) => (
+            {items?.map((item, index) => (
               <div
                 key={index}
                 className="dropdown-item"
                 onClick={() => handleItemClick(item)}
               >
-                <span>{item[itemKey]}</span>
+                {/* <span>{item[itemKey]}</span> */}
+                <span>{item?.artistName} {item?.labelName}</span>
               </div>
             ))}
           </Popover.Content>
@@ -91,14 +95,15 @@ const SearchDropdown = ({
         {/* Search results dropdown */}
         {searchQuery && showResults && (
           <div className="search-results-dropdown">
-            {filteredItems.length > 0 ? (
-              filteredItems.map((item, index) => (
+            {filteredItems?.length > 0 ? (
+              filteredItems?.map((item, index) => (
                 <div
                   key={index}
                   className="dropdown-item"
                   onClick={() => handleItemClick(item)}
                 >
-                  <span>{item[itemKey]}</span>
+                  {/* <span>{item[itemKey]}</span> */}
+                  <span>{item?.artistName} {item?.labelName}</span>
                 </div>
               ))
             ) : (
@@ -137,18 +142,17 @@ const SearchDropdown = ({
           <div className="selected-items">
             {value.map((item, index) => (
               <div key={index} className="selected-item">
-                {imageKey && (
                   <img
-                    src={`src/assets/${imagePath}/${item[imageKey]}`}
-                    alt={item[itemKey]}
+                    style={{borderRadius: '50%', objectFit: 'cover', objectPosition: 'center'}}
+                    src={item?.imgUrl}
+                    alt=''
                     className="item-image"
                   />
-                )}
                 <div className="item-details">
-                  <p>{item[itemKey]}</p>
-                  <small>{item?.release_sample}</small>
+                  <p>{item?.artistName} {item?.labelName}</p>
+                  {/* <small>{item?.release_sample}</small> */}
                 </div>
-                <span onClick={() => handleRemoveItem(item[itemKey])}>
+                <span onClick={() => handleRemoveItem(item._id)}>
                   <Cross1Icon />
                 </span>
               </div>
@@ -164,18 +168,16 @@ const SearchDropdown = ({
 SearchDropdown.propTypes = {
   items: PropTypes.arrayOf(
     PropTypes.shape({
-      release: PropTypes.string,
-      name: PropTypes.string,
-      img: PropTypes.string,
+      artistName: PropTypes.string,
+      labelName: PropTypes.string,
+      imgUrl: PropTypes.string,
+      _id: PropTypes.string,
     })
   ).isRequired,
   itemKey: PropTypes.string.isRequired,
-  imageKey: PropTypes.string,
   onSelect: PropTypes.func.isRequired,
-  imagePath: PropTypes.string,
   searchTxt: PropTypes.string,
   itemName: PropTypes.string,
-  artistSocialItems: PropTypes.array.isRequired,
 };
 
 export default SearchDropdown;
