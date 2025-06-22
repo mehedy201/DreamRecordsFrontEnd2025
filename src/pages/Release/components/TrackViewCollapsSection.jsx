@@ -5,12 +5,31 @@ import { IoPlayCircleOutline } from "react-icons/io5";
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
 import { RiDownloadLine } from "react-icons/ri";
 import AudioPlayerForTracViewTab from "../../../components/AudioPlayerForTracViewTab";
+import { useDispatch, useSelector } from "react-redux";
+import { X } from "lucide-react";
+import { setTracksInfo } from "../../../redux/features/releaseDataHandleSlice/releaseDataHandleSlice";
+import axios from "axios";
 
-const TrackViewCollapsSection = ({track}) => {
+const TrackViewCollapsSection = ({track, index}) => {
+
+    const {tracksInfo} = useSelector(state => state.releaseData);
+    const dispatch = useDispatch()
     const [albumOverviewSong, setAlbumOverviewSong] = useState(false);
     const trackTittle = track.tittle;
     const trackAudioUrl = track.audioUrl;
     const dataForAudioPlayer = {tittle: trackTittle, audioUrl: trackAudioUrl}
+
+    const deleteTrack = (indexNumber) => {
+      const updatedTracks = tracksInfo.filter((item, index) => index !== indexNumber);
+      dispatch(setTracksInfo(updatedTracks))
+      axios.delete(`http://localhost:5000/api/v1/release/delete-file?key=${track.audioKey}`)
+      .then( res => {
+      if(res.status == 200){
+          alert('Deleted')
+      }
+      })
+      .catch(er => console.log(er));
+    }
     
 
   return (
@@ -25,7 +44,8 @@ const TrackViewCollapsSection = ({track}) => {
             <div style={{flexGrow: 1}}>
                 <AudioPlayerForTracViewTab data={dataForAudioPlayer}/>
             </div>
-            <div style={{flexShrink: 0}}>
+            <div style={{flexShrink: 0, display: 'flex', alignItems: 'center', gap: '15px'}}>
+                <X size={18} onClick={() => deleteTrack(index)} style={{color: 'red', cursor: 'pointer'}}/>
                 <Collapsible.Trigger asChild>
                         {albumOverviewSong ? (
                             <MdKeyboardArrowUp className="release-album-arrowIcon" />

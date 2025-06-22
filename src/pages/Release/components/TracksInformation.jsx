@@ -1,18 +1,36 @@
 import PropTypes from "prop-types";
 import * as RadioGroup from "@radix-ui/react-radio-group";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import TrackInformationUploadForm from "./TrackInformationUploadForm";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import TrackViewCollapsSection from "./TrackViewCollapsSection";
-function TracksInformation({ artistsItems, step, setStep, steps, handleNext, handlePrev, lablesItems}) {
+import { setTrackFormat } from "../../../redux/features/releaseDataHandleSlice/releaseDataHandleSlice";
+function TracksInformation({ step, setStep, steps, handlePrev}) {
 
-  const [trackFormat, setTrackFormat] = useState("Singles");
-  const {tracksInfo} = useSelector(state => state.releaseData)
+  
+
+  const {tracksInfo, trackFormat} = useSelector(state => state.releaseData);
+  const dispatch = useDispatch();
 
   const [showForm, setShowForm] = useState(false);
   const handleAddTrackClick = () => {
     setShowForm(true);
+  };
+
+
+  const [error,setError] = useState('')
+  const handleNext = () => {
+    setError('')
+    console.log(tracksInfo.length)
+    if (tracksInfo.length === 0) {
+      setError("Please Add Track"); 
+    } else {
+      if (step < steps.length - 1) {
+      setStep(step + 1);
+    }
+    }
+    
   };
 
 
@@ -23,8 +41,8 @@ function TracksInformation({ artistsItems, step, setStep, steps, handleNext, han
         <label htmlFor="">Format</label>
         <RadioGroup.Root
           className="radio-group"
-          value={trackFormat}
-          onValueChange={setTrackFormat}
+          defaultValue={trackFormat}
+          onValueChange={(value) => dispatch(setTrackFormat(value))}
         >
           <label className="radio-label">
             <span><RadioGroup.Item className="radio-item" value="Singles" />&nbsp; Singles</span>
@@ -36,14 +54,29 @@ function TracksInformation({ artistsItems, step, setStep, steps, handleNext, han
 
         {
           trackFormat === "Singles" &&
-          <TrackInformationUploadForm
-            trackFormat={trackFormat}
-            step={step}
-            steps={steps}
-            setStep={setStep}
-            handlePrev={handlePrev}
-            setShowForm={setShowForm}
-            />
+          <>
+            {
+              tracksInfo.length > 1 && 
+              <>
+                <p style={{color: 'red', border: '1px solid red', padding: '5px', borderRadius: '10px', margin: '10px'}}>Please Remove Extra Tracks Becuse You Select Single Release Also take only First Track Data</p>
+                {
+                tracksInfo &&
+                tracksInfo.map((track, index) => 
+                  <div key={index}>
+                    <TrackViewCollapsSection track={track} index={index}/>
+                  </div>
+                )
+              }
+              </>
+            }
+            <TrackInformationUploadForm
+              step={step}
+              steps={steps}
+              setStep={setStep}
+              handlePrev={handlePrev}
+              setShowForm={setShowForm}
+              />
+          </>
         }
         {
           trackFormat === "Album" &&
@@ -54,7 +87,7 @@ function TracksInformation({ artistsItems, step, setStep, steps, handleNext, han
                 tracksInfo &&
                 tracksInfo.map((track, index) => 
                   <div key={index}>
-                    <TrackViewCollapsSection track={track}/>
+                    <TrackViewCollapsSection track={track} index={index}/>
                   </div>
                 )
               }
@@ -84,6 +117,9 @@ function TracksInformation({ artistsItems, step, setStep, steps, handleNext, han
 
       {/* This Next And Pre Button Will active if release type Album _____________ */}
       {
+        error && <p style={{color: 'red'}}>{error}</p>
+      }
+      {
         trackFormat === 'Album' &&
         <>
           {step === 4 || (
@@ -109,15 +145,19 @@ function TracksInformation({ artistsItems, step, setStep, steps, handleNext, han
             >
               cancel
             </button>
-            {step < steps.length - 1 ? (
+            {
+              trackFormat === 'Album' && !showForm &&
               <button className="theme-btn" onClick={handleNext}>
                 Next &nbsp; <ArrowRight />
               </button>
-            ) : (
-              <button className="theme-btn" onClick={() => setStep(4)}>
-                Submit &nbsp; <ArrowRight />
+            }
+            {
+              trackFormat === 'Album' && showForm &&
+              <button className="theme-btn">
+                Please Fill The Form First &nbsp; <ArrowRight />
               </button>
-            )}
+            }
+           
           </div>
         )}
         </>

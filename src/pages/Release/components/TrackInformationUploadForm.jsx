@@ -1,19 +1,20 @@
 import * as RadioGroup from "@radix-ui/react-radio-group";
 import ReleaseAudioUpload from "../../../components/ReleaseAudioUpload";
 import SearchDropdown from "../../../components/SearchDropdown";
-import { ArrowLeft, ArrowRight } from "lucide-react";
+import { ArrowLeft, ArrowRight, X } from "lucide-react";
 import { Controller, useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import SelectDropdownForCreateRelease from "../../../components/SelectDropdownForCreateRelease";
 import { useDispatch, useSelector } from "react-redux";
-import { setSingleTrackInfo, setTracksInfo } from "../../../redux/features/releaseDataHandleSlice/releaseDataHandleSlice";
+import { setTracksInfo } from "../../../redux/features/releaseDataHandleSlice/releaseDataHandleSlice";
 
-const TrackInformationUploadForm = ({artistsItems, trackFormat, step, setStep, steps,setShowForm, handlePrev}) => {
+const TrackInformationUploadForm = ({ step, setStep, steps,setShowForm, handlePrev}) => {
+
+    const { trackFormat, tracksInfo} = useSelector(state => state.releaseData);
 
     const {userNameIdRoll} = useSelector((state) => state.userData);
     const { yearsList } = useSelector(state => state.yearsAndStatus);
-    const {singleTrackInfo} = useSelector(state => state.releaseData);
     const dispatch = useDispatch();
 
 
@@ -45,17 +46,18 @@ const TrackInformationUploadForm = ({artistsItems, trackFormat, step, setStep, s
     }, [userNameIdRoll])
 
     
-    const preAudioKey = singleTrackInfo?.audioKey
-    const preAudioUrl = singleTrackInfo?.audioUrl
-    const preAudioName = singleTrackInfo?.audioName
+    const preAudioKey = trackFormat === 'Singles' ? tracksInfo[0]?.audioKey : '';
+    const preAudioUrl = trackFormat === 'Singles' ? tracksInfo[0]?.audioUrl : '';
+    const preAudioName = trackFormat === 'Singles' ? tracksInfo[0]?.audioName : '';
     const fullPreAudioData = {audioKey: preAudioKey, audioName: preAudioName, audioUrl: preAudioUrl}
-    const [audioData, setAudioData] = useState(singleTrackInfo?.audioUrl ? fullPreAudioData : '');
+    const [audioData, setAudioData] = useState(trackFormat === 'Singles' && tracksInfo[0]?.audioUrl ? fullPreAudioData : '');
     const [audioErr, setAudioErr] = useState();
 
     const [isISRC, setIsISRC] = useState();
     const {register, handleSubmit, setValue, watch, reset, control, formState: {errors}} = useForm({
-        defaultValues: singleTrackInfo
+        defaultValues: trackFormat === 'Singles' ? tracksInfo[0] : {}
     })
+
     const onSubmit = async (data) => {
         setAudioErr('')
         if(!audioData){
@@ -63,25 +65,39 @@ const TrackInformationUploadForm = ({artistsItems, trackFormat, step, setStep, s
             return;
         }
         if(trackFormat === 'Singles'){
-            const nData = {...data, ...audioData}
-            dispatch(setSingleTrackInfo(nData)) 
+            const nData = [{...data, ...audioData}]
+            dispatch(setTracksInfo(nData)) 
+            setAudioData('')
+            reset();
             if (step < steps.length - 1) {
                 setStep(step + 1);
             }
         }else{
             console.log(data)  
-            const nData = [{...data, ...audioData}]
-            dispatch(setSingleTrackInfo(nData)) 
-            dispatch(setTracksInfo(nData))
+            const formData = {...data, ...audioData}
+            const dataWithPre = [...tracksInfo, formData]
+            dispatch(setTracksInfo(dataWithPre)) 
             setShowForm(false)
+            setAudioData('')
             reset() 
         }        
+    }
+
+    const closeForm = () => {
+        setShowForm(false)
+        reset()
     }
 
 
   return (
     <div>
       <>
+        {
+            trackFormat === "Album" &&
+            <div style={{display: 'flex', justifyContent: 'end'}}>
+                <X onClick={closeForm} style={{color: 'red', cursor: 'pointer', paddingRight: '8px', paddingBottom: '5px'}}/>
+            </div>
+        }
         <ReleaseAudioUpload 
             audioData={audioData} 
             setAudioData={setAudioData}
@@ -274,7 +290,7 @@ const TrackInformationUploadForm = ({artistsItems, trackFormat, step, setStep, s
                     </RadioGroup.Root>
                     )}
                 />
-              {errors.isISRC && <span style={{color: '#ea3958'}}>Parental advisory Required</span>}
+              {errors.parentalAdvisory && <span style={{color: '#ea3958'}}>Parental advisory Required</span>}
                 
             </div>
             <div>

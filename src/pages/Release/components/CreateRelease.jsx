@@ -16,7 +16,6 @@ const steps = [
 function CreateRelease({
   releaseAlbumInfo,
   releaseTrackDetails,
-  albumTrackList,
 }) {
 
   const {userNameIdRoll} = useSelector((state) => state.userData);
@@ -105,7 +104,6 @@ function CreateRelease({
           step={step}
           steps={steps}
           setStep={setStep}
-          handleNext={handleNext}
           handlePrev={handlePrev}
         />
       )}
