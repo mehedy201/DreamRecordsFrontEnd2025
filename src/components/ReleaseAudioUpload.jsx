@@ -3,15 +3,15 @@ import PropTypes from "prop-types"; // ✅ Import PropTypes
 import { CircleX } from "lucide-react";
 import uploadFileIcon from '../assets/icons/upload-img.png'
 import axios from "axios";
-import AudioPlayer from "./AudioPlayerForCreateRelease";
 import AudioPlayerForCreateRelease from "./AudioPlayerForCreateRelease";
 
 const ReleaseAudioUpload = ({
-    className
+    className,
+    audioData,
+    setAudioData
 }) => {
   const [errorMessage, setErrorMessage] = useState("");
   const [uploadLoading, setUploadLoading] = useState(false)
-  const [audioData, setAudioData] = useState();
 
   const releaseAudioUpload = (event) => {
         if(!event){
@@ -110,15 +110,7 @@ const ReleaseAudioUpload = ({
 
 // ✅ Add PropTypes validation
 ReleaseAudioUpload.propTypes = {
-  title: PropTypes.string.isRequired,
-  description: PropTypes.string.isRequired,
   className: PropTypes.string,
-  placeholderImg: PropTypes.string,
-  placeholderTxt: PropTypes.string,
-  imageLink: PropTypes.string,
-  setImageLink: PropTypes.func,
-  setUploadedImage: PropTypes.func,
-  uploadedImage: PropTypes.object
 };
 
 export default ReleaseAudioUpload;

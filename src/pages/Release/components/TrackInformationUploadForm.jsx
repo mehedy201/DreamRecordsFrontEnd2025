@@ -2,15 +2,21 @@ import * as RadioGroup from "@radix-ui/react-radio-group";
 import ReleaseAudioUpload from "../../../components/ReleaseAudioUpload";
 import SearchDropdown from "../../../components/SearchDropdown";
 import { ArrowLeft, ArrowRight } from "lucide-react";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import SelectDropdownForCreateRelease from "../../../components/SelectDropdownForCreateRelease";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { setSingleTrackInfo, setTracksInfo } from "../../../redux/features/releaseDataHandleSlice/releaseDataHandleSlice";
 
-const TrackInformationUploadForm = ({artistsItems, lablesItems, trackFormat, step, setStep, steps,setShowForm, handlePrev}) => {
+const TrackInformationUploadForm = ({artistsItems, trackFormat, step, setStep, steps,setShowForm, handlePrev}) => {
 
+    const {userNameIdRoll} = useSelector((state) => state.userData);
     const { yearsList } = useSelector(state => state.yearsAndStatus);
+    const {singleTrackInfo} = useSelector(state => state.releaseData);
+    const dispatch = useDispatch();
+
+
     // Genre and Language Data Get Form API ____________________________
     const [allGenre, setAllGenre] = useState()
     const [language, setLanguage] = useState()
@@ -25,22 +31,50 @@ const TrackInformationUploadForm = ({artistsItems, lablesItems, trackFormat, ste
         .then(res => {
             const data = res.data.data
             const l = data.map(item => item.language);
-            console.log(l)
             setLanguage(l);
         })
     }, [])
+
+    // Artist Data Get Form API ____________________________
+    const [artist, setArtist] = useState()
+    useEffect(() => {
+        axios.get(`http://localhost:5000/api/v1/artist/for-release/${userNameIdRoll ? userNameIdRoll[1]: ''}`)
+        .then(res => {
+            setArtist(res.data.data)
+        })
+    }, [userNameIdRoll])
+
     
-    const {register, handleSubmit, setValue, watch, control, formState: {errors}} = useForm()
-    
+    const preAudioKey = singleTrackInfo?.audioKey
+    const preAudioUrl = singleTrackInfo?.audioUrl
+    const preAudioName = singleTrackInfo?.audioName
+    const fullPreAudioData = {audioKey: preAudioKey, audioName: preAudioName, audioUrl: preAudioUrl}
+    const [audioData, setAudioData] = useState(singleTrackInfo?.audioUrl ? fullPreAudioData : '');
+    const [audioErr, setAudioErr] = useState();
+
+    const [isISRC, setIsISRC] = useState();
+    const {register, handleSubmit, setValue, watch, reset, control, formState: {errors}} = useForm({
+        defaultValues: singleTrackInfo
+    })
     const onSubmit = async (data) => {
+        setAudioErr('')
+        if(!audioData){
+            setAudioErr('Please add Audio File')
+            return;
+        }
         if(trackFormat === 'Singles'){
-            console.log(data)  
+            const nData = {...data, ...audioData}
+            dispatch(setSingleTrackInfo(nData)) 
             if (step < steps.length - 1) {
                 setStep(step + 1);
             }
         }else{
             console.log(data)  
+            const nData = [{...data, ...audioData}]
+            dispatch(setSingleTrackInfo(nData)) 
+            dispatch(setTracksInfo(nData))
             setShowForm(false)
+            reset() 
         }        
     }
 
@@ -48,7 +82,13 @@ const TrackInformationUploadForm = ({artistsItems, lablesItems, trackFormat, ste
   return (
     <div>
       <>
-        <ReleaseAudioUpload/>
+        <ReleaseAudioUpload 
+            audioData={audioData} 
+            setAudioData={setAudioData}
+        />
+        {
+            audioErr && <p style={{color: 'red'}}>{audioErr}</p>
+        }
         <form onSubmit={handleSubmit(onSubmit)}>
             <label>Tittle *</label>
             <input type="text" {...register("tittle", { required: true})}/>
@@ -61,7 +101,7 @@ const TrackInformationUploadForm = ({artistsItems, lablesItems, trackFormat, ste
                 <label htmlFor="">Primary Artist *</label>
 
                 <SearchDropdown
-                    items={artistsItems}
+                    items={artist}
                     searchTxt="Search and select primary artist"
                     itemName="Artist"
                     register={{...register("primaryArtist", { required: true})}}
@@ -74,7 +114,7 @@ const TrackInformationUploadForm = ({artistsItems, lablesItems, trackFormat, ste
                 <label htmlFor="">Featuring</label>
 
                 <SearchDropdown
-                    items={artistsItems}
+                    items={artist}
                     searchTxt="Search and select featuring"
                     itemName="Artist"
                     onSelect={(items) => setValue("featuring", items, { shouldValidate: true })}
@@ -85,7 +125,7 @@ const TrackInformationUploadForm = ({artistsItems, lablesItems, trackFormat, ste
                 <label htmlFor="">Lyricist *</label>
 
                 <SearchDropdown
-                    items={artistsItems}
+                    items={artist}
                     searchTxt="Search and select lyricist"
                     itemName="Artist"
                     register={{...register("lyricist", { required: true})}}
@@ -98,7 +138,7 @@ const TrackInformationUploadForm = ({artistsItems, lablesItems, trackFormat, ste
                 <label htmlFor="">Composer *</label>
 
                 <SearchDropdown
-                    items={artistsItems}
+                    items={artist}
                     searchTxt="Search and select composer"
                     itemName="Artist"
                     register={{...register("composer", { required: true})}}
@@ -164,47 +204,78 @@ const TrackInformationUploadForm = ({artistsItems, lablesItems, trackFormat, ste
             </div>
             <div>
                 <label htmlFor="">Do you already have a ISRC? *</label>
-                <RadioGroup.Root className="radio-group" defaultValue="Yes">
-                <label className="radio-label">
-                    <span>
-                    <RadioGroup.Item className="radio-item" value="No" />
-                    &nbsp; No
-                    </span>
-                </label>
-                <label className="radio-label">
-                    <span>
-                    <RadioGroup.Item className="radio-item" value="Yes" />
-                    &nbsp; Yes
-                    </span>
-                </label>
-                </RadioGroup.Root>
+                <Controller
+                name="isISRC"
+                control={control}
+                rules={{ required: "This selection is required" }}
+                render={({ field }) => (
+                  <RadioGroup.Root
+                    className="radio-group"
+                    value={field.value}
+                    onValueChange={(value) => {
+                      field.onChange(value);
+                      setIsISRC(value)
+                    }}
+                  >
+                    <label className="radio-label">
+                        <span>
+                            <RadioGroup.Item className="radio-item" value="No" />
+                            &nbsp; No
+                        </span>
+                    </label>
+                    <label className="radio-label">
+                        <span>
+                            <RadioGroup.Item className="radio-item" value="Yes" />
+                            &nbsp; Yes
+                        </span>
+                    </label>
+                  </RadioGroup.Root>
+                )}
+              />
+              {errors.isISRC && <span style={{color: '#ea3958'}}>This field Required</span>}
             </div>
-            <div>
-                <label>ISRC *</label>
-                <input type="text" {...register("ISRC", { required: true})}/>
-            </div>
+            {
+                isISRC === 'Yes' &&
+                <div>
+                    <label>ISRC *</label>
+                    <input type="text" {...register("ISRC", { required: true})}/>
+                </div>
+            }
             <div>
                 <label htmlFor="">Parental advisory *</label>
-                <RadioGroup.Root className="radio-group" defaultValue="Yes">
-                <label className="radio-label">
-                    <span>
-                    <RadioGroup.Item className="radio-item" value="No" />
-                    &nbsp; No
-                    </span>
-                </label>
-                <label className="radio-label">
-                    <span>
-                    <RadioGroup.Item className="radio-item" value="Yes" />
-                    &nbsp; Yes
-                    </span>
-                </label>
-                <label className="radio-label">
-                    <span>
-                    <RadioGroup.Item className="radio-item" value="Cleaned" />
-                    &nbsp; Cleaned
-                    </span>
-                </label>
-                </RadioGroup.Root>
+                <Controller
+                name="parentalAdvisory"
+                control={control}
+                rules={{ required: "This selection is required" }}
+                render={({ field }) => (
+                  <RadioGroup.Root
+                    className="radio-group"
+                    value={field.value}
+                    onValueChange={(value) => field.onChange(value)}
+                  >
+                    <label className="radio-label">
+                        <span>
+                            <RadioGroup.Item className="radio-item" value="No" />
+                            &nbsp; No
+                        </span>
+                    </label>
+                    <label className="radio-label">
+                        <span>
+                            <RadioGroup.Item className="radio-item" value="Yes" />
+                            &nbsp; Yes
+                        </span>
+                    </label>
+                    <label className="radio-label">
+                        <span>
+                        <RadioGroup.Item className="radio-item" value="Cleaned" />
+                        &nbsp; Cleaned
+                        </span>
+                    </label>
+                    </RadioGroup.Root>
+                    )}
+                />
+              {errors.isISRC && <span style={{color: '#ea3958'}}>Parental advisory Required</span>}
+                
             </div>
             <div>
                 <label htmlFor="">Preview start </label>

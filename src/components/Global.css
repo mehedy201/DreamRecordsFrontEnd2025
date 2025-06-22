@@ -918,3 +918,16 @@ label {
     width: cover;
   }
 }
+
+
+/* Mehedi  */
+@media (max-width: 1020px) {
+  .audioDuration {
+    display: none;
+  }
+}
+@media (max-width: 920px) {
+  .progressBarResponsive {
+    display: none;
+  }
+}

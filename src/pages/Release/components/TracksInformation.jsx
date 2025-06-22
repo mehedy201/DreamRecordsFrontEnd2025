@@ -3,9 +3,12 @@ import * as RadioGroup from "@radix-ui/react-radio-group";
 import { useState } from "react";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import TrackInformationUploadForm from "./TrackInformationUploadForm";
+import { useSelector } from "react-redux";
+import TrackViewCollapsSection from "./TrackViewCollapsSection";
 function TracksInformation({ artistsItems, step, setStep, steps, handleNext, handlePrev, lablesItems}) {
 
   const [trackFormat, setTrackFormat] = useState("Singles");
+  const {tracksInfo} = useSelector(state => state.releaseData)
 
   const [showForm, setShowForm] = useState(false);
   const handleAddTrackClick = () => {
@@ -34,8 +37,6 @@ function TracksInformation({ artistsItems, step, setStep, steps, handleNext, han
         {
           trackFormat === "Singles" &&
           <TrackInformationUploadForm
-            artistsItems={artistsItems} 
-            lablesItems={lablesItems}
             trackFormat={trackFormat}
             step={step}
             steps={steps}
@@ -48,11 +49,19 @@ function TracksInformation({ artistsItems, step, setStep, steps, handleNext, han
           trackFormat === "Album" &&
           <>
           <div id="formOpenDiv">
+            <div>
+              {
+                tracksInfo &&
+                tracksInfo.map((track, index) => 
+                  <div key={index}>
+                    <TrackViewCollapsSection track={track}/>
+                  </div>
+                )
+              }
+            </div>
           {
             showForm &&
             <TrackInformationUploadForm
-              artistsItems={artistsItems} 
-              lablesItems={lablesItems}
               step={step}
               steps={steps}
               setStep={setStep}

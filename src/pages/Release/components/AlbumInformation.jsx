@@ -10,8 +10,9 @@ import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { setReleaseAlbumInfo } from "../../../redux/features/releaseDataHandleSlice/releaseDataHandleSlice";
 
-function AlbumInformation({ artistsItems, LablesItems, step, setStep, steps, handlePrev }) {
+function AlbumInformation({ step, setStep, steps, handlePrev }) {
     
+  const {userNameIdRoll} = useSelector((state) => state.userData);
   const { yearsList } = useSelector(state => state.yearsAndStatus);
   const { releaseAlbumInfo } = useSelector(state => state.releaseData);
   const dispatch = useDispatch()
@@ -32,6 +33,27 @@ function AlbumInformation({ artistsItems, LablesItems, step, setStep, steps, han
         setAllGenre(genreArray);
     })
   }, [])
+
+      // Label Data Get Form API ____________________________
+    const [lebel, setLabel] = useState()
+    useEffect(() => {
+      if(userNameIdRoll){
+        axios.get(`http://localhost:5000/api/v1/labels/for-release/${userNameIdRoll[1]}`)
+        .then(res => {
+            setLabel(res.data.data);
+        })
+      }
+    }, [userNameIdRoll])
+
+     // Artist Data Get Form API ____________________________
+    const [artist, setArtist] = useState()
+    useEffect(() => {
+        axios.get(`http://localhost:5000/api/v1/artist/for-release/${userNameIdRoll ? userNameIdRoll[1]: ''}`)
+        .then(res => {
+            setArtist(res.data.data)
+            console.log(res)
+        })
+    }, [userNameIdRoll])
 
 
 
@@ -119,7 +141,7 @@ function AlbumInformation({ artistsItems, LablesItems, step, setStep, steps, han
               <div>
                 <label htmlFor="">Select Artist *</label>
                 <SearchDropdown
-                  items={artistsItems}
+                  items={artist}
                   searchTxt="Search and select artist"
                   itemName="Artist"
                   register={{...register("globalArtist", { required: true})}}
@@ -132,7 +154,7 @@ function AlbumInformation({ artistsItems, LablesItems, step, setStep, steps, han
           </div>
           <label htmlFor="">Featuring</label>
           <SearchDropdown
-            items={artistsItems}
+            items={artist}
             itemName="Artist"
             searchTxt="Search and select Genre"
             onSelect={(items) => setValue("globalFeatureing", items, { shouldValidate: true })}
@@ -170,7 +192,7 @@ function AlbumInformation({ artistsItems, LablesItems, step, setStep, steps, han
           </div>
           <label htmlFor="">Label Name *</label>
           <SearchDropdown
-            items={LablesItems}
+            items={lebel}
             itemName="Label"
             searchTxt="Search and select label"
             onSelect={(items) => setValue("globalLabel", items, { shouldValidate: true })}
@@ -292,7 +314,7 @@ function AlbumInformation({ artistsItems, LablesItems, step, setStep, steps, han
   );
 }
 AlbumInformation.propTypes = {
-  artistsItems: PropTypes.array.isRequired,
+  artist: PropTypes.array.isRequired,
   LablesItems: PropTypes.array.isRequired,
 };
 export default AlbumInformation;

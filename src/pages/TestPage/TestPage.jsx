@@ -1,488 +1,94 @@
-// import React from 'react';
+import React from 'react';
+import { useForm } from 'react-hook-form';
 
-// const TestPage = () => {
-//     return (
-//         <div>
-            
-//         </div>
-//     );
-// };
+const TestPage = () => {
+  // প্রতিটি ফর্মের জন্য আলাদা useForm হুক
+  const { register: form1Register, handleSubmit: handleForm1Submit, formState: { errors: form1Errors }, trigger: form1Trigger } = useForm();
+  const { register: form2Register, handleSubmit: handleForm2Submit, formState: { errors: form2Errors }, trigger: form2Trigger } = useForm();
+  const { register: form3Register, handleSubmit: handleForm3Submit, formState: { errors: form3Errors }, trigger: form3Trigger } = useForm();
 
-// export default TestPage;
-
-import React, { useState } from 'react';
-
-// Track input form
-const TrackForm = ({ initialData = {}, onSubmit, onCancel }) => {
-  const [formData, setFormData] = useState(initialData);
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+  // প্রতিটি ফর্মের সাবমিট হ্যান্ডলার
+  const onSubmitForm1 = (data) => {
+    console.log('Form 1 Data:', data);
+    return data;
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    onSubmit(formData);
+  const onSubmitForm2 = (data) => {
+    console.log('Form 2 Data:', data);
+    return data;
+  };
+
+  const onSubmitForm3 = (data) => {
+    console.log('Form 3 Data:', data);
+    return data;
+  };
+
+  // মূল সাবমিট বাটন হ্যান্ডলার
+  const handleGlobalSubmit = async () => {
+    // সব ফর্মের ভ্যালিডেশন ট্রিগার
+    const isForm1Valid = await form1Trigger();
+    const isForm2Valid = await form2Trigger();
+    const isForm3Valid = await form3Trigger();
+
+    if (isForm1Valid && isForm2Valid && isForm3Valid) {
+      // সব ফর্ম সাবমিট করুন
+      handleForm1Submit(onSubmitForm1)();
+      handleForm2Submit(onSubmitForm2)();
+      handleForm3Submit(onSubmitForm3)();
+      
+      // অথবা একসাথে সব ডাটা প্রসেস করতে চাইলে:
+      // const form1Data = form1GetValues();
+      // const form2Data = form2GetValues();
+      // const form3Data = form3GetValues();
+      // console.log('All Data:', { form1Data, form2Data, form3Data });
+    } else {
+      console.log('সব ফর্মের প্রয়োজনীয় তথ্য পূরণ করুন');
+    }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="border p-4 rounded shadow mb-4">
-      <input
-        type="text"
-        name="title"
-        placeholder="Track Title"
-        value={formData.title || ''}
-        onChange={handleChange}
-        className="block w-full mb-2 p-2 border rounded"
-        required
-      />
-      <input
-        type="text"
-        name="duration"
-        placeholder="Duration (e.g., 04:23)"
-        value={formData.duration || ''}
-        onChange={handleChange}
-        className="block w-full mb-2 p-2 border rounded"
-        required
-      />
-      <input
-        type="text"
-        name="artist"
-        placeholder="Artist Name"
-        value={formData.artist || ''}
-        onChange={handleChange}
-        className="block w-full mb-2 p-2 border rounded"
-        required
-      />
-      <div className="flex gap-2">
-        <button type="submit" className="bg-green-600 text-white px-4 py-2 rounded">Save</button>
-        <button type="button" className="bg-gray-400 text-white px-4 py-2 rounded" onClick={onCancel}>Cancel</button>
-      </div>
-    </form>
-  );
-};
-
-// Track card component
-const TrackCard = ({ data, onEdit, isExpanded }) => {
-  return (
-    <div className="border p-4 mb-2 rounded shadow">
-      <div className="flex justify-between items-center">
+    <div>
+      {/* ফর্ম ১ */}
+      <form>
+        <h2>ফর্ম ১</h2>
         <div>
-          <p className="font-bold">{data.title}</p>
-          <p className="text-sm text-gray-600">{data.artist} - {data.duration}</p>
+          <label>নাম (আবশ্যক)</label>
+          <input {...form1Register('name', { required: 'নাম আবশ্যক' })} />
+          {form1Errors.name && <p style={{ color: 'red' }}>{form1Errors.name.message}</p>}
         </div>
-        <button onClick={onEdit} className="text-blue-600 underline text-sm">
-          {isExpanded ? 'Collapse' : 'Edit'}
-        </button>
-      </div>
+        
+        <div>
+          <label>ইমেইল</label>
+          <input {...form1Register('email')} />
+        </div>
+      </form>
+
+      {/* ফর্ম ২ */}
+      <form>
+        <h2>ফর্ম ২</h2>
+        <div>
+          <label>ঠিকানা (আবশ্যক)</label>
+          <input {...form2Register('address', { required: 'ঠিকানা আবশ্যক' })} />
+          {form2Errors.address && <p style={{ color: 'red' }}>{form2Errors.address.message}</p>}
+        </div>
+      </form>
+
+      {/* ফর্ম ৩ */}
+      <form>
+        <h2>ফর্ম ৩</h2>
+        <div>
+          <label>ফোন নম্বর (আবশ্যক)</label>
+          <input {...form3Register('phone', { required: 'ফোন নম্বর আবশ্যক' })} />
+          {form3Errors.phone && <p style={{ color: 'red' }}>{form3Errors.phone.message}</p>}
+        </div>
+      </form>
+
+      {/* গ্লোবাল সাবমিট বাটন */}
+      <button onClick={handleGlobalSubmit} style={{ marginTop: '20px', padding: '10px 20px' }}>
+        সব ফর্ম সাবমিট করুন
+      </button>
     </div>
   );
 };
 
-// Main release upload page
-const TestPage = () => {
-  const [mode, setMode] = useState('single');
-  const [tracks, setTracks] = useState([]);
-  const [showForm, setShowForm] = useState(true);
-  const [editIndex, setEditIndex] = useState(null);
-
-  const handleModeChange = (e) => {
-    setMode(e.target.value);
-    setTracks([]);
-    setShowForm(true);
-    setEditIndex(null);
-  };
-
-  const handleTrackSubmit = (formData) => {
-    if (editIndex !== null) {
-      const updated = [...tracks];
-      updated[editIndex] = formData;
-      setTracks(updated);
-      setEditIndex(null);
-    } else {
-      setTracks([...tracks, formData]);
-    }
-    setShowForm(false);
-  };
-
-  return (
-    <>
-    {tracktFormat === "Singles" ? (
-          <>
-            {" "}
-
-            <ReleaseAudioUpload/>
-            <label htmlFor="">Instrumental *</label>
-            <RadioGroup.Root
-              className="radio-group"
-              value={addAlbumInstrument}
-              onValueChange={setAddAlbumInstrument}
-            >
-              <label className="radio-label">
-                <span>
-                  <RadioGroup.Item className="radio-item" value="No" />
-                  &nbsp; No
-                </span>
-              </label>
-              <label className="radio-label">
-                <span>
-                  <RadioGroup.Item className="radio-item" value="Yes" />
-                  &nbsp; Yes
-                </span>
-              </label>
-            </RadioGroup.Root>
-            {addAlbumInstrument === "No" ? (
-              <>
-                {/* <label>Tittle *</label>
-                <input type="text" />
-                <label>Version/Subtittle</label>
-                <input type="text" />
-                <div className="form-grid release-form-grid">
-                  <div>
-                    <label htmlFor="">Primary Artist *</label>
-
-                    <SearchDropdown
-                      items={artistsItems}
-                      itemKey="name"
-                      imagePath="artists/"
-                      imageKey="img"
-                      searchTxt="Search and select primary artist"
-                    />
-                  </div>
-                  <div>
-                    <label htmlFor="">Featuring</label>
-
-                    <SearchDropdown
-                      items={artistsItems}
-                      itemKey="name"
-                      imagePath="artists/"
-                      imageKey="img"
-                      searchTxt="Search and select featuring"
-                    />
-                  </div>
-                  <div>
-                    <label htmlFor="">Lyricist *</label>
-
-                    <SearchDropdown
-                      items={artistsItems}
-                      itemKey="name"
-                      imagePath="artists/"
-                      imageKey="img"
-                      searchTxt="Search and select lyricist"
-                    />
-                  </div>
-                  <div>
-                    <label htmlFor="">Composer *</label>
-
-                    <SearchDropdown
-                      items={artistsItems}
-                      itemKey="name"
-                      imagePath="artists/"
-                      imageKey="img"
-                      searchTxt="Search and select composer"
-                    />
-                  </div>
-                  <div>
-                    <label>Arranger</label>
-                    <input type="text" />
-                  </div>
-                  <div>
-                    <label>Producer</label>
-                    <input type="text" />
-                  </div>
-                </div>
-                <label>Publisher</label>
-                <input type="text" />
-                <div className="form-grid release-form-grid">
-                  <div>
-                    <label htmlFor="">Genre *</label>
-                    <SelectDropdown
-                      options={["Option 1", "Option 2", "Option 3"]}
-                      placeholder="Select genre..."
-                      className="createRelease-dropdown"
-                    />
-                  </div>
-                  <div>
-                    <label htmlFor="">Sub-Genre *</label>
-                    <SelectDropdown
-                      options={["Option 1", "Option 2", "Option 3"]}
-                      placeholder="Select sub-genre..."
-                      className="createRelease-dropdown"
-                    />
-                  </div>
-                  <div>
-                    <label>℗ line *</label>
-                    <input type="text" />
-                  </div>
-                  <div>
-                    <label htmlFor="">Production Year *</label>
-                    <SelectDropdown
-                      options={["Option 1", "Option 2", "Option 3"]}
-                      placeholder="Select a year..."
-                      className="createRelease-dropdown"
-                    />
-                  </div>
-                  <div>
-                    <label htmlFor="">Do you already have a ISRC? *</label>
-                    <RadioGroup.Root className="radio-group" defaultValue="Yes">
-                      <label className="radio-label">
-                        <span>
-                          <RadioGroup.Item className="radio-item" value="No" />
-                          &nbsp; No
-                        </span>
-                      </label>
-                      <label className="radio-label">
-                        <span>
-                          <RadioGroup.Item className="radio-item" value="Yes" />
-                          &nbsp; Yes
-                        </span>
-                      </label>
-                    </RadioGroup.Root>
-                  </div>
-                  <div>
-                    <label>ISRC *</label>
-                    <input type="text" />
-                  </div>
-                  <div>
-                    <label htmlFor="">Parental advisory *</label>
-                    <RadioGroup.Root className="radio-group" defaultValue="Yes">
-                      <label className="radio-label">
-                        <span>
-                          <RadioGroup.Item className="radio-item" value="No" />
-                          &nbsp; No
-                        </span>
-                      </label>
-                      <label className="radio-label">
-                        <span>
-                          <RadioGroup.Item className="radio-item" value="Yes" />
-                          &nbsp; Yes
-                        </span>
-                      </label>
-                      <label className="radio-label">
-                        <span>
-                          <RadioGroup.Item
-                            className="radio-item"
-                            value="Cleaned"
-                          />
-                          &nbsp; Cleaned
-                        </span>
-                      </label>
-                    </RadioGroup.Root>
-                  </div>
-                  <div>
-                    <label htmlFor="">Preview start </label>
-                    <input type="number" />
-                  </div>
-                </div>
-                <label htmlFor="">Lyrics Language *</label>
-                <SelectDropdown
-                  options={["Option 1", "Option 2", "Option 3"]}
-                  placeholder="Select language..."
-                  className="createRelease-dropdown"
-                />
-
-                <label htmlFor="">Lyrics</label>
-                <textarea></textarea>
-                <br />
-                <br /> */}
-              </>
-            ) : (
-              <>
-                {/* <label>Tittle *</label>
-                <input type="text" />
-                <label>Version/Subtittle</label>
-                <input type="text" />
-                <div className="form-grid release-form-grid">
-                  <div>
-                    <label htmlFor="">Primary Artist *</label>
-
-                    <SearchDropdown
-                      items={artistsItems}
-                      itemKey="name"
-                      imagePath="artists/"
-                      imageKey="img"
-                      searchTxt="Search and select primary artist"
-                    />
-                  </div>
-                  <div>
-                    <label htmlFor="">Featuring</label>
-
-                    <SearchDropdown
-                      items={artistsItems}
-                      itemKey="name"
-                      imagePath="artists/"
-                      imageKey="img"
-                      searchTxt="Search and select featuring"
-                    />
-                  </div>
-                </div>
-                <label htmlFor="">Composer *</label>
-
-                <SearchDropdown
-                  items={artistsItems}
-                  itemKey="name"
-                  imagePath="artists/"
-                  imageKey="img"
-                  searchTxt="Search and select composer"
-                />
-                <div className="form-grid release-form-grid">
-                  <div>
-                    <label htmlFor="">Arranger </label>
-                    <input type="text" />
-                  </div>
-                  <div>
-                    <label htmlFor="">Producer </label>
-                    <input type="text" />
-                  </div>
-                </div>
-                <label htmlFor="">Publisher </label>
-                <input type="text" />
-                <div className="form-grid release-form-grid">
-                  <div>
-                    <label htmlFor="">Genre *</label>
-                    <SelectDropdown
-                      options={["Option 1", "Option 2", "Option 3"]}
-                      placeholder="Select genre..."
-                      className="createRelease-dropdown"
-                    />
-                  </div>
-                  <div>
-                    <label htmlFor="">Sub-Genre *</label>
-                    <SelectDropdown
-                      options={["Option 1", "Option 2", "Option 3"]}
-                      placeholder="Select sub-genre..."
-                      className="createRelease-dropdown"
-                    />
-                  </div>
-                  <div>
-                    <label>℗ line *</label>
-                    <input type="text" />
-                  </div>
-                  <div>
-                    <label htmlFor="">Production Year *</label>
-                    <SelectDropdown
-                      options={["Option 1", "Option 2", "Option 3"]}
-                      placeholder="Select a year..."
-                      className="createRelease-dropdown"
-                    />
-                  </div>
-                  <div>
-                    <label htmlFor="">Do you already have a ISRC? *</label>
-                    <RadioGroup.Root className="radio-group" defaultValue="Yes">
-                      <label className="radio-label">
-                        <span>
-                          <RadioGroup.Item className="radio-item" value="No" />
-                          &nbsp; No
-                        </span>
-                      </label>
-                      <label className="radio-label">
-                        <span>
-                          <RadioGroup.Item className="radio-item" value="Yes" />
-                          &nbsp; Yes
-                        </span>
-                      </label>
-                    </RadioGroup.Root>
-                  </div>
-                  <div>
-                    <label>ISRC *</label>
-                    <input type="text" />
-                  </div>
-                  <div>
-                    <label htmlFor="">Parental advisory *</label>
-                    <RadioGroup.Root className="radio-group" defaultValue="Yes">
-                      <label className="radio-label">
-                        <span>
-                          <RadioGroup.Item className="radio-item" value="No" />
-                          &nbsp; No
-                        </span>
-                      </label>
-                      <label className="radio-label">
-                        <span>
-                          <RadioGroup.Item className="radio-item" value="Yes" />
-                          &nbsp; Yes
-                        </span>
-                      </label>
-                      <label className="radio-label">
-                        <span>
-                          <RadioGroup.Item
-                            className="radio-item"
-                            value="Cleaned"
-                          />
-                          &nbsp; Cleaned
-                        </span>
-                      </label>
-                    </RadioGroup.Root>
-                  </div>
-                  <div>
-                    <label htmlFor="">Preview start </label>
-                    <input type="number" />
-                  </div>
-                </div>
-                <label htmlFor="">Lyrics Language *</label>
-                <SelectDropdown
-                  options={["Option 1", "Option 2", "Option 3"]}
-                  placeholder="Select language..."
-                  className="createRelease-dropdown"
-                />
-
-                <label htmlFor="">Lyrics</label>
-                <textarea></textarea>
-                <br />
-                <br /> */}
-              </>
-            )}
-          </>
-        ) : (
-          <>
-            {albumTrackList.map((album, index) => (
-              <Collapsible.Root
-                key={index}
-                open={albumSongList[index] || false} // Use object state
-                onOpenChange={() => toggleAlbum(index)}
-              >
-                <Collapsible.Trigger asChild>
-                  <div className="release-album-list">
-                    <IoPlayCircleOutline className="release-album-playIcon" />
-                    <div>
-                      <p>{album.title}</p>
-                      <small>{album.artist}</small>
-                    </div>
-                    <div className="d-flex release-album-RangeDiv">
-                      <p>{album.duration}</p>
-                      <Slider.Root
-                        className="rangeSliderRoot"
-                        defaultValue={[50]}
-                        max={100}
-                        step={1}
-                      >
-                        <Slider.Track className="SliderTrack">
-                          <Slider.Range className="SliderRange" />
-                        </Slider.Track>
-                        <Slider.Thumb
-                          className="SliderThumb"
-                          aria-label="Volume"
-                        />
-                      </Slider.Root>
-                      {albumSongList[index] ? (
-                        <IoIosArrowUp className="release-album-arrowIcon" />
-                      ) : (
-                        <IoIosArrowDown className="release-album-arrowIcon" />
-                      )}
-                    </div>
-                  </div>
-                </Collapsible.Trigger>
-
-                <Collapsible.Content>
-                  <span>line</span>
-                </Collapsible.Content>
-              </Collapsible.Root>
-            ))}
-            <AlbumTrackList artistsItems={artistsItems} />
-          </>
-        )}</>
-  );
-};
-
 export default TestPage;
-

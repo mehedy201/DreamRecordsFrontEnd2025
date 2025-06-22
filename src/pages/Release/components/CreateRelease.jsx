@@ -4,8 +4,8 @@ import AlbumInformation from "./AlbumInformation";
 import TracksInformation from "./TracksInformation";
 import ReleaseDate from "./ReleaseDate";
 import ReleaseOverview from "./ReleaseOverview";
-import { useSelector } from "react-redux";
 import axios from "axios";
+import { useSelector } from "react-redux";
 const steps = [
   "Album Information",
   "Tracks Information",
@@ -20,6 +20,18 @@ function CreateRelease({
 }) {
 
   const {userNameIdRoll} = useSelector((state) => state.userData);
+
+  useEffect(() => {
+    if(userNameIdRoll){
+      axios.get(`http://localhost:5000/api/v1/release/${userNameIdRoll[1]}?page=1&limit=6&status=All`)
+      .then( res => {
+        if(res.status == 200){
+          console.log(res.data.data);
+        }
+      })
+      .catch(er => console.log(er));
+    }
+  },[])
 
 
   const [step, setStep] = useState(1);
@@ -36,29 +48,7 @@ function CreateRelease({
   };
 
 
-  // Artist Data Get Form API ____________________________
-    const [artist, setArtist] = useState()
-    useEffect(() => {
-      if(userNameIdRoll){
-        axios.get(`http://localhost:5000/api/v1/artist/for-release/${userNameIdRoll[1]}`)
-        .then(res => {
-            setArtist(res.data.data)
-            console.log(res.data.data)
-        })
-      }
-    }, [])
-    // Label Data Get Form API ____________________________
-    const [lebel, setLabel] = useState()
-    useEffect(() => {
-      if(userNameIdRoll){
-        axios.get(`http://localhost:5000/api/v1/labels/for-release/${userNameIdRoll[1]}`)
-        .then(res => {
-            setLabel(res.data.data);
-            console.log(res.data.data)
-        })
-      }
-
-    }, [])
+  
 
   return (
     <div
@@ -104,8 +94,6 @@ function CreateRelease({
 
       {step === 0 && (
         <AlbumInformation
-          artistsItems={artist}
-          LablesItems={lebel}
           step={step}
           steps={steps}
           setStep={setStep}
@@ -114,9 +102,6 @@ function CreateRelease({
       )}
       {step === 1 && (
         <TracksInformation
-          artistsItems={artist}
-          lablesItems={lebel}
-          albumTrackList={albumTrackList}
           step={step}
           steps={steps}
           setStep={setStep}
