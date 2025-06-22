@@ -56,7 +56,58 @@ const TrackViewCollapsSection = ({track}) => {
 
               <Tabs.Content className="tabs-content" value="TrackDetails">
                 <div className="release-track-details">
-                  <p>Track Details</p>
+                  <div className="d-flex">
+                    <p>Track type:</p>
+                    <p>Cover</p>
+                  </div>
+                  <div className="d-flex">
+                    <p>Genre:</p>
+                    <p>{track?.genre}</p>
+                  </div>
+                  <div className="d-flex">
+                    <p>Tittle :</p>
+                    <p>{track?.tittle}</p>
+                  </div>
+                  <div className="d-flex">
+                    <p>Sub-genre:</p>
+                    <p>{track?.subGenre}</p>
+                  </div>
+                  <div className="d-flex">
+                    <p>Version/Subtittle:</p>
+                    <p>{track?.versionSubtittle}</p>
+                  </div>
+                  <div className="d-flex">
+                    <p>Parental Advisory:</p>
+                    <p>{track?.parentalAdvisory}</p>
+                  </div>
+                  <div className="d-flex">
+                    <p>℗ line:</p>
+                    <p>{track?.pLine}</p>
+                  </div>
+                  <div className="d-flex">
+                    <p>Track Tittle Language:</p>
+                    <p>{track?.language}</p>
+                  </div>
+                  <div className="d-flex">
+                    <p>Production Year:</p>
+                    <p>{track?.productionYear}</p>
+                  </div>
+                  <div className="d-flex">
+                    <p>Lyrics Language:</p>
+                    <p>{track?.language}</p>
+                  </div>
+                  <div className="d-flex">
+                    <p>Publisher:</p>
+                    <p>{track?.publisher}</p>
+                  </div>
+                  <div className="d-flex">
+                    <p>Lyrics:</p>
+                    <p>{track?.language}</p>
+                  </div>
+                  <div className="d-flex">
+                    <p>ISRC Code:</p>
+                    <p>{track?.ISRC}</p>
+                  </div>                  
                 </div>
               </Tabs.Content>
               <Tabs.Content className="tabs-content" value="Credits">
