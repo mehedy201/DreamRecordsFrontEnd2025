@@ -117,7 +117,7 @@ function TracksInformation({ step, setStep, steps, handlePrev}) {
 
       {/* This Next And Pre Button Will active if release type Album _____________ */}
       {
-        error && <p style={{color: 'red'}}>{error}</p>
+        error && <p style={{color: 'red', textAlign:'right', paddingBottom: '15px'}}>{error}</p>
       }
       {
         trackFormat === 'Album' &&

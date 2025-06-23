@@ -12,6 +12,7 @@ import { setTracksInfo } from "../../../redux/features/releaseDataHandleSlice/re
 const TrackInformationUploadForm = ({ step, setStep, steps,setShowForm, handlePrev}) => {
 
     const { trackFormat, tracksInfo} = useSelector(state => state.releaseData);
+    const { reFetchArtist } = useSelector(state => state.reFetchSlice);
 
     const {userNameIdRoll} = useSelector((state) => state.userData);
     const { yearsList } = useSelector(state => state.yearsAndStatus);
@@ -43,7 +44,7 @@ const TrackInformationUploadForm = ({ step, setStep, steps,setShowForm, handlePr
         .then(res => {
             setArtist(res.data.data)
         })
-    }, [userNameIdRoll])
+    }, [userNameIdRoll, reFetchArtist])
 
     
     const preAudioKey = trackFormat === 'Singles' ? tracksInfo[0]?.audioKey : '';
@@ -217,7 +218,7 @@ const TrackInformationUploadForm = ({ step, setStep, steps,setShowForm, handlePr
                     setValue={setValue}
                     defaultValue={watch("productionYear")}
                 />
-                {errors.subGenre && <span style={{color: '#ea3958'}}>Production Year Required</span>}
+                {errors.productionYear && <span style={{color: '#ea3958'}}>Production Year Required</span>}
             </div>
             <div>
                 <label htmlFor="">Do you already have a ISRC? *</label>

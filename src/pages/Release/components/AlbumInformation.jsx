@@ -15,6 +15,8 @@ function AlbumInformation({ step, setStep, steps, handlePrev }) {
   const {userNameIdRoll} = useSelector((state) => state.userData);
   const { yearsList } = useSelector(state => state.yearsAndStatus);
   const { releaseAlbumInfo } = useSelector(state => state.releaseData);
+  const { reFetchLabel, reFetchArtist } = useSelector(state => state.reFetchSlice);
+
   const dispatch = useDispatch()
 
 
@@ -43,7 +45,7 @@ function AlbumInformation({ step, setStep, steps, handlePrev }) {
             setLabel(res.data.data);
         })
       }
-    }, [userNameIdRoll])
+    }, [userNameIdRoll, reFetchLabel])
 
      // Artist Data Get Form API ____________________________
     const [artist, setArtist] = useState()
@@ -53,7 +55,7 @@ function AlbumInformation({ step, setStep, steps, handlePrev }) {
             setArtist(res.data.data)
             console.log(res)
         })
-    }, [userNameIdRoll])
+    }, [userNameIdRoll, reFetchArtist])
 
 
 

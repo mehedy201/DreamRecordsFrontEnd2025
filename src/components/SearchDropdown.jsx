@@ -61,6 +61,10 @@ const filteredItems = items?.filter((item) => {
 });
 
 
+const [artistIsOpen, setArtistIsOpen] = useState(false);
+const [labelIsOpen, setLabelIsOpen] = useState(false);
+
+
 
   return (
     <div>
@@ -86,7 +90,6 @@ const filteredItems = items?.filter((item) => {
                 className="dropdown-item"
                 onClick={() => handleItemClick(item)}
               >
-                {/* <span>{item[itemKey]}</span> */}
                 <span>{item?.artistName} {item?.labelName}</span>
               </div>
             ))}
@@ -110,21 +113,34 @@ const filteredItems = items?.filter((item) => {
               <div className="searchDropdown-notFound-div">
                 <p className="no-items">{itemName} Not Found ?</p>
                 {itemName === "Artist" ? (
-                  <Dialog.Root>
+                  <Dialog.Root open={artistIsOpen} onOpenChange={setArtistIsOpen}>
                     <Dialog.Trigger className="theme-btn">
                       Create New {itemName} +
                     </Dialog.Trigger>
                     <Modal className="searchDropdown-modal-content">
-                      <CreateArtist/>
+                      <CreateArtist 
+                        fromReleaseForm={true} 
+                        openModal={setArtistIsOpen} 
+                        setSearchQuery={setSearchQuery}
+                        selectedItems={selectedItems}
+                        setSelectedItems={setSelectedItems}
+                        onSelect={onSelect}
+                      />
                     </Modal>
                   </Dialog.Root>
                 ) : itemName === "Label" ? (
-                  <Dialog.Root>
+                  <Dialog.Root open={labelIsOpen} onOpenChange={setLabelIsOpen}>
                     <Dialog.Trigger className="theme-btn">
                       Create New {itemName} +
                     </Dialog.Trigger>
                     <Modal className="searchDropdown-modal-content">
-                      <CreateLabel />
+                      <CreateLabel 
+                        fromReleaseForm={true} 
+                        openModal={setLabelIsOpen} 
+                        setSearchQuery={setSearchQuery}
+                        selectedItems={selectedItems}
+                        onSelect={onSelect}
+                      />
                     </Modal>
                   </Dialog.Root>
                 ) : (
