@@ -1,9 +1,7 @@
-import { Dialog, Slider, Tabs } from "radix-ui";
+import { Tabs } from "radix-ui";
 import { Collapsible } from "radix-ui";
 import { useState } from "react";
-import { IoPlayCircleOutline } from "react-icons/io5";
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
-import { RiDownloadLine } from "react-icons/ri";
 import AudioPlayerForTracViewTab from "../../../components/AudioPlayerForTracViewTab";
 import { useDispatch, useSelector } from "react-redux";
 import { X } from "lucide-react";
@@ -12,8 +10,10 @@ import axios from "axios";
 
 const TrackViewCollapsSection = ({track, index}) => {
 
+    // Get TrackInfo Data State form Redux 
     const {tracksInfo} = useSelector(state => state.releaseData);
     const dispatch = useDispatch()
+    
     const [albumOverviewSong, setAlbumOverviewSong] = useState(false);
     const trackTittle = track.tittle;
     const trackAudioUrl = track.audioUrl;
