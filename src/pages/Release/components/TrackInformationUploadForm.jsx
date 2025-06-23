@@ -185,8 +185,8 @@ const TrackInformationUploadForm = ({ step, setStep, steps,setShowForm, handlePr
                     dataName='genre'
                     setValue={setValue}
                     defaultValue={watch("genre")}
-                    errors={errors}
                 />
+                {errors.genre && <span style={{color: '#ea3958'}}>Genre Required</span>}
             </div>
             <div>
                 <label htmlFor="">Sub-Genre *</label>
@@ -198,12 +198,13 @@ const TrackInformationUploadForm = ({ step, setStep, steps,setShowForm, handlePr
                     dataName='subGenre'
                     setValue={setValue}
                     defaultValue={watch("subGenre")}
-                    errors={errors}
                 />
+                {errors.subGenre && <span style={{color: '#ea3958'}}>Sub Genre Required</span>}
             </div>
             <div>
                 <label>℗ line *</label>
                 <input type="text" {...register("pLine", { required: true})}/>
+                {errors.pLine && <span style={{color: '#ea3958'}}>P line field Required</span>}
             </div>
             <div>
                 <label htmlFor="">Production Year *</label>
@@ -215,8 +216,8 @@ const TrackInformationUploadForm = ({ step, setStep, steps,setShowForm, handlePr
                     dataName='productionYear'
                     setValue={setValue}
                     defaultValue={watch("productionYear")}
-                    errors={errors}
                 />
+                {errors.subGenre && <span style={{color: '#ea3958'}}>Production Year Required</span>}
             </div>
             <div>
                 <label htmlFor="">Do you already have a ISRC? *</label>
@@ -307,11 +308,10 @@ const TrackInformationUploadForm = ({ step, setStep, steps,setShowForm, handlePr
                 dataName='language'
                 setValue={setValue}
                 defaultValue={watch("language")}
-                errors={errors}
             />
-
+            {errors.language && <span style={{color: '#ea3958'}}>Language Required</span>}
             <label htmlFor="">Lyrics</label>
-            <textarea {...register("text")}></textarea>
+            <textarea {...register("lyrics")}></textarea>
             <br />
             <br />
             {

@@ -8,7 +8,6 @@ const SelectDropdownForCreateRelease = ({
   className,
   dataName,
   setValue,
-  errors,
   defaultValue
 }) => {
 
@@ -44,11 +43,6 @@ const SelectDropdownForCreateRelease = ({
             </Select.Content>
         </Select.Portal>
         </Select.Root>
-        {errors?.[dataName] && (
-        <p style={{color: '#ea3958'}} className="error-message" role="alert">
-          {errors[dataName].message || "This field is required"}
-        </p>
-      )}
     </>
   );
 };
