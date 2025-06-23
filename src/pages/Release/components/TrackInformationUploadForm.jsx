@@ -256,6 +256,7 @@ const TrackInformationUploadForm = ({ step, setStep, steps,setShowForm, handlePr
                 <div>
                     <label>ISRC *</label>
                     <input type="text" {...register("ISRC", { required: true})}/>
+                    {errors.ISRC && <span style={{color: '#ea3958'}}>ISRC Required</span>}
                 </div>
             }
             <div>
