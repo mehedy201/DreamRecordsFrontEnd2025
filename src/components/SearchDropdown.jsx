@@ -7,6 +7,7 @@ import * as Dialog from "@radix-ui/react-dialog";
 import Modal from "./Modal";
 import CreateArtist from "../pages/Artists/components/CreateArtist";
 import CreateLabel from "../pages/Lables/components/CreateLabel";
+import demoImg from '../assets/artists/artist4.png'
 const SearchDropdown = ({
   items,
   onSelect,
@@ -160,7 +161,7 @@ const [labelIsOpen, setLabelIsOpen] = useState(false);
               <div key={index} className="selected-item">
                   <img
                     style={{borderRadius: '50%', objectFit: 'cover', objectPosition: 'center'}}
-                    src={item?.imgUrl}
+                    src={item?.imgUrl ? item?.imgUrl : demoImg}
                     alt=''
                     className="item-image"
                   />
