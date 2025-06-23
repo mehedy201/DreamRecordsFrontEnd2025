@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import * as RadioGroup from "@radix-ui/react-radio-group";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import TrackInformationUploadForm from "./TrackInformationUploadForm";
 import { useDispatch, useSelector } from "react-redux";
@@ -58,7 +58,7 @@ function TracksInformation({ step, setStep, steps, handlePrev}) {
             {
               tracksInfo.length > 1 && 
               <>
-                <p style={{color: 'red', border: '1px solid red', padding: '5px', borderRadius: '10px', margin: '10px'}}>Please Remove Extra Tracks Becuse You Select Single Release Also take only First Track Data</p>
+                <p style={{color: '#ea3958', border: '1px solid #ea3958', padding: '5px', borderRadius: '8px', margin: '10px'}}>We are noticing that you have previously added multiple tracks by selecting the track status album. Now you have changed the track status to single from the album. Please remove your extra tracks, otherwise only the first track will be uploaded.</p>
                 {
                 tracksInfo &&
                 tracksInfo.map((track, index) => 
@@ -153,8 +153,8 @@ function TracksInformation({ step, setStep, steps, handlePrev}) {
             }
             {
               trackFormat === 'Album' && showForm &&
-              <button className="theme-btn">
-                Please Fill The Form First &nbsp; <ArrowRight />
+              <button style={{backgroundColor: 'gray'}} className="theme-btn">
+                Please Add Track + First &nbsp; <ArrowRight />
               </button>
             }
            
