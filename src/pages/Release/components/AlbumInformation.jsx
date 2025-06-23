@@ -173,8 +173,8 @@ function AlbumInformation({ step, setStep, steps, handlePrev }) {
                 dataName='globalGenre'
                 setValue={setValue}
                 defaultValue={watch("globalGenre")}
-                errors={errors}
               />
+              {errors.globalGenre && <span style={{color: '#ea3958'}}>Genre Required</span>}
             </div>
             <div>
               <label htmlFor="">Sub-Genre *</label>
@@ -186,8 +186,8 @@ function AlbumInformation({ step, setStep, steps, handlePrev }) {
                 register={{...register("globalSubGenre", { required: true})}}
                 setValue={setValue}
                 defaultValue={watch("globalSubGenre")}
-                errors={errors}
               />
+              {errors.globalSubGenre && <span style={{color: '#ea3958'}}>Sub Genre Required</span>}
             </div>
           </div>
           <label htmlFor="">Label Name *</label>
@@ -212,8 +212,8 @@ function AlbumInformation({ step, setStep, steps, handlePrev }) {
                 register={{...register("productionYear", { required: true})}}
                 setValue={setValue}
                 defaultValue={watch("productionYear")}
-                errors={errors}
               />
+              {errors.productionYear && <span style={{color: '#ea3958'}}>Production Year Required</span>}
             </div>
             <div>
               <label htmlFor="">Physical/Original release date *</label>
