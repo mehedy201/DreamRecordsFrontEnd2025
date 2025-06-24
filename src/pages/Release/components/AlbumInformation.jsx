@@ -145,22 +145,22 @@ function AlbumInformation({ step, setStep, steps, handlePrev }) {
                 <SearchDropdown
                   items={artist}
                   searchTxt="Search and select artist"
-                  itemName="Artist"
-                  register={{...register("globalArtist", { required: true})}}
-                  onSelect={(items) => setValue("globalArtist", items, { shouldValidate: true })}
-                  value={watch("globalArtist")} // Pass current value
+                  itemName="artist"
+                  register={{...register("artist", { required: true})}}
+                  onSelect={(items) => setValue("artist", items, { shouldValidate: true })}
+                  value={watch("artist")} // Pass current value
                 />
-                {errors.globalArtist && <span style={{color: '#ea3958'}}>Please Select Artist</span>}
+                {errors.artist && <span style={{color: '#ea3958'}}>Please Select Artist</span>}
               </div>
             }
           </div>
           <label htmlFor="">Featuring</label>
           <SearchDropdown
             items={artist}
-            itemName="Artist"
+            itemName="featureing"
             searchTxt="Search and select Genre"
-            onSelect={(items) => setValue("globalFeatureing", items, { shouldValidate: true })}
-            value={watch("globalFeatureing")}
+            onSelect={(items) => setValue("featureing", items, { shouldValidate: true })}
+            value={watch("featureing")}
           />
 
           <div className="form-grid release-form-grid">
@@ -171,12 +171,12 @@ function AlbumInformation({ step, setStep, steps, handlePrev }) {
                 options={allGenre}
                 placeholder="Select genre..."
                 className="createRelease-dropdown"
-                register={{...register("globalGenre", { required: true})}}
-                dataName='globalGenre'
+                register={{...register("genre", { required: true})}}
+                dataName='genre'
                 setValue={setValue}
-                defaultValue={watch("globalGenre")}
+                defaultValue={watch("genre")}
               />
-              {errors.globalGenre && <span style={{color: '#ea3958'}}>Genre Required</span>}
+              {errors.genre && <span style={{color: '#ea3958'}}>Genre Required</span>}
             </div>
             <div>
               <label htmlFor="">Sub-Genre *</label>
@@ -184,24 +184,24 @@ function AlbumInformation({ step, setStep, steps, handlePrev }) {
                 options={allGenre}
                 placeholder="Select sub-genre..."
                 className="createRelease-dropdown"
-                dataName='globalSubGenre'
-                register={{...register("globalSubGenre", { required: true})}}
+                dataName='subGenre'
+                register={{...register("subGenre", { required: true})}}
                 setValue={setValue}
-                defaultValue={watch("globalSubGenre")}
+                defaultValue={watch("subGenre")}
               />
-              {errors.globalSubGenre && <span style={{color: '#ea3958'}}>Sub Genre Required</span>}
+              {errors.subGenre && <span style={{color: '#ea3958'}}>Sub Genre Required</span>}
             </div>
           </div>
           <label htmlFor="">Label Name *</label>
           <SearchDropdown
             items={lebel}
-            itemName="Label"
+            itemName="label"
             searchTxt="Search and select label"
-            onSelect={(items) => setValue("globalLabel", items, { shouldValidate: true })}
-            register={{...register("globalLabel", { required: true})}}
-            value={watch("globalLabel")}
+            onSelect={(items) => setValue("label", items, { shouldValidate: true })}
+            register={{...register("label", { required: true})}}
+            value={watch("label")}
           />
-          {errors.globalLabel && <span style={{color: '#ea3958'}}>Please Select Label</span>}
+          {errors.label && <span style={{color: '#ea3958'}}>Please Select Label</span>}
 
           <div className="form-grid release-form-grid">
             <div>
