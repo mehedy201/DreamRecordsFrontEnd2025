@@ -144,7 +144,7 @@ function AlbumInformation({ step, setStep, steps, handlePrev }) {
                 <SearchDropdown
                   items={artist}
                   searchTxt="Search and select artist"
-                  itemName="artist"
+                  itemName="Artist"
                   register={{...register("artist", { required: true})}}
                   onSelect={(items) => setValue("artist", items, { shouldValidate: true })}
                   value={watch("artist")} // Pass current value
@@ -156,7 +156,7 @@ function AlbumInformation({ step, setStep, steps, handlePrev }) {
           <label htmlFor="">Featuring</label>
           <SearchDropdown
             items={artist}
-            itemName="featureing"
+            itemName="Artist"
             searchTxt="Search and select Genre"
             onSelect={(items) => setValue("featureing", items, { shouldValidate: true })}
             value={watch("featureing")}
@@ -194,7 +194,7 @@ function AlbumInformation({ step, setStep, steps, handlePrev }) {
           <label htmlFor="">Label Name *</label>
           <SearchDropdown
             items={lebel}
-            itemName="label"
+            itemName="Label"
             searchTxt="Search and select label"
             onSelect={(items) => setValue("label", items, { shouldValidate: true })}
             register={{...register("label", { required: true})}}
