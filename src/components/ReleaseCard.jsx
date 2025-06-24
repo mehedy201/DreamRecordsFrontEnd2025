@@ -11,7 +11,7 @@ const ReleaseCard = ({ releaseData }) => {
     <div className="release-container">
       { releaseData && releaseData?.map((item, index) => (
         <Link
-          to="/single-release"
+          to={`/release/${item._id}`}
           state={{ release: item }}
           key={index}
           className="release-card"

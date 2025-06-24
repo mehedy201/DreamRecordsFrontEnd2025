@@ -125,7 +125,7 @@ function App() {
             element={<Release />}
           />
           <Route
-            path="/single-release"
+            path="/release/:id"
             element={
               <SingleRelease
                 releaseAlbumInfo={releaseAlbumInfo}
