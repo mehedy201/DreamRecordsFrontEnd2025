@@ -1,28 +1,70 @@
 import PropTypes from "prop-types";
-import { useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
 import { ArrowLeft, ArrowRight } from "lucide-react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import TrackViewCollapsSection from "./TrackViewCollapsSection";
-function ReleaseOverview({ step, setStep, steps, handleNext, handlePrev }) {
+import { InfoCircledIcon } from "@radix-ui/react-icons";
+function ReleaseOverview({ step, setStep, handlePrev }) {
 
+  const {userNameIdRoll} = useSelector(state => state.userData)
   const {releaseAlbumInfo, tracksInfo, releaseDate, trackFormat} = useSelector(state => state.releaseData);
+  // const {trackFormat} = useSelector(state => state.releaseData);
   
-  const location = useLocation();
-  const supportMessage = location.state?.supportMessage;
-  console.log(supportMessage)
-  return (
-    <div className={supportMessage && "main-content"}>
-      {supportMessage ? (
-        ""
-      ) : (
-        <h3 className="create-release-heading">Release Overview</h3>
-      )}
 
+
+  const errorRef = useRef(null);
+  const isEmptyObject = (obj) => {
+    return Object.keys(obj).length === 0 && obj.constructor === Object;
+  }
+  const isEmptyArray = (arr) => {
+    return Array.isArray(arr) && arr.length === 0;
+  } 
+
+  const [error, setError] = useState()
+  const releaseUpload = () =>{
+    setError('')
+    if(isEmptyObject(releaseAlbumInfo)){
+      setError('Something went wrong. Please Fill Release Album Information Again');
+      return;
+    }
+    if(isEmptyArray(tracksInfo)){
+      setError('Something went wrong. Please Fill Track Information Again');
+      return;
+    }
+    if(isEmptyObject(releaseDate)){
+      setError('Something went wrong. Please Fill Release Date Again');
+      return;
+    }
+
+    const payload = {...releaseAlbumInfo, tracks: tracksInfo, ...releaseDate, format: trackFormat, date: new Date().toISOString()}
+    console.log(payload);
+    setStep(4)
+  }
+
+  // This useEffect will run after the error message renders
+  useEffect(() => {
+    if (error && errorRef.current) {
+      errorRef.current.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center'
+      });
+    }
+  }, [error]);
+
+  return (
+    <div>
+      {
+        error &&
+        <div ref={errorRef} className="home-notice">
+          <InfoCircledIcon />
+          <p>{error}</p>
+        </div>
+      }
+      <h3 className="create-release-heading">Release Overview</h3>
       <div className="createRelease-content-div createRelease-overview-div">
         <div className="d-flex release-overview-img-div">
           <img
-            src={releaseAlbumInfo.imgUrl}
+            src={releaseAlbumInfo?.imgUrl}
             className="release-overview-img"
             alt=""
           />
@@ -40,11 +82,11 @@ function ReleaseOverview({ step, setStep, steps, handleNext, handlePrev }) {
           </div>
           <div className="d-flex">
             <p>Primary Artist:</p>
-            <p>{releaseAlbumInfo?.globalArtist.map(artist => artist.artistName).join(', ')}</p>
+            <p>{releaseAlbumInfo?.globalArtist?.map(artist => artist.artistName).join(', ')}</p>
           </div>
           <div className="d-flex">
             <p>Featuring:</p>
-            <p>{releaseAlbumInfo?.globalFeatureing.map(artist => artist.artistName).join(', ')}</p>
+            <p>{releaseAlbumInfo?.globalFeatureing?.map(artist => artist.artistName).join(', ')}</p>
           </div>
           <div className="d-flex">
             <p>Genre:</p>
@@ -56,7 +98,7 @@ function ReleaseOverview({ step, setStep, steps, handleNext, handlePrev }) {
           </div>
           <div className="d-flex">
             <p>Label Name:</p>
-            <p>{releaseAlbumInfo?.globalLabel.map(label => label.labelName).join(', ')}</p>
+            <p>{releaseAlbumInfo?.globalLabel?.map(label => label.labelName).join(', ')}</p>
           </div>
           <div className="d-flex">
             <p>Release Date:</p>
@@ -130,15 +172,9 @@ function ReleaseOverview({ step, setStep, steps, handleNext, handlePrev }) {
           >
             cancel
           </button>
-          {step < steps.length - 1 ? (
-            <button className="theme-btn" onClick={handleNext}>
-              Next &nbsp; <ArrowRight />
-            </button>
-          ) : (
-            <button className="theme-btn" onClick={() => setStep(4)}>
+          <button className="theme-btn" onClick={releaseUpload}>
               Submit &nbsp; <ArrowRight />
-            </button>
-          )}
+          </button>
         </div>
       )}
     </div>
