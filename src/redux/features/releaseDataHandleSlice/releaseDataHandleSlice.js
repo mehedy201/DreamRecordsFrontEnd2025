@@ -5,6 +5,7 @@ const initialState = {
   trackFormat: 'Singles',
   tracksInfo: [],
   singleTrackInfo: [],
+  releaseDate: {},
   isLoading: false,
   error: null,
 };
@@ -25,8 +26,11 @@ export const releaseDataHandleSlice = createSlice({
     setTracksInfo: (state, action) => {
       state.tracksInfo = action.payload; 
     },
+    setReleaseDate: (state, action) => {
+      state.releaseDate = action.payload; 
+    },
   },
 });
 
-export const {setReleaseAlbumInfo, setSingleTrackInfo, setTracksInfo, setTrackFormat} = releaseDataHandleSlice.actions;
+export const {setReleaseAlbumInfo, setSingleTrackInfo, setTracksInfo, setTrackFormat, setReleaseDate} = releaseDataHandleSlice.actions;
 export default releaseDataHandleSlice.reducer;

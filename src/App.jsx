@@ -140,8 +140,6 @@ function App() {
             path="/create-release"
             element={
               <CreateRelease
-                artistsItems={artistsItems}
-                LablesItems={LablesItems}
                 releaseAlbumInfo={releaseAlbumInfo}
                 albumTrackList={albumTrackList}
                 releaseTrackDetails={releaseTrackDetails}
