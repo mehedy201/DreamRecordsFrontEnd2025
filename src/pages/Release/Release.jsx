@@ -6,12 +6,35 @@ import { useEffect, useState } from "react";
 
 import ReleaseCard from "../../components/ReleaseCard";
 import Pagination from "../../components/Pagination";
-import { Link } from "react-router-dom";
+import { Link, useParams, useSearchParams } from "react-router-dom";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { HiOutlineAdjustmentsHorizontal } from "react-icons/hi2";
 import SelectDropdown from "../../components/SelectDropdown";
+import { useSelector } from "react-redux";
+import useQueryParams from "../../hooks/useQueryParams";
+import axios from "axios";
 
-const Release = ({ releaseItems }) => {
+const Release = () => {
+
+  // Get Data Form Redux ________________________
+  const {userNameIdRoll} = useSelector((state) => state.userData);
+  const { yearsList,releaseStatusList } = useSelector(state => state.yearsAndStatus);
+  // Main Params ________________________________
+  const {pageNumber, perPageItem, status} = useParams();
+  // Filter Query Paramitars_____________________
+  const { navigateWithParams } = useQueryParams();
+  const [filterParams] = useSearchParams();
+  const search = filterParams.get('search') || '';
+  const years = filterParams.get('years') || '';
+
+  const filterByYear = (yearValue) => {
+    navigateWithParams(`/releases/1/10/${status}`, { search: search, years: yearValue });
+  }
+  const filterByStatus = (statusValue) => {
+    navigateWithParams(`/releases/1/10/${statusValue}`, { search: search, years: years });
+  }
+
+  // Responsive Code ______________________________________________
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 700);
   useEffect(() => {
     const handleResize = () => {
@@ -21,20 +44,60 @@ const Release = ({ releaseItems }) => {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+  // Years and Status Dropdown______________________________________
   const dropdownItem = (
     <>
       <SelectDropdown
-        options={["Option 1", "Option 2", "Option 3"]}
-        placeholder="All time"
+        options={yearsList}
+        placeholder={`${years ? years : 'All Time'}`}
+        filterByYearAndStatus={filterByYear}
       />
 
       {isMobile && <br />}
       <SelectDropdown
-        options={["Option 1", "Option 2", "Option 3"]}
-        placeholder="All Releases"
+        options={releaseStatusList}
+        placeholder={status}
+        filterByYearAndStatus={filterByStatus}
       />
     </>
   );
+
+  // Fatch Release Data _______________________________________________
+  const [currentPage, setCurrentPage] = useState(parseInt(pageNumber));
+  const [releaseData, setReleaseData] = useState()
+  const [filteredCount, setFilteredCount] = useState();
+  const [totalPages, setTotalPages] = useState();
+  useEffect( () => {
+    if(userNameIdRoll){
+      axios.get(`http://localhost:5000/api/v1/release/${userNameIdRoll[1]}?page=${pageNumber}&limit=${perPageItem}&status=${status}&search=${search}&years=${years}`)
+        .then( res => {
+          if(res.status == 200){
+            setReleaseData(res.data.data);
+            setFilteredCount(res.data.filteredCount);
+            setTotalPages(res.data.totalPages);
+          }
+        })
+        .catch(er => console.log(er));
+    }
+  },[userNameIdRoll, pageNumber, perPageItem, search, years]);
+
+  // Handle Page Change ________________________________
+  const handlePageChange = (page) => {
+    navigateWithParams(`/releases/${page}/${perPageItem}/${status}`, { search: search, years: years });
+  }
+  // Search _____________________________________________
+  const [searchText, setSearchText] = useState();
+  const handleKeyPress = (event) => {
+    if (event.key === 'Enter') {
+      navigateWithParams(`/releases/1/${perPageItem}/${status}`, { search: searchText, years: years });
+    }
+  };
+
+  // Handle Per Page Item _______________________________
+  const handlePerPageItem = (perPageItem) => {
+    navigateWithParams(`/releases/${pageNumber}/${perPageItem}/${status}`, { search: search, years: years });
+  }
 
   return (
     <div className="main-content">
@@ -56,7 +119,7 @@ const Release = ({ releaseItems }) => {
       </Flex>
 
       <div className="search-setion">
-        <input type="text" placeholder="Search..." />
+        <input onKeyPress={handleKeyPress} onChange={e => setSearchText(e.target.value)} type="text" placeholder="Search..." />
         {isMobile ? (
           <DropdownMenu.Root>
             <DropdownMenu.Trigger asChild>
@@ -86,8 +149,15 @@ const Release = ({ releaseItems }) => {
           dropdownItem
         )}
       </div>
-      <ReleaseCard releaseItems={releaseItems} />
-      <Pagination />
+      <ReleaseCard releaseData={releaseData} />
+      <Pagination 
+        totalDataCount={filteredCount} 
+        totalPages={totalPages}
+        currentPage={currentPage} 
+        perPageItem={perPageItem} 
+        setCurrentPage={setCurrentPage} 
+        handlePageChange={handlePageChange}
+        customFunDropDown={handlePerPageItem}/>
     </div>
   );
 };

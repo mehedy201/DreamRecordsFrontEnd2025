@@ -3,18 +3,20 @@ import PropTypes from "prop-types";
 import "./Global.css";
 import { Link } from "react-router-dom";
 import useStatusStyle from "../hooks/useStatusStyle";
+import releaseDemoImage from "../assets/release-placeholder.png"
+import localDate from "../hooks/localDate";
 const ReleaseCard = ({ releaseData }) => {
 
   return (
     <div className="release-container">
-      { releaseData && releaseData.map((item, index) => (
+      { releaseData && releaseData?.map((item, index) => (
         <Link
           to="/single-release"
           state={{ release: item }}
           key={index}
           className="release-card"
         >
-          <img src={`${item?.imgUrl}`} alt="" />
+          <img src={item?.imgUrl ? item.imgUrl : releaseDemoImage} alt="" />
           <div style={{ paddingTop: "12px" }}>
             <Flex style={{ display: "flex" }}>
               <div
@@ -23,13 +25,11 @@ const ReleaseCard = ({ releaseData }) => {
               >
                 {item?.status}
               </div>
-              <div className="card-date-txt">date</div>
+              <div className="card-date-txt">{item?.date ? localDate(item?.date) : 'Date'}</div>
             </Flex>
             <small>{item?.releaseTitle}</small>
             <br />
-            {
-              item?.artist.map((a) => <span><small>{a?.artistName}</small></span>)
-            }
+            <span><small>{item?.artist?.map(artist => artist.artistName).join(', ')}</small></span>
           </div>
         </Link>
       ))}

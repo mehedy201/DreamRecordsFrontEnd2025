@@ -120,7 +120,7 @@ function App() {
           />
           <Route
             path="/releases/:pageNumber/:perPageItem/:status"
-            element={<Release releaseItems={releaseItems} />}
+            element={<Release />}
           />
           <Route
             path="/single-release"
