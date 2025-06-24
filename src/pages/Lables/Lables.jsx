@@ -27,10 +27,10 @@ const Lables = () => {
   const years = filterParams.get('years') || '';
 
   const filterByYear = (yearValue) => {
-    navigateWithParams(`/lables/1/10/${status}`, { search: search, years: yearValue });
+    navigateWithParams(`/labels/1/10/${status}`, { search: search, years: yearValue });
   }
   const filterByStatus = (statusValue) => {
-    navigateWithParams(`/lables/1/10/${statusValue}`, { search: search, years: years });
+    navigateWithParams(`/labels/1/10/${statusValue}`, { search: search, years: years });
   }
 
 
@@ -90,19 +90,19 @@ const Lables = () => {
 
   // Handle Page Change ________________________________
   const handlePageChange = (page) => {
-    navigateWithParams(`/lables/${page}/${perPageItem}/${status}`, { search: search, years: years });
+    navigateWithParams(`/labels/${page}/${perPageItem}/${status}`, { search: search, years: years });
   }
   // Search _____________________________________________
   const [searchText, setSearchText] = useState();
   const handleKeyPress = (event) => {
     if (event.key === 'Enter') {
-      navigateWithParams(`/lables/1/${perPageItem}/${status}`, { search: searchText, years: years });
+      navigateWithParams(`/labels/1/${perPageItem}/${status}`, { search: searchText, years: years });
     }
   };
 
   // Handle Per Page Item _______________________________
   const handlePerPageItem = (perPageItem) => {
-    navigateWithParams(`/lables/${pageNumber}/${perPageItem}/${status}`, { search: search, years: years });
+    navigateWithParams(`/labels/${pageNumber}/${perPageItem}/${status}`, { search: search, years: years });
   }
 
 

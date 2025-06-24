@@ -118,6 +118,8 @@ function App() {
               <Home releaseItems={releaseItems} />
             }
           />
+
+          {/* Release Route Start_________________________________ */}
           <Route
             path="/releases/:pageNumber/:perPageItem/:status"
             element={<Release />}
@@ -157,6 +159,7 @@ function App() {
               />
             }
           />
+          {/* Release Route End_____________________________________ */}
 
           {/* Artist Route Start ___________________________________ */}
           <Route
