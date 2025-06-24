@@ -67,6 +67,7 @@ const TrackInformationUploadForm = ({ step, setStep, steps,setShowForm, handlePr
         }
         if(trackFormat === 'Singles'){
             const nData = [{...data, ...audioData}]
+            console.log(nData)
             dispatch(setTracksInfo(nData)) 
             setAudioData('')
             reset();

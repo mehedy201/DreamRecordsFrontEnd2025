@@ -33,7 +33,7 @@ function CreateRelease({
   },[])
 
 
-  const [step, setStep] = useState(2);
+  const [step, setStep] = useState(3);
   const handleNext = () => {
     if (step < steps.length - 1) {
       setStep(step + 1);

@@ -30,6 +30,7 @@ function ReleaseDate({ step, setStep, steps, handlePrev }) {
     if(data.releaseOption === 'AsSoonAsPossible'){
       delete data.releaseDate
     }
+    console.log(data)
     dispatch(setReleaseDate(data))
     if (step < steps.length - 1) {
       setStep(step + 1);
