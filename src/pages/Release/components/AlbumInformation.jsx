@@ -53,7 +53,6 @@ function AlbumInformation({ step, setStep, steps, handlePrev }) {
         axios.get(`http://localhost:5000/api/v1/artist/for-release/${userNameIdRoll ? userNameIdRoll[1]: ''}`)
         .then(res => {
             setArtist(res.data.data)
-            console.log(res)
         })
     }, [userNameIdRoll, reFetchArtist])
 

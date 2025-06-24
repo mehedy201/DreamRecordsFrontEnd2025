@@ -1,16 +1,18 @@
 import PropTypes from "prop-types";
 import { useEffect, useRef, useState } from "react";
+import { useLocation } from "react-router-dom";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import TrackViewCollapsSection from "./TrackViewCollapsSection";
 import { InfoCircledIcon } from "@radix-ui/react-icons";
+import { setReleaseAlbumInfo, setReleaseDate, setTrackFormat, setTracksInfo } from "../../../redux/features/releaseDataHandleSlice/releaseDataHandleSlice";
+import axios from "axios";
 function ReleaseOverview({ step, setStep, handlePrev }) {
 
   const {userNameIdRoll} = useSelector(state => state.userData)
-  const {releaseAlbumInfo, tracksInfo, releaseDate, trackFormat} = useSelector(state => state.releaseData);
-  // const {trackFormat} = useSelector(state => state.releaseData);
-  
+  const {releaseAlbumInfo, tracksInfo, releaseDate, trackFormat} = useSelector(state => state.releaseData);  
 
+  const dispatch = useDispatch();
 
   const errorRef = useRef(null);
   const isEmptyObject = (obj) => {
@@ -23,6 +25,10 @@ function ReleaseOverview({ step, setStep, handlePrev }) {
   const [error, setError] = useState()
   const releaseUpload = () =>{
     setError('')
+    if(!userNameIdRoll){
+      setError('Please click submit button again');
+      return
+    }
     if(isEmptyObject(releaseAlbumInfo)){
       setError('Something went wrong. Please Fill Release Album Information Again');
       return;
@@ -36,9 +42,18 @@ function ReleaseOverview({ step, setStep, handlePrev }) {
       return;
     }
 
-    const payload = {...releaseAlbumInfo, tracks: tracksInfo, ...releaseDate, format: trackFormat, date: new Date().toISOString()}
-    console.log(payload);
-    setStep(4)
+    const payload = {...releaseAlbumInfo, tracks: tracksInfo, ...releaseDate, format: trackFormat, date: new Date().toISOString(), userName: userNameIdRoll[0], masterUserId: userNameIdRoll[1], status: 'Pending'}
+    axios.post(`http://localhost:5000/api/v1/release/create-release`, payload)
+    .then(res => {
+      if(res.status === 200){
+        console.log(res)
+        dispatch(setReleaseAlbumInfo({}))
+        dispatch(setTracksInfo([]))
+        dispatch(setTrackFormat('Singles'))
+        dispatch(setReleaseDate({}))
+        setStep(4)
+      }
+    })
   }
 
   // This useEffect will run after the error message renders
@@ -82,23 +97,23 @@ function ReleaseOverview({ step, setStep, handlePrev }) {
           </div>
           <div className="d-flex">
             <p>Primary Artist:</p>
-            <p>{releaseAlbumInfo?.globalArtist?.map(artist => artist.artistName).join(', ')}</p>
+            <p>{releaseAlbumInfo?.artist?.map(artist => artist.artistName).join(', ')}</p>
           </div>
           <div className="d-flex">
             <p>Featuring:</p>
-            <p>{releaseAlbumInfo?.globalFeatureing?.map(artist => artist.artistName).join(', ')}</p>
+            <p>{releaseAlbumInfo?.featureing?.map(artist => artist.artistName).join(', ')}</p>
           </div>
           <div className="d-flex">
             <p>Genre:</p>
-            <p>{releaseAlbumInfo?.globalGenre}</p>
+            <p>{releaseAlbumInfo?.genre}</p>
           </div>
           <div className="d-flex">
             <p>Sub Genre:</p>
-            <p>{releaseAlbumInfo?.globalSubGenre}</p>
+            <p>{releaseAlbumInfo?.subGenre}</p>
           </div>
           <div className="d-flex">
             <p>Label Name:</p>
-            <p>{releaseAlbumInfo?.globalLabel?.map(label => label.labelName).join(', ')}</p>
+            <p>{releaseAlbumInfo?.label?.map(label => label.labelName).join(', ')}</p>
           </div>
           <div className="d-flex">
             <p>Release Date:</p>

@@ -1,10 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  releaseAlbumInfo: [],
+  releaseAlbumInfo: {},
   trackFormat: 'Singles',
   tracksInfo: [],
-  singleTrackInfo: [],
   releaseDate: {},
   isLoading: false,
   error: null,
@@ -19,9 +18,6 @@ export const releaseDataHandleSlice = createSlice({
     },
     setTrackFormat: (state, action) => {
       state.trackFormat = action.payload; 
-    },
-    setSingleTrackInfo: (state, action) => {
-      state.singleTrackInfo = action.payload; 
     },
     setTracksInfo: (state, action) => {
       state.tracksInfo = action.payload; 
