@@ -6,14 +6,14 @@ import { useEffect, useState } from "react";
 import { Link, useLocation, useParams } from "react-router-dom";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import Dropdown from "../../../components/Dropdown";
-
 import Table from "../../../components/Table";
 import Chart from "./Chart";
-import Modal from "../../../components/Modal";
 import { FiAlertTriangle } from "react-icons/fi";
 import axios from "axios";
 import threeDotImg from '../../../assets/icons/vertical-threeDots.png'
 import TrackViewCollapsSection from "./TrackViewCollapsSection";
+import downloadImg from "../../../assets/icons/img-download.png"
+import editImg from "../../../assets/icons/editIcon.png"
 
 const singleColumns = [
   { label: "DSPs", key: "DSPs" },
@@ -63,6 +63,7 @@ function SingleRelease({
 
 
 
+
   const location = useLocation();
   const [release, setRelease] = useState(null);
   const [albumSongList, setAlbumSongList] = useState({});
@@ -87,6 +88,9 @@ function SingleRelease({
       setRelease(parsedRelease);
     }
   }, [location.state]);
+
+
+
 
 
   return (
@@ -122,18 +126,18 @@ function SingleRelease({
                   <span
                     className="card-type-txt"
                     style={
-                      release.type == "Takedown"
+                        releaseData?.status == "Takedown"
                         ? { background: "#FEEBEC", color: "#E5484D" }
-                        : release.type == "Pending"
+                        : releaseData?.status == "Pending"
                         ? { background: "#FFEBD8", color: "#FFA552" }
-                        : release.type == "Review"
+                        : releaseData?.status == "Review"
                         ? { background: "#D5EFFF", color: "#0090FF" }
-                        : release.type == "Error"
+                        : releaseData?.status == "Action Required"
                         ? { background: "#E8E8E8", color: "#8D8D8D" }
                         : { background: "#E6F6EB", color: "#2B9A66" }
                     }
                   >
-                    {release.type}
+                    {releaseData?.status}
                   </span>
                   <br />
                   <h1>{releaseData?.releaseTitle}</h1>
@@ -157,7 +161,21 @@ function SingleRelease({
                   >
                     <DropdownMenu.Item className="dropdown-item">
                       <Link
-                        to="/edit-artist"
+                        onClick={() => window.open(releaseData?.imgUrl)}
+                        style={{
+                          cursor: "pointer",
+                          color: "#202020",
+                          textDecoration: "none",
+                          display: "flex",
+                          alignItems: "center",
+                          marginBottom: '15px'
+                        }}
+                      >
+                        <img src={downloadImg} />
+                        Download Artwork
+                      </Link>
+                      <Link
+                        to="/edit-release"
                         style={{
                           cursor: "pointer",
                           color: "#202020",
@@ -166,8 +184,8 @@ function SingleRelease({
                           alignItems: "center",
                         }}
                       >
-                        <img src="src/assets/icons/img-download.png" />
-                        Download Artwork
+                        <img src={editImg} />
+                        Edit Metadata
                       </Link>
                     </DropdownMenu.Item>
                   </DropdownMenu.Content>
