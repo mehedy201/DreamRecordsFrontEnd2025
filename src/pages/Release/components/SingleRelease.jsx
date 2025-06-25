@@ -1,11 +1,9 @@
 import * as Collapsible from "@radix-ui/react-collapsible";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
-import { Dialog, Slider, Tabs } from "radix-ui";
+import { Tabs } from "radix-ui";
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
-import { IoPlayCircleOutline } from "react-icons/io5";
 import { Link, useLocation, useParams } from "react-router-dom";
-import { RiDownloadLine } from "react-icons/ri";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import Dropdown from "../../../components/Dropdown";
 
@@ -29,8 +27,6 @@ const singleRevenueColumns = [
 ];
 
 function SingleRelease({
-  releaseAlbumInfo,
-  albumTrackList,
   singleReleaseATrackData,
   chartData,
   singleReleaseARevenueData,
@@ -42,12 +38,22 @@ function SingleRelease({
 
 
   const [releaseData, setReleaseData] = useState()
+  const [trackData, setTrackData] = useState();
   useEffect(() => {
     axios.get(`http://localhost:5000/api/v1/release/single/${id}`)
     .then(res => {
       if(res.status === 200){
         setReleaseData(res.data.data[0])
-        console.log(res.data.data)
+        setTrackData(res?.data?.data[0]?.tracks)
+        if(res.data.data[0].audioUrl){
+          const audioUrl = res.data.data[0].audioUrl;
+          const tittle = res.data.data[0].releaseTitle;
+          const artist = res.data.data[0].artist;
+          const labels = res.data.data[0].labels;
+          const featuring = res.data.data[0].featuring;
+          const genre = res.data.data[0].genre;
+          setTrackData([{audioUrl, tittle, artist, labels, genre, featuring}])
+        }
       }
     })
   },[id])
@@ -172,52 +178,56 @@ function SingleRelease({
             <h3 className="release-album-title">Album Info</h3>
             <div className="release-album-info-row">
               <div className="d-flex">
-                <p>Primary Artist:</p>
-                <p>{releaseData?.artist?.map(artist => artist.artistName).join(', ')}</p>
-              </div>
-              <div className="d-flex">
-                <p>Featuring:</p>
-                <p>{releaseData?.featureing?.map(artist => artist.artistName).join(', ')}</p>
-              </div>
-              <div className="d-flex">
-                <p>Genre:</p>
-                <p>{releaseData?.genre}</p>
-              </div>
-              <div className="d-flex">
-                <p>Sub Genre:</p>
-                <p>{releaseData?.subGenre}</p>
-              </div>
-              <div className="d-flex">
-                <p>Label Name:</p>
-                <p>{releaseData?.label?.map(label => label.labelName).join(', ')}</p>
-              </div>
-              <div className="d-flex">
-                <p>Release Date:</p>
-                <p>{releaseData?.releaseDate ? releaseData.releaseDate : releaseData?.releaseOption}</p>
+                <p>Release Tittle::</p>
+                <p>{releaseData?.releaseTitle}</p>
               </div>
               <div className="d-flex">
                 <p>Version/Subtittle:</p>
                 <p>{releaseData?.subTitle}</p>
               </div>
               <div className="d-flex">
+                <p>Primary Artist:</p>
+                <p>{releaseData?.artist?.map(artist => artist.artistName).join(', ')}</p>
+              </div>
+              <div className="d-flex">
                 <p>Format:</p>
                 <p>{releaseData?.format}</p>
+              </div>
+              <div className="d-flex">
+                <p>Featuring:</p>
+                <p>{releaseData?.featuring?.map(artist => artist.artistName).join(', ')} {releaseData?.featureing?.map(artist => artist.artistName).join(', ')}</p>
               </div>
               <div className="d-flex">
                 <p>℗ line:</p>
                 <p>{releaseData?.pLine}</p>
               </div>
               <div className="d-flex">
+                <p>Genre:</p>
+                <p>{releaseData?.genre}</p>
+              </div>
+              <div className="d-flex">
                 <p>© line:</p>
                 <p>{releaseData?.cLine}</p>
+              </div>
+              <div className="d-flex">
+                <p>Sub Genre:</p>
+                <p>{releaseData?.subGenre}</p>
               </div>
               <div className="d-flex">
                 <p>Production Year:</p>
                 <p>{releaseData?.productionYear}</p>
               </div>
               <div className="d-flex">
+                <p>Label Name:</p>
+                <p>{releaseData?.labels?.map(label => label.labelName).join(', ')} {releaseData?.label?.map(label => label.labelName).join(', ')}</p>
+              </div>
+              <div className="d-flex">
                 <p>UPC/EAN</p>
                 <p>{releaseData?.UPC}</p>
+              </div>
+              <div className="d-flex">
+                <p>Release Date:</p>
+                <p>{releaseData?.releaseDate ? releaseData.releaseDate : releaseData?.releaseOption}</p>
               </div>
               <div className="d-flex">
                 <p>Producer Catalog Number:</p>
@@ -229,8 +239,8 @@ function SingleRelease({
             <br />
 
             {
-                releaseData?.tracks &&
-                releaseData?.tracks?.map((track, index) => 
+                trackData &&
+                trackData?.map((track, index) => 
                   <div key={index}>
                     <TrackViewCollapsSection track={track} index=''/>
                   </div>

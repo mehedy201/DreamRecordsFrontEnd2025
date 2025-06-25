@@ -158,8 +158,8 @@ function AlbumInformation({ step, setStep, steps, handlePrev }) {
             items={artist}
             itemName="Artist"
             searchTxt="Search and select Genre"
-            onSelect={(items) => setValue("featureing", items, { shouldValidate: true })}
-            value={watch("featureing")}
+            onSelect={(items) => setValue("featuring", items, { shouldValidate: true })}
+            value={watch("featuring")}
           />
 
           <div className="form-grid release-form-grid">
@@ -196,9 +196,9 @@ function AlbumInformation({ step, setStep, steps, handlePrev }) {
             items={lebel}
             itemName="Label"
             searchTxt="Search and select label"
-            onSelect={(items) => setValue("label", items, { shouldValidate: true })}
-            register={{...register("label", { required: true})}}
-            value={watch("label")}
+            onSelect={(items) => setValue("labels", items, { shouldValidate: true })}
+            register={{...register("labels", { required: true})}}
+            value={watch("labels")}
           />
           {errors.label && <span style={{color: '#ea3958'}}>Please Select Label</span>}
 
