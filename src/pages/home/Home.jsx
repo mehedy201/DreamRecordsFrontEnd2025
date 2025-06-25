@@ -9,8 +9,9 @@ import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import axios from "axios";
+import NotFoundComponent from "../../components/NotFoundComponent";
 
-const Home = ({ releaseItems }) => {
+const Home = () => {
 
   const {userData, userNameIdRoll} = useSelector((state) => state.userData);
 
@@ -66,13 +67,21 @@ const Home = ({ releaseItems }) => {
 
   const [artistData, setArtistData] = useState()
   const [releaseData, setReleaseData] = useState()
+  const [artistNotFound, setArtistNotFound] = useState(false)
+  const [releaseNotFound, setReleaseNotFound] = useState(false)
+  const isEmptyArray = (arr) => {
+    return Array.isArray(arr) && arr.length === 0;
+  } 
   useEffect( () => {
+    setArtistNotFound(false)
+    setReleaseNotFound(false)
     if(userNameIdRoll){
       // Artist Data Get From API _____________
       axios.get(`http://localhost:5000/api/v1/artist/${userNameIdRoll[1]}?page=1&limit=${artistVisibleCount}`)
         .then( res => {
           if(res.status == 200){
             setArtistData(res.data.data);
+            if(isEmptyArray(res.data.data))setArtistNotFound(true)
           }
         })
         .catch(er => console.log(er));
@@ -82,6 +91,7 @@ const Home = ({ releaseItems }) => {
         .then( res => {
           if(res.status == 200){
             setReleaseData(res.data.data);
+            if(isEmptyArray(res.data.data))setReleaseNotFound(true)
           }
         })
         .catch(er => console.log(er));
@@ -112,12 +122,18 @@ const Home = ({ releaseItems }) => {
       </Flex>
       <br />
       <ArtistCard artistsItems={artistData} />
+      {
+        artistNotFound === true && <NotFoundComponent/> 
+      }
       <Flex as="span" className="artists-flex">
         <p>Latest Releases</p>
         <Link to="/releases/1/10/All">See All</Link>
       </Flex>
 
-      <ReleaseCard releaseData={releaseData} />
+      <ReleaseCard releaseData={releaseData} /> 
+      {
+        releaseNotFound === true && <NotFoundComponent/> 
+      } 
       <br />
     </div>
   );
