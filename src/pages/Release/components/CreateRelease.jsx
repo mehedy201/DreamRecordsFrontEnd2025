@@ -13,10 +13,7 @@ const steps = [
   "Overview",
 ];
 
-function CreateRelease({
-  releaseAlbumInfo,
-  releaseTrackDetails,
-}) {
+function CreateRelease() {
 
   const {userNameIdRoll} = useSelector((state) => state.userData);
 
@@ -34,12 +31,6 @@ function CreateRelease({
 
 
   const [step, setStep] = useState(0);
-  const handleNext = () => {
-    if (step < steps.length - 1) {
-      setStep(step + 1);
-    }
-  };
-
   const handlePrev = () => {
     if (step > 0) {
       setStep(step - 1);
@@ -115,12 +106,9 @@ function CreateRelease({
           handlePrev={handlePrev}/>}
       {step === 3 && (
         <ReleaseOverview
-          releaseAlbumInfo={releaseAlbumInfo}
-          releaseTrackDetails={releaseTrackDetails}
           step={step}
           steps={steps}
           setStep={setStep}
-          handleNext={handleNext}
           handlePrev={handlePrev}
         />
       )}

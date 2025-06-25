@@ -200,7 +200,7 @@ function AlbumInformation({ step, setStep, steps, handlePrev }) {
             register={{...register("labels", { required: true})}}
             value={watch("labels")}
           />
-          {errors.label && <span style={{color: '#ea3958'}}>Please Select Label</span>}
+          {errors.labels && <span style={{color: '#ea3958'}}>Please Select Label</span>}
 
           <div className="form-grid release-form-grid">
             <div>
