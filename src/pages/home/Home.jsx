@@ -65,12 +65,23 @@ const Home = ({ releaseItems }) => {
 
 
   const [artistData, setArtistData] = useState()
+  const [releaseData, setReleaseData] = useState()
   useEffect( () => {
     if(userNameIdRoll){
+      // Artist Data Get From API _____________
       axios.get(`http://localhost:5000/api/v1/artist/${userNameIdRoll[1]}?page=1&limit=${artistVisibleCount}`)
         .then( res => {
           if(res.status == 200){
             setArtistData(res.data.data);
+          }
+        })
+        .catch(er => console.log(er));
+
+        // Release Data Get From API ___________
+        axios.get(`http://localhost:5000/api/v1/release/${userNameIdRoll[1]}?page=1&limit=5&status=Approved&search=&years=`)
+        .then( res => {
+          if(res.status == 200){
+            setReleaseData(res.data.data);
           }
         })
         .catch(er => console.log(er));
@@ -103,10 +114,10 @@ const Home = ({ releaseItems }) => {
       <ArtistCard artistsItems={artistData} />
       <Flex as="span" className="artists-flex">
         <p>Latest Releases</p>
-        <Link href="#">See All</Link>
+        <Link to="/releases/1/10/All">See All</Link>
       </Flex>
 
-      <ReleaseCard releaseItems={releaseItems.slice(0, releaseVisibleCount)} />
+      <ReleaseCard releaseData={releaseData} />
       <br />
     </div>
   );
