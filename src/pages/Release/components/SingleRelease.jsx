@@ -30,8 +30,6 @@ function SingleRelease({
   singleReleaseATrackData,
   chartData,
   singleReleaseARevenueData,
-  releaseTrackDetails,
-  releaseCredits,
 }) {
 
   const {id} = useParams();

@@ -128,13 +128,9 @@ function App() {
             path="/release/:id"
             element={
               <SingleRelease
-                releaseAlbumInfo={releaseAlbumInfo}
-                albumTrackList={albumTrackList}
                 singleReleaseATrackData={singleReleaseATrackData}
                 singleReleaseARevenueData={singleReleaseARevenueData}
-                releaseTrackDetails={releaseTrackDetails}
                 chartData={chartData}
-                releaseCredits={releaseCredits}
               />
             }
           />
