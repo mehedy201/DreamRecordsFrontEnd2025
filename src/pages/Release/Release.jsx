@@ -13,6 +13,7 @@ import SelectDropdown from "../../components/SelectDropdown";
 import { useSelector } from "react-redux";
 import useQueryParams from "../../hooks/useQueryParams";
 import axios from "axios";
+import LoadingScreen from "../../components/LoadingScreen";
 
 const Release = () => {
 
@@ -68,18 +69,22 @@ const Release = () => {
   const [releaseData, setReleaseData] = useState()
   const [filteredCount, setFilteredCount] = useState();
   const [totalPages, setTotalPages] = useState();
+  const [loading, setLoading] = useState(false);
   useEffect( () => {
     if(userNameIdRoll){
+      setLoading(true)
       axios.get(`http://localhost:5000/api/v1/release/${userNameIdRoll[1]}?page=${pageNumber}&limit=${perPageItem}&status=${status}&search=${search}&years=${years}`)
         .then( res => {
           if(res.status == 200){
             setReleaseData(res.data.data);
             setFilteredCount(res.data.filteredCount);
             setTotalPages(res.data.totalPages);
+            setLoading(false)
           }
         })
         .catch(er => console.log(er));
     }
+    setLoading(false)
   },[userNameIdRoll, pageNumber, perPageItem, search, years]);
 
   // Handle Page Change ________________________________
@@ -99,7 +104,12 @@ const Release = () => {
     navigateWithParams(`/releases/${pageNumber}/${perPageItem}/${status}`, { search: search, years: years });
   }
 
+
   return (
+    <>
+    {
+      loading === true && <LoadingScreen/>
+    }
     <div className="main-content">
       <Flex className="page-heading">
         <h2>Releases</h2>
@@ -159,6 +169,7 @@ const Release = () => {
         handlePageChange={handlePageChange}
         customFunDropDown={handlePerPageItem}/>
     </div>
+    </>
   );
 };
 Release.propTypes = {
