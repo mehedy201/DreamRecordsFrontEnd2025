@@ -169,6 +169,7 @@ function BlockedVideo({
         )}
       </div>
       <Table
+        tableFor='BlockedVideo'
         columns={BlockVideoColumns}
         data={ProcessBlockVideo}
         renderCell={renderReleaseCell}

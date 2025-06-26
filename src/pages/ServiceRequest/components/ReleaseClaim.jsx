@@ -9,12 +9,23 @@ import { Flex } from "@radix-ui/themes";
 import SearchDropdown from "../../../components/SearchDropdown";
 import { IoEyeOutline } from "react-icons/io5";
 import SelectDropdown from "../../../components/SelectDropdown";
+import { useSelector } from "react-redux";
+import NotFoundComponent from "../../../components/NotFoundComponent";
+import Pagination from "../../../components/Pagination";
+import { useParams } from "react-router-dom";
 function ReleaseClaim({
-  Release_Claim,
-
-  releaseColumns,
-  renderReleaseCell,
+  years,
+  notFound,
+  filterByYear,
+  filterByStatus,
+  handleKeyPress,
+  setSearchText,
 }) {
+
+  const {status} = useParams();
+  const {serviceRequestData} = useSelector((state) => state.serviceRequestPageSlice);
+  const { yearsList } = useSelector(state => state.yearsAndStatus);
+
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 700);
   useEffect(() => {
     const handleResize = () => {
@@ -24,76 +35,24 @@ function ReleaseClaim({
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
   const dropdownItem = (
     <>
       <SelectDropdown
-        options={["Option 1", "Option 2", "Option 3"]}
-        placeholder="All time"
+        options={yearsList}
+        placeholder={`${years ? years : 'All Time'}`}
+        filterByYearAndStatus={filterByYear}
       />
 
       {isMobile && <br />}
       <SelectDropdown
-        options={["Option 1", "Option 2", "Option 3"]}
-        placeholder="All Releases"
+        options={['All', 'Pending', 'Solved','Rejected']}
+        placeholder={status}
+        filterByYearAndStatus={filterByStatus}
       />
     </>
   );
-  const ProcessRelease_Claim = Release_Claim.map((item, index) => ({
-    ...item,
-    reason:
-      item.reason === "info_icon" ? (
-        <Dialog.Root key={index}>
-          <Dialog.Trigger className="serviceRequest-view-trigger">
-            <IoEyeOutline style={{ width: "24px", height: "24px" }} />
-          </Dialog.Trigger>
-          <Modal title="Release Claim">
-            <div className=" serviceRequest-tableModal-info">
-              <div className="d-flex">
-                <p>Tittle:</p>
-                <p>{item.release}</p>
-              </div>
-              <div className="d-flex">
-                <p>UPC:</p>
-                <p>{item.release_sample}</p>
-              </div>
-              <div className="d-flex">
-                <p>Type:</p>
-                <p>{item.type}</p>
-              </div>
-              <div className="d-flex">
-                <p>URL:</p>
-                <p>{item.url}</p>
-              </div>
-              <div className="d-flex">
-                <p>Created At:</p>
-                <p>{item.date}</p>
-              </div>
-              <div className="d-flex">
-                <p>Change Status: </p>
-                <p>{item.status}</p>
-              </div>
-              {item.status === "REJECTED" && (
-                <>
-                  <p style={{ fontSize: "14px", color: "#838383" }}>
-                    Reject Reason
-                  </p>
-                  <ul>
-                    <li>Reason 1</li>
-                    <li>Reason 2</li>
-                    <li>Reason 3</li>
-                    <li>Reason 4</li>
-                    <li>Reason 5</li>
-                    <li>Reason 6</li>
-                  </ul>
-                </>
-              )}
-            </div>
-          </Modal>
-        </Dialog.Root>
-      ) : (
-        item.reason
-      ),
-  }));
+
   return (
     <div>
       <Flex className="page-heading serviceRequest-heading">
@@ -123,7 +82,7 @@ function ReleaseClaim({
 
               <p style={{ fontSize: "12px" }}>Choose Release</p>
               <SearchDropdown
-                items={Release_Claim}
+                items={[]}
                 itemKey="release"
                 imageKey="img"
                 searchTxt="Search & select release"
@@ -140,7 +99,7 @@ function ReleaseClaim({
         </Dialog.Root>
       </Flex>
       <div className="search-setion">
-        <input type="text" placeholder="Search..." />
+        <input onKeyPress={handleKeyPress} onChange={e => setSearchText(e.target.value)} type="text" placeholder="Search..." />
         {isMobile ? (
           <DropdownMenu.Root>
             <DropdownMenu.Trigger asChild>
@@ -171,12 +130,16 @@ function ReleaseClaim({
         )}
       </div>
 
-      <Table
-        Table
-        columns={releaseColumns}
-        data={ProcessRelease_Claim}
-        renderCell={renderReleaseCell}
-      />
+      {
+        serviceRequestData &&
+        <Table
+          serviceRequestData={serviceRequestData}
+          tableFor="ReleaseClaim"
+        />
+      }
+      {
+        notFound && <NotFoundComponent/> 
+      }
     </div>
   );
 }
@@ -185,6 +148,9 @@ ReleaseClaim.propTypes = {
 
   releaseColumns: PropTypes.array.isRequired,
   renderReleaseCell: PropTypes.func.isRequired,
+  filterByYear: PropTypes.func.isRequired,
+  filterByStatus: PropTypes.func.isRequired,
+  handleKeyPress: PropTypes.func.isRequired,
 };
 
 export default ReleaseClaim;

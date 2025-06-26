@@ -140,6 +140,7 @@ function OAC({
         )}
       </div>
       <Table
+        tableFor='OAC'
         columns={OACColumns}
         data={ProcessOAC}
         renderCell={renderReleaseCell}

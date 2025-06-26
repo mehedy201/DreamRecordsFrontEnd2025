@@ -201,8 +201,11 @@ function App() {
             path="/Transaction"
             element={<Transaction transactions={transactions} />}
           />
+
+          {/* Service Request Route Start _______________________ */}
           <Route
-            path="/ServiceRequest"
+            path="/service-request/:request/:pageNumber/:perPageItem/:status"
+            // path="/serviceRequest"
             element={
               <ServiceRequest
                 artistsItems={artistsItems}
@@ -210,6 +213,9 @@ function App() {
               />
             }
           />
+          {/* Service Request Route End _________________________ */}
+
+          
           <Route path="/Profile" element={<Profile />} />
           <Route path="/settings" element={<Settings />} />
           <Route

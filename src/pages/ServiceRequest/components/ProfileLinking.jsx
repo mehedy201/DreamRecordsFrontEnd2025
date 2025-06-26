@@ -251,6 +251,7 @@ function ProfileLinking({
         )}
       </div>
       <Table
+        tableFor='ProfileLinking'
         columns={ProfileLinkingColumns}
         data={ProcessProfile_linking}
         renderCell={renderReleaseCell}

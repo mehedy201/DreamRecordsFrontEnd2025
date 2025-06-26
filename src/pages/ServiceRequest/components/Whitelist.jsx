@@ -244,6 +244,7 @@ function Whitelist({ Release_Claim, renderReleaseCell, artistsItems }) {
         )}
       </div>
       <Table
+        tableFor='Whitelist'
         columns={WhiteListColumns}
         data={ProcessWhitelist}
         renderCell={renderReleaseCell}

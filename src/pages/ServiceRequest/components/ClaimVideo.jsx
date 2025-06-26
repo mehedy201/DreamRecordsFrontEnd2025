@@ -181,6 +181,7 @@ function ClaimVideo({
         )}
       </div>
       <Table
+        tableFor='ClaimVideo'
         columns={ClaimVideoColumns}
         data={ProcessClaimVideo}
         renderCell={renderReleaseCell}
