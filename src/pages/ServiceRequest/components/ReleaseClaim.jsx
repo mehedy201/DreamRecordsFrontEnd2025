@@ -7,12 +7,12 @@ import * as Dialog from "@radix-ui/react-dialog";
 import Modal from "../../../components/Modal";
 import { Flex } from "@radix-ui/themes";
 import SearchDropdown from "../../../components/SearchDropdown";
-import { IoEyeOutline } from "react-icons/io5";
 import SelectDropdown from "../../../components/SelectDropdown";
 import { useSelector } from "react-redux";
 import NotFoundComponent from "../../../components/NotFoundComponent";
-import Pagination from "../../../components/Pagination";
 import { useParams } from "react-router-dom";
+
+
 function ReleaseClaim({
   years,
   notFound,
