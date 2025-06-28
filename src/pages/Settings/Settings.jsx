@@ -1,15 +1,53 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./Settings.css";
 import * as Select from "@radix-ui/react-select";
 import { ChevronDownIcon } from "@radix-ui/react-icons";
-// import { RadioGroup } from "@radix-ui/react-dropdown-menu";
 import * as RadioGroup from "@radix-ui/react-radio-group";
-import Dropdown from "../../components/Dropdown";
-// import * as RadixRadioGroup from "@radix-ui/react-radio-group";
+import { Controller, useForm } from "react-hook-form";
+import { useSelector } from "react-redux";
+import axios from "axios";
+import { Check, ChevronDown } from "lucide-react";
+
 function Settings() {
-  const [paymentMethod, setPaymentMethod] = useState("bank");
-  const [bankAccountType, setBankAccountType] = useState("savings");
-  const [bankBusinessTypeOption, setBankBusinessTypeOption] = useState(false);
+  const {userNameIdRoll} = useSelector((state) => state.userData);
+
+  useEffect(() => {
+    if(userNameIdRoll){
+      axios.get(`http://localhost:5000/api/v1/bank-info/${userNameIdRoll[1]}`)
+      .then(res => {
+          if(res.status == 200){
+              console.log(res.data.data)
+          }
+      })
+      .catch(er => console.log(er)) 
+    }
+  }, [userNameIdRoll]);
+
+
+  const [paymentMethod, setPaymentMethod] = useState("Bank Account");
+
+  const {
+    register,
+    handleSubmit,
+    control,
+    watch,
+    setValue,
+    reset,
+    formState: { errors },
+  } = useForm();
+
+  const bankAccountType = watch("bankAccountType")
+
+
+  const onSubmit = (data) => {
+    let payloadData = {...data, paymentMethod}
+    console.log("Submitted Data:", payloadData);
+  };
+
+  useEffect(() => {
+    reset()
+  },[paymentMethod])
+
   return (
     <div className="main-content">
       <h2 style={{ fontSize: "24px", fontWeight: "500" }}>Settings</h2>
@@ -17,16 +55,14 @@ function Settings() {
         <div className="settings-div">
           <h4>Payout Preference</h4>
           <p>Default Payout Method</p>
-          <div className="form-container" style={{ position: "relative" }}>
-            {/* Radix UI Select */}
-            <Select.Root value={paymentMethod} onValueChange={setPaymentMethod}>
+          <Select.Root value={paymentMethod} onValueChange={setPaymentMethod}>
               <Select.Trigger className="select-trigger">
                 <span>
-                  {paymentMethod === "bank"
+                  {paymentMethod === "Bank Account"
                     ? "Bank Account"
-                    : paymentMethod === "payoneer"
+                    : paymentMethod === "Payoneer"
                     ? "Payoneer"
-                    : paymentMethod === "paypal"
+                    : paymentMethod === "Paypal"
                     ? "PayPal"
                     : "bKash"}
                 </span>
@@ -40,164 +76,204 @@ function Settings() {
                   position="popper"
                 >
                   <Select.Viewport>
-                    <Select.Item className="settings-select-item" value="bank">
-                      Bank Account
-                    </Select.Item>
-                    <Select.Item
-                      className="settings-select-item"
-                      value="payoneer"
-                    >
-                      Payoneer
-                    </Select.Item>
-                    <Select.Item
-                      className="settings-select-item"
-                      value="paypal"
-                    >
-                      PayPal
-                    </Select.Item>
-                    <Select.Item className="settings-select-item" value="bKash">
-                      bKash
-                    </Select.Item>
+                    <Select.Item className="settings-select-item" value="Bank Account">Bank Account</Select.Item>
+                    <Select.Item className="settings-select-item" value="Payoneer">Payoneer</Select.Item>
+                    <Select.Item className="settings-select-item" value="Paypal">PayPal</Select.Item>
+                    <Select.Item className="settings-select-item" value="bKash">bKash</Select.Item>
                   </Select.Viewport>
                 </Select.Content>
               </Select.Portal>
             </Select.Root>
-
+          <form onSubmit={handleSubmit(onSubmit)} className="form-container" style={{ position: "relative" }}>
             {/* Dynamic Form Fields */}
-            {paymentMethod === "bank" ? (
+            {paymentMethod === "Bank Account" ? (
               <div>
                 <p>Account Type*</p>
-                <RadioGroup.Root
-                  className="radio-group"
-                  value={bankAccountType}
-                  onValueChange={setBankAccountType}
-                >
-                  <label className="radio-label">
-                    <RadioGroup.Item className="radio-item" value="savings" />
-                    Savings
-                  </label>
-                  <label className="radio-label">
-                    <RadioGroup.Item className="radio-item" value="current" />
-                    Current
-                  </label>
-                </RadioGroup.Root>
+                <Controller
+                  name="bankAccountType"
+                  defaultValue='Savings'
+                  control={control}
+                  rules={{ required: true }}
+                  render={({ field }) => (
+                    <RadioGroup.Root className="radio-group" value={field.value} onValueChange={field.onChange}>
+                      <label className="radio-label">
+                        <RadioGroup.Item className="radio-item" value="Savings" />
+                        Savings
+                      </label>
+                      <label className="radio-label">
+                        <RadioGroup.Item className="radio-item" value="Current" />
+                        Current
+                      </label>
+                    </RadioGroup.Root>
+                  )}
+                />
 
                 <div className="settings-form-grid">
-                  {bankAccountType === "savings" ? (
+                  {bankAccountType === "Savings" ? (
                     <>
                       <div>
                         <label>Beneficiary Name</label>
-                        <input type="text" />
+                        <input {...register("account_holder_name", { required: true})} type="text" />
+                        {errors.account_holder_name && <span style={{color: '#ea3958'}}>Beneficiary Name Required</span>}
                       </div>
                       <div>
                         <label>Bank Name</label>
-                        <input type="text" />
+                        <input {...register("bank_name", { required: true})} type="text" />
+                        {errors.bank_name && <span style={{color: '#ea3958'}}>Bank Name Required</span>}
                       </div>
                       <div>
                         <label>Account No.</label>
-                        <input type="text" />
+                        <input {...register("account_number", { required: true})} type="text" />
+                        {errors.account_number && <span style={{color: '#ea3958'}}>Account No Required</span>}
                       </div>
                       <div>
                         <label>IFSC Code</label>
-                        <input type="text" />
+                        <input {...register("IFSC")} type="text" />
                       </div>
                     </>
                   ) : (
                     <>
                       <div>
                         <label>Beneficiary Name</label>
-                        <input type="text" />
+                        <input {...register("account_holder_name", { required: true})} type="text" />
+                        {errors.account_holder_name && <span style={{color: '#ea3958'}}>Beneficiary Name Required</span>}
                       </div>
                       <div>
                         <label>Bank Name</label>
-                        <input type="text" />
+                        <input {...register("bank_name", { required: true})} type="text" />
+                        {errors.bank_name && <span style={{color: '#ea3958'}}>Bank Name Required</span>}
                       </div>
                       <div>
                         <label>Account No.</label>
-                        <input type="text" />
+                        <input {...register("account_number", { required: true})} type="text" />
+                        {errors.account_number && <span style={{color: '#ea3958'}}>Account No Required</span>}
                       </div>
                       <div>
                         <label>IFSC Code</label>
-                        <input type="text" />
+                        <input {...register("IFSC")} type="text" />
                       </div>
+
                       <div>
                         <label>Business Entity Type</label>
-                        <Dropdown
-                          label="Private Limited Company"
-                          options={["Option 1", "Option 2", "Option 3"]}
-                          onSelect={setBankBusinessTypeOption}
-                          select={bankBusinessTypeOption}
-                        />
+                        <Select.Root 
+                          onValueChange={e => setValue('bankBusinessTypeOption', e, { shouldValidate: true })}
+                          defaultValue="Private Limited Company"
+                        >
+                          <Select.Trigger className={`dropdown-trigger`}>
+                            <Select.Value/>
+                            <Select.Icon className="select-icon">
+                              <ChevronDown />
+                            </Select.Icon>
+                          </Select.Trigger>
+
+                          <Select.Portal>
+                            <Select.Content
+                              className="dropdown-content"
+                              style={{ padding: 0, overflowY: "auto" }}
+                            >
+                              <Select.Viewport>
+                                <Select.Item value='Private Limited Company' className="select-item">
+                                  <Select.ItemText>Private Limited Company</Select.ItemText>
+                                  <Select.ItemIndicator className="select-item-indicator">
+                                    <Check size={18} />
+                                  </Select.ItemIndicator>
+                                </Select.Item>
+                                <Select.Item value='Private Limited Company 1' className="select-item">
+                                  <Select.ItemText>Private Limited Company 1</Select.ItemText>
+                                  <Select.ItemIndicator className="select-item-indicator">
+                                    <Check size={18} />
+                                  </Select.ItemIndicator>
+                                </Select.Item>
+                                <Select.Item value='Private Limited Company 2' className="select-item">
+                                  <Select.ItemText>Private Limited Company 2</Select.ItemText>
+                                  <Select.ItemIndicator className="select-item-indicator">
+                                    <Check size={18} />
+                                  </Select.ItemIndicator>
+                                </Select.Item>
+                              </Select.Viewport>
+                            </Select.Content>
+                          </Select.Portal>
+                        </Select.Root>
                       </div>
                       <div>
                         <label>GST Registered?</label>
-                        <RadioGroup.Root
-                          className="radio-group"
-                          style={{ marginTop: "16px" }}
-                          defaultValue="yes"
-                        >
-                          <label className="radio-label">
-                            <RadioGroup.Item
-                              className="radio-item"
-                              value="yes"
-                            />
-                            <span>Yes</span>
-                          </label>
-                          <label className="radio-label">
-                            <RadioGroup.Item
-                              className="radio-item"
-                              value="no"
-                            />
-                            <span>No</span>
-                          </label>
-                        </RadioGroup.Root>
+                        <Controller
+                          name="isGST"
+                          defaultValue='Yes'
+                          control={control}
+                          rules={{ required: true }}
+                          render={({ field }) => (
+                            <RadioGroup.Root className="radio-group" value={field.value} onValueChange={field.onChange}>
+                              <label className="radio-label">
+                                <RadioGroup.Item className="radio-item" value="Yes" />
+                                Yes
+                              </label>
+                              <label className="radio-label">
+                                <RadioGroup.Item className="radio-item" value="No" />
+                                No
+                              </label>
+                            </RadioGroup.Root>
+                          )}
+                        />
                       </div>
                       <div>
                         <label>GST Number</label>
-                        <input type="text" />
+                        <input {...register("GSTNumber")} type="text" />
                       </div>
                     </>
                   )}
                 </div>
               </div>
-            ) : paymentMethod === "payoneer" ? (
+            ) : paymentMethod === "Payoneer" ? (
               <div className="settings-form-grid">
                 <div>
                   <label>Payoneer ID</label>
-                  <input type="text" />
+                  <input {...register("payoneerID", { required: true})} type="text" />
+                  {errors.payoneerID && <span style={{color: '#ea3958'}}>Payoneer ID Required</span>}
                 </div>
                 <div>
                   <label>Payoneer Email</label>
-                  <input type="text" />
+                  <input {...register("payoneerEmail", { required: true})} type="email" />
+                  {errors.payoneerEmail && <span style={{color: '#ea3958'}}>Payoneer Email Required</span>}
                 </div>
               </div>
-            ) : paymentMethod === "paypal" ? (
+            ) : paymentMethod === "Paypal" ? (
               <div className="settings-form-grid">
                 <div>
                   <label>Paypal ID</label>
-                  <input type="text" />
+                  <input {...register("paypalID", { required: true})} type="text" />
+                  {errors.paypalID && <span style={{color: '#ea3958'}}>Paypal ID Required</span>}
                 </div>
                 <div>
                   <label>Paypal Email</label>
-                  <input type="text" />
+                  <input {...register("paypalEmail", { required: true})} type="email" />
+                  {errors.paypalEmail && <span style={{color: '#ea3958'}}>Paypal Email Required</span>}
                 </div>
               </div>
             ) : (
               <div className="settings-form-grid">
                 <div>
                   <label>Full Name (As per bKash Account)</label>
-                  <input type="text" />
+                  <input {...register("bKashName", { required: true})} type="text" />
+                  {errors.bKashName && <span style={{color: '#ea3958'}}>Full Name (As per bKash Account) Required</span>}
                 </div>
                 <div>
                   <label>bKash ID</label>
-                  <input type="text" />
+                  <input type="tel"  {...register('bKashNumber', {
+                    required: true,
+                    pattern: {
+                      value: '/^(?:\+?(88|91|92|977|975))?[0-9]{7,14}$/',
+                      message: 'Invalid mobile number (e.g., +8801712345678, 917812345678)',
+                    },
+                    })}/>
+                    {errors.bKashNumber && <span style={{color: '#ea3958'}}>bKash No Required</span>}
                 </div>
               </div>
             )}
 
             {/* Save Button */}
             <button className="settings-save-btn">Save</button>
-          </div>
+          </form>
         </div>
       </div>
     </div>
