@@ -1,0 +1,54 @@
+// import React from 'react';
+
+// const TransactionTable = () => {
+//     return (
+//         <div>
+            
+//         </div>
+//     );
+// };
+
+// export default TransactionTable;
+
+import PropTypes from "prop-types";
+
+const TransactionTable = ({ columns, data, renderCell, className }) => {
+  return (
+    <div className="table-wrapper">
+      <table className={`theme-table ${className}`}>
+        <thead>
+          <tr>
+            {columns.map((col, index) => (
+              <th key={index}>{col.label}</th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {data.map((row, rowIndex) => (
+            <tr key={rowIndex}>
+              {columns.map((col, colIndex) => (
+                <td key={colIndex}>
+                  {renderCell ? renderCell(col.key, row) : row[col.key]}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+};
+
+TransactionTable.propTypes = {
+  columns: PropTypes.arrayOf(
+    PropTypes.shape({
+      label: PropTypes.string.isRequired,
+      key: PropTypes.string.isRequired,
+    })
+  ).isRequired,
+  data: PropTypes.arrayOf(PropTypes.object).isRequired,
+  renderCell: PropTypes.func,
+  className: PropTypes.string,
+};
+
+export default TransactionTable;

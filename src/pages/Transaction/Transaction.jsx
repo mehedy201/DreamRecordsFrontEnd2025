@@ -6,6 +6,10 @@ import * as Dialog from "@radix-ui/react-dialog";
 import Modal from "../../components/Modal";
 import Table from "../../components/Table";
 import PropTypes from "prop-types";
+import TransactionTable from "../../components/TransactionTable";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { useSelector } from "react-redux";
 
 const transactionColumns = [
   { label: "Type", key: "type" },
@@ -60,13 +64,56 @@ const renderTransactionCell = (key, row) => {
   return row[key];
 };
 const Transaction = ({ transactions }) => {
+
+  const {userNameIdRoll} = useSelector((state) => state.userData);
+
+
+
+
+  const [activePaymentMonth, setActivePaymentMonth] = useState(false);
+  const [activePaymentMonthName, setActivePaymentMonthName] = useState()
+  const [userData, setUserData] = useState()
+  useEffect(() => {
+    // Active Payment Month _____________________________________________
+    const currentDate = new Date();
+    const month = currentDate.toLocaleString('default', { month: 'long' });
+    axios.get(`http://localhost:5000/admin/api/v1/active-payment-month/66d80b32544c7126feb39661`)
+      .then(res => {
+      if(res.status === 200){
+        console.log(res.data.data)
+        setActivePaymentMonthName(res.data.data)
+        res.data.data.activeMonth.map(activeMonth => {
+            if(activeMonth === month){
+                setActivePaymentMonth(true)
+            }
+        })
+      }
+    })
+
+    // UserData With Balance Month _____________________________________________
+    if(userNameIdRoll){
+      axios.get(`http://localhost:5000/api/v1/users/${userNameIdRoll[1]}`)
+          .then(res => {
+              if(res.status == 200){
+                  setUserData(res.data.data);
+                  console.log(res.data.data);
+              }
+          })
+          .catch(er => console.log(er)) 
+    }
+  }, [userNameIdRoll]);
+
+
+
+
+
   return (
     <div className="main-content">
       <h2 style={{ fontWeight: "500" }}>Transactions</h2>
       <Flex className="page-heading">
         <div>
           <span>Total Balance</span>
-          <h2>€0.00</h2>
+          <h2>€ {userData?.balance?.amount}.00</h2>
         </div>
         <Dialog.Root>
           <Dialog.Trigger className="theme-btn">Withdraw</Dialog.Trigger>
@@ -85,23 +132,24 @@ const Transaction = ({ transactions }) => {
             <br />
             <div className="d-flex">
               <Dialog.Close className="modal-cancel-btn">Cancel</Dialog.Close>
-              <Dialog.Close className="close-button">
-                Yes, Withdraw
-              </Dialog.Close>
+              {
+                activePaymentMonth === true ?
+                <Dialog.Close className="close-button">
+                  Yes, Withdraw
+                </Dialog.Close> : <button disabled className="close-button">Can't Withdraw</button>
+              }
             </div>
           </Modal>
         </Dialog.Root>
-        {/* <button className="theme-btn">Withdraw</button> */}
       </Flex>
       <br />
       <div className="home-notice">
         <InfoCircledIcon />
         <p>
-          You can withdraw your earnings during the withdrawal periods in
-          February, May, August, and November.
+          You can withdraw your earnings during the withdrawal periods in {activePaymentMonthName?.activeMonth?.map(month => month).join(', ')}.
         </p>
       </div>
-      <Table
+      <TransactionTable
         columns={transactionColumns}
         data={transactions}
         renderCell={renderTransactionCell}
