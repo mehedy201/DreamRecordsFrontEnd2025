@@ -198,7 +198,7 @@ function OAC({
         serviceRequestData &&
         <Table
           serviceRequestData={serviceRequestData}
-          tableFor="ReleaseClaim"
+          tableFor="OAC"
         />
       }
       {

@@ -162,7 +162,7 @@ function BlockedVideo({
         serviceRequestData &&
         <Table
           serviceRequestData={serviceRequestData}
-          tableFor="ReleaseClaim"
+          tableFor="ClaimVideo"
         />
       }
       {

@@ -261,7 +261,7 @@ function Whitelist({
         serviceRequestData &&
         <Table
           serviceRequestData={serviceRequestData}
-          tableFor="ReleaseClaim"
+          tableFor="Whitelist"
         />
       }
       {

@@ -167,7 +167,7 @@ function ClaimVideo({
         serviceRequestData &&
         <Table
           serviceRequestData={serviceRequestData}
-          tableFor="ReleaseClaim"
+          tableFor="ClaimVideo"
         />
       }
       {

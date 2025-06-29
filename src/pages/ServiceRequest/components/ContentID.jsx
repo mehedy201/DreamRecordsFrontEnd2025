@@ -163,7 +163,7 @@ function ContentID({
         serviceRequestData &&
         <Table
           serviceRequestData={serviceRequestData}
-          tableFor="ReleaseClaim"
+          tableFor="ContentID"
         />
       }
       {

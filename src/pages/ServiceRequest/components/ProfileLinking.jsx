@@ -234,7 +234,7 @@ function ProfileLinking({
         serviceRequestData &&
         <Table
           serviceRequestData={serviceRequestData}
-          tableFor="ReleaseClaim"
+          tableFor="ProfileLinking"
         />
       }
       {
