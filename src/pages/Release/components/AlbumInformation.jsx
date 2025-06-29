@@ -157,7 +157,7 @@ function AlbumInformation({ step, setStep, steps, handlePrev }) {
           <SearchDropdown
             items={artist}
             itemName="Artist"
-            searchTxt="Search and select Genre"
+            searchTxt="Search and select Featuring"
             onSelect={(items) => setValue("featuring", items, { shouldValidate: true })}
             value={watch("featuring")}
           />

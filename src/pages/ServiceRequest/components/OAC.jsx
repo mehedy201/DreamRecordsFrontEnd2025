@@ -7,8 +7,13 @@ import SearchDropdown from "../../../components/SearchDropdown";
 import { HiOutlineAdjustmentsHorizontal } from "react-icons/hi2";
 import PropTypes from "prop-types";
 import Table from "../../../components/Table";
-import { IoEyeOutline } from "react-icons/io5";
 import SelectDropdown from "../../../components/SelectDropdown";
+import { useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
+import axios from "axios";
+import { useForm } from "react-hook-form";
+import SearchDropdownRelease from "../../../components/SearchDropdownRelease";
+import NotFoundComponent from "../../../components/NotFoundComponent";
 const OACColumns = [
   { label: "Release", key: "release" },
   { label: "Topic Channel Link", key: "url" },
@@ -17,11 +22,48 @@ const OACColumns = [
   { label: "Action", key: "reason" },
 ];
 function OAC({
-  Release_Claim,
-
-  artistsItems,
-  renderReleaseCell,
+  years,
+  notFound,
+  filterByYear,
+  filterByStatus,
+  handleKeyPress,
+  setSearchText,
 }) {
+
+  const {status} = useParams();
+  const {serviceRequestData} = useSelector((state) => state.serviceRequestPageSlice);
+  const { yearsList } = useSelector(state => state.yearsAndStatus);
+  const {userNameIdRoll} = useSelector((state) => state.userData);
+  const { reFetchArtist } = useSelector(state => state.reFetchSlice);
+
+
+
+  const [releaseData, setReleaseData] = useState();
+  useEffect( () => {
+    if(userNameIdRoll){
+      axios.get(`http://localhost:5000/api/v1/release/${userNameIdRoll[1]}?page=1&limit=1000&status=All`)
+        .then( res => {
+          if(res.status == 200){
+            setReleaseData(res.data.data);
+          }
+        })
+        .catch(er => console.log(er));
+    }
+  },[userNameIdRoll]);
+
+   // Artist Data Get Form API ____________________________
+    const [artist, setArtist] = useState()
+    useEffect(() => {
+        axios.get(`http://localhost:5000/api/v1/artist/for-release/${userNameIdRoll ? userNameIdRoll[1]: ''}`)
+        .then(res => {
+            setArtist(res.data.data)
+        })
+    }, [userNameIdRoll, reFetchArtist])
+
+
+
+
+
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 700);
   useEffect(() => {
     const handleResize = () => {
@@ -34,82 +76,95 @@ function OAC({
   const dropdownItem = (
     <>
       <SelectDropdown
-        options={["Option 1", "Option 2", "Option 3"]}
-        placeholder="All time"
+        options={yearsList}
+        placeholder={`${years ? years : 'All Time'}`}
+        filterByYearAndStatus={filterByYear}
       />
-
       {isMobile && <br />}
       <SelectDropdown
-        options={["Option 1", "Option 2", "Option 3"]}
-        placeholder="All Releases"
+        options={['All', 'Pending', 'Solved','Rejected']}
+        placeholder={status}
+        filterByYearAndStatus={filterByStatus}
       />
     </>
   );
-  const ProcessOAC = Release_Claim.map((item) => ({
-    ...item,
-    reason:
-      item.reason === "info_icon" ? (
-        <IoEyeOutline style={{ width: "24px", height: "24px" }} />
-      ) : (
-        item.reason
-      ),
-  }));
+  const [isOpen, setIsOpen] = useState(false);
+  // Form  ____________________________________________________
+  const {register, handleSubmit, setValue, watch, control, formState: {errors}} = useForm()
+  const onSubmit = (data) => {
+    console.log(data)
+    setIsOpen(false)
+  }
+
+
+
   return (
     <div>
       <Flex className="page-heading serviceRequest-heading">
         <h2>Service Request</h2>
-        <Dialog.Root>
+        <Dialog.Root open={isOpen} onOpenChange={setIsOpen}>
           <Dialog.Trigger className="theme-btn">+ Create New</Dialog.Trigger>
           <Modal title="Create New Service Request">
-            <div className="serviceRequest-modal-content">
+            <form onSubmit={handleSubmit(onSubmit)} className="serviceRequest-modal-content">
               <p className="modal-description">
                 If you want to claim a service request, please fill the details
                 below for associated tracks with appropriate links.
               </p>
               <p style={{ fontSize: "12px" }}>Service Request</p>
-
-              <SelectDropdown
-                options={["Option 1", "Option 2", "Option 3"]}
-                placeholder="OAC"
-                className="Service-modal-dropdown-trigger"
+              <input
+                type="text"
+                value='OAC'
+                className="service-modal-input"
+                {...register("claimOption", { required: true})}
+                readOnly
               />
+              {errors.claimOption && <span style={{color: '#ea3958'}}>OAC Required</span>}
+
 
               <p style={{ fontSize: "12px" }}>Choose Artist</p>
-
               <SearchDropdown
-                items={artistsItems}
-                itemKey="name"
-                imagePath="artists/"
-                searchTxt="Search & select artist"
-                imageKey="img"
+                items={artist}
+                searchTxt="Search and select artist"
+                itemName="Artist"
+                register={{...register("artist", { required: true})}}
+                onSelect={(items) => setValue("artist", items, { shouldValidate: true })}
+                value={watch("artist")}
               />
+              {errors.artist && <span style={{color: '#ea3958'}}>Please Select Artist</span>}
+
               <p style={{ fontSize: "12px" }}>Choose 5 Release below</p>
-
-              <SearchDropdown
-                items={Release_Claim}
-                itemKey="release"
-                imageKey="img"
-                searchTxt="Search & select release"
+              <SearchDropdownRelease
+                items={releaseData}
+                searchTxt="Search and select Release"
+                onSelect={(items) => setValue("release", items, { shouldValidate: true })}
+                register={{...register("release", { required: true})}}
+                value={watch("release")}
               />
+              {errors.release && <span style={{color: '#ea3958'}}>Release Required</span>}
+
               <p style={{ fontSize: "12px" }}>Artists Topic channel link *</p>
               <input
                 type="text"
                 placeholder="Paste link here"
                 className="service-modal-input"
+                {...register("artistsTopicChannelLink", { required: true})}
               />
+              {errors.artistsTopicChannelLink && <span style={{color: '#ea3958'}}>Artists Topic Channel Link Required</span>}
               <p style={{ fontSize: "12px" }}>Artists YoutTube channel link*</p>
               <input
                 type="text"
                 placeholder="Paste link here"
                 className="service-modal-input"
+                {...register("artistsYoutubeChannelLink", { required: true})}
               />
-            </div>
-            <Dialog.Close className="close-button">Submit</Dialog.Close>
+              {errors.artistsYoutubeChannelLink && <span style={{color: '#ea3958'}}>Artists youtube Link Required</span>}
+              <button type="submit" className="close-button">Submit</button>
+            </form>
           </Modal>
         </Dialog.Root>
       </Flex>
       <div className="search-setion">
-        <input type="text" placeholder="Search..." />
+        <input onKeyPress={handleKeyPress} onChange={e => setSearchText(e.target.value)}  type="text" placeholder="Search..." />
         {isMobile ? (
           <DropdownMenu.Root>
             <DropdownMenu.Trigger asChild>
@@ -139,12 +194,16 @@ function OAC({
           dropdownItem
         )}
       </div>
-      <Table
-        tableFor='OAC'
-        columns={OACColumns}
-        data={ProcessOAC}
-        renderCell={renderReleaseCell}
-      />
+      {
+        serviceRequestData &&
+        <Table
+          serviceRequestData={serviceRequestData}
+          tableFor="ReleaseClaim"
+        />
+      }
+      {
+        notFound && <NotFoundComponent/> 
+      }
     </div>
   );
 }

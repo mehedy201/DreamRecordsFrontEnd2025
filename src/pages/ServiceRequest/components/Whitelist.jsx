@@ -9,6 +9,16 @@ import PropTypes from "prop-types";
 import Table from "../../../components/Table";
 import { IoEyeOutline } from "react-icons/io5";
 import SelectDropdown from "../../../components/SelectDropdown";
+import { useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
+import axios from "axios";
+import { useForm } from "react-hook-form";
+import * as Select from "@radix-ui/react-select";
+import SearchDropdownRelease from "../../../components/SearchDropdownRelease";
+import NotFoundComponent from "../../../components/NotFoundComponent";
+import { Check, ChevronDown } from "lucide-react";
+
+
 const WhiteListColumns = [
   { label: "Release", key: "release" },
   { label: "Whitelist Link", key: "url" },
@@ -16,7 +26,60 @@ const WhiteListColumns = [
   { label: "Status", key: "status" },
   { label: "Action", key: "reason" },
 ];
-function Whitelist({ Release_Claim, renderReleaseCell, artistsItems }) {
+function Whitelist({ 
+  years,
+  notFound,
+  filterByYear,
+  filterByStatus,
+  handleKeyPress,
+  setSearchText,
+ }) {
+
+  const {status} = useParams();
+  const {serviceRequestData} = useSelector((state) => state.serviceRequestPageSlice);
+  const { yearsList } = useSelector(state => state.yearsAndStatus);
+  const {userNameIdRoll} = useSelector((state) => state.userData);
+  const { reFetchArtist, reFetchLabel } = useSelector(state => state.reFetchSlice);
+
+
+
+  const [releaseData, setReleaseData] = useState();
+  useEffect( () => {
+    if(userNameIdRoll){
+      axios.get(`http://localhost:5000/api/v1/release/${userNameIdRoll[1]}?page=1&limit=1000&status=All`)
+        .then( res => {
+          if(res.status == 200){
+            setReleaseData(res.data.data);
+          }
+        })
+        .catch(er => console.log(er));
+    }
+  },[userNameIdRoll]);
+
+  // Artist Data Get Form API ____________________________
+  const [artist, setArtist] = useState()
+  useEffect(() => {
+    axios.get(`http://localhost:5000/api/v1/artist/for-release/${userNameIdRoll ? userNameIdRoll[1]: ''}`)
+    .then(res => {
+        setArtist(res.data.data)
+    })
+  }, [userNameIdRoll, reFetchArtist])
+
+  // Label Data Get Form API ____________________________
+  const [lebel, setLabel] = useState()
+  useEffect(() => {
+    if(userNameIdRoll){
+      axios.get(`http://localhost:5000/api/v1/labels/for-release/${userNameIdRoll[1]}`)
+      .then(res => {
+          setLabel(res.data.data);
+      })
+    }
+  }, [userNameIdRoll, reFetchLabel])
+
+
+
+
+
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 700);
   useEffect(() => {
     const handleResize = () => {
@@ -26,137 +89,35 @@ function Whitelist({ Release_Claim, renderReleaseCell, artistsItems }) {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+  
+  
+
   const dropdownItem = (
     <>
       <SelectDropdown
-        options={["Option 1", "Option 2", "Option 3"]}
-        placeholder="All time"
+        options={yearsList}
+        placeholder={`${years ? years : 'All Time'}`}
+        filterByYearAndStatus={filterByYear}
       />
-
       {isMobile && <br />}
       <SelectDropdown
-        options={["Option 1", "Option 2", "Option 3"]}
-        placeholder="All Releases"
+        options={['All', 'Pending', 'Solved','Rejected']}
+        placeholder={status}
+        filterByYearAndStatus={filterByStatus}
       />
     </>
   );
-  const ProcessWhitelist = Release_Claim.map((item, index) => ({
-    ...item,
-    reason:
-      item.reason === "info_icon" ? (
-        <Dialog.Root key={index}>
-          <Dialog.Trigger className="serviceRequest-view-trigger">
-            <IoEyeOutline style={{ width: "24px", height: "24px" }} />
-          </Dialog.Trigger>
-          <Modal title="Profile Linking">
-            <div className=" serviceRequest-tableModal-info">
-              <div
-                style={{
-                  background: "#F9F9F9",
-                  padding: "12px",
-                  marginBottom: "12px",
-                }}
-              >
-                <p>Track 1</p>
-                <div className="d-flex">
-                  <p>Tittle:</p>
-                  <p>{item.release}</p>
-                </div>
-                <div className="d-flex">
-                  <p>UPC:</p>
-                  <p>{item.release_sample}</p>
-                </div>
-              </div>
-              <div
-                style={{
-                  background: "#F9F9F9",
-                  padding: "12px",
-                  marginBottom: "12px",
-                }}
-              >
-                <p>Track 2</p>
-                <div className="d-flex">
-                  <p>Tittle:</p>
-                  <p>{item.release}</p>
-                </div>
-                <div className="d-flex">
-                  <p>UPC:</p>
-                  <p>{item.release_sample}</p>
-                </div>
-              </div>
-              <div
-                style={{
-                  background: "#F9F9F9",
-                  padding: "12px",
-                  marginBottom: "12px",
-                }}
-              >
-                <p>Track 3</p>
-                <div className="d-flex">
-                  <p>Tittle:</p>
-                  <p>{item.release}</p>
-                </div>
-                <div className="d-flex">
-                  <p>UPC:</p>
-                  <p>{item.release_sample}</p>
-                </div>
-              </div>
-              <div
-                style={{
-                  background: "#F9F9F9",
-                  padding: "12px",
-                  marginBottom: "12px",
-                }}
-              >
-                <p>Track 4</p>
-                <div className="d-flex">
-                  <p>Tittle:</p>
-                  <p>{item.release}</p>
-                </div>
-                <div className="d-flex">
-                  <p>UPC:</p>
-                  <p>{item.release_sample}</p>
-                </div>
-              </div>
+  const [isOpen, setIsOpen] = useState(false);
+  // Form  ____________________________________________________
+  const {register, handleSubmit, setValue, watch, control, formState: {errors}} = useForm()
+  const onSubmit = (data) => {
+    console.log(data)
+    setIsOpen(false)
+  }
 
-              <div className="d-flex">
-                <p>Label:</p>
-                <p>SBM Music</p>
-              </div>
-              <div className="d-flex">
-                <p>Artist’s Instagram URL:</p>
-                <p>{item.url}</p>
-              </div>
-              <div className="d-flex">
-                <p>Created At:</p>
-                <p>{item.date}</p>
-              </div>
-              <div className="d-flex">
-                <p>Change Status: </p>
-                <p>{item.status}</p>
-              </div>
-              {item.status === "REJECTED" && (
-                <>
-                  <p style={{ fontSize: "14px", color: "#838383" }}>
-                    Reject Reason
-                  </p>
-                  <ul>
-                    <li>Reason 1</li>
-                    <li>Reason 2</li>
-                    <li>Reason 3</li>
-                    <li>Reason 4</li>
-                    <li>Reason 5</li>
-                    <li>Reason 6</li>
-                  </ul>
-                </>
-              )}
-            </div>
-          </Modal>
-        </Dialog.Root>
-      ) : (
-        item.reason
-      ),
-  }));
+
+
+
   return (
     <div>
       <Flex className="page-heading serviceRequest-heading">
@@ -170,50 +131,103 @@ function Whitelist({ Release_Claim, renderReleaseCell, artistsItems }) {
                 below for associated tracks with appropriate links.
               </p>
               <p style={{ fontSize: "12px" }}>Service Request</p>
-
-              <SelectDropdown
-                options={["Option 1", "Option 2", "Option 3"]}
-                placeholder="Whitelist"
-                className="Service-modal-dropdown-trigger"
+              <input
+                type="text"
+                value='Whitelist'
+                className="service-modal-input"
+                {...register("claimOption", { required: true})}
+                readOnly
               />
+              {errors.claimOption && <span style={{color: '#ea3958'}}>Whitelist Required</span>}
 
               <p style={{ fontSize: "12px" }}>Type</p>
-              <SelectDropdown
-                options={["Option 1", "Option 2", "Option 3"]}
-                placeholder="Facebook"
-                className="Service-modal-dropdown-trigger"
-              />
+              <Select.Root 
+                onValueChange={e => setValue('type', e, { shouldValidate: true })}
+                defaultValue="Youtube"
+              >
+                <Select.Trigger className='dropdown-trigger Service-modal-dropdown-trigger'>
+                  <Select.Value/>
+                  <Select.Icon className="select-icon">
+                    <ChevronDown />
+                  </Select.Icon>
+                </Select.Trigger>
+                <Select.Portal>
+                  <Select.Content
+                    className="dropdown-content"
+                    style={{ padding: 0, overflowY: "auto" }}
+                  >
+                    <Select.Viewport>
+                      <Select.Item value='Youtube' className="select-item">
+                        <Select.ItemText>Youtube</Select.ItemText>
+                        <Select.ItemIndicator className="select-item-indicator">
+                          <Check size={18} />
+                        </Select.ItemIndicator>
+                      </Select.Item>
+                      <Select.Item value='Facebook' className="select-item">
+                        <Select.ItemText>Facebook</Select.ItemText>
+                        <Select.ItemIndicator className="select-item-indicator">
+                          <Check size={18} />
+                        </Select.ItemIndicator>
+                      </Select.Item>
+                      <Select.Item value='Instagram' className="select-item">
+                        <Select.ItemText>Instagram</Select.ItemText>
+                        <Select.ItemIndicator className="select-item-indicator">
+                          <Check size={18} />
+                        </Select.ItemIndicator>
+                      </Select.Item>
+                    </Select.Viewport>
+                  </Select.Content>
+                </Select.Portal>
+              </Select.Root>
+              {errors.type && <span style={{color: '#ea3958'}}>Type Required</span>}
 
-              <p style={{ fontSize: "12px" }}>Choose Label/Artist</p>
-
+              <p style={{ fontSize: "12px" }}>Choose Artist*</p>
               <SearchDropdown
-                items={artistsItems}
-                itemKey="name"
-                imageKey="img"
-                imagePath="artists/"
-                searchTxt="Search & select artist"
+                items={artist}
+                searchTxt="Search and select artist"
+                itemName="Artist"
+                register={{...register("artist", { required: true})}}
+                onSelect={(items) => setValue("artist", items, { shouldValidate: true })}
+                value={watch("artist")}
               />
+              {errors.artist && <span style={{color: '#ea3958'}}>Please Select Artist</span>}
+
+              <p style={{ fontSize: "12px" }}>Label Name *</p>
+              <SearchDropdown
+                items={lebel}
+                itemName="Label"
+                searchTxt="Search and select label"
+                onSelect={(items) => setValue("labels", items, { shouldValidate: true })}
+                register={{...register("labels", { required: true})}}
+                value={watch("labels")}
+              />
+              {errors.labels && <span style={{color: '#ea3958'}}>Please Select Label</span>}
+
               <p style={{ fontSize: "12px" }}>Choose 10 Release below</p>
-
-              <SearchDropdown
-                items={Release_Claim}
-                itemKey="release"
-                imageKey="img"
-                searchTxt="Search & select release"
+              <SearchDropdownRelease
+                items={releaseData}
+                searchTxt="Search and select Release"
+                onSelect={(items) => setValue("release", items, { shouldValidate: true })}
+                register={{...register("release", { required: true})}}
+                value={watch("release")}
               />
+              {errors.release && <span style={{color: '#ea3958'}}>Release Required</span>}
+
               <p style={{ fontSize: "12px" }}>Give the link to whitelist *</p>
               <input
                 type="text"
                 placeholder="Paste link here"
                 className="service-modal-input"
+                {...register("whiteListLink", { required: true})}
               />
+              {errors.artistProfileLink && <span style={{color: '#ea3958'}}>Whitelist Link Required</span>}
+              <button type="submit" className="close-button">Submit</button>
             </div>
-            <Dialog.Close className="close-button">Submit</Dialog.Close>
           </Modal>
         </Dialog.Root>
       </Flex>
       <div className="search-setion">
-        <input type="text" placeholder="Search..." />
+        <input onKeyPress={handleKeyPress} onChange={e => setSearchText(e.target.value)} type="text" placeholder="Search..." />
         {isMobile ? (
           <DropdownMenu.Root>
             <DropdownMenu.Trigger asChild>
@@ -243,12 +257,16 @@ function Whitelist({ Release_Claim, renderReleaseCell, artistsItems }) {
           dropdownItem
         )}
       </div>
-      <Table
-        tableFor='Whitelist'
-        columns={WhiteListColumns}
-        data={ProcessWhitelist}
-        renderCell={renderReleaseCell}
-      />
+      {
+        serviceRequestData &&
+        <Table
+          serviceRequestData={serviceRequestData}
+          tableFor="ReleaseClaim"
+        />
+      }
+      {
+        notFound && <NotFoundComponent/> 
+      }
     </div>
   );
 }

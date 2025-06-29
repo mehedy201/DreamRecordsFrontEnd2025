@@ -220,29 +220,46 @@ const ServiceRequest = ({ artistsItems, Release_Claim }) => {
           </Tabs.Content>
           <Tabs.Content className="tab-panel" value="Blocked Video">
             <BlockedVideo
+              years={years}
+              notFound={notFound}
               renderReleaseCell={renderReleaseCell}
-              Release_Claim={Release_Claim}
+              filterByYear={filterByYear}
+              filterByStatus={filterByStatus}
+              handleKeyPress={handleKeyPress}
+              setSearchText={setSearchText}
             />
           </Tabs.Content>
           <Tabs.Content className="tab-panel" value="OAC">
             <OAC
-              Release_Claim={Release_Claim}
+              years={years}
+              notFound={notFound}
               renderReleaseCell={renderReleaseCell}
-              artistsItems={artistsItems}
+              filterByYear={filterByYear}
+              filterByStatus={filterByStatus}
+              handleKeyPress={handleKeyPress}
+              setSearchText={setSearchText}
             />
           </Tabs.Content>
           <Tabs.Content className="tab-panel" value="Profile Linking">
             <ProfileLinking
-              Release_Claim={Release_Claim}
+              years={years}
+              notFound={notFound}
               renderReleaseCell={renderReleaseCell}
-              artistsItems={artistsItems}
+              filterByYear={filterByYear}
+              filterByStatus={filterByStatus}
+              handleKeyPress={handleKeyPress}
+              setSearchText={setSearchText}
             />
           </Tabs.Content>
           <Tabs.Content className="tab-panel" value="Whitelist">
             <Whitelist
-              Release_Claim={Release_Claim}
+              years={years}
+              notFound={notFound}
               renderReleaseCell={renderReleaseCell}
-              artistsItems={artistsItems}
+              filterByYear={filterByYear}
+              filterByStatus={filterByStatus}
+              handleKeyPress={handleKeyPress}
+              setSearchText={setSearchText}
             />
           </Tabs.Content>
         </div>

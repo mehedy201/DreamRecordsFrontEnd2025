@@ -92,7 +92,7 @@ function ClaimVideo({
     <div>
       <Flex className="page-heading serviceRequest-heading">
         <h2>Service Request</h2>
-        <Dialog.Root>
+        <Dialog.Root open={isOpen} onOpenChange={setIsOpen}>
           <Dialog.Trigger className="theme-btn">+ Create New</Dialog.Trigger>
           <Modal title="Create New Service Request">
             <form onSubmit={handleSubmit(onSubmit)} className="serviceRequest-modal-content">
