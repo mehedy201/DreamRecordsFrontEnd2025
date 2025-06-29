@@ -11,6 +11,11 @@ import SelectDropdown from "../../../components/SelectDropdown";
 import { useSelector } from "react-redux";
 import NotFoundComponent from "../../../components/NotFoundComponent";
 import { useParams } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import * as Select from "@radix-ui/react-select";
+import { Check, ChevronDown } from "lucide-react";
+import SearchDropdownRelease from "../../../components/SearchDropdownRelease";
+import axios from "axios";
 
 
 function ReleaseClaim({
@@ -25,6 +30,21 @@ function ReleaseClaim({
   const {status} = useParams();
   const {serviceRequestData} = useSelector((state) => state.serviceRequestPageSlice);
   const { yearsList } = useSelector(state => state.yearsAndStatus);
+  const {userNameIdRoll} = useSelector((state) => state.userData);
+
+
+  const [releaseData, setReleaseData] = useState();
+  useEffect( () => {
+    if(userNameIdRoll){
+      axios.get(`http://localhost:5000/api/v1/release/${userNameIdRoll[1]}?page=1&limit=1000&status=All`)
+        .then( res => {
+          if(res.status == 200){
+            setReleaseData(res.data.data);
+          }
+        })
+        .catch(er => console.log(er));
+    }
+  },[userNameIdRoll]);
 
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 700);
   useEffect(() => {
@@ -53,48 +73,101 @@ function ReleaseClaim({
     </>
   );
 
+
+  const [isOpen, setIsOpen] = useState(false);
+  // Form  ____________________________________________________
+  const {register, handleSubmit, setValue, watch, control, formState: {errors}} = useForm()
+  const onSubmit = (data) => {
+    console.log(data)
+    setIsOpen(false)
+  }
+
+
   return (
     <div>
       <Flex className="page-heading serviceRequest-heading">
         <h2>Service Request</h2>
-        <Dialog.Root>
+        <Dialog.Root open={isOpen} onOpenChange={setIsOpen}>
           <Dialog.Trigger className="theme-btn">+ Create New</Dialog.Trigger>
           <Modal title="Create New Service Request">
-            <div className="serviceRequest-modal-content">
+            <form onSubmit={handleSubmit(onSubmit)} className="serviceRequest-modal-content">
               <p className="modal-description">
                 If you want to claim a service request, please fill the details
                 below for associated tracks with appropriate links.
               </p>
               <p style={{ fontSize: "12px" }}>Service Request</p>
 
-              <SelectDropdown
-                options={["Option 1", "Option 2", "Option 3"]}
-                placeholder="Release Claim"
-                className="Service-modal-dropdown-trigger"
+              <input
+                type="text"
+                value='Release Claim'
+                className="service-modal-input"
+                {...register("claimOption", { required: true})}
+                readOnly
               />
+              {errors.claimOption && <span style={{color: '#ea3958'}}>Release Claim Required</span>}
 
               <p style={{ fontSize: "12px" }}>Type</p>
-              <SelectDropdown
-                options={["Option 1", "Option 2", "Option 3"]}
-                placeholder="YouTube"
-                className="Service-modal-dropdown-trigger"
-              />
+              <Select.Root 
+                onValueChange={e => setValue('type', e, { shouldValidate: true })}
+                defaultValue="Youtube"
+              >
+                <Select.Trigger className='dropdown-trigger Service-modal-dropdown-trigger'>
+                  <Select.Value/>
+                  <Select.Icon className="select-icon">
+                    <ChevronDown />
+                  </Select.Icon>
+                </Select.Trigger>
+                <Select.Portal>
+                  <Select.Content
+                    className="dropdown-content"
+                    style={{ padding: 0, overflowY: "auto" }}
+                  >
+                    <Select.Viewport>
+                      <Select.Item value='Youtube' className="select-item">
+                        <Select.ItemText>Youtube</Select.ItemText>
+                        <Select.ItemIndicator className="select-item-indicator">
+                          <Check size={18} />
+                        </Select.ItemIndicator>
+                      </Select.Item>
+                      <Select.Item value='Facebook' className="select-item">
+                        <Select.ItemText>Facebook</Select.ItemText>
+                        <Select.ItemIndicator className="select-item-indicator">
+                          <Check size={18} />
+                        </Select.ItemIndicator>
+                      </Select.Item>
+                      <Select.Item value='Instagram' className="select-item">
+                        <Select.ItemText>Instagram</Select.ItemText>
+                        <Select.ItemIndicator className="select-item-indicator">
+                          <Check size={18} />
+                        </Select.ItemIndicator>
+                      </Select.Item>
+                    </Select.Viewport>
+                  </Select.Content>
+                </Select.Portal>
+              </Select.Root>
+              {errors.type && <span style={{color: '#ea3958'}}>Type Required</span>}
 
               <p style={{ fontSize: "12px" }}>Choose Release</p>
-              <SearchDropdown
-                items={[]}
-                itemKey="release"
-                imageKey="img"
-                searchTxt="Search & select release"
+              <SearchDropdownRelease
+                items={releaseData}
+                searchTxt="Search and select Release"
+                onSelect={(items) => setValue("release", items, { shouldValidate: true })}
+                register={{...register("release", { required: true})}}
+                value={watch("release")}
               />
+              {errors.release && <span style={{color: '#ea3958'}}>Release Required</span>}
               <p style={{ fontSize: "12px" }}>Video link*</p>
               <input
                 type="text"
                 placeholder="Paste link here"
                 className="service-modal-input"
+                {...register("claimLink", { required: true})}
               />
-            </div>
-            <Dialog.Close className="close-button">Submit</Dialog.Close>
+              {errors.claimLink && <span style={{color: '#ea3958'}}>Video Link Required</span>}
+
+              {/* <Dialog.Close type="submit" className="close-button">Submit</Dialog.Close> */}
+              <button type="submit" className="close-button">Submit</button>
+            </form>
           </Modal>
         </Dialog.Root>
       </Flex>
