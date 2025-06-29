@@ -10,6 +10,12 @@ import PropTypes from "prop-types";
 import Table from "../../../components/Table";
 import { IoEyeOutline } from "react-icons/io5";
 import SelectDropdown from "../../../components/SelectDropdown";
+import { useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
+import axios from "axios";
+import SearchDropdownRelease from "../../../components/SearchDropdownRelease";
+import { useForm } from "react-hook-form";
+import NotFoundComponent from "../../../components/NotFoundComponent";
 const ClaimVideoColumns = [
   { label: "Release", key: "release" },
   { label: "Video Link", key: "url" },
@@ -18,10 +24,35 @@ const ClaimVideoColumns = [
   { label: "Action", key: "reason" },
 ];
 function ClaimVideo({
-  Release_Claim,
-
-  renderReleaseCell,
+    years,
+    notFound,
+    filterByYear,
+    filterByStatus,
+    handleKeyPress,
+    setSearchText,
 }) {
+
+
+  const {status} = useParams();
+  const {serviceRequestData} = useSelector((state) => state.serviceRequestPageSlice);
+  const { yearsList } = useSelector(state => state.yearsAndStatus);
+  const {userNameIdRoll} = useSelector((state) => state.userData);
+
+
+  const [releaseData, setReleaseData] = useState();
+  useEffect( () => {
+    if(userNameIdRoll){
+      axios.get(`http://localhost:5000/api/v1/release/${userNameIdRoll[1]}?page=1&limit=1000&status=All`)
+        .then( res => {
+          if(res.status == 200){
+            setReleaseData(res.data.data);
+          }
+        })
+        .catch(er => console.log(er));
+    }
+  },[userNameIdRoll]);
+
+
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 700);
   useEffect(() => {
     const handleResize = () => {
@@ -31,73 +62,32 @@ function ClaimVideo({
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+  
   const dropdownItem = (
     <>
       <SelectDropdown
-        options={["Option 1", "Option 2", "Option 3"]}
-        placeholder="All time"
+        options={yearsList}
+        placeholder={`${years ? years : 'All Time'}`}
+        filterByYearAndStatus={filterByYear}
       />
-
       {isMobile && <br />}
       <SelectDropdown
-        options={["Option 1", "Option 2", "Option 3"]}
-        placeholder="All Releases"
+        options={['All', 'Pending', 'Solved','Rejected']}
+        placeholder={status}
+        filterByYearAndStatus={filterByStatus}
       />
     </>
   );
-  const ProcessClaimVideo = Release_Claim.map((item, index) => ({
-    ...item,
-    reason:
-      item.reason === "info_icon" ? (
-        <Dialog.Root key={index}>
-          <Dialog.Trigger className="serviceRequest-view-trigger">
-            <IoEyeOutline style={{ width: "24px", height: "24px" }} />
-          </Dialog.Trigger>
-          <Modal title="Claim Video">
-            <div className=" serviceRequest-tableModal-info">
-              <div className="d-flex">
-                <p>Tittle:</p>
-                <p>{item.release}</p>
-              </div>
-              <div className="d-flex">
-                <p>UPC:</p>
-                <p>{item.release_sample}</p>
-              </div>
+  const [isOpen, setIsOpen] = useState(false);
+  // Form  ____________________________________________________
+  const {register, handleSubmit, setValue, watch, control, formState: {errors}} = useForm()
+  const onSubmit = (data) => {
+    console.log(data)
+    setIsOpen(false)
+  }
 
-              <div className="d-flex">
-                <p>URL:</p>
-                <p>{item.url}</p>
-              </div>
-              <div className="d-flex">
-                <p>Created At:</p>
-                <p>{item.date}</p>
-              </div>
-              <div className="d-flex">
-                <p>Change Status: </p>
-                <p>{item.status}</p>
-              </div>
-              {item.status === "REJECTED" && (
-                <>
-                  <p style={{ fontSize: "14px", color: "#838383" }}>
-                    Reject Reason
-                  </p>
-                  <ul>
-                    <li>Reason 1</li>
-                    <li>Reason 2</li>
-                    <li>Reason 3</li>
-                    <li>Reason 4</li>
-                    <li>Reason 5</li>
-                    <li>Reason 6</li>
-                  </ul>
-                </>
-              )}
-            </div>
-          </Modal>
-        </Dialog.Root>
-      ) : (
-        item.reason
-      ),
-  }));
+
   return (
     <div>
       <Flex className="page-heading serviceRequest-heading">
@@ -105,52 +95,45 @@ function ClaimVideo({
         <Dialog.Root>
           <Dialog.Trigger className="theme-btn">+ Create New</Dialog.Trigger>
           <Modal title="Create New Service Request">
-            <div className="serviceRequest-modal-content">
+            <form onSubmit={handleSubmit(onSubmit)} className="serviceRequest-modal-content">
               <p className="modal-description">
                 If you want to claim a service request, please fill the details
                 below for associated tracks with appropriate links.
               </p>
               <p style={{ fontSize: "12px" }}>Service Request</p>
-              {/* <Dropdown
-                label="Claim Video"
-                options={["Option 1", "Option 2", "Option 3"]}
-                onSelect={setModalReleaseDropdown1}
-                select={modalReleaseDropdown1}
-                className="Service-modal-dropdown-trigger"
-              /> */}
-              <SelectDropdown
-                options={[
-                  "Option 1",
-                  "Option 2",
-                  "Option 3",
-                  "Option 4",
-                  "Option 5",
-                  "Option 6",
-                ]}
-                placeholder="Claim Video"
-                className="Service-modal-dropdown-trigger"
+              <input
+                type="text"
+                value='Claim Video'
+                className="service-modal-input"
+                {...register("claimOption", { required: true})}
+                readOnly
               />
+              {errors.claimOption && <span style={{color: '#ea3958'}}>Claim Video Required</span>}
 
               <p style={{ fontSize: "12px" }}>Choose Release</p>
-              <SearchDropdown
-                items={Release_Claim}
-                itemKey="release"
-                imageKey="img"
-                searchTxt="Search & select release"
+              <SearchDropdownRelease
+                items={releaseData}
+                searchTxt="Search and select Release"
+                onSelect={(items) => setValue("release", items, { shouldValidate: true })}
+                register={{...register("release", { required: true})}}
+                value={watch("release")}
               />
+              {errors.release && <span style={{color: '#ea3958'}}>Release Required</span>}
               <p style={{ fontSize: "12px" }}>Video link*</p>
               <input
                 type="text"
                 placeholder="Paste link here"
                 className="service-modal-input"
+                {...register("claimLink", { required: true})}
               />
-            </div>
-            <Dialog.Close className="close-button">Submit</Dialog.Close>
+              {errors.claimLink && <span style={{color: '#ea3958'}}>Video Link Required</span>}
+              <button type="submit" className="close-button">Submit</button>
+            </form>
           </Modal>
         </Dialog.Root>
       </Flex>
       <div className="search-setion">
-        <input type="text" placeholder="Search..." />
+        <input onKeyPress={handleKeyPress} onChange={e => setSearchText(e.target.value)} type="text" placeholder="Search..." />
         {isMobile ? (
           <DropdownMenu.Root>
             <DropdownMenu.Trigger asChild>
@@ -180,12 +163,16 @@ function ClaimVideo({
           dropdownItem
         )}
       </div>
-      <Table
-        tableFor='ClaimVideo'
-        columns={ClaimVideoColumns}
-        data={ProcessClaimVideo}
-        renderCell={renderReleaseCell}
-      />
+      {
+        serviceRequestData &&
+        <Table
+          serviceRequestData={serviceRequestData}
+          tableFor="ReleaseClaim"
+        />
+      }
+      {
+        notFound && <NotFoundComponent/> 
+      }
     </div>
   );
 }

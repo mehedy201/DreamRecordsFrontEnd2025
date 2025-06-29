@@ -209,8 +209,13 @@ const ServiceRequest = ({ artistsItems, Release_Claim }) => {
 
           <Tabs.Content className="tab-panel" value="Claim Video">
             <ClaimVideo
-              Release_Claim={Release_Claim}
+              years={years}
+              notFound={notFound}
               renderReleaseCell={renderReleaseCell}
+              filterByYear={filterByYear}
+              filterByStatus={filterByStatus}
+              handleKeyPress={handleKeyPress}
+              setSearchText={setSearchText}
             />
           </Tabs.Content>
           <Tabs.Content className="tab-panel" value="Blocked Video">
