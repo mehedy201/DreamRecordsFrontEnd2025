@@ -197,8 +197,13 @@ const ServiceRequest = ({ artistsItems, Release_Claim }) => {
 
           <Tabs.Content className="tab-panel" value="Content ID">
             <ContentID
-              Release_Claim={Release_Claim}
+              years={years}
+              notFound={notFound}
               renderReleaseCell={renderReleaseCell}
+              filterByYear={filterByYear}
+              filterByStatus={filterByStatus}
+              handleKeyPress={handleKeyPress}
+              setSearchText={setSearchText}
             />
           </Tabs.Content>
 

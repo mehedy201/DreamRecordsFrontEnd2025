@@ -9,6 +9,12 @@ import { HiOutlineAdjustmentsHorizontal } from "react-icons/hi2";
 import { useEffect, useState } from "react";
 import { IoEyeOutline } from "react-icons/io5";
 import SelectDropdown from "../../../components/SelectDropdown";
+import { useSelector } from "react-redux";
+import NotFoundComponent from "../../../components/NotFoundComponent";
+import { useParams } from "react-router-dom";
+import axios from "axios";
+import SearchDropdownRelease from "../../../components/SearchDropdownRelease";
+import { useForm } from "react-hook-form";
 const contentIDColumns = [
   { label: "Release", key: "release" },
   { label: "Created At", key: "date" },
@@ -16,15 +22,38 @@ const contentIDColumns = [
   { label: "Reason", key: "reason" },
 ];
 function ContentID({
-  // modalReleaseDropdown1,
-  // setModalReleaseDropdown1,
-  Release_Claim,
-  renderReleaseCell,
-  // setSelectedOption2,
-  // setSelectedOption1,
-  // selectedOption1,
-  // selectedOption2,
+  years,
+  notFound,
+  filterByYear,
+  filterByStatus,
+  handleKeyPress,
+  setSearchText,
 }) {
+
+  const {status} = useParams();
+  const {serviceRequestData} = useSelector((state) => state.serviceRequestPageSlice);
+  const { yearsList } = useSelector(state => state.yearsAndStatus);
+  const {userNameIdRoll} = useSelector((state) => state.userData);
+
+
+  const [releaseData, setReleaseData] = useState();
+  useEffect( () => {
+    if(userNameIdRoll){
+      axios.get(`http://localhost:5000/api/v1/release/${userNameIdRoll[1]}?page=1&limit=1000&status=All`)
+        .then( res => {
+          if(res.status == 200){
+            setReleaseData(res.data.data);
+          }
+        })
+        .catch(er => console.log(er));
+    }
+  },[userNameIdRoll]);
+
+
+
+
+
+
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 700);
   useEffect(() => {
     const handleResize = () => {
@@ -35,102 +64,72 @@ function ContentID({
     return () => window.removeEventListener("resize", handleResize);
   }, []);
   const dropdownItem = (
-    <>
-      <SelectDropdown
-        options={["Option 1", "Option 2", "Option 3"]}
-        placeholder="All time"
-      />
-
-      {isMobile && <br />}
-      <SelectDropdown
-        options={["Option 1", "Option 2", "Option 3"]}
-        placeholder="All Releases"
-      />
-    </>
+      <>
+        <SelectDropdown
+          options={yearsList}
+          placeholder={`${years ? years : 'All Time'}`}
+          filterByYearAndStatus={filterByYear}
+        />
+  
+        {isMobile && <br />}
+        <SelectDropdown
+          options={['All', 'Pending', 'Solved','Rejected']}
+          placeholder={status}
+          filterByYearAndStatus={filterByStatus}
+        />
+      </>
   );
-  const ProcessContent_Id = Release_Claim.map((item, index) => ({
-    ...item,
-    reason:
-      item.reason === "info_icon" ? (
-        <Dialog.Root key={index}>
-          <Dialog.Trigger className="serviceRequest-view-trigger">
-            <IoEyeOutline style={{ width: "24px", height: "24px" }} />
-          </Dialog.Trigger>
-          <Modal title="Content ID">
-            <div className=" serviceRequest-tableModal-info">
-              <div className="d-flex">
-                <p>Tittle:</p>
-                <p>{item.release}</p>
-              </div>
-              <div className="d-flex">
-                <p>UPC:</p>
-                <p>{item.release_sample}</p>
-              </div>
-              <div className="d-flex">
-                <p>Created At:</p>
-                <p>{item.date}</p>
-              </div>
-              <div className="d-flex">
-                <p>Change Status: </p>
-                <p>{item.status}</p>
-              </div>
-              {item.status === "REJECTED" && (
-                <>
-                  <p style={{ fontSize: "14px", color: "#838383" }}>
-                    Reject Reason
-                  </p>
-                  <ul>
-                    <li>Reason 1</li>
-                    <li>Reason 2</li>
-                    <li>Reason 3</li>
-                    <li>Reason 4</li>
-                    <li>Reason 5</li>
-                    <li>Reason 6</li>
-                  </ul>
-                </>
-              )}
-            </div>
-          </Modal>
-        </Dialog.Root>
-      ) : (
-        item.reason
-      ),
-  }));
+
+  const [isOpen, setIsOpen] = useState(false);
+  // Form  ____________________________________________________
+  const {register, handleSubmit, setValue, watch, control, formState: {errors}} = useForm()
+  const onSubmit = (data) => {
+    console.log(data)
+    setIsOpen(false)
+  }
+
+
   return (
     <div>
       {" "}
       <Flex className="page-heading serviceRequest-heading">
         <h2>Service Request</h2>
-        <Dialog.Root>
+        <Dialog.Root open={isOpen} onOpenChange={setIsOpen}>
           <Dialog.Trigger className="theme-btn">+ Create New</Dialog.Trigger>
           <Modal title="Create New Service Request">
-            <div className="serviceRequest-modal-content">
+            <form onSubmit={handleSubmit(onSubmit)} className="serviceRequest-modal-content">
               <p className="modal-description">
                 If you want to claim a service request, please fill the details
                 below for associated tracks with appropriate links.
               </p>
               <p style={{ fontSize: "12px" }}>Service Request</p>
 
-              <SelectDropdown
-                options={["Option 1", "Option 2", "Option 3"]}
-                placeholder="Content ID"
-                className="Service-modal-dropdown-trigger"
+              <input
+                type="text"
+                value='Content ID'
+                className="service-modal-input"
+                {...register("claimOption", { required: true})}
+                readOnly
               />
+              {errors.claimOption && <span style={{color: '#ea3958'}}>Content ID Required</span>}
 
               <p style={{ fontSize: "12px" }}>Choose Release</p>
-              <SearchDropdown
-                items={Release_Claim}
-                itemKey="release"
-                imageKey="img"
+              <SearchDropdownRelease
+                items={releaseData}
+                searchTxt="Search and select Release"
+                onSelect={(items) => setValue("release", items, { shouldValidate: true })}
+                register={{...register("release", { required: true})}}
+                value={watch("release")}
               />
-            </div>
+              {errors.release && <span style={{color: '#ea3958'}}>Release Required</span>}
+              <button type="submit" className="close-button">Submit</button>
+            </form>
 
-            <Dialog.Close className="close-button">Submit</Dialog.Close>
           </Modal>
         </Dialog.Root>
       </Flex>
       <div className="search-setion">
-        <input type="text" placeholder="Search..." />
+        <input type="text" onKeyPress={handleKeyPress} onChange={e => setSearchText(e.target.value)} placeholder="Search..." />
         {isMobile ? (
           <DropdownMenu.Root>
             <DropdownMenu.Trigger asChild>
@@ -160,11 +159,16 @@ function ContentID({
           dropdownItem
         )}
       </div>
-      <Table
-        columns={contentIDColumns}
-        data={ProcessContent_Id}
-        renderCell={renderReleaseCell}
-      />
+      {
+        serviceRequestData &&
+        <Table
+          serviceRequestData={serviceRequestData}
+          tableFor="ReleaseClaim"
+        />
+      }
+      {
+        notFound && <NotFoundComponent/> 
+      }
     </div>
   );
 }
