@@ -104,7 +104,6 @@ const ServiceRequest = () => {
           setFilteredCount(res.data.filteredCount);
           setTotalPages(res.data.totalPages);
           setLoading(false)
-          console.log(res.data.data)
         }
     })
     setLoading(false)
