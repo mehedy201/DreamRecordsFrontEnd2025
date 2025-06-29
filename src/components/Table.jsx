@@ -57,17 +57,17 @@ const Table = ({ tableFor, serviceRequestData }) => {
                     {
                       Array.isArray(data?.release) &&
                       data?.release?.map(item => 
-                        <div key={item?._id} className="release-table-img-td">
-                          <img src={item?.imgUrl ? data?.imgUrl : releasePlaceHolderImg} alt="" />
+                        <div style={{margin: '3px'}} key={item?._id} className="release-table-img-td">
+                          <img src={item?.imgUrl ? item?.imgUrl : releasePlaceHolderImg} alt="" />
                           <div>
-                            <p>{data?.releaseTitle}</p>
-                            <small>UPC: {data?.UPC}</small>
+                            <p>{item?.releaseTitle}</p>
+                            <small>UPC: {item?.UPC}</small>
                           </div>
                         </div>
                       )
                     }
                     {
-                      typeof data?.release === 'object' &&
+                      typeof data?.release === 'object' && data?.release?.releaseTitle &&
                       <div className="release-table-img-td">
                         <img src={data?.release?.imgUrl ? data?.release?.imgUrl : releasePlaceHolderImg} alt="" />
                         <div>
@@ -130,7 +130,7 @@ const Table = ({ tableFor, serviceRequestData }) => {
                               <p>{data?.type ? data?.type : 'Youtube'}</p>
                             </div>
                             <div style={{gap: '10px'}} className="d-flex">
-                              <p>URL</p>
+                              <p>URL:</p>
                               <p>{data?.claimLink}</p>
                             </div>
                             </>
@@ -146,7 +146,7 @@ const Table = ({ tableFor, serviceRequestData }) => {
                           tableFor === 'OAC' && 
                           <>
                             <div style={{gap: '10px'}} className="d-flex">
-                              <p>Artist's</p>
+                              <p>Artist's:</p>
                               <p>{data?.artist?.map(artist => artist.artistName).join(', ')}</p>
                             </div>
                             <div style={{gap: '10px'}} className="d-flex">
@@ -163,11 +163,11 @@ const Table = ({ tableFor, serviceRequestData }) => {
                           tableFor === 'ProfileLinking' && 
                           <>
                             <div style={{gap: '10px'}} className="d-flex">
-                              <p>Artist's</p>
+                              <p>Artist's:</p>
                               <p>{data?.artist?.map(artist => artist.artistName).join(', ')}</p>
                             </div>
                             <div style={{gap: '10px'}} className="d-flex">
-                              <p>Artist's Profile Link</p>
+                              <p>Artist's Profile Link:</p>
                               <p>{data?.artistProfileLink}</p>
                             </div>
                           </>
@@ -180,26 +180,26 @@ const Table = ({ tableFor, serviceRequestData }) => {
                               <p>{data?.whiteListLink}</p>
                             </div>
                             <div style={{gap: '10px'}} className="d-flex">
-                              <p>Artist</p>
+                              <p>Artist: </p>
                               <p>{data?.artist?.map(artist => artist.artistName).join(', ')}</p>
                             </div>
                             <div style={{gap: '10px'}} className="d-flex">
-                              <p>Label</p>
+                              <p>Label: </p>
                               <p>{data?.label?.map(label => label.labelName).join(', ')}</p>
                             </div>
                           </>
                         }
                         <div style={{gap: '10px'}} className="d-flex">
-                          <p>Created At	</p>
+                          <p>Created At:</p>
                           <p>{data?.isoDate ? localDate(data?.isoDate) : '--'}</p>
                         </div>
                         <div style={{gap: '10px'}} className="d-flex">
-                          <p>Status</p>
+                          <p>Status:</p>
                           <p>{data?.status}</p>
                         </div>
                         <div style={{gap: '10px'}} className="">
                           <p style={{ fontSize: "14px", color: "#838383" }}>
-                            Reject Reason
+                            Reject Reason:
                           </p>
                           <div dangerouslySetInnerHTML={{ __html: data?.actionRequired }} />
                         </div>

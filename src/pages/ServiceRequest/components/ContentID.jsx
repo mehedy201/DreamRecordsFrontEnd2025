@@ -7,14 +7,15 @@ import Table from "../../../components/Table";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { HiOutlineAdjustmentsHorizontal } from "react-icons/hi2";
 import { useEffect, useState } from "react";
-import { IoEyeOutline } from "react-icons/io5";
 import SelectDropdown from "../../../components/SelectDropdown";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import NotFoundComponent from "../../../components/NotFoundComponent";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import SearchDropdownRelease from "../../../components/SearchDropdownRelease";
 import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
+import { setReFetchServiceRequest } from "../../../redux/features/reFetchDataHandleSlice/reFetchDataHandleSlice";
 const contentIDColumns = [
   { label: "Release", key: "release" },
   { label: "Created At", key: "date" },
@@ -34,6 +35,8 @@ function ContentID({
   const {serviceRequestData} = useSelector((state) => state.serviceRequestPageSlice);
   const { yearsList } = useSelector(state => state.yearsAndStatus);
   const {userNameIdRoll} = useSelector((state) => state.userData);
+  const { reFetchServiceRequest } = useSelector(state => state.reFetchSlice);
+  const dispatch = useDispatch();
 
 
   const [releaseData, setReleaseData] = useState();
@@ -84,7 +87,18 @@ function ContentID({
   // Form  ____________________________________________________
   const {register, handleSubmit, setValue, watch, control, formState: {errors}} = useForm()
   const onSubmit = (data) => {
-    console.log(data)
+    const userName = userNameIdRoll[0]
+    const masterUserId = userNameIdRoll[1]
+    const status = 'Pending';
+    const isoDate = new Date().toISOString()
+    const payload = {...data, userName, masterUserId, status, isoDate};
+    axios.post(`http://localhost:5000/common/api/v1/claim-release`, payload)
+    .then(res => {
+        if(res.status === 200){
+            dispatch(setReFetchServiceRequest(reFetchServiceRequest + 1))
+            toast.success('Successfully Submited');
+        }
+    })
     setIsOpen(false)
   }
 

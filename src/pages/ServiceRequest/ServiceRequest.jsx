@@ -51,9 +51,10 @@ const renderReleaseCell = (key, row) => {
   return row[key];
 };
 
-const ServiceRequest = ({ artistsItems, Release_Claim }) => {
+const ServiceRequest = () => {
 
   const {userNameIdRoll} = useSelector((state) => state.userData);
+  const { reFetchServiceRequest } = useSelector(state => state.reFetchSlice);
   const dispatch = useDispatch();
   const {pageNumber, perPageItem, status, request} = useParams();
   const navigate = useNavigate();
@@ -103,10 +104,11 @@ const ServiceRequest = ({ artistsItems, Release_Claim }) => {
           setFilteredCount(res.data.filteredCount);
           setTotalPages(res.data.totalPages);
           setLoading(false)
+          console.log(res.data.data)
         }
     })
     setLoading(false)
-  },[userNameIdRoll, pageNumber, perPageItem, years, search])
+  },[userNameIdRoll, pageNumber, perPageItem, years, search, reFetchServiceRequest])
 
   // Handle Page Change ________________________________
   const handlePageChange = (page) => {

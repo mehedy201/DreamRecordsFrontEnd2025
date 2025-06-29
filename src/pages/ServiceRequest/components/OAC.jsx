@@ -9,18 +9,15 @@ import PropTypes from "prop-types";
 import Table from "../../../components/Table";
 import SelectDropdown from "../../../components/SelectDropdown";
 import { useParams } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { useForm } from "react-hook-form";
 import SearchDropdownRelease from "../../../components/SearchDropdownRelease";
 import NotFoundComponent from "../../../components/NotFoundComponent";
-const OACColumns = [
-  { label: "Release", key: "release" },
-  { label: "Topic Channel Link", key: "url" },
-  { label: "Created At", key: "date" },
-  { label: "Status", key: "status" },
-  { label: "Action", key: "reason" },
-];
+import { setReFetchServiceRequest } from "../../../redux/features/reFetchDataHandleSlice/reFetchDataHandleSlice";
+import toast from "react-hot-toast";
+
+
 function OAC({
   years,
   notFound,
@@ -35,6 +32,8 @@ function OAC({
   const { yearsList } = useSelector(state => state.yearsAndStatus);
   const {userNameIdRoll} = useSelector((state) => state.userData);
   const { reFetchArtist } = useSelector(state => state.reFetchSlice);
+  const { reFetchServiceRequest } = useSelector(state => state.reFetchSlice);
+  const dispatch = useDispatch();
 
 
 
@@ -92,7 +91,18 @@ function OAC({
   // Form  ____________________________________________________
   const {register, handleSubmit, setValue, watch, control, formState: {errors}} = useForm()
   const onSubmit = (data) => {
-    console.log(data)
+    const userName = userNameIdRoll[0]
+    const masterUserId = userNameIdRoll[1]
+    const status = 'Pending';
+    const isoDate = new Date().toISOString()
+    const payload = {...data, userName, masterUserId, status, isoDate};
+    axios.post(`http://localhost:5000/common/api/v1/claim-release`, payload)
+    .then(res => {
+        if(res.status === 200){
+            dispatch(setReFetchServiceRequest(reFetchServiceRequest + 1))
+            toast.success('Successfully Submited');
+        }
+    })
     setIsOpen(false)
   }
 
