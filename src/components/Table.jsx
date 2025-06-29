@@ -54,13 +54,28 @@ const Table = ({ tableFor, serviceRequestData }) => {
             serviceRequestData?.map((data, index) => 
               <tr key={index}>
                   <td>
-                    <div className="release-table-img-td">
-                      <img src={data?.release?.imgUrl ? data?.release?.imgUrl : releasePlaceHolderImg} alt="" />
-                      <div>
-                        <p>{data?.release?.releaseTitle}</p>
-                        <small>UPC: {data?.release?.UPC}</small>
+                    {
+                      Array.isArray(data?.release) &&
+                      data?.release?.map(item => 
+                        <div key={item?._id} className="release-table-img-td">
+                          <img src={item?.imgUrl ? data?.imgUrl : releasePlaceHolderImg} alt="" />
+                          <div>
+                            <p>{data?.releaseTitle}</p>
+                            <small>UPC: {data?.UPC}</small>
+                          </div>
+                        </div>
+                      )
+                    }
+                    {
+                      typeof data?.release === 'object' &&
+                      <div className="release-table-img-td">
+                        <img src={data?.release?.imgUrl ? data?.release?.imgUrl : releasePlaceHolderImg} alt="" />
+                        <div>
+                          <p>{data?.release?.releaseTitle}</p>
+                          <small>UPC: {data?.release?.UPC}</small>
+                        </div>
                       </div>
-                    </div>
+                    }
                   </td>
                   {
                     tableFor === 'ReleaseClaim' &&
@@ -85,13 +100,22 @@ const Table = ({ tableFor, serviceRequestData }) => {
                     tableFor === 'Whitelist' && <td>Whitelist Link</td>
                   }
                   <td>{data?.isoDate ? localDate(data?.isoDate) : '--'}</td>
-                  <td>{data?.status}</td>
+                  <td><span className={`status ${data?.status?.toLowerCase()}`}>{data?.status}</span></td>
                   <td>
                     <Dialog.Root>
                       <Dialog.Trigger className="serviceRequest-view-trigger">
                         <IoEyeOutline style={{ width: "24px", height: "24px" }} />
                       </Dialog.Trigger>
                       <Modal title={modifyRequest(request)}>
+                        {
+                          Array.isArray(data?.release) &&
+                          data?.release?.map(item => 
+                            <div key={item?._id} style={{gap: '10px'}} className="d-flex">
+                              <p>Tittle:</p>
+                              <p>{item?.releaseTitle}</p>
+                            </div>
+                          )
+                        }
                         { data?.release?.releaseTitle &&
                           <div style={{gap: '10px'}} className="d-flex">
                               <p>Tittle:</p>
@@ -115,29 +139,55 @@ const Table = ({ tableFor, serviceRequestData }) => {
                           tableFor === 'ClaimVideo' || tableFor === 'BlockedVideo' && 
                           <div style={{gap: '10px'}} className="d-flex">
                             <p>Video Link:</p>
-                            <p>{data?.videoLink}</p>
+                            <p>{data?.claimLink}</p>
                           </div>
                         }
                         {
                           tableFor === 'OAC' && 
                           <>
                             <div style={{gap: '10px'}} className="d-flex">
+                              <p>Artist's</p>
+                              <p>{data?.artist?.map(artist => artist.artistName).join(', ')}</p>
+                            </div>
+                            <div style={{gap: '10px'}} className="d-flex">
                               <p>Topic Channel Link:</p>
                               <p>{data?.artistsTopicChannelLink}</p>
+                            </div>
+                            <div style={{gap: '10px'}} className="d-flex">
+                              <p>Artist Youtube Link:</p>
+                              <p>{data?.artistsYoutubeChannelLink}</p>
                             </div>
                           </>
                         }
                         {
                           tableFor === 'ProfileLinking' && 
-                          <div style={{gap: '10px'}} className="d-flex">
-                            Artist's Profile Link
-                          </div>
+                          <>
+                            <div style={{gap: '10px'}} className="d-flex">
+                              <p>Artist's</p>
+                              <p>{data?.artist?.map(artist => artist.artistName).join(', ')}</p>
+                            </div>
+                            <div style={{gap: '10px'}} className="d-flex">
+                              <p>Artist's Profile Link</p>
+                              <p>{data?.artistProfileLink}</p>
+                            </div>
+                          </>
                         }
                         {
                           tableFor === 'Whitelist' && 
-                          <div style={{gap: '10px'}} className="d-flex">
-                            Whitelist Link
-                          </div>
+                          <>
+                            <div style={{gap: '10px'}} className="d-flex">
+                              <p>Whitelist Link</p>
+                              <p>{data?.whiteListLink}</p>
+                            </div>
+                            <div style={{gap: '10px'}} className="d-flex">
+                              <p>Artist</p>
+                              <p>{data?.artist?.map(artist => artist.artistName).join(', ')}</p>
+                            </div>
+                            <div style={{gap: '10px'}} className="d-flex">
+                              <p>Label</p>
+                              <p>{data?.label?.map(label => label.labelName).join(', ')}</p>
+                            </div>
+                          </>
                         }
                         <div style={{gap: '10px'}} className="d-flex">
                           <p>Created At	</p>
@@ -147,7 +197,7 @@ const Table = ({ tableFor, serviceRequestData }) => {
                           <p>Status</p>
                           <p>{data?.status}</p>
                         </div>
-                        <div style={{gap: '10px'}} className="d-flex">
+                        <div style={{gap: '10px'}} className="">
                           <p style={{ fontSize: "14px", color: "#838383" }}>
                             Reject Reason
                           </p>
