@@ -14,6 +14,7 @@ function Profile() {
 
   // const dispatch = useDispatch();
   const {userData, userNameIdRoll} = useSelector((state) => state.userData);
+  console.log(userData)
 
   // Handle Image Upload
   const [image, setImage] = useState(null);
@@ -89,7 +90,7 @@ function Profile() {
           ) : (
             <>
               <img
-                src={userData?.image}
+                src={userData?.photoURL}
                 alt="Profile"
                 onClick={() => document.getElementById("fileInput").click()}
               />
