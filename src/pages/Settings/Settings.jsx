@@ -1,27 +1,30 @@
 import { useEffect, useState } from "react";
 import "./Settings.css";
 import * as Select from "@radix-ui/react-select";
-import { ChevronDownIcon } from "@radix-ui/react-icons";
+import { ChevronDownIcon, TrashIcon } from "@radix-ui/react-icons";
 import * as RadioGroup from "@radix-ui/react-radio-group";
 import { Controller, useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import { Check, ChevronDown } from "lucide-react";
+import toast from "react-hot-toast";
 
 function Settings() {
   const {userNameIdRoll} = useSelector((state) => state.userData);
 
+  const [bankInfo, setBankInfo] = useState()
+  const [bankInfoReFetch, setBankInfoReFetch] = useState(1)
   useEffect(() => {
     if(userNameIdRoll){
       axios.get(`http://localhost:5000/api/v1/bank-info/${userNameIdRoll[1]}`)
       .then(res => {
           if(res.status == 200){
-              console.log(res.data.data)
+              setBankInfo(res.data.data)
           }
       })
       .catch(er => console.log(er)) 
     }
-  }, [userNameIdRoll]);
+  }, [userNameIdRoll, bankInfoReFetch]);
 
 
   const [paymentMethod, setPaymentMethod] = useState("Bank Account");
@@ -40,13 +43,31 @@ function Settings() {
 
 
   const onSubmit = (data) => {
-    let payloadData = {...data, paymentMethod}
-    console.log("Submitted Data:", payloadData);
+    let payloadData = {...data, paymentMethod, masterUserId: userNameIdRoll[1], userName: userNameIdRoll[0], date: new Date().toISOString()}
+    axios.post('http://localhost:5000/api/v1/bank-info', payloadData)
+    .then(res => {
+        if(res.status === 200){
+            toast.success(res.data.message)
+            setBankInfoReFetch(bankInfoReFetch + 1)
+        }
+    })
+    reset()
   };
 
   useEffect(() => {
     reset()
   },[paymentMethod])
+
+  const deleteBankInfo = (id) => {
+    axios.delete(`http://localhost:5000/api/v1/bank-info/${id}`)
+    .then( res => {
+        if(res.status == 200){
+            setBankInfoReFetch(bankInfoReFetch + 1)
+            toast.success('Deleted the BankInfo');
+        }
+    })
+    .catch(er => console.log(er));
+  }
 
   return (
     <div className="main-content">
@@ -275,6 +296,21 @@ function Settings() {
             <button className="settings-save-btn">Save</button>
           </form>
         </div>
+      </div>
+      <div>
+        <h4>Bank Information</h4>
+        {
+          bankInfo && 
+          bankInfo.map(bank =>
+          <div key={bank._id} style={{marginBottom: '10px'}} className="modal-transaction-method">
+            <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+              <p>{bank?.bank_name} {bank?.payoneerID ? `Payoneer`: ''}{bank?.paypalID ? `Paypal`: ''}{bank?.bKashName}</p>
+              <TrashIcon onClick={() => deleteBankInfo(bank._id)} style={{color: '#ea3958', cursor: 'pointer'}}/>
+            </div>
+            <small>{bank?.account_number && `************${bank?.account_number.slice(-4)}`} {bank?.payoneerEmail} {bank?.paypalEmail} {bank?.bKashNumber && bank?.bKashNumber.toSlice(-4)}</small>
+          </div>
+          )
+        }
       </div>
     </div>
   );

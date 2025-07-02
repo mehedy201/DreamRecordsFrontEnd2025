@@ -56,7 +56,6 @@ const Transaction = () => {
           .then(res => {
               if(res.status == 200){
                   setUserData(res.data.data);
-                  console.log(res.data.data)
               }
           })
           .catch(er => console.log(er)) 
