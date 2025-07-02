@@ -1,21 +1,12 @@
-// import React from 'react';
-
-// const TransactionTable = () => {
-//     return (
-//         <div>
-            
-//         </div>
-//     );
-// };
-
-// export default TransactionTable;
-
 import PropTypes from "prop-types";
+import upImg from '../assets/icons/Received.png'
+import downImg from '../assets/icons/Withdrawn.png'
+import localDate from "../hooks/localDate";
 
-const TransactionTable = ({ columns, data, renderCell, className }) => {
+const TransactionTable = ({ columns, data }) => {
   return (
     <div className="table-wrapper">
-      <table className={`theme-table ${className}`}>
+      <table className={`theme-table`}>
         <thead>
           <tr>
             {columns.map((col, index) => (
@@ -24,13 +15,26 @@ const TransactionTable = ({ columns, data, renderCell, className }) => {
           </tr>
         </thead>
         <tbody>
-          {data.map((row, rowIndex) => (
-            <tr key={rowIndex}>
-              {columns.map((col, colIndex) => (
-                <td key={colIndex}>
-                  {renderCell ? renderCell(col.key, row) : row[col.key]}
-                </td>
-              ))}
+          {data?.map((d) => (
+            <tr key={d._id}>
+              <td>
+                {
+                  d?.type == 'Withdraw' ?
+                  <div className={`transactions-type`}>
+                    <img src={downImg} alt="" />
+                    <p style={{ margin: "8px 0" }}>Withdrow {data?.type}</p>
+                  </div> :
+                  <div className={`transactions-type`}>
+                    <img src={upImg} alt="" />
+                    <p style={{ margin: "8px 0" }}>Received {data?.type}</p>
+                  </div>
+                }
+              </td>
+              <td>—</td>
+              <td>{d?.type === 'Withdraw' ? '-': '+'} € {d?.amount}</td>
+              <td><span className={`status ${d?.type === 'Withdraw' ? d?.status.toLowerCase() : 'Success'}`}>{d?.type === 'Withdraw' ? d?.status : 'Success'}</span></td>
+              <td>{d?.type === 'Withdraw' ? localDate(d?.date) : d?.paymentReportDate}</td>
+              <td>{d?.invoice ? <button>Invoice</button> : '—'}</td>
             </tr>
           ))}
         </tbody>
@@ -47,8 +51,6 @@ TransactionTable.propTypes = {
     })
   ).isRequired,
   data: PropTypes.arrayOf(PropTypes.object).isRequired,
-  renderCell: PropTypes.func,
-  className: PropTypes.string,
 };
 
 export default TransactionTable;

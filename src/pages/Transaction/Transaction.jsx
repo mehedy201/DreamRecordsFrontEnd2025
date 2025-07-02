@@ -4,12 +4,15 @@ import Pagination from "../../components/Pagination";
 import "./Transaction.css";
 import * as Dialog from "@radix-ui/react-dialog";
 import Modal from "../../components/Modal";
-import Table from "../../components/Table";
-import PropTypes from "prop-types";
 import TransactionTable from "../../components/TransactionTable";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useSelector } from "react-redux";
+import toast from "react-hot-toast";
+import { useParams } from "react-router-dom";
+import LoadingScreen from "../../components/LoadingScreen";
+import isEmptyArray from "../../hooks/isEmptyArrayCheck";
+import useQueryParams from "../../hooks/useQueryParams";
 
 const transactionColumns = [
   { label: "Type", key: "type" },
@@ -20,54 +23,12 @@ const transactionColumns = [
   { label: "Action", key: "action" },
 ];
 
-const renderTransactionCell = (key, row) => {
-  if (key === "type") {
-    return (
-      <div className={`transactions-type ${row.type.toLowerCase()}`}>
-        <img src={`src/assets/icons/${row.type}.png`} alt="" />
-        <p style={{ margin: "8px 0" }}>{row.type}</p>
-      </div>
-    );
-  }
-  if (key === "method") {
-    return (
-      <div>
-        {row.method}
-        <p className="transaction-method-sample">{row.methoda_sample}</p>
-      </div>
-    );
-  }
-  if (key === "status") {
-    return (
-      <span className={`status ${row.status.toLowerCase()}`}>{row.status}</span>
-    );
-  }
-  if (key === "action") {
-    return row.action === "Reject" ? (
-      <Dialog.Root>
-        <Dialog.Trigger className="reject-btn">
-          <InfoCircledIcon />
-          {row.action}
-        </Dialog.Trigger>
-        <Modal title="Payment Rejection Details">
-          <p className="modal-description">
-            If you want to claim a service request, please fill the details
-            below.
-          </p>
-          <Dialog.Close className="close-button">Close</Dialog.Close>
-        </Modal>
-      </Dialog.Root>
-    ) : (
-      <button className="non-transjection-btn">{row.action}</button>
-    );
-  }
-  return row[key];
-};
-const Transaction = ({ transactions }) => {
+
+const Transaction = () => {
 
   const {userNameIdRoll} = useSelector((state) => state.userData);
-
-
+  const {pageNumber, perPageItem, status} = useParams();
+  const { navigateWithParams } = useQueryParams();
 
 
   const [activePaymentMonth, setActivePaymentMonth] = useState(false);
@@ -80,7 +41,6 @@ const Transaction = ({ transactions }) => {
     axios.get(`http://localhost:5000/admin/api/v1/active-payment-month/66d80b32544c7126feb39661`)
       .then(res => {
       if(res.status === 200){
-        console.log(res.data.data)
         setActivePaymentMonthName(res.data.data)
         res.data.data.activeMonth.map(activeMonth => {
             if(activeMonth === month){
@@ -96,7 +56,7 @@ const Transaction = ({ transactions }) => {
           .then(res => {
               if(res.status == 200){
                   setUserData(res.data.data);
-                  console.log(res.data.data);
+                  console.log(res.data.data)
               }
           })
           .catch(er => console.log(er)) 
@@ -104,7 +64,85 @@ const Transaction = ({ transactions }) => {
   }, [userNameIdRoll]);
 
 
+  const [paymentDetails, setPaymentDetails] = useState();
+  const [bankInfo, setBankInfo] = useState();
+  const [activeBankInfo, setActiveBankInfo] = useState(null);
+  const [selectBankInfo, setSelectBankInfo] = useState('');
+  const [SelectBankInfoErr, setSelectBankInfoErr] = useState('')
+  // For Pagination ___________________________________________
+  const [currentPage, setCurrentPage] = useState(parseInt(pageNumber));
+  const [filteredCount, setFilteredCount] = useState();
+  const [totalPages, setTotalPages] = useState();
+  const [loading, setLoading] = useState(false);
+  const [notFound, setNotFound] = useState(false)
 
+  const activeBankAndSelectBank = (id, data) => {
+    setActiveBankInfo(id)
+    setSelectBankInfo(data)
+  }
+  useEffect(() => {
+    setLoading(true)
+    // Get Payment With Balance Month _____________________________________________
+    if(userNameIdRoll){
+      axios.get(`http://localhost:5000/common/api/v1/payment/${userNameIdRoll[1]}?page=${pageNumber}&limit=${perPageItem}`)
+      .then(res => {
+        if(res.status === 200){
+          setPaymentDetails(res.data.data)
+          if(isEmptyArray(res.data.data))setNotFound(true)
+          setFilteredCount(res.data.filteredCount);
+          setTotalPages(res.data.totalPages);
+        }
+      })
+      axios.get(`http://localhost:5000/api/v1/bank-info/${userNameIdRoll[1]}`)
+      .then(res => {
+          if(res.status == 200){
+            setBankInfo(res.data.data)
+          }
+      })
+      .catch(er => console.log(er)) 
+    }
+    setLoading(false)
+  }, [userNameIdRoll]);
+
+
+
+  const [isOpen, setIsOpen] = useState(false);
+  const withdrowBalance = () => {
+    setSelectBankInfoErr('')
+    if(!selectBankInfo){
+      setSelectBankInfoErr('Please Select Bank')
+      return;
+    }
+    if(!userNameIdRoll){
+      setSelectBankInfoErr('Please Reload the page and try again')
+      return;
+    }
+    axios.post(`http://localhost:5000/common/api/v1/payment/withdrawal/${userNameIdRoll[1]}`, selectBankInfo)
+      .then(res => {
+          if(res.status == 200){
+            // setBankInfo(res.data.data)
+            toast.success(res.data.message)
+            setIsOpen(false)
+          }
+      })
+      .catch(er => console.log(er))
+  }
+
+
+  // Handle Page Change ________________________________
+  const handlePageChange = (page) => {
+    navigateWithParams(`/transaction/${page}/${perPageItem}/${status}`);
+  }
+
+  // Handle Per Page Item _______________________________
+  const handlePerPageItem = (perPageItem) => {
+    console.log('object')
+    navigateWithParams(`/transaction/${pageNumber}/${perPageItem}/${status}`);
+  }
+
+ if(loading){
+  return <LoadingScreen/>
+ }
 
 
   return (
@@ -113,9 +151,9 @@ const Transaction = ({ transactions }) => {
       <Flex className="page-heading">
         <div>
           <span>Total Balance</span>
-          <h2>€ {userData?.balance?.amount}.00</h2>
+          <h2>€ {userData?.balance?.amount}</h2>
         </div>
-        <Dialog.Root>
+        <Dialog.Root open={isOpen} onOpenChange={setIsOpen}>
           <Dialog.Trigger className="theme-btn">Withdraw</Dialog.Trigger>
           <Modal title="Withdraw Payment">
             <p className="modal-description">
@@ -123,21 +161,28 @@ const Transaction = ({ transactions }) => {
               specified payment method ?
             </p>
             <p className="modal-description">Withdrawal Amount</p>
-            <h1 style={{ fontWeight: "500", margin: 0 }}>₹500</h1>
+            <h1 style={{ fontWeight: "500", margin: 0 }}>€ {userData?.balance?.amount}</h1>
             <p className="modal-description">Payment Method</p>
-            <div className="modal-transaction-method">
-              <p>Bank Account</p>
-              <small>************2853</small>
-            </div>
+            {
+              bankInfo && 
+              bankInfo.map(bank =>
+              <div key={bank._id} onClick={() => activeBankAndSelectBank(bank._id, bank)} style={{marginBottom: '5px',cursor: 'pointer', border: activeBankInfo == bank._id ? '2px solid #ea3958' : 'none'}} className="modal-transaction-method">
+                <p>{bank?.bank_name} {bank?.payoneerID ? `Payoneer`: ''}{bank?.paypalID ? `Paypal`: ''}{bank?.bKashName}</p>
+                <small>{bank?.account_number && `************${bank?.account_number.slice(-4)}`} {bank?.payoneerEmail} {bank?.paypalEmail} {bank?.bKashNumber && bank?.bKashNumber.toSlice(-4)}</small>
+              </div>
+              )
+            }
+            {
+              SelectBankInfoErr && <p style={{color: '#ea3958'}}>{SelectBankInfoErr}</p>
+            }
             <br />
             <div className="d-flex">
               <Dialog.Close className="modal-cancel-btn">Cancel</Dialog.Close>
               {
                 activePaymentMonth === true ?
-                <Dialog.Close className="close-button">
-                  Yes, Withdraw
-                </Dialog.Close> : <button disabled className="close-button">Can't Withdraw</button>
+                <button onClick={withdrowBalance} className="close-button">Yes, Withdraw</button> : <button disabled className="close-button">Can't Withdraw</button>
               }
+              {/* <button onClick={withdrowBalance} className="close-button">Yes, Withdraw</button> */}
             </div>
           </Modal>
         </Dialog.Root>
@@ -149,18 +194,28 @@ const Transaction = ({ transactions }) => {
           You can withdraw your earnings during the withdrawal periods in {activePaymentMonthName?.activeMonth?.map(month => month).join(', ')}.
         </p>
       </div>
-      <TransactionTable
-        columns={transactionColumns}
-        data={transactions}
-        renderCell={renderTransactionCell}
-        className="transaction-table"
-      />
 
-      <Pagination />
+      {
+        notFound && NotFoundComponent
+      }
+      {
+        paymentDetails &&
+        <TransactionTable
+          columns={transactionColumns}
+          data={paymentDetails}
+        />
+      }
+
+      <Pagination
+        totalDataCount={filteredCount} 
+        totalPages={totalPages}
+        currentPage={currentPage} 
+        perPageItem={perPageItem} 
+        setCurrentPage={setCurrentPage} 
+        handlePageChange={handlePageChange}
+        customFunDropDown={handlePerPageItem}
+       />
     </div>
   );
 };
 export default Transaction;
-Transaction.propTypes = {
-  transactions: PropTypes.array.isRequired,
-};

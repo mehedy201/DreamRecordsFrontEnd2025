@@ -56,6 +56,7 @@ import ReleaseOverview from "./pages/Release/components/ReleaseOverview";
 import CreateArtist from "./pages/Artists/components/CreateArtist";
 import CreateLabel from "./pages/Lables/components/CreateLabel";
 import SingleLable from "./pages/Lables/components/SIngleLable";
+import TestPage from "./pages/TestPage/TestPage";
 
 function Layout() {
   const location = useLocation();
@@ -198,7 +199,7 @@ function App() {
 
 
           <Route
-            path="/Transaction"
+            path="/transaction/:pageNumber/:perPageItem/:status"
             element={<Transaction transactions={transactions} />}
           />
 
@@ -240,6 +241,7 @@ function App() {
         <Route path="/login" element={<LogIn />} />
         <Route path="/resetpassword" element={<ResetPassword />} />
         <Route path="/newpassword" element={<NewPassword />} />
+        <Route path="/testPage" element={<TestPage />} />
       </Routes>
     </Router>
   );

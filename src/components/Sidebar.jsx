@@ -7,7 +7,7 @@ const menuItems = [
   { name: "Artists", path: "/artist/1/10", icon: "group.png" },
   { name: "Lables", path: "/labels/1/10/All", icon: "Labels.png" },
   { name: "Service Request", path: "/service-request/Release-Claim/1/10/All", icon: "Service Request.png",},
-  { name: "Transactions", path: "/Transaction", icon: "Transactions.png" },
+  { name: "Transactions", path: "/transaction/1/10/All", icon: "Transactions.png" },
   { name: "Support", path: "/support", icon: "Support.png", divider: true },
   { name: "Help", path: "/help", icon: "Help.png" },
   { name: "Profile", path: "/profile", icon: "Profile.png", divider: true },
