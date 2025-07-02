@@ -32,7 +32,7 @@ const TransactionTable = ({ columns, data }) => {
               </td>
               <td>—</td>
               <td>{d?.type === 'Withdraw' ? '-': '+'} € {d?.amount}</td>
-              <td><span className={`status ${d?.type === 'Withdraw' ? d?.status.toLowerCase() : 'Success'}`}>{d?.type === 'Withdraw' ? d?.status : 'Success'}</span></td>
+              <td><span className={`status ${d?.type === 'Withdraw' ? d?.status.toLowerCase() : 'success'}`}>{d?.type === 'Withdraw' ? d?.status : 'Success'}</span></td>
               <td>{d?.type === 'Withdraw' ? localDate(d?.date) : d?.paymentReportDate}</td>
               <td>{d?.invoice ? <button>Invoice</button> : '—'}</td>
             </tr>
