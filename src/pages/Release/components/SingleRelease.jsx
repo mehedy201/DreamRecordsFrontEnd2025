@@ -14,35 +14,45 @@ import threeDotImg from '../../../assets/icons/vertical-threeDots.png'
 import TrackViewCollapsSection from "./TrackViewCollapsSection";
 import downloadImg from "../../../assets/icons/img-download.png"
 import editImg from "../../../assets/icons/editIcon.png"
+import { useSelector } from "react-redux";
+import * as Select from "@radix-ui/react-select";
+import { ChevronDown, Check } from "lucide-react";
+import SingleReleasePageTable from "../../../components/singleReleasePageTable";
+import isEmptyArray from "../../../hooks/isEmptyArrayCheck";
+import NotFoundComponent from "../../../components/NotFoundComponent";
 
-const singleColumns = [
+const dspColumn = [
   { label: "DSPs", key: "DSPs" },
   { label: "Streams", key: "Streams" },
-  { label: "Album Downloads", key: "AlbumDownloads" },
-  { label: "Track Downloads", key: "TrackDownloads" },
+  { label: "Revenue", key: "Revenue" },
 ];
-const singleRevenueColumns = [
+const territoryColumn = [
+  { label: "Territory", key: "Territory" },
+  { label: "Streams", key: "Streams" },
+  { label: "Revenue", key: "Revenue" },
+];
+const totalRevineuStreamColumn = [
   { label: "Total", key: "Total" },
+  { label: "Streams", key: "Streams" },
   { label: "Revenue", key: "Revenue" },
 ];
 
-function SingleRelease({
-  singleReleaseATrackData,
-  chartData,
-  singleReleaseARevenueData,
-}) {
+function SingleRelease() {
 
   const {id} = useParams();
+  const { yearsList } = useSelector(state => state.yearsAndStatus);
 
 
   const [releaseData, setReleaseData] = useState()
   const [trackData, setTrackData] = useState();
+  const [UPC, setUPC] = useState('')
   useEffect(() => {
     axios.get(`http://localhost:5000/api/v1/release/single/${id}`)
     .then(res => {
       if(res.status === 200){
         setReleaseData(res.data.data[0])
         setTrackData(res?.data?.data[0]?.tracks)
+        setUPC(res?.data?.data[0]?.UPC)
         if(res.data.data[0].audioUrl){
           const audioUrl = res.data.data[0].audioUrl;
           const tittle = res.data.data[0].releaseTitle;
@@ -56,40 +66,103 @@ function SingleRelease({
     })
   },[id])
 
+  // Analytics Table Componet Data Process_________________
+  const [tableColumn, setTableColumn] = useState(dspColumn);
+  const [tableData, setTableData] = useState();
+  const [dspTableData, setDspTableData] = useState()
+  const [territoryTableData, setTerritoryTableData] = useState()
+  const [totalSummary, setTotalSummary] = useState();
+  const dspAndTerittoriGet = (data) => {
+    // DSP Aggregation
+    const dspMap = {};
+    data?.forEach(entry => {
+      entry.byDSP.forEach(dsp => {
+        if (!dspMap[dsp.dsp]) {
+          dspMap[dsp.dsp] = { revenue: 0, streams: 0 };
+        }
+        dspMap[dsp.dsp].revenue += dsp.revenue;
+        dspMap[dsp.dsp].streams += dsp.streams;
+      });
+    });
 
-
-
-
-
-
-  const location = useLocation();
-  const [release, setRelease] = useState(null);
-  const [albumSongList, setAlbumSongList] = useState({});
-  const [selectedOption1, setSelectedOption1] = useState(false);
-  const [analyticsCollapse, setAnalyticsCollapse] = useState(false);
-  const toggleAlbum = (index) => {
-    setAlbumSongList((prev) => ({
-      ...prev,
-      [index]: !prev[index], // Toggle open/close for the specific album
+    const byDsp = Object.entries(dspMap).map(([dsp, { revenue, streams }]) => ({
+      dsp,
+      revenue: Number(revenue.toFixed(2)),
+      streams
     }));
-  };
 
-  
+    // =============== Territory Aggregation ==============
+    const territoryMap = {};
+    data?.forEach(entry => {
+      entry.byTerritory.forEach(t => {
+        if (!territoryMap[t.territory]) {
+          territoryMap[t.territory] = { revenue: 0, streams: 0 };
+        }
+        territoryMap[t.territory].revenue += t.revenue;
+        territoryMap[t.territory].streams += t.streams;
+      });
+    });
+
+    const byTerritory = Object.entries(territoryMap).map(([territory, { revenue, streams }]) => ({
+      territory,
+      revenue: Number(revenue.toFixed(2)),
+      streams
+    }));
+
+    // ================= Total Summary =================
+    const totalSummaryData = data?.reduce(
+      (acc, entry) => {
+        acc.streams += entry.summary?.streams || 0;
+        acc.revenue += entry.summary?.revenue || 0;
+        return acc;
+      },
+      { total: 'Total', streams: 0, revenue: 0 }
+    );
+    totalSummaryData.revenue = Number(totalSummaryData.revenue.toFixed(2));
+
+    setTableData(byDsp)
+    setDspTableData(byDsp);
+    setTerritoryTableData(byTerritory);
+    setTotalSummary([totalSummaryData])
+  }
+
+  // Getting Analytics Chart and Table Data From API ________
+  const [chartDataStreams, setChartDataStreams] = useState();
+  const [chartDataRevenue, setChartDataRevenue] = useState();
+  const [totalStreams, setTotalStreams] = useState()
+  const [totalRevenue, setTotalRevenue] = useState();
+  const [years, setYears] = useState(Math.max(...yearsList));
+  const [dataNotFound, setDataNotFound] = useState(false)
   useEffect(() => {
-    const releaseFromState = location.state?.release;
-    const releaseFromStorage = localStorage.getItem("release");
-    const parsedRelease =
-      releaseFromState ||
-      (releaseFromStorage && JSON.parse(releaseFromStorage));
+    setDataNotFound(false)
+    if(UPC){
+      axios.get(`http://localhost:5000/common/api/v1/analytics-and-balance/upc-analytics?UPC=${UPC}&years=${years}`)
+      .then(res => {
+        if(res.status === 200){
+          if(isEmptyArray(res?.data?.data))setDataNotFound(true)
+          setTotalStreams(res?.data?.totalRevenue)
+          setTotalRevenue(res?.data?.totalStreams)
+          dspAndTerittoriGet(res?.data?.data)
 
-    if (parsedRelease) {
-      setRelease(parsedRelease);
+          const rawData = res?.data?.data
+          const streamsData = rawData?.map(item => ({
+            month: item.date,
+            value: item.summary.streams,
+          })).sort((a, b) => new Date(a.month) - new Date(b.month))
+    
+          const revenewData = rawData?.map(item => ({
+            month: item.date,
+            value: item.summary.revenue,
+          })).sort((a, b) => new Date(a.month) - new Date(b.month))
+  
+          setChartDataStreams(streamsData)
+          setChartDataRevenue(revenewData)
+        }
+      })
     }
-  }, [location.state]);
+  },[UPC, years])
 
-
-
-
+  const [analyticsCollapse, setAnalyticsCollapse] = useState(true)
 
   return (
     <div>
@@ -99,7 +172,6 @@ function SingleRelease({
       >
         {releaseData && releaseData ? (
           <>
-            {release?.type === "Error" && (
               <>
                 {" "}
                 <div className="home-notice">
@@ -112,7 +184,6 @@ function SingleRelease({
                 </div>
                 <br />
               </>
-            )}
             <div className="d-flex release-overview-img-div">
               <img
                 src={releaseData?.imgUrl}
@@ -267,10 +338,12 @@ function SingleRelease({
           <p>No release found! Try selecting an release first.</p>
         )}
       </div>
+      {/* open={analyticsCollapse} // Use object state
+          onOpenChange={() => setAnalyticsCollapse(!analyticsCollapse)} */}
       <div className="release-analytics">
         <Collapsible.Root
-          open={analyticsCollapse} // Use object state
-          onOpenChange={() => setAnalyticsCollapse(!analyticsCollapse)}
+          defaultOpen={true}
+          onOpenChange={setAnalyticsCollapse}
         >
           <Collapsible.Trigger asChild>
             <div className="">
@@ -297,59 +370,126 @@ function SingleRelease({
             <div className="analytics-card-row">
               <div className="analytics-card">
                 <h6>Total Streams</h6>
-                <h2>3435</h2>
+                <h2>{totalStreams}</h2>
               </div>
               <div className="analytics-card">
                 <h6>Total Revenue</h6>
-                <h2>€3435</h2>
+                <h2>€{totalRevenue}</h2>
               </div>
             </div>
             <Tabs.Root
               className="tabs-root singleRelease-tabs"
-              defaultValue="TrackDetails"
+              defaultValue="Streams"
             >
               <Tabs.List className="tabs-list">
                 <div className="singleRelease-tabsList">
-                  <Tabs.Trigger className="tabs-trigger" value="TrackDetails">
+                  <Tabs.Trigger className="tabs-trigger" value="Streams">
                     Streams
                   </Tabs.Trigger>
-                  <Tabs.Trigger className="tabs-trigger" value="Credits">
+                  <Tabs.Trigger className="tabs-trigger" value="Revenue">
                     Revenue
                   </Tabs.Trigger>
                   <div className="d-flex" style={{ width: "100%" }}>
                     <div style={{ width: "100%" }}>
                       {" "}
                       <label htmlFor="">Period</label>
-                      <Dropdown
-                        label="Last Year"
-                        options={["Option 1", "Option 2", "Option 3"]}
-                        onSelect={setSelectedOption1}
-                        select={selectedOption1}
-                      />
+
+                      <Select.Root defaultValue={Math.max(...yearsList)} onValueChange={(value) => setYears(value.toString())}>
+                        <Select.Trigger className={`dropdown-trigger`}>
+                          <Select.Value/>
+                          <Select.Icon className="select-icon">
+                            <ChevronDown />
+                          </Select.Icon>
+                        </Select.Trigger>
+                        <Select.Portal>
+                          <Select.Content
+                            className="dropdown-content"
+                            style={{ padding: 0, overflowY: "auto" }}
+                          >
+                            <Select.Viewport>
+                              {yearsList?.map((option, index) => (
+                                <Select.Item key={index} value={option} className="select-item">
+                                  <Select.ItemText>{option}</Select.ItemText>
+                                  <Select.ItemIndicator className="select-item-indicator">
+                                    <Check size={18} />
+                                  </Select.ItemIndicator>
+                                </Select.Item>
+                              ))}
+                            </Select.Viewport>
+                          </Select.Content>
+                        </Select.Portal>
+                      </Select.Root>
+
                     </div>
                     <div style={{ width: "100%" }}>
                       <label htmlFor="">By</label>
-                      <Dropdown
-                        label="DSP"
-                        options={["Option 1", "Option 2", "Option 3"]}
-                        onSelect={setSelectedOption1}
-                        select={selectedOption1}
-                      />
+                      <Select.Root defaultValue="DSP" onValueChange={(value) => {
+                          if(value === 'DSP'){setTableData(dspTableData); setTableColumn(dspColumn)}
+                          if(value === 'Territory'){setTableData(territoryTableData); setTableColumn(territoryColumn)}
+                          if(value === 'Total'){setTableData(totalSummary); setTableColumn(totalRevineuStreamColumn)}
+                      }}>
+                        <Select.Trigger className={`dropdown-trigger`}>
+                          <Select.Value placeholder='Filter by DSP/Territory'/>
+                          <Select.Icon className="select-icon">
+                            <ChevronDown />
+                          </Select.Icon>
+                        </Select.Trigger>
+                        <Select.Portal>
+                          <Select.Content
+                            className="dropdown-content"
+                            style={{ padding: 0, overflowY: "auto" }}
+                          >
+                            <Select.Viewport>
+                                <Select.Item value='DSP' className="select-item">
+                                  <Select.ItemText>DSP</Select.ItemText>
+                                  <Select.ItemIndicator className="select-item-indicator">
+                                    <Check size={18} />
+                                  </Select.ItemIndicator>
+                                </Select.Item>
+                                <Select.Item value='Territory' className="select-item">
+                                  <Select.ItemText>Territory</Select.ItemText>
+                                  <Select.ItemIndicator className="select-item-indicator">
+                                    <Check size={18} />
+                                  </Select.ItemIndicator>
+                                </Select.Item>
+                                <Select.Item value='Total' className="select-item">
+                                  <Select.ItemText>Total</Select.ItemText>
+                                  <Select.ItemIndicator className="select-item-indicator">
+                                    <Check size={18} />
+                                  </Select.ItemIndicator>
+                                </Select.Item>
+                            </Select.Viewport>
+                          </Select.Content>
+                        </Select.Portal>
+                      </Select.Root>
                     </div>
                   </div>
                 </div>
               </Tabs.List>
 
-              <Tabs.Content className="tabs-content" value="TrackDetails">
-                <Chart chartData={chartData} />
-                <Table columns={singleColumns} data={singleReleaseATrackData} />
+              <Tabs.Content className="tabs-content" value="Streams">
+                {
+                  dataNotFound === false &&
+                  <>
+                    <Chart chartData={chartDataStreams} />
+                    <SingleReleasePageTable columns={tableColumn} data={tableData}/>
+                  </>
+                }
+                {
+                  dataNotFound === true && <NotFoundComponent/>
+                }
               </Tabs.Content>
-              <Tabs.Content className="tabs-content" value="Credits">
-                <Chart chartData={chartData} />
-                <Table
-                  columns={singleRevenueColumns}
-                  data={singleReleaseARevenueData}
-                />
+              <Tabs.Content className="tabs-content" value="Revenue">
+                {
+                  dataNotFound === false && 
+                  <>
+                    <Chart chartData={chartDataRevenue} />
+                    <SingleReleasePageTable columns={tableColumn} data={tableData}/>
+                  </>
+                }
+                {
+                  dataNotFound === true && <NotFoundComponent/>
+                }
               </Tabs.Content>
             </Tabs.Root>
           </Collapsible.Content>
@@ -358,13 +498,5 @@ function SingleRelease({
     </div>
   );
 }
-SingleRelease.propTypes = {
-  releaseData: PropTypes.array.isRequired,
-  albumTrackList: PropTypes.array.isRequired,
-  singleReleaseATrackData: PropTypes.array.isRequired,
-  chartData: PropTypes.array.isRequired,
-  singleReleaseARevenueData: PropTypes.array.isRequired,
-  releaseTrackDetails: PropTypes.array.isRequired,
-  releaseCredits: PropTypes.array.isRequired,
-};
+
 export default SingleRelease;

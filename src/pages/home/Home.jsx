@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import NotFoundComponent from "../../components/NotFoundComponent";
+import isEmptyArray from "../../hooks/isEmptyArrayCheck";
 
 const Home = () => {
 
@@ -69,9 +70,6 @@ const Home = () => {
   const [releaseData, setReleaseData] = useState()
   const [artistNotFound, setArtistNotFound] = useState(false)
   const [releaseNotFound, setReleaseNotFound] = useState(false)
-  const isEmptyArray = (arr) => {
-    return Array.isArray(arr) && arr.length === 0;
-  } 
   useEffect( () => {
     setArtistNotFound(false)
     setReleaseNotFound(false)
