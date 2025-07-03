@@ -90,6 +90,7 @@ const Transaction = () => {
           if(isEmptyArray(res.data.data))setNotFound(true)
           setFilteredCount(res.data.filteredCount);
           setTotalPages(res.data.totalPages);
+          console.log(res.data.data)
         }
       })
       axios.get(`http://localhost:5000/api/v1/bank-info/${userNameIdRoll[1]}`)
