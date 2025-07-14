@@ -39,11 +39,14 @@ const ReleaseCard = ({ releaseData }) => {
 ReleaseCard.propTypes = {
   releaseItems: PropTypes.arrayOf(
     PropTypes.shape({
-      name: PropTypes.string.isRequired,
-      type: PropTypes.string.isRequired,
-      img: PropTypes.string.isRequired,
-      date: PropTypes.string.isRequired,
-      // artist: PropTypes.string.isRequired,
+      releaseTitle: PropTypes.string.isRequired,
+      imgUrl: PropTypes.string.isRequired,
+      status: PropTypes.string.isRequired,
+      artist: PropTypes.arrayOf(
+        PropTypes.shape({
+          artistName: PropTypes.string
+        })
+      )
     })
   ).isRequired,
 };
