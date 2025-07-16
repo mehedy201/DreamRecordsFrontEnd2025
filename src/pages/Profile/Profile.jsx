@@ -140,11 +140,11 @@ function Profile() {
             <h5>Address</h5>
             <div style={{marginTop: '14px'}} className="d-flex">
               <p>Address Line 1:</p>
-              <p className="profile-value-text">{userData?.address}</p>
+              <p className="profile-value-text">{userData?.addressLine1}</p>
             </div>
             <div className="d-flex">
               <p>Address Line 1:</p>
-              <p className="profile-value-text">{userData?.address2}</p>
+              <p className="profile-value-text">{userData?.addressLine2}</p>
             </div>
             <div className="d-flex">
               <p>Postal Code:</p>
