@@ -50,16 +50,16 @@ function SingleRelease() {
     axios.get(`http://localhost:5000/api/v1/release/single/${id}`)
     .then(res => {
       if(res.status === 200){
-        setReleaseData(res.data.data[0])
-        setTrackData(res?.data?.data[0]?.tracks)
-        setUPC(res?.data?.data[0]?.UPC)
-        if(res.data.data[0].audioUrl){
-          const audioUrl = res.data.data[0].audioUrl;
-          const tittle = res.data.data[0].releaseTitle;
-          const artist = res.data.data[0].artist;
-          const labels = res.data.data[0].labels;
-          const featuring = res.data.data[0].featuring;
-          const genre = res.data.data[0].genre;
+        setReleaseData(res.data.data)
+        setTrackData(res?.data?.data?.tracks)
+        setUPC(res?.data?.data?.UPC)
+        if(res.data.data.audioUrl){
+          const audioUrl = res.data.data.audioUrl;
+          const tittle = res.data.data.releaseTitle;
+          const artist = res.data.data.artist;
+          const labels = res.data.data.labels;
+          const featuring = res.data.data.featuring;
+          const genre = res.data.data.genre;
           setTrackData([{audioUrl, tittle, artist, labels, genre, featuring}])
         }
       }
