@@ -1,20 +1,6 @@
-// import React from 'react';
-
-// const AudioPlayerForTracViewTab = () => {
-//     return (
-//         <div>
-            
-//         </div>
-//     );
-// };
-
-// export default AudioPlayerForTracViewTab;
-
 import { useRef, useState, useEffect } from 'react';
 import { IoPauseCircleOutline, IoPlayCircleOutline } from 'react-icons/io5';
-import {  Slider } from "radix-ui";
 import { RiDownloadLine } from 'react-icons/ri';
-import { CirclePause, CirclePlay } from 'lucide-react';
 
 const formatTime = (time) => {
   if (isNaN(time)) return '00:00';

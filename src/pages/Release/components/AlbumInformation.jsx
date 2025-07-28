@@ -28,7 +28,7 @@ function AlbumInformation({ step, setStep, steps, handlePrev }) {
   // Genre Data Get Form API ____________________________
   const [allGenre, setAllGenre] = useState()
   useEffect(() => {
-    axios.get(`http://localhost:5000/admin/api/v1/genre`)
+    axios.get(`http://localhost:5000/admin/api/v1/settings/genre`)
     .then(res => {
         const data = res.data.data;
         const genreArray = data.map(item => item.genre);
