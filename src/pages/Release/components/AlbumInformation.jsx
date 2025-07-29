@@ -179,7 +179,7 @@ function AlbumInformation({ step, setStep, steps, handlePrev }) {
             </div>
             <div>
               <label htmlFor="">Sub-Genre *</label>
-              <SelectDropdownForCreateRelease
+              {/* <SelectDropdownForCreateRelease
                 options={allGenre}
                 placeholder="Select sub-genre..."
                 className="createRelease-dropdown"
@@ -187,7 +187,8 @@ function AlbumInformation({ step, setStep, steps, handlePrev }) {
                 register={{...register("subGenre", { required: true})}}
                 setValue={setValue}
                 defaultValue={watch("subGenre")}
-              />
+              /> */}
+              <input type="text" {...register("subGenre", { required: true})}/>
               {errors.subGenre && <span style={{color: '#ea3958'}}>Sub Genre Required</span>}
             </div>
           </div>

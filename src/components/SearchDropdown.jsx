@@ -31,9 +31,14 @@ const SearchDropdown = ({
         (selectedItem) => selectedItem._id === item._id
       )
     ) {
-      setSelectedItems([...selectedItems, item]);
-      const selectItem = [...selectedItems, item];
-      onSelect(selectItem)
+      if(itemName === 'Label'){
+        setSelectedItems([item])
+        onSelect([item])
+      }else{
+        setSelectedItems([...selectedItems, item]);
+        const selectItem = [...selectedItems, item];
+        onSelect(selectItem)
+      }
     }
 
     // Slight delay to ensure input is cleared properly

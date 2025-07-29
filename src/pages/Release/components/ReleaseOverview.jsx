@@ -101,7 +101,7 @@ function ReleaseOverview({ step, setStep, handlePrev }) {
           </div>
           <div className="d-flex">
             <p>Featuring:</p>
-            <p>{releaseAlbumInfo?.featureing?.map(artist => artist.artistName).join(', ')}</p>
+            <p>{releaseAlbumInfo?.featuring?.map(artist => artist.artistName).join(', ')}</p>
           </div>
           <div className="d-flex">
             <p>Genre:</p>
@@ -113,7 +113,7 @@ function ReleaseOverview({ step, setStep, handlePrev }) {
           </div>
           <div className="d-flex">
             <p>Label Name:</p>
-            <p>{releaseAlbumInfo?.label?.map(label => label.labelName).join(', ')}</p>
+            <p>{releaseAlbumInfo?.labels?.map(label => label.labelName).join(', ')}</p>
           </div>
           <div className="d-flex">
             <p>Release Date:</p>

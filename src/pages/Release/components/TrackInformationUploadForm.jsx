@@ -23,13 +23,13 @@ const TrackInformationUploadForm = ({ step, setStep, steps,setShowForm, handlePr
     const [allGenre, setAllGenre] = useState()
     const [language, setLanguage] = useState()
     useEffect(() => {
-        axios.get(`http://localhost:5000/admin/api/v1/genre`)
+        axios.get(`http://localhost:5000/admin/api/v1/settings/genre`)
         .then(res => {
             const data = res.data.data;
             const genreArray = data.map(item => item.genre);
             setAllGenre(genreArray);
         })
-        axios.get('http://localhost:5000/admin/api/v1/language')
+        axios.get('http://localhost:5000/admin/api/v1/settings/language')
         .then(res => {
             const data = res.data.data
             const l = data.map(item => item.language);
@@ -191,7 +191,7 @@ const TrackInformationUploadForm = ({ step, setStep, steps,setShowForm, handlePr
             </div>
             <div>
                 <label htmlFor="">Sub-Genre *</label>
-                <SelectDropdownForCreateRelease
+                {/* <SelectDropdownForCreateRelease
                     options={allGenre}
                     placeholder="Select sub-genre..."
                     className="createRelease-dropdown"
@@ -199,7 +199,8 @@ const TrackInformationUploadForm = ({ step, setStep, steps,setShowForm, handlePr
                     dataName='subGenre'
                     setValue={setValue}
                     defaultValue={watch("subGenre")}
-                />
+                /> */}
+                <input type="text" {...register("subGenre", { required: true})}/>
                 {errors.subGenre && <span style={{color: '#ea3958'}}>Sub Genre Required</span>}
             </div>
             <div>
