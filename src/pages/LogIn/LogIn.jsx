@@ -1,30 +1,35 @@
 import { Flex } from "@radix-ui/themes";
 import { useForm } from "react-hook-form";
 import "./logIn.css";
-import auth from "../../../firebase.config";
-import { useSignInWithEmailAndPassword } from 'react-firebase-hooks/auth';
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { useState } from "react";
+import toast from "react-hot-toast";
 
 function LogIn() {
 
   const navigate = useNavigate();
 
-  const [
-    signInWithEmailAndPassword,
-    loading,
-    error,
-  ] = useSignInWithEmailAndPassword(auth);
 
-
+  const [loading, setLoading] = useState(false)
   const { register, handleSubmit, formState: { errors } } = useForm();
+  const [errorMassage, setErrorMassage] = useState('');
   const onSubmit = data => {
-    const email = data.email;
-    const password = data.password;
-    const loginUser = signInWithEmailAndPassword(email, password)
-    .then((res) => {
-      if(res.user){
+    setLoading(true)
+    setErrorMassage('')
+    axios.post(`http://localhost:5000/common/api/v1/authentication/user-login`, data)
+    .then(res => {
+      console.log(res)
+      if(res.data.status === 200){
+        console.log(res.status)
+        localStorage.setItem("token", res.data.token);
+        toast.success(res.data.message)
         navigate('/')
-        }
+        setLoading(false)
+      }else{
+        setErrorMassage(res.data.message)
+        setLoading(false)
+      }
     })
   };
 
@@ -51,7 +56,9 @@ function LogIn() {
             <label
               style={{
                 marginLeft: "auto",
+                cursor: 'pointer',
               }}
+              onClick={() => navigate('/resetpassword')}
             >
               Forget Password?
             </label>
@@ -60,6 +67,9 @@ function LogIn() {
           {errors.password && <span>Password Required</span>}
           {
             loading && <p>Loading.....</p>
+          }
+          {
+            errorMassage && <p style={{color: 'red'}}>{errorMassage}</p>
           }
           <button
             type="submit"
@@ -70,9 +80,6 @@ function LogIn() {
           </button>
         </form>
         <button className="theme-btn2">Don’t have an account? sign up</button>
-        {
-          error && <p>{error}</p> 
-        }
       </div>
     </div>
   );

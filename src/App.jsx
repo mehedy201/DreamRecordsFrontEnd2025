@@ -57,6 +57,7 @@ import CreateArtist from "./pages/Artists/components/CreateArtist";
 import CreateLabel from "./pages/Lables/components/CreateLabel";
 import SingleLable from "./pages/Lables/components/SIngleLable";
 import TestPage from "./pages/TestPage/TestPage";
+import Authorization from "./Authorization/Authorization";
 
 function Layout() {
   const location = useLocation();
@@ -116,7 +117,8 @@ function App() {
           <Route
             path="/"
             element={
-              <Home releaseItems={releaseItems} />
+              <Authorization> <Home releaseItems={releaseItems} /></Authorization>
+             
             }
           />
 
@@ -240,7 +242,7 @@ function App() {
         />
         <Route path="/login" element={<LogIn />} />
         <Route path="/resetpassword" element={<ResetPassword />} />
-        <Route path="/newpassword" element={<NewPassword />} />
+        <Route path="/newpassword/:email" element={<NewPassword />} />
         <Route path="/testPage" element={<TestPage />} />
       </Routes>
     </Router>
