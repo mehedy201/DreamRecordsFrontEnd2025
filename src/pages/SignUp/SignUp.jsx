@@ -10,6 +10,10 @@ import { HiOutlineCheckCircle } from "react-icons/hi";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css"; // Import default styles
 import ImageUpload from "../../components/ImageUpload";
+import PersonalDetails from "./signUpSteps/PersonalDetails";
+import AddressInformation from "./signUpSteps/AddressInformation";
+import LabelVerification from "./signUpSteps/LabelVerification";
+import DocumentUpload from "./signUpSteps/DocumentUpload";
 const steps = [
   {
     title: "Personal Details",
@@ -133,211 +137,16 @@ const SignUp = () => {
                     <p>{steps[step].subline}</p>
                   </div>
                   {step === 0 && (
-                    <div>
-                      <label>Account Type*</label>
-                      <RadioGroup.Root
-                        className="signUp-radio-group radio-group"
-                        value={formData.registerAs}
-                        onValueChange={(value) =>
-                          setFormData({ ...formData, registerAs: value })
-                        }
-                      >
-                        <label
-                          className="radio-label signUp-label"
-                          style={{
-                            border:
-                              formData?.registerAs === "individual" &&
-                              "1px solid #dc3e42",
-                          }}
-                        >
-                          <RadioGroup.Item
-                            className="radio-item"
-                            value="individual"
-                          />
-                          Individual
-                        </label>
-                        <label
-                          className="radio-label signUp-label"
-                          style={{
-                            border:
-                              formData?.registerAs === "Distributor" &&
-                              "1px solid #dc3e42",
-                          }}
-                        >
-                          <RadioGroup.Item
-                            className="radio-item"
-                            value="Distributor"
-                          />
-                          Distributor
-                        </label>
-                        <label
-                          className="radio-label signUp-label"
-                          style={{
-                            border:
-                              formData?.registerAs === "IndividualArtist" &&
-                              "1px solid #dc3e42",
-                          }}
-                        >
-                          <RadioGroup.Item
-                            className="radio-item"
-                            value="IndividualArtist"
-                          />
-                          Individual Artist
-                        </label>
-                      </RadioGroup.Root>
-                      <label>First Name *</label>
-
-                      <input
-                        type="text"
-                        name="firstName"
-                        onChange={handleChange}
-                      />
-                      <label>Last Name *</label>
-
-                      <input
-                        type="text"
-                        name="lastName"
-                        onChange={handleChange}
-                      />
-                      <label>Phone *</label>
-                      <PhoneInput
-                        country={"in"} // Default country
-                        value={phone}
-                        onChange={(phone) => setPhone(phone)}
-                        inputClass="phone-input-field"
-                        buttonClass="phone-dropdown"
-                        className="signUp-phone-input"
-                      />
-                    </div>
+                    <PersonalDetails/>
                   )}
                   {step === 1 && (
-                    <div>
-                      <label htmlFor="">Address Line 1 *</label>
-                      <input
-                        type="text"
-                        name="addressLine1"
-                        onChange={handleChange}
-                      />
-                      <label htmlFor="">Address Line 2</label>
-                      <input
-                        type="text"
-                        name="addressLine2"
-                        onChange={handleChange}
-                      />
-                      <div className="signUp-form-grid">
-                        <div>
-                          <label htmlFor="">Select Country *</label>
-                          <Dropdown
-                            label="India"
-                            options={["Option 1", "Option 2", "Option 3"]}
-                            onSelect={setCountryDropdown}
-                            select={countryDropdown}
-                            className="signUp-dropdown-trigger"
-                          />
-                        </div>
-                        <div>
-                          <label htmlFor="">Select State *</label>
-                          <Dropdown
-                            label="West Bengal"
-                            options={["Option 1", "Option 2", "Option 3"]}
-                            onSelect={setStateDropdown}
-                            select={stateDropdown}
-                            className="signUp-dropdown-trigger"
-                          />
-                        </div>
-                        <div>
-                          <label htmlFor="">City *</label>
-
-                          <input
-                            type="text"
-                            name="state"
-                            onChange={handleChange}
-                          />
-                        </div>
-                        <div>
-                          <label htmlFor="">Postal Code *</label>
-                          <input
-                            type="text"
-                            name="postalCode"
-                            className="input-field"
-                            onChange={handleChange}
-                          />
-                        </div>
-                      </div>
-                    </div>
+                    <AddressInformation/>
                   )}
                   {step === 2 && (
-                    <div>
-                      <label htmlFor="">Channel Name *</label>
-                      <input
-                        type="text"
-                        name="channelName"
-                        onChange={handleChange}
-                      />
-                      <label htmlFor="">Channel URL *</label>
-                      <input
-                        type="text"
-                        name="channelURL"
-                        onChange={handleChange}
-                      />
-                      <div className="signUp-form-grid">
-                        <div>
-                          <label htmlFor="">Subscribers Count *</label>
-
-                          <input
-                            type="text"
-                            name="subscribers"
-                            onChange={handleChange}
-                          />
-                        </div>
-                        <div>
-                          <label htmlFor="">Videos Count *</label>
-                          <input
-                            type="text"
-                            name="videos"
-                            className="input-field"
-                            onChange={handleChange}
-                          />
-                        </div>
-                      </div>
-                    </div>
+                    <LabelVerification/>
                   )}
                   {step === 3 && (
-                    <div className="">
-                      {" "}
-                      <label htmlFor="">Upload Profile Picture *</label>
-                      <ImageUpload
-                        placeholderImg="upload-img.png"
-                        placeholderTxt="Drop your image here"
-                        className="signUp-imgUpload"
-                      />
-                      <label htmlFor="">Upload Government ID *</label>
-                      <div className="row">
-                        <div className="col-6">
-                          <div
-                            style={{
-                              marginRight:
-                                window.innerWidth <= 420 ? "5px" : "10px",
-                            }}
-                          >
-                            <ImageUpload
-                              placeholderImg="identity.png"
-                              placeholderTxt="Drop Front Side of ID here"
-                              className="signUp-identity-imgUpload"
-                            />
-                          </div>
-                        </div>
-                        <div className="col-6">
-                          <div style={{ marginLeft: "10px" }}>
-                            <ImageUpload
-                              placeholderImg="identity.png"
-                              placeholderTxt="Drop Back Side of ID here"
-                              className="signUp-identity-imgUpload"
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
+                    <DocumentUpload/>
                   )}
                   <div className="signUp-buttons">
                     {step > 0 && (

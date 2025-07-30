@@ -237,7 +237,7 @@ function App() {
           element={<SignUpVerificationEmailSent />}
         />
         <Route
-          path="/SignUpVerificationEmail"
+          path="/email-verification"
           element={<SignUpVerificationEmail />}
         />
         <Route path="/login" element={<LogIn />} />
