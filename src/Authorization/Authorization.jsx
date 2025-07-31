@@ -5,7 +5,7 @@ import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import PropTypes from "prop-types";
 import LoadingScreen from "../components/LoadingScreen";
-import { setUserData } from "../redux/features/userDataHandleSlice/userDataHandleSlice";
+import { setUserData, setUserNameIdRoll } from "../redux/features/userDataHandleSlice/userDataHandleSlice";
 
 const Authorization = ({ children }) => {
 
@@ -37,6 +37,7 @@ const Authorization = ({ children }) => {
             const displayName = decoded.displayName;
             const userNameIdRoll = displayName?.split("'__'"); // ['username', 'id', 'role']
             const userId = userNameIdRoll[1];
+            dispatch(setUserNameIdRoll(userNameIdRoll))
 
             if(!displayName){
                 navigate('/login')
@@ -47,12 +48,18 @@ const Authorization = ({ children }) => {
             const res = await axios.get(`http://localhost:5000/api/v1/users/${userId}`);
             dispatch(setUserData(res.data.data))
             const isLocked = res.data?.data?.userLocked;
-
             if (isLocked) {
                 navigate('/locked/:userId')
                 return;
             }
-
+            if(!res?.data?.data.first_name && !res?.data?.data.first_name){
+                navigate('/sign-up-profile-info')
+                return
+            }
+            if(!res?.data?.data?.addressLine1){
+                navigate('/sign-up-address-info')
+                return
+            }
             await axios.patch(`http://localhost:5000/api/v1/users/last-log-in/${userId}`)
             
         } catch (err) {

@@ -59,6 +59,8 @@ import SingleLable from "./pages/Lables/components/SIngleLable";
 import TestPage from "./pages/TestPage/TestPage";
 import Authorization from "./Authorization/Authorization";
 import SignUpFirstPage from "./pages/SignUp/SignUpFirstPage";
+import PersonalDetails from "./pages/SignUp/signUpSteps/PersonalDetails";
+import AddressInformation from "./pages/SignUp/signUpSteps/AddressInformation";
 
 function Layout() {
   const location = useLocation();
@@ -118,7 +120,7 @@ function App() {
           <Route
             path="/"
             element={
-              <Authorization> <Home releaseItems={releaseItems} /></Authorization>
+              <Authorization><Home releaseItems={releaseItems} /></Authorization>
              
             }
           />
@@ -233,13 +235,10 @@ function App() {
 
         {/* Route WITHOUT Sidebar & Navbar */}
         <Route path="/sign-up" element={<SignUpFirstPage />} />
-        <Route path="/email-verification" element={<SignUpVerificationEmail />}/>
-        <Route path="/sign-up-info" element={<SignUp />} />
-        
-        <Route
-          path="/SignUpVerificationEmailSent"
-          element={<SignUpVerificationEmailSent />}
-        />
+        <Route path="/email-verification/:id" element={<SignUpVerificationEmail />}/>
+        <Route path="/sign-up-profile-info" element={<Authorization><PersonalDetails /></Authorization>} />
+        <Route path="/sign-up-address-info" element={<Authorization><AddressInformation /></Authorization>} />
+
         
         <Route path="/login" element={<LogIn />} />
         <Route path="/resetpassword" element={<ResetPassword />} />

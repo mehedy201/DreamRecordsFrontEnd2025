@@ -1,5 +1,5 @@
 import { Button, Flex } from "@radix-ui/themes";
-import { use, useEffect, useState } from "react";
+import {  useEffect, useState } from "react";
 import { Link, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import ReleaseCard from "../../../components/ReleaseCard";
 import Dropdown from "../../../components/Dropdown";
@@ -43,6 +43,7 @@ function SingleLable() {
       .then(res => {
         if(res.status == 200) {
           setLabel(res.data.data[0])
+          console.log(res.data.data[0])
         }
       })
   },[id])
@@ -189,50 +190,55 @@ function SingleLable() {
                   side="bottom"
                   className="dropdown-content singleArtist-dropdown-content"
                 >
-                  <DropdownMenu.Item className="dropdown-item">
-                    <Link
-                      to={`/edit-label/${id}`}
-                      style={{
-                        cursor: "pointer",
-                        color: "#202020",
-                        textDecoration: "none",
-                      }}
-                    >
-                      <GoPencil /> Edit Label
-                    </Link>
-                  </DropdownMenu.Item>
-                  <hr />
-
-                  <DropdownMenu.Item
-                    className="dropdown-item"
-                    onSelect={(e) => e.preventDefault()} // Prevent dropdown from closing
-                  >
-                    <Dialog.Root>
-                      <Dialog.Trigger asChild>
-                        <span>
-                          <AiOutlineDelete /> Delete Label
-                        </span>
-                      </Dialog.Trigger>
-                      <Dialog.Portal>
-                        <Dialog.Overlay className="dialog-overlay" />
-                        <Dialog.Content className="dialog-content">
-                          <Modal title="Delete Label Profile?">
-                            <p className="modal-description">
-                              Are you sure you want to delete this Label
-                              profile? This action is irreversible, and all
-                              associated data, including music releases and
-                              analytics, will be permanently removed.
-                            </p>
-                            <br />
-                            <div className="singleArtist-deleteModal-btns">
-                              <Button>No</Button>
-                              <Button onClick={() => deleteLabel(id, label?.imgkey)}>Yes, Delete</Button>
-                            </div>
-                          </Modal>
-                        </Dialog.Content>
-                      </Dialog.Portal>
-                    </Dialog.Root>
-                  </DropdownMenu.Item>
+                  {
+                    label.status !== 'Approved' &&
+                    <>
+                      <DropdownMenu.Item className="dropdown-item">
+                        <Link
+                          to={`/edit-label/${id}`}
+                          style={{
+                            cursor: "pointer",
+                            color: "#202020",
+                            textDecoration: "none",
+                          }}
+                        >
+                          <GoPencil /> Edit Label
+                        </Link>
+                      </DropdownMenu.Item>
+                      <hr />
+                        <DropdownMenu.Item
+                          className="dropdown-item"
+                          onSelect={(e) => e.preventDefault()} // Prevent dropdown from closing
+                        >
+                          <Dialog.Root>
+                            <Dialog.Trigger asChild>
+                              <span>
+                                <AiOutlineDelete /> Delete Label
+                              </span>
+                            </Dialog.Trigger>
+                            <Dialog.Portal>
+                              <Dialog.Overlay className="dialog-overlay" />
+                              <Dialog.Content className="dialog-content">
+                                <Modal title="Delete Label Profile?">
+                                  <p className="modal-description">
+                                    Are you sure you want to delete this Label
+                                    profile? This action is irreversible, and all
+                                    associated data, including music releases and
+                                    analytics, will be permanently removed.
+                                  </p>
+                                  <br />
+                                  <div className="singleArtist-deleteModal-btns">
+                                    <Button>No</Button>
+                                    <Button onClick={() => deleteLabel(id, label?.imgkey)}>Yes, Delete</Button>
+                                  </div>
+                                </Modal>
+                              </Dialog.Content>
+                            </Dialog.Portal>
+                          </Dialog.Root>
+                        </DropdownMenu.Item>
+                    </>
+                  }
+                                    
                 </DropdownMenu.Content>
               </DropdownMenu.Root>
             </Flex>

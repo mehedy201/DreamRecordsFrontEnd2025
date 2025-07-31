@@ -8,9 +8,6 @@ const SignUpImgIdUpload = ({
   link,
   imgLink,
   setImgLink,
-  title,
-  description,
-  className,
   placeholderTxt,
   setUploadedImage,
   uploadedImage
@@ -104,9 +101,9 @@ const SignUpImgIdUpload = ({
         {error && <p className="error-text">{error}</p>}
         {
             imgLink &&
-            <div style={{display: 'flex', justifyContent: 'space-between', marginBottom: '10px', alignItems: 'start'}}>
+            <div style={{display: 'flex', gap: '5px', margin: '10px 0px', alignItems: 'start'}}>
                 <img src={imgLink} alt="Uploaded" style={{width: '50px', height: '50px', borderRadius: '10px', objectFit: 'cover', objectPosition: 'center'}} />
-                <button style={{cursor: 'pointer', border: '1px solid black'}} onClick={() => deleteFile(uploadedImage.key)}><X size={16}/></button>
+                <button style={{cursor: 'pointer', border: 'none'}} onClick={() => deleteFile(uploadedImage.key)}><X size={16}/></button>
             </div>
         }
     </div>

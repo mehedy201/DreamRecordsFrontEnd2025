@@ -1,12 +1,26 @@
 import { MdOutlineKeyboardArrowRight } from "react-icons/md";
 import './SignUp.css'
-import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 function SignUpVerificationEmail() {
   const navigate = useNavigate();
 
+  const {id} = useParams();
+  console.log(id)
   const [otp, setOtp] = useState("");
+
+  const [tempData, setTempData] = useState();
+  useEffect(() => {
+    axios.get(`http://localhost:5000/common/api/v1/authentication/get-temp-user/${id}`)
+    .then(res => {
+      if(res.data.status == 200){
+        console.log(res.data.data)
+        setTempData(res.data.data)
+      }
+    })
+  },[])
 
   const handleChange = (e) => {
     const value = e.target.value.replace(/\D/g, ""); // allow digits only
@@ -14,6 +28,33 @@ function SignUpVerificationEmail() {
       setOtp(value);
     }
   };
+
+  const [otpErr, setOtpErr] = useState();
+  const verifyOtp = () => {
+    setOtpErr('')
+    if(!otp){
+      setOtpErr('OTP Required')
+      return
+    }
+    if(otp.length !== 4){
+      setOtpErr('OTP must have to 4 character')
+      return;
+    }
+    if(!tempData){
+      setOtpErr('User not found')
+      return;
+    }
+    const payload = {otp, id}
+    axios.post(`http://localhost:5000/common/api/v1/authentication/verify-user-otp`, payload)
+    .then(res => {
+      if(res.data.status === 200){
+        localStorage.setItem("token", res.data.token);
+        navigate('/sign-up-profile-info')
+      }
+    })
+
+    // 
+  }
 
 
   const styles = {
@@ -70,8 +111,8 @@ function SignUpVerificationEmail() {
         </div>
         <h5>Verification Email Sent!</h5>
         <div className="verificationEmail-txt">
-          <p>We have sent you a 6 digit code to</p>
-          <p style={{ color: "#202020" }}>subhamaykarjee@gmail.com</p>
+          <p>We have sent you a 4 digit code to</p>
+          <p style={{ color: "#202020" }}>{tempData?.email}</p>
         </div>
         <div style={{padding: '50px 0px'}}>
           <div style={styles.container}>
@@ -96,10 +137,13 @@ function SignUpVerificationEmail() {
             </div>
           </div>
         </div>
+        {
+          otpErr && <p style={{color: 'red'}}>{otpErr}</p>
+        }
         <button
           className="theme-btn"
           style={{ width: "100%", margin: "0 0 0px 0" }}
-          onClick={() => navigate('/sign-up-info')}
+          onClick={verifyOtp}
         >
           Continue
         </button>
