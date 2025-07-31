@@ -14,6 +14,8 @@ import PersonalDetails from "./signUpSteps/PersonalDetails";
 import AddressInformation from "./signUpSteps/AddressInformation";
 import LabelVerification from "./signUpSteps/LabelVerification";
 import DocumentUpload from "./signUpSteps/DocumentUpload";
+import { useDispatch, useSelector } from "react-redux";
+import { setStep } from "../../redux/features/signUpDataHandleSlice/signUpDataHandleSlice";
 const steps = [
   {
     title: "Personal Details",
@@ -39,7 +41,11 @@ const SignUp = () => {
   const [stateDropdown, setStateDropdown] = useState(false);
   const [isSignUp, setIsSignUp] = useState(false);
 
-  const [step, setStep] = useState(0);
+
+  const dispatch = useDispatch();
+  const {step} = useSelector(state => state.signUpData);
+
+
   const [formData, setFormData] = useState({
     registerAs: "individual",
     firstName: "",
@@ -61,14 +67,14 @@ const SignUp = () => {
 
   const handleNext = () => {
     if (step < steps.length - 1) {
-      setStep(step + 1);
+      dispatch(setStep(step + 1));
     }
     setIsSubmitted(false);
   };
 
   const handlePrev = () => {
     if (step > 0) {
-      setStep(step - 1);
+      dispatch(setStep(step - 1));
     }
     setIsSubmitted(false);
   };
@@ -79,13 +85,11 @@ const SignUp = () => {
   };
   return (
     <>
-      {isSignUp ? (
         <div className="signup-wrapper ">
           <div className="sineUp-step-sidebar">
             <div style={{ textAlign: "center", marginBottom: "48px" }}>
               <img src="src/assets/Logo.png" alt="Logo" />
             </div>
-
             {steps.map((item, index) => (
               <div
                 key={index}
@@ -118,19 +122,7 @@ const SignUp = () => {
             </button>
 
             <div className="signUp-form">
-              {isSubmitted ? (
-                <div className="signUp-pending-div">
-                  <img src="src/assets/icons/clock.png"></img>
-                  <h3>Your Account is Pending Approval</h3>
-                  <p>
-                    Your request has been submitted for verification and will be
-                    reviewed by an admin. Approval may take up to{" "}
-                    <b>24-48 hours</b>. Once approved, you’ll receive a
-                    confirmation email, and you’ll be able to log in and access
-                    your account.
-                  </p>
-                </div>
-              ) : (
+              
                 <>
                   <div className="form-title-txt">
                     <h1>{steps[step].title}</h1>
@@ -170,43 +162,9 @@ const SignUp = () => {
                     )}
                   </div>
                 </>
-              )}
             </div>
           </div>
         </div>
-      ) : (
-        <div className="logIn-pg">
-          <div className="login-sideimg-div"></div>
-          <div className="login-form-section">
-            <div style={{ textAlign: "center" }}>
-              <img src="src/assets/Logo.png" alt="" />
-            </div>
-            <h5>
-              Sign Up to release and distribute your content, check to
-              streamline data & revenue.
-            </h5>
-            <label>Email</label>
-
-            <input type="text" name="firstName" />
-            <label>Password:</label>
-
-            <input type="text" name="firstName" className="password-input" />
-            <label>Confirm Password:</label>
-
-            <input type="text" name="firstName" className="password-input" />
-            <button
-              className="theme-btn"
-              style={{ width: "100%", margin: "0 0 24px 0" }}
-              onClick={() => setIsSignUp(!isSignUp)}
-            >
-              Sign Up
-            </button>
-            <button className="theme-btn2">
-              Already have an account? Log In
-            </button>
-          </div>
-        </div>
-      )}
     </>
   );
 };

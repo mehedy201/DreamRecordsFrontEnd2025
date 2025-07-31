@@ -49,7 +49,7 @@ function LogIn() {
         <form onSubmit={handleSubmit(onSubmit)}>
           <label>Email</label>
           <input type="email" {...register("email", { required: true })}/>
-          {errors.email && <span>Email Required</span>}
+          {errors.email && <span style={{color: 'red'}}>Email Required</span>}
           <Flex className="d-flex">
             {" "}
             <label>Password</label>
@@ -79,7 +79,7 @@ function LogIn() {
             Log In
           </button>
         </form>
-        <button className="theme-btn2">Don’t have an account? sign up</button>
+        <button onClick={() => navigate('/sign-up')} className="theme-btn2">Don’t have an account? sign up</button>
       </div>
     </div>
   );

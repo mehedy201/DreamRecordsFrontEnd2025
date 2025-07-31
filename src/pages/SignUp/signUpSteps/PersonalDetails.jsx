@@ -1,92 +1,60 @@
 import * as RadioGroup from "@radix-ui/react-radio-group";
 import { useState } from "react";
+import { useForm } from "react-hook-form";
 import PhoneInput from "react-phone-input-2";
+import { useDispatch, useSelector } from "react-redux";
+import { setPersonalDetails, setStep } from "../../../redux/features/signUpDataHandleSlice/signUpDataHandleSlice";
 
 const PersonalDetails = () => {
 
+    const dispatch = useDispatch();
+    const {step} = useSelector(state => state.signUpData);
+
     const [phone, setPhone] = useState("");
-    const [formData, setFormData] = useState('individual');
+    const [phoneErr, setPhoneErr] = useState('');
+    const [loading, setLoading] = useState(false)
+    const { register, handleSubmit, formState: { errors } } = useForm();
+    const onSubmit = data => {
+      setLoading(true)
+      if(!phone){
+        setPhoneErr('Phone number required')
+      }
+      const payload = {...data, phone}
+      dispatch(setPersonalDetails(payload))
+      dispatch(setStep(step +1))
+      console.log(data)
+      // navigate('/email-verification')
+    };
 
     return (
         <div>
-            <div>
-                <label>Account Type*</label>
-                <RadioGroup.Root
-                  className="signUp-radio-group radio-group"
-                  value={formData}
-                  onValueChange={(value) => {
-                        console.log(value)
-                        setFormData(value)
-                    }
-                  }
-                >
-                  <label
-                    className="radio-label signUp-label"
-                    style={{
-                      border:
-                        formData === "Individual" &&
-                        "1px solid #dc3e42",
-                    }}
-                  >
-                    <RadioGroup.Item
-                      className="radio-item"
-                      value="Individual"
-                    />
-                    Individual
-                  </label>
-                  <label
-                    className="radio-label signUp-label"
-                    style={{
-                      border:
-                        formData === "Distributor" &&
-                        "1px solid #dc3e42",
-                    }}
-                  >
-                    <RadioGroup.Item
-                      className="radio-item"
-                      value="Distributor"
-                    />
-                    Distributor
-                  </label>
-                  <label
-                    className="radio-label signUp-label"
-                    style={{
-                      border:
-                        formData === "IndividualArtist" &&
-                        "1px solid #dc3e42",
-                    }}
-                  >
-                    <RadioGroup.Item
-                      className="radio-item"
-                      value="IndividualArtist"
-                    />
-                    Individual Artist
-                  </label>
-                </RadioGroup.Root>
+            <form onSubmit={handleSubmit(onSubmit)}>
                 <label>First Name *</label>
+                <input type="text" {...register("first_name", { required: true })} />
+                {errors.first_name && <p style={{color: 'red', marginTop: '-10px'}}>First Name Required</p>}
 
-                <input
-                  type="text"
-                  name="firstName"
-                //   onChange={handleChange}
-                />
                 <label>Last Name *</label>
+                <input type="text" {...register("last_naem", { required: true })} />
+                {errors.last_naem && <p style={{color: 'red', marginTop: '-10px'}}>Last Name Required</p>}
 
-                <input
-                  type="text"
-                  name="lastName"
-                //   onChange={handleChange}
-                />
                 <label>Phone *</label>
                 <PhoneInput
                   country={"in"} // Default country
                   value={phone}
-                  onChange={(phone) => setPhone(phone)}
+                  onChange={(phone) => {setPhone(phone); setPhoneErr('')}}
                   inputClass="phone-input-field"
                   buttonClass="phone-dropdown"
                   className="signUp-phone-input"
                 />
-            </div>
+                {
+                  phoneErr && <p style={{color: 'red'}}>{phoneErr}</p>
+                }
+                <div className="signUp-buttons">
+                    <button className="signUp-next-btn" type="submit">
+                      Next
+                    </button>
+                </div>
+            </form>
         </div>
     );
 };

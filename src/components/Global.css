@@ -931,3 +931,9 @@ label {
     display: none;
   }
 }
+
+
+/* phone input  */
+.react-tel-input .form-control{
+  padding-left: 45px !important;
+}

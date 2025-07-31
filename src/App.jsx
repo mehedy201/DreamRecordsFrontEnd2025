@@ -58,6 +58,7 @@ import CreateLabel from "./pages/Lables/components/CreateLabel";
 import SingleLable from "./pages/Lables/components/SIngleLable";
 import TestPage from "./pages/TestPage/TestPage";
 import Authorization from "./Authorization/Authorization";
+import SignUpFirstPage from "./pages/SignUp/SignUpFirstPage";
 
 function Layout() {
   const location = useLocation();
@@ -231,15 +232,15 @@ function App() {
         </Route>
 
         {/* Route WITHOUT Sidebar & Navbar */}
-        <Route path="/signup" element={<SignUp />} />
+        <Route path="/sign-up" element={<SignUpFirstPage />} />
+        <Route path="/email-verification" element={<SignUpVerificationEmail />}/>
+        <Route path="/sign-up-info" element={<SignUp />} />
+        
         <Route
           path="/SignUpVerificationEmailSent"
           element={<SignUpVerificationEmailSent />}
         />
-        <Route
-          path="/email-verification"
-          element={<SignUpVerificationEmail />}
-        />
+        
         <Route path="/login" element={<LogIn />} />
         <Route path="/resetpassword" element={<ResetPassword />} />
         <Route path="/newpassword/:email" element={<NewPassword />} />
