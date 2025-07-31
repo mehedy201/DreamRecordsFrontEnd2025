@@ -937,3 +937,12 @@ label {
 .react-tel-input .form-control{
   padding-left: 45px !important;
 }
+/* country state select  */
+.stdropdown-input{
+  position: relative;
+}
+.stdropdown-tools{
+    position: absolute;
+    top: 17px;
+    right: 6px;
+}
