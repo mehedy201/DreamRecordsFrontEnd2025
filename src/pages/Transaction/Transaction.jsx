@@ -140,6 +140,15 @@ const Transaction = () => {
     navigateWithParams(`/transaction/${pageNumber}/${perPageItem}/${status}`);
   }
 
+  // Withdraw page Notice_______________________________
+  const [withdrawPageNotices, setWithdrawPageNotices] = useState();
+  useEffect(() => {
+    axios.get('http://localhost:5000/admin/api/v1/settings/withdraw-page-notice')
+    .then(res => {
+      setWithdrawPageNotices(res.data.data);
+    })
+  },[])
+
  if(loading){
   return <LoadingScreen/>
  }
@@ -151,7 +160,7 @@ const Transaction = () => {
       <Flex className="page-heading">
         <div>
           <span>Total Balance</span>
-          <h2>€ {userData?.balance?.amount}</h2>
+          <h2>&#8377; {userData?.balance?.amount}</h2>
         </div>
         <Dialog.Root open={isOpen} onOpenChange={setIsOpen}>
           <Dialog.Trigger className="theme-btn">Withdraw</Dialog.Trigger>
@@ -188,12 +197,15 @@ const Transaction = () => {
         </Dialog.Root>
       </Flex>
       <br />
-      <div className="home-notice">
-        <InfoCircledIcon />
-        <p>
-          You can withdraw your earnings during the withdrawal periods in {activePaymentMonthName?.activeMonth?.map(month => month).join(', ')}.
-        </p>
-      </div>
+      {
+        withdrawPageNotices && 
+        withdrawPageNotices?.map(notice => 
+        <div key={notice._id} className="home-notice">
+          <InfoCircledIcon />
+          <p dangerouslySetInnerHTML={{__html: notice?.notice}}></p>
+        </div>
+        )
+      }
 
       {
         notFound && NotFoundComponent
