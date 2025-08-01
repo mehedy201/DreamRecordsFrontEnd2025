@@ -95,19 +95,29 @@ const Home = () => {
         .catch(er => console.log(er));
     }
   },[userNameIdRoll])
+ 
 
+  // Home Page Notice 
+  const [homePageNotices, setHomePageNotices] = useState();
+  useEffect(() => {
+    axios.get('http://localhost:5000/admin/api/v1/settings/home-page-notice')
+    .then(res => {
+      setHomePageNotices(res.data.data);
+    })
+  },[])
 
 
   return (
     <div className="main-content">
-      <div className="home-notice">
-        <InfoCircledIcon />
-        <p>
-          We are upgrading our platform to enhance your experience. You may
-          notice new user interfaces appearing periodically. Thank you for your
-          patience as we make these improvements.
-        </p>
-      </div>
+        {
+          homePageNotices && 
+          homePageNotices?.map(notice =>
+          <div key={notice._id} className="home-notice">
+            <InfoCircledIcon />
+            <p dangerouslySetInnerHTML={{__html: notice?.notice}}></p>
+          </div>
+         )
+        }
       <section className="hero">
         <div>
           <h1>Hi, {userData?.first_name}</h1>
