@@ -52,14 +52,15 @@ const Authorization = ({ children }) => {
                 navigate('/locked/:userId')
                 return;
             }
+
             if(!res?.data?.data.first_name && !res?.data?.data.first_name){
                 navigate('/sign-up-profile-info')
                 return
             }
-            if(!res?.data?.data?.addressLine1){
-                navigate('/sign-up-address-info')
-                return
-            }
+            // if(!res?.data?.data?.addressLine1 && !res?.data?.data?.address ){
+            //     navigate('/sign-up-address-info')
+            //     return
+            // }
             await axios.patch(`http://localhost:5000/api/v1/users/last-log-in/${userId}`)
             
         } catch (err) {

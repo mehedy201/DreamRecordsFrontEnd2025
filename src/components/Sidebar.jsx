@@ -1,4 +1,4 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import "./Global.css";
 
 const menuItems = [
@@ -15,6 +15,7 @@ const menuItems = [
 ];
 
 const Sidebar = () => {
+  const navigate = useNavigate();
   return (
     <aside className="sidebar">
       {/* Logo */}
@@ -24,7 +25,7 @@ const Sidebar = () => {
 
       {/* Create Button */}
 
-      <button className="theme-btn">+ Create</button>
+      <button onClick={() => navigate('/create-release')} className="theme-btn">+ Create</button>
 
       {/* Navigation Links */}
       <nav className="nav">

@@ -29,7 +29,7 @@ function ResetPassword() {
 
       if (res.data.message) {
         setMessage("OTP sent to your email. Please check.");
-        navigate(`/newpassword/${data.email}`)
+        navigate(`/set-new-assword/${data.email}`)
       }
     } catch (err) {
       setMessage(

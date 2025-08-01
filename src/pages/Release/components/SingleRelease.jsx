@@ -53,6 +53,7 @@ function SingleRelease() {
         setReleaseData(res.data.data)
         setTrackData(res?.data?.data?.tracks)
         setUPC(res?.data?.data?.UPC)
+        console.log(res.data.data)
         if(res.data.data.audioUrl){
           const audioUrl = res.data.data.audioUrl;
           const tittle = res.data.data.releaseTitle;
@@ -197,7 +198,7 @@ function SingleRelease() {
                     style={
                         releaseData?.status == "Takedown"
                         ? { background: "#FEEBEC", color: "#E5484D" }
-                        : releaseData?.status == "Pending"
+                        : releaseData?.status == "QC Approval"
                         ? { background: "#FFEBD8", color: "#FFA552" }
                         : releaseData?.status == "Review"
                         ? { background: "#D5EFFF", color: "#0090FF" }

@@ -242,7 +242,7 @@ function App() {
         
         <Route path="/login" element={<LogIn />} />
         <Route path="/resetpassword" element={<ResetPassword />} />
-        <Route path="/newpassword/:email" element={<NewPassword />} />
+        <Route path="/set-new-password/:email" element={<NewPassword />} />
         <Route path="/testPage" element={<TestPage />} />
       </Routes>
     </Router>
