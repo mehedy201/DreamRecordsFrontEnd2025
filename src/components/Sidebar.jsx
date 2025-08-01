@@ -1,17 +1,34 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import "./Global.css";
 
+import logo from '../assets/Logo.png'
+
+import homeIcon from '../assets/icons/home.png'
+// import userIcon from '../assets/icons/users.png'
+import releaseIcon from '../assets/icons/Releases.png'
+import groupIcon from '../assets/icons/group.png'
+import labelsIcon from '../assets/icons/Labels.png'
+// import analyticsIcon from '../assets/icons/analytics.png'
+import serviceRequestIcon from '../assets/icons/Service Request.png'
+import transactionsIcon from '../assets/icons/indian-rupee.png'
+import supportIcon from '../assets/icons/Support.png'
+import helpIcon from '../assets/icons/Help.png'
+import profileIcon from '../assets/icons/Profile.png'
+import settingsIcon from '../assets/icons/Settings.png'
+
+import beleveIcon from '../assets/believe.png'
+
 const menuItems = [
-  { name: "Home", path: "/", icon: "home.png" },
-  { name: "Releases", path: "/releases/1/10/All", icon: "Releases.png" },
-  { name: "Artists", path: "/artist/1/10", icon: "group.png" },
-  { name: "Lables", path: "/labels/1/10/All", icon: "Labels.png" },
-  { name: "Service Request", path: "/service-request/Release-Claim/1/10/All", icon: "Service Request.png",},
-  { name: "Transactions", path: "/transaction/1/10/All", icon: "Transactions.png" },
-  { name: "Support", path: "/support", icon: "Support.png", divider: true },
-  { name: "Help", path: "/help", icon: "Help.png" },
-  { name: "Profile", path: "/profile", icon: "Profile.png", divider: true },
-  { name: "My Settings", path: "/settings", icon: "Settings.png" },
+  { name: "Home", path: "/", icon: homeIcon },
+  { name: "Releases", path: "/releases/1/10/All", icon: releaseIcon },
+  { name: "Artists", path: "/artist/1/10", icon: groupIcon },
+  { name: "Lables", path: "/labels/1/10/All", icon: labelsIcon},
+  { name: "Service Request", path: "/service-request/Release-Claim/1/10/All", icon: serviceRequestIcon,},
+  { name: "Transactions", path: "/transaction/1/10/All", icon: transactionsIcon },
+  { name: "Support", path: "/support", icon: supportIcon, divider: true },
+  { name: "Help", path: "/help", icon: helpIcon },
+  { name: "Profile", path: "/profile", icon: profileIcon, divider: true },
+  { name: "My Settings", path: "/settings", icon: settingsIcon },
 ];
 
 const Sidebar = () => {
@@ -20,7 +37,7 @@ const Sidebar = () => {
     <aside className="sidebar">
       {/* Logo */}
       <div className="sidebar-logo">
-        <img src="src/assets/Logo.png" alt="Dream Records Logo" width={86} />
+        <img src={logo} alt="Dream Records Logo" width={86} />
       </div>
 
       {/* Create Button */}
@@ -39,7 +56,7 @@ const Sidebar = () => {
               }
             >
               <img
-                src={`src/assets/icons/${item.icon}`}
+                src={item.icon}
                 alt={item.name}
                 className="nav-icon"
               />
@@ -50,7 +67,7 @@ const Sidebar = () => {
       </nav>
       <div className="sidebar-bottomTxt-div">
         <p>Powered by</p>
-        <img src="src/assets/believe.png" alt="" />
+        <img src={beleveIcon} alt="" />
       </div>
     </aside>
   );
