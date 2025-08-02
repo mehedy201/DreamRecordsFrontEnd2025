@@ -33,7 +33,7 @@ const AddressInformation = () => {
 
       const label = {
         labelName: 'Dream Records',
-        imgUrl: '',
+        imgUrl: 'https://dream-records-2024.s3.ap-south-1.amazonaws.com/release-image/1754129130799-119804724-Dream%20Records%20Logo%20%28Dark%29.png',
         status: 'Approved',
         instagram: '',
         facebook: '',
