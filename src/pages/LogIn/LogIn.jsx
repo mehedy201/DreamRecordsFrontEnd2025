@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useState } from "react";
 import toast from "react-hot-toast";
+import FormSubmitLoading from "../../components/FormSubmitLoading";
 
 function LogIn() {
 
@@ -21,7 +22,6 @@ function LogIn() {
     .then(res => {
       console.log(res)
       if(res.data.status === 200){
-        console.log(res.status)
         localStorage.setItem("token", res.data.token);
         toast.success(res.data.message)
         navigate('/')
@@ -66,7 +66,7 @@ function LogIn() {
           <input type="password" className="password-input" {...register("password", { required: true })}/>
           {errors.password && <span>Password Required</span>}
           {
-            loading && <p>Loading.....</p>
+            loading && <FormSubmitLoading/>
           }
           {
             errorMassage && <p style={{color: 'red'}}>{errorMassage}</p>

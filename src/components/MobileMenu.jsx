@@ -23,8 +23,8 @@ const menuItems = [
   { name: "Lables", path: "/labels/1/10/All", icon: labelsIcon},
   { name: "Service Request", path: "/service-request/Release-Claim/1/10/All", icon: serviceRequestIcon,},
   { name: "Transactions", path: "/transaction/1/10/All", icon: transactionsIcon },
-  { name: "Support", path: "/support", icon: supportIcon, divider: true },
-  { name: "Help", path: "/help", icon: helpIcon },
+  { name: "Support", path: "/", icon: supportIcon, divider: true },
+  { name: "Help", path: "/", icon: helpIcon },
   { name: "Profile", path: "/profile", icon: profileIcon, divider: true },
   { name: "My Settings", path: "/settings", icon: settingsIcon },
 ];

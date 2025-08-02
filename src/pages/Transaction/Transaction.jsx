@@ -170,7 +170,7 @@ const Transaction = () => {
               specified payment method ?
             </p>
             <p className="modal-description">Withdrawal Amount</p>
-            <h1 style={{ fontWeight: "500", margin: 0 }}>€ {userData?.balance?.amount}</h1>
+            <h1 style={{ fontWeight: "500", margin: 0 }}>&#8377; {userData?.balance?.amount}</h1>
             <p className="modal-description">Payment Method</p>
             {
               bankInfo && 

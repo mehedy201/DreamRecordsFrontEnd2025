@@ -2,6 +2,7 @@ import axios from "axios";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
+import FormSubmitLoading from "../../components/FormSubmitLoading";
 
 function NewPassword() {
 
@@ -16,7 +17,6 @@ function NewPassword() {
   const { register, handleSubmit, formState: { errors } } = useForm();
   const onSubmit = async data => {
     setLoading(true)
-    console.log(data)
     setMessage('')
     let newPassword;
     if(data.password1 === data.password2){
@@ -32,8 +32,6 @@ function NewPassword() {
   if (res.data.token) {
     setMessage(res.data.message)
     localStorage.setItem("token", res.data.token); // ✅ Token save
-    console.log(res.data.user)
-
     navigate("/"); // redirect
     setLoading(false)
   }
@@ -77,6 +75,9 @@ function NewPassword() {
               {...register("password2", { required: true })}
             />
             {errors.password2 && <span>Confirm Password Required</span>}
+            {
+              loading && <FormSubmitLoading/>
+            }
             {
               message && <p>{message}</p>
             }

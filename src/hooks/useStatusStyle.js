@@ -1,10 +1,10 @@
 const useStatusStyle = (status) => {
   switch (status) {
-    case 'Pending':
+    case 'QC Approval':
       return { background: "#FFEBD8", color: "#FFA552" };
     case 'Review':
       return { background: '#D5EFFF', color: '#0090FF'};
-    case 'Approved':
+    case 'Live':
       return { background: '#E6F6EB', color: '#2A9B66'};
     case 'Action Required':
       return { background: "#FEEBEC", color: "#E5484D"  };

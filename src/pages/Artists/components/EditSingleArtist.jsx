@@ -37,8 +37,8 @@ function EditSingleArtist() {
 
   const {register, handleSubmit, formState: {errors}} = useForm()
   const onSubmit = async (data) => {
-    const formData = {...data, ...uploadedImage, _id: id};
-      axios.put(`http://localhost:5000/api/v1/artist/update-artist/${id}`, formData)
+    const formData = {...data, ...uploadedImage};
+      axios.patch(`http://localhost:5000/api/v1/artist/update-artist/${id}`, formData)
       .then(res => {
         if(res.status == 200){
           setUploadedImage()
