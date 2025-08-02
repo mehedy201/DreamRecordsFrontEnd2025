@@ -89,7 +89,7 @@ function NewPassword() {
               Update Password
             </button>
         </form>
-        <button className="theme-btn2">Return to login</button>
+        <button onClick={() => navigate('/login')} className="theme-btn2">Return to login</button>
       </div>
     </div>
   );

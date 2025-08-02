@@ -7,18 +7,8 @@ import FormSubmitLoading from "../../components/FormSubmitLoading";
 function ResetPassword() {
   
   const navigate = useNavigate();
-  const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
-
-  const handleForgotPassword = async (e) => {
-    e.preventDefault();
-
-    if (!email) return setMessage("Please enter your email.");
-
-    
-  };
-
 
   const { register, handleSubmit, formState: { errors } } = useForm();
   const onSubmit = async data => {
@@ -30,7 +20,7 @@ function ResetPassword() {
 
       if (res.data.message) {
         setMessage("OTP sent to your email. Please check.");
-        navigate(`/set-new-assword/${data.email}`)
+        navigate(`/set-new-password/${data.email}`)
       }
     } catch (err) {
       setMessage(
@@ -72,7 +62,7 @@ function ResetPassword() {
             </button>
           </form>
 
-        <button className="theme-btn2">Return to login</button>
+        <button onClick={() => navigate('/login')} className="theme-btn2">Return to login</button>
       </div>
     </div>
   );
