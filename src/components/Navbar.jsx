@@ -7,6 +7,7 @@ import PropTypes from "prop-types";
 import { Menu } from "lucide-react";
 import { FaRegUser } from "react-icons/fa";
 import { useSelector } from "react-redux";
+import logOutImg from '../assets/icons/logout.png'
 
 const Navbar = ({ toggleMobileMenu }) => {
 
@@ -52,7 +53,7 @@ const Navbar = ({ toggleMobileMenu }) => {
           }}
           >
             <div>
-              <img src="src/assets/icons/logout.png" width="16px" alt="" />
+              <img src={logOutImg} width="16px" alt="" />
             </div>
             &nbsp;&nbsp; <p>Logout</p>
           </DropdownMenu.Item>

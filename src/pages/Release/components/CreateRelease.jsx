@@ -6,6 +6,7 @@ import ReleaseDate from "./ReleaseDate";
 import ReleaseOverview from "./ReleaseOverview";
 import axios from "axios";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 const steps = [
   "Album Information",
   "Tracks Information",
@@ -15,6 +16,7 @@ const steps = [
 
 function CreateRelease() {
 
+  const navigate = useNavigate();
   const {userNameIdRoll} = useSelector((state) => state.userData);
 
   useEffect(() => {
@@ -55,8 +57,8 @@ function CreateRelease() {
           </p>
           <br />
           <div className="d-flex">
-            <button className="release-backDash-btn">Back to Dashboard</button>
-            <button className="theme-btn" style={{ width: "100%" }}>
+            <button onClick={() => navigate('/')} className="release-backDash-btn">Back to Dashboard</button>
+            <button onClick={() => navigate('/releases/1/10/All')} className="theme-btn" style={{ width: "100%" }}>
               View Track
             </button>
           </div>

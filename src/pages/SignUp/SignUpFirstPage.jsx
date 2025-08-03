@@ -77,7 +77,7 @@ const SignUpFirstPage = () => {
 // /common/api/v1/authentication/verify-user-otp
 // /common/api/v1/authentication/get-temp-user/:id
 
-    const payload = {userName: userName, email: data.email, password: password, roll: 'User'}
+    const payload = {userName: userName, email: data.email, password: password, roll: 'User', status: 'Pending'}
     axios.post(`http://localhost:5000/common/api/v1/authentication/register-user`, payload)
     .then(res => {
       console.log(res)

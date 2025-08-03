@@ -121,14 +121,13 @@ function App() {
             path="/"
             element={
               <Authorization><Home releaseItems={releaseItems} /></Authorization>
-             
             }
           />
 
           {/* Release Route Start_________________________________ */}
           <Route
             path="/releases/:pageNumber/:perPageItem/:status"
-            element={<Release />}
+            element={<Authorization><Release /> </Authorization>}
           />
           <Route
             path="/release/:id"

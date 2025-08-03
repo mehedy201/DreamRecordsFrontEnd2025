@@ -27,29 +27,29 @@ const releaseColumns = [
   { label: "Reason", key: "reason" },
 ];
 
-const renderReleaseCell = (key, row) => {
-  if (key === "release") {
-    return (
-      <div className="release-table-img-td">
-        <img src={`src/assets/${row.img}`} alt="" />
-        <div>
-          <p>{row.release}</p>
-          <small>UPC: {row.release_sample}</small>
-        </div>
-      </div>
-    );
-  }
-  if (key === "url") {
-    return row.url.length > 22 ? row.url.slice(0, 22) + "..." : row.url;
-  }
-  if (key === "status") {
-    return (
-      <span className={`status ${row.status.toLowerCase()}`}>{row.status}</span>
-    );
-  }
+// const renderReleaseCell = (key, row) => {
+//   if (key === "release") {
+//     return (
+//       <div className="release-table-img-td">
+//         <img src={`src/assets/${row.img}`} alt="" />
+//         <div>
+//           <p>{row.release}</p>
+//           <small>UPC: {row.release_sample}</small>
+//         </div>
+//       </div>
+//     );
+//   }
+//   if (key === "url") {
+//     return row.url.length > 22 ? row.url.slice(0, 22) + "..." : row.url;
+//   }
+//   if (key === "status") {
+//     return (
+//       <span className={`status ${row.status.toLowerCase()}`}>{row.status}</span>
+//     );
+//   }
 
-  return row[key];
-};
+//   return row[key];
+// };
 
 const ServiceRequest = () => {
 
@@ -80,7 +80,7 @@ const ServiceRequest = () => {
     return request;
   }
 
-  // Fatch Release Data _______________________________________________
+  // Fatch Service Request Data _______________________________________________
   const [currentPage, setCurrentPage] = useState(parseInt(pageNumber));
   const [filteredCount, setFilteredCount] = useState();
   const [totalPages, setTotalPages] = useState();
@@ -188,7 +188,6 @@ const ServiceRequest = () => {
             <ReleaseClaim
               years={years}
               notFound={notFound}
-              renderReleaseCell={renderReleaseCell}
               filterByYear={filterByYear}
               filterByStatus={filterByStatus}
               handleKeyPress={handleKeyPress}
@@ -200,7 +199,7 @@ const ServiceRequest = () => {
             <ContentID
               years={years}
               notFound={notFound}
-              renderReleaseCell={renderReleaseCell}
+              // renderReleaseCell={renderReleaseCell}
               filterByYear={filterByYear}
               filterByStatus={filterByStatus}
               handleKeyPress={handleKeyPress}
@@ -212,7 +211,7 @@ const ServiceRequest = () => {
             <ClaimVideo
               years={years}
               notFound={notFound}
-              renderReleaseCell={renderReleaseCell}
+              // renderReleaseCell={renderReleaseCell}
               filterByYear={filterByYear}
               filterByStatus={filterByStatus}
               handleKeyPress={handleKeyPress}
@@ -223,7 +222,7 @@ const ServiceRequest = () => {
             <BlockedVideo
               years={years}
               notFound={notFound}
-              renderReleaseCell={renderReleaseCell}
+              // renderReleaseCell={renderReleaseCell}
               filterByYear={filterByYear}
               filterByStatus={filterByStatus}
               handleKeyPress={handleKeyPress}
@@ -234,7 +233,7 @@ const ServiceRequest = () => {
             <OAC
               years={years}
               notFound={notFound}
-              renderReleaseCell={renderReleaseCell}
+              // renderReleaseCell={renderReleaseCell}
               filterByYear={filterByYear}
               filterByStatus={filterByStatus}
               handleKeyPress={handleKeyPress}
@@ -245,7 +244,7 @@ const ServiceRequest = () => {
             <ProfileLinking
               years={years}
               notFound={notFound}
-              renderReleaseCell={renderReleaseCell}
+              // renderReleaseCell={renderReleaseCell}
               filterByYear={filterByYear}
               filterByStatus={filterByStatus}
               handleKeyPress={handleKeyPress}
@@ -256,7 +255,7 @@ const ServiceRequest = () => {
             <Whitelist
               years={years}
               notFound={notFound}
-              renderReleaseCell={renderReleaseCell}
+              // renderReleaseCell={renderReleaseCell}
               filterByYear={filterByYear}
               filterByStatus={filterByStatus}
               handleKeyPress={handleKeyPress}
