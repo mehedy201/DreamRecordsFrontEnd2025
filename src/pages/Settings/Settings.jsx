@@ -12,6 +12,19 @@ import toast from "react-hot-toast";
 function Settings() {
   const {userNameIdRoll} = useSelector((state) => state.userData);
 
+  const ddd = {
+
+  IFSC: "",
+  account_holder_name: "mehedi",
+  account_number: "11111111",
+  bank_name: "Demo",
+  branch_name: "aaa",
+  masterUserId: "662b71650a78738b0334837f",
+  match_account_number: "11111111",
+  swift_code: "aaa",
+  _id: "67447266499cf486a8cb35c3",
+  }
+
   const [bankInfo, setBankInfo] = useState()
   const [bankInfoReFetch, setBankInfoReFetch] = useState(1)
   useEffect(() => {
@@ -98,14 +111,16 @@ function Settings() {
                 >
                   <Select.Viewport>
                     <Select.Item className="settings-select-item" value="Bank Account">Bank Account</Select.Item>
-                    <Select.Item className="settings-select-item" value="Payoneer">Payoneer</Select.Item>
+                    {/* <Select.Item className="settings-select-item" value="Payoneer">Payoneer</Select.Item>
                     <Select.Item className="settings-select-item" value="Paypal">PayPal</Select.Item>
-                    <Select.Item className="settings-select-item" value="bKash">bKash</Select.Item>
+                    <Select.Item className="settings-select-item" value="bKash">bKash</Select.Item> */}
                   </Select.Viewport>
                 </Select.Content>
               </Select.Portal>
             </Select.Root>
-          <form onSubmit={handleSubmit(onSubmit)} className="form-container" style={{ position: "relative" }}>
+          {
+            !bankInfo && 
+            <form onSubmit={handleSubmit(onSubmit)} className="form-container" style={{ position: "relative" }}>
             {/* Dynamic Form Fields */}
             {paymentMethod === "Bank Account" ? (
               <div>
@@ -295,6 +310,7 @@ function Settings() {
             {/* Save Button */}
             <button className="settings-save-btn">Save</button>
           </form>
+          }
         </div>
       </div>
       <div>
@@ -303,11 +319,21 @@ function Settings() {
           bankInfo && 
           bankInfo.map(bank =>
           <div key={bank._id} style={{marginBottom: '10px'}} className="modal-transaction-method">
-            <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
-              <p>{bank?.bank_name} {bank?.payoneerID ? `Payoneer`: ''}{bank?.paypalID ? `Paypal`: ''}{bank?.bKashName}</p>
-              <TrashIcon onClick={() => deleteBankInfo(bank._id)} style={{color: '#ea3958', cursor: 'pointer'}}/>
+            <div>
+              <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+                <p>{bank?.bank_name} {bank?.payoneerID ? `Payoneer`: ''}{bank?.paypalID ? `Paypal`: ''}{bank?.bKashName}</p>
+                <TrashIcon onClick={() => deleteBankInfo(bank._id)} style={{color: '#ea3958', cursor: 'pointer'}}/>
+              </div>
+              <small>{bank?.account_number && `************${bank?.account_number.slice(-4)}`} {bank?.payoneerEmail} {bank?.paypalEmail} {bank?.bKashNumber && bank?.bKashNumber.toSlice(-4)}</small>
             </div>
-            <small>{bank?.account_number && `************${bank?.account_number.slice(-4)}`} {bank?.payoneerEmail} {bank?.paypalEmail} {bank?.bKashNumber && bank?.bKashNumber.toSlice(-4)}</small>
+            <div>
+              <p>Account Holder/Beneficiary: {bank?.account_holder_name}</p>
+              <p>Branch Name: {bank?.branch_name}</p>
+              <p>Swift Code: {bank?.swift_code}</p>
+              <p>IFSC: {bank?.IFSC}</p>
+              <p>Account Type: {bank?.bankAccountType}</p>
+              <p>Payment Method: {bank?.paymentMethod}</p>
+            </div>
           </div>
           )
         }
@@ -317,3 +343,16 @@ function Settings() {
 }
 
 export default Settings;
+
+  const ddd = {
+
+  IFSC: "",
+  account_holder_name: "mehedi",
+  account_number: "11111111",
+  bank_name: "Demo",
+  branch_name: "aaa",
+  masterUserId: "662b71650a78738b0334837f",
+  match_account_number: "11111111",
+  swift_code: "aaa",
+  _id: "67447266499cf486a8cb35c3",
+  }

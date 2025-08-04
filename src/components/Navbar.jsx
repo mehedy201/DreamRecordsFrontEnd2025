@@ -15,7 +15,6 @@ const Navbar = ({ toggleMobileMenu }) => {
   const [open, setOpen] = useState(false);
 
   const {userData} = useSelector((state) => state.userData);
-  console.log(userData)
 
 
   return (

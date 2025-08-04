@@ -96,7 +96,7 @@ const Transaction = () => {
       axios.get(`http://localhost:5000/api/v1/bank-info/${userNameIdRoll[1]}`)
       .then(res => {
           if(res.status == 200){
-            setBankInfo(res.data.data)
+            setBankInfo(res.data.data[0])
           }
       })
       .catch(er => console.log(er)) 
@@ -109,18 +109,19 @@ const Transaction = () => {
   const [isOpen, setIsOpen] = useState(false);
   const withdrowBalance = () => {
     setSelectBankInfoErr('')
-    if(!selectBankInfo){
-      setSelectBankInfoErr('Please Select Bank')
+    if(!bankInfo){
+      setSelectBankInfoErr('Please add Bank INFO first')
       return;
     }
     if(!userNameIdRoll){
       setSelectBankInfoErr('Please Reload the page and try again')
       return;
     }
-    axios.post(`http://localhost:5000/common/api/v1/payment/withdrawal/${userNameIdRoll[1]}`, selectBankInfo)
+    axios.post(`http://localhost:5000/common/api/v1/payment/withdrawal/${userNameIdRoll[1]}`, bankInfo)
       .then(res => {
           if(res.status == 200){
             // setBankInfo(res.data.data)
+            console.log(res)
             toast.success(res.data.message)
             setIsOpen(false)
           }
@@ -172,7 +173,7 @@ const Transaction = () => {
             <p className="modal-description">Withdrawal Amount</p>
             <h1 style={{ fontWeight: "500", margin: 0 }}>&#8377; {userData?.balance?.amount}</h1>
             <p className="modal-description">Payment Method</p>
-            {
+            {/* {
               bankInfo && 
               bankInfo.map(bank =>
               <div key={bank._id} onClick={() => activeBankAndSelectBank(bank._id, bank)} style={{marginBottom: '5px',cursor: 'pointer', border: activeBankInfo == bank._id ? '2px solid #ea3958' : 'none'}} className="modal-transaction-method">
@@ -180,6 +181,13 @@ const Transaction = () => {
                 <small>{bank?.account_number && `************${bank?.account_number.slice(-4)}`} {bank?.payoneerEmail} {bank?.paypalEmail} {bank?.bKashNumber && bank?.bKashNumber.toSlice(-4)}</small>
               </div>
               )
+            } */}
+            {
+              bankInfo &&
+              <div key={bankInfo._id} style={{marginBottom: '5px',cursor: 'pointer'}} className="modal-transaction-method">
+                <p>{bankInfo?.bank_name} {bankInfo?.payoneerID ? `Payoneer`: ''}{bankInfo?.paypalID ? `Paypal`: ''}{bankInfo?.bKashName}</p>
+                <small>{bankInfo?.account_number && `************${bankInfo?.account_number.slice(-4)}`} {bankInfo?.payoneerEmail} {bankInfo?.paypalEmail} {bankInfo?.bKashNumber && bankInfo?.bKashNumber.toSlice(-4)}</small>
+              </div>
             }
             {
               SelectBankInfoErr && <p style={{color: '#ea3958'}}>{SelectBankInfoErr}</p>
