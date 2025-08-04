@@ -16,24 +16,31 @@ import axios from "axios";
 import LoadingScreen from "../../components/LoadingScreen";
 
 const Release = () => {
-
   // Get Data Form Redux ________________________
-  const {userNameIdRoll} = useSelector((state) => state.userData);
-  const { yearsList,releaseStatusList } = useSelector(state => state.yearsAndStatus);
+  const { userNameIdRoll } = useSelector((state) => state.userData);
+  const { yearsList, releaseStatusList } = useSelector(
+    (state) => state.yearsAndStatus
+  );
   // Main Params ________________________________
-  const {pageNumber, perPageItem, status} = useParams();
+  const { pageNumber, perPageItem, status } = useParams();
   // Filter Query Paramitars_____________________
   const { navigateWithParams } = useQueryParams();
   const [filterParams] = useSearchParams();
-  const search = filterParams.get('search') || '';
-  const years = filterParams.get('years') || '';
+  const search = filterParams.get("search") || "";
+  const years = filterParams.get("years") || "";
 
   const filterByYear = (yearValue) => {
-    navigateWithParams(`/releases/1/10/${status}`, { search: search, years: yearValue });
-  }
+    navigateWithParams(`/releases/1/10/${status}`, {
+      search: search,
+      years: yearValue,
+    });
+  };
   const filterByStatus = (statusValue) => {
-    navigateWithParams(`/releases/1/10/${statusValue}`, { search: search, years: years });
-  }
+    navigateWithParams(`/releases/1/10/${statusValue}`, {
+      search: search,
+      years: years,
+    });
+  };
 
   // Responsive Code ______________________________________________
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 700);
@@ -51,7 +58,7 @@ const Release = () => {
     <>
       <SelectDropdown
         options={yearsList}
-        placeholder={`${years ? years : 'All Time'}`}
+        placeholder={`${years ? years : "All Time"}`}
         filterByYearAndStatus={filterByYear}
       />
 
@@ -66,109 +73,124 @@ const Release = () => {
 
   // Fatch Release Data _______________________________________________
   const [currentPage, setCurrentPage] = useState(parseInt(pageNumber));
-  const [releaseData, setReleaseData] = useState()
+  const [releaseData, setReleaseData] = useState();
   const [filteredCount, setFilteredCount] = useState();
   const [totalPages, setTotalPages] = useState();
   const [loading, setLoading] = useState(false);
-  useEffect( () => {
-    if(userNameIdRoll){
-      setLoading(true)
-      axios.get(`http://localhost:5000/api/v1/release/${userNameIdRoll[1]}?page=${pageNumber}&limit=${perPageItem}&status=${status}&search=${search}&years=${years}`)
-        .then( res => {
-          if(res.status == 200){
+  useEffect(() => {
+    if (userNameIdRoll) {
+      setLoading(true);
+      axios
+        .get(
+          `https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/release/${userNameIdRoll[1]}?page=${pageNumber}&limit=${perPageItem}&status=${status}&search=${search}&years=${years}`
+        )
+        .then((res) => {
+          if (res.status == 200) {
             setReleaseData(res.data.data);
             setFilteredCount(res.data.filteredCount);
             setTotalPages(res.data.totalPages);
-            setLoading(false)
+            setLoading(false);
           }
         })
-        .catch(er => console.log(er));
+        .catch((er) => console.log(er));
     }
-    setLoading(false)
-  },[userNameIdRoll, pageNumber, perPageItem, search, years]);
+    setLoading(false);
+  }, [userNameIdRoll, pageNumber, perPageItem, search, years]);
 
   // Handle Page Change ________________________________
   const handlePageChange = (page) => {
-    navigateWithParams(`/releases/${page}/${perPageItem}/${status}`, { search: search, years: years });
-  }
+    navigateWithParams(`/releases/${page}/${perPageItem}/${status}`, {
+      search: search,
+      years: years,
+    });
+  };
   // Search _____________________________________________
   const [searchText, setSearchText] = useState();
   const handleKeyPress = (event) => {
-    if (event.key === 'Enter') {
-      navigateWithParams(`/releases/1/${perPageItem}/${status}`, { search: searchText, years: years });
+    if (event.key === "Enter") {
+      navigateWithParams(`/releases/1/${perPageItem}/${status}`, {
+        search: searchText,
+        years: years,
+      });
     }
   };
 
   // Handle Per Page Item _______________________________
   const handlePerPageItem = (perPageItem) => {
-    navigateWithParams(`/releases/${pageNumber}/${perPageItem}/${status}`, { search: search, years: years });
-  }
-
+    navigateWithParams(`/releases/${pageNumber}/${perPageItem}/${status}`, {
+      search: search,
+      years: years,
+    });
+  };
 
   return (
     <>
-    {
-      loading === true && <LoadingScreen/>
-    }
-    <div className="main-content">
-      <Flex className="page-heading">
-        <h2>Releases</h2>
-        <Link
-          className="theme-btn"
-          to="/create-release"
-          style={{
-            textDecoration: "none",
-            marginRight: 0,
-            marginLeft: "auto",
-            width: "185px",
-            textAlign: "center",
-          }}
-        >
-          + Create New
-        </Link>
-      </Flex>
+      {loading === true && <LoadingScreen />}
+      <div className="main-content">
+        <Flex className="page-heading">
+          <h2>Releases</h2>
+          <Link
+            className="theme-btn"
+            to="/create-release"
+            style={{
+              textDecoration: "none",
+              marginRight: 0,
+              marginLeft: "auto",
+              width: "185px",
+              textAlign: "center",
+            }}
+          >
+            + Create New
+          </Link>
+        </Flex>
 
-      <div className="search-setion">
-        <input onKeyPress={handleKeyPress} onChange={e => setSearchText(e.target.value)} type="text" placeholder="Search..." />
-        {isMobile ? (
-          <DropdownMenu.Root>
-            <DropdownMenu.Trigger asChild>
-              <button
-                className="dropdown-trigger"
-                style={{
-                  width: "56px",
-                  justifyContent: "center",
-                  marginRight: "0",
-                }}
+        <div className="search-setion">
+          <input
+            onKeyPress={handleKeyPress}
+            onChange={(e) => setSearchText(e.target.value)}
+            type="text"
+            placeholder="Search..."
+          />
+          {isMobile ? (
+            <DropdownMenu.Root>
+              <DropdownMenu.Trigger asChild>
+                <button
+                  className="dropdown-trigger"
+                  style={{
+                    width: "56px",
+                    justifyContent: "center",
+                    marginRight: "0",
+                  }}
+                >
+                  <HiOutlineAdjustmentsHorizontal
+                    style={{ width: "24px", height: "24px" }}
+                  />
+                </button>
+              </DropdownMenu.Trigger>
+
+              <DropdownMenu.Content
+                align="center"
+                side="bottom"
+                className="dropdown-content"
               >
-                <HiOutlineAdjustmentsHorizontal
-                  style={{ width: "24px", height: "24px" }}
-                />
-              </button>
-            </DropdownMenu.Trigger>
-
-            <DropdownMenu.Content
-              align="center"
-              side="bottom"
-              className="dropdown-content"
-            >
-              {dropdownItem}
-            </DropdownMenu.Content>
-          </DropdownMenu.Root>
-        ) : (
-          dropdownItem
-        )}
+                {dropdownItem}
+              </DropdownMenu.Content>
+            </DropdownMenu.Root>
+          ) : (
+            dropdownItem
+          )}
+        </div>
+        <ReleaseCard releaseData={releaseData} />
+        <Pagination
+          totalDataCount={filteredCount}
+          totalPages={totalPages}
+          currentPage={currentPage}
+          perPageItem={perPageItem}
+          setCurrentPage={setCurrentPage}
+          handlePageChange={handlePageChange}
+          customFunDropDown={handlePerPageItem}
+        />
       </div>
-      <ReleaseCard releaseData={releaseData} />
-      <Pagination 
-        totalDataCount={filteredCount} 
-        totalPages={totalPages}
-        currentPage={currentPage} 
-        perPageItem={perPageItem} 
-        setCurrentPage={setCurrentPage} 
-        handlePageChange={handlePageChange}
-        customFunDropDown={handlePerPageItem}/>
-    </div>
     </>
   );
 };

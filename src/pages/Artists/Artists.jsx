@@ -10,17 +10,16 @@ import { useSelector } from "react-redux";
 import axios from "axios";
 import useQueryParams from "../../hooks/useQueryParams";
 const Artists = () => {
-
   // Get Data Form Redux ________________________
-  const {userNameIdRoll} = useSelector((state) => state.userData);
-  const { yearsList } = useSelector(state => state.yearsAndStatus);
+  const { userNameIdRoll } = useSelector((state) => state.userData);
+  const { yearsList } = useSelector((state) => state.yearsAndStatus);
   // Main Params ________________________________
-  const {pageNumber, perPageItem} = useParams();
+  const { pageNumber, perPageItem } = useParams();
   // Filter Query Paramitars_____________________
   const { navigateWithParams } = useQueryParams();
   const [filterParams] = useSearchParams();
-  const search = filterParams.get('search') || '';
-  const years = filterParams.get('years') || '';
+  const search = filterParams.get("search") || "";
+  const years = filterParams.get("years") || "";
 
   // Responsive Code ____________________________
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 700);
@@ -33,57 +32,66 @@ const Artists = () => {
   }, []);
 
   const filterByYear = (yearValue) => {
-    navigateWithParams('/artist/1/10', { search: search, years: yearValue });
-  }
+    navigateWithParams("/artist/1/10", { search: search, years: yearValue });
+  };
 
   const dropdownItem = (
     <SelectDropdown
       options={yearsList}
-      placeholder={`${years ? years : 'All Time'}`}
+      placeholder={`${years ? years : "All Time"}`}
       filterByYearAndStatus={filterByYear}
     />
   );
 
   // Fatch Artist Data _______________________________________________
   const [currentPage, setCurrentPage] = useState(parseInt(pageNumber));
-  const [artistData, setArtistData] = useState()
+  const [artistData, setArtistData] = useState();
   const [totalCount, setTotalCount] = useState();
   const [filteredCount, setFilteredCount] = useState();
   const [totalPages, setTotalPages] = useState();
-  useEffect( () => {
-    if(userNameIdRoll){
-      axios.get(`http://localhost:5000/api/v1/artist/${userNameIdRoll[1]}?page=${pageNumber}&limit=${perPageItem}&search=${search}&years=${years}`)
-        .then( res => {
-          if(res.status == 200){
+  useEffect(() => {
+    if (userNameIdRoll) {
+      axios
+        .get(
+          `https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/artist/${userNameIdRoll[1]}?page=${pageNumber}&limit=${perPageItem}&search=${search}&years=${years}`
+        )
+        .then((res) => {
+          if (res.status == 200) {
             setArtistData(res.data.data);
             setTotalCount(res.data.totalCount);
             setFilteredCount(res.data.filteredCount);
             setTotalPages(res.data.totalPages);
           }
         })
-        .catch(er => console.log(er));
+        .catch((er) => console.log(er));
     }
-  },[userNameIdRoll, pageNumber, perPageItem, search, years])
+  }, [userNameIdRoll, pageNumber, perPageItem, search, years]);
 
   // Handle Page Change ________________________________
   const handlePageChange = (page) => {
-    navigateWithParams(`/artist/${page}/${perPageItem}`, { search: search, years: years });
-  }
+    navigateWithParams(`/artist/${page}/${perPageItem}`, {
+      search: search,
+      years: years,
+    });
+  };
   // Search _____________________________________________
   const [searchText, setSearchText] = useState();
   const handleKeyPress = (event) => {
-    if (event.key === 'Enter') {
-      navigateWithParams(`/artist/1/${perPageItem}`, { search: searchText, years: years });
+    if (event.key === "Enter") {
+      navigateWithParams(`/artist/1/${perPageItem}`, {
+        search: searchText,
+        years: years,
+      });
     }
   };
 
   // Handle Per Page Item _______________________________
   const handlePerPageItem = (perPageItem) => {
-    navigateWithParams(`/artist/${pageNumber}/${perPageItem}`, { search: search, years: years });
-  }
-
-
-
+    navigateWithParams(`/artist/${pageNumber}/${perPageItem}`, {
+      search: search,
+      years: years,
+    });
+  };
 
   return (
     <div className="main-content">
@@ -105,7 +113,13 @@ const Artists = () => {
       </Flex>
 
       <div className="search-setion">
-        <input onKeyPress={handleKeyPress} onChange={e => setSearchText(e.target.value)} type="text" placeholder="Search..." style={{ width: "87%" }} />
+        <input
+          onKeyPress={handleKeyPress}
+          onChange={(e) => setSearchText(e.target.value)}
+          type="text"
+          placeholder="Search..."
+          style={{ width: "87%" }}
+        />
         {/* First Dropdown */}
         {isMobile ? (
           <DropdownMenu.Root>
@@ -139,13 +153,14 @@ const Artists = () => {
       <br />
       <ArtistCard artistsItems={artistData} />
       <Pagination
-        totalDataCount={filteredCount} 
+        totalDataCount={filteredCount}
         totalPages={totalPages}
-        currentPage={currentPage} 
-        perPageItem={perPageItem} 
-        setCurrentPage={setCurrentPage} 
+        currentPage={currentPage}
+        perPageItem={perPageItem}
+        setCurrentPage={setCurrentPage}
         handlePageChange={handlePageChange}
-        customFunDropDown={handlePerPageItem}/>
+        customFunDropDown={handlePerPageItem}
+      />
     </div>
   );
 };

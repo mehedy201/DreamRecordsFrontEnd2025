@@ -11,7 +11,6 @@
 // import { useNavigate, useParams } from "react-router-dom";
 // import { setReFetchArtist } from "../../../redux/features/reFetchDataHandleSlice/reFetchDataHandleSlice";
 
-
 // function CreateArtist({fromReleaseForm, openModal, setSearchQuery, selectedItems, onSelect}) {
 
 //   const { reFetchArtist } = useSelector(state => state.reFetchSlice);
@@ -22,12 +21,11 @@
 //   const [imgLink, setImgLink] = useState();
 //   const [uploadedImage, setUploadedImage] = useState();
 
-
 //   const {register, handleSubmit, reset, formState: {errors}} = useForm()
 //   const onSubmit = async (data) => {
 //       const date = new Date().toISOString();
 //       const formData = {...data, ...uploadedImage, masterUserId: userNameIdRoll[1], userName: userNameIdRoll[0], date};
-//       axios.post(`http://localhost:5000/api/v1/artist/create-artist`, formData)
+//       axios.post(`https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/artist/create-artist`, formData)
 //       .then(res => {
 //           if(res.status == 200){
 //             setUploadedImage()
@@ -45,7 +43,7 @@
 //             }
 //           }
 //       })
-//       .catch(er => console.log(er))    
+//       .catch(er => console.log(er))
 //   }
 
 //   return (
@@ -53,7 +51,7 @@
 //       <div className="artist-editImg-div">
 //         {" "}
 //         <ImageUpload
-//           link={`http://localhost:5000/api/v1/artist/upload-artist-img`}
+//           link={`https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/artist/upload-artist-img`}
 //           setImgLink={setImgLink}
 //           imgLink={imgLink}
 //           uploadedImage={uploadedImage}
@@ -125,7 +123,6 @@
 
 // export default CreateArtist;
 
-
 import ImageUpload from "../../../components/ImageUpload";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -133,17 +130,24 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { setReFetchArtist } from "../../../redux/features/reFetchDataHandleSlice/reFetchDataHandleSlice";
 
-import facbookIcon from '../../../assets/social/facebook.png';
-import appleIcon from '../../../assets/social/apple-music.png';
-import instaIcon from '../../../assets/social/instagram.png';
-import spotifyIcon from '../../../assets/social/spotify-icon.png';
-import youtubeIcon from '../../../assets/social/youtube-icon.png';
+import facbookIcon from "../../../assets/social/facebook.png";
+import appleIcon from "../../../assets/social/apple-music.png";
+import instaIcon from "../../../assets/social/instagram.png";
+import spotifyIcon from "../../../assets/social/spotify-icon.png";
+import youtubeIcon from "../../../assets/social/youtube-icon.png";
 
-function CreateArtist({ fromReleaseForm, openModal, setSearchQuery, selectedItems, setSelectedItems, onSelect }) {
+function CreateArtist({
+  fromReleaseForm,
+  openModal,
+  setSearchQuery,
+  selectedItems,
+  setSelectedItems,
+  onSelect,
+}) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { userNameIdRoll } = useSelector(state => state.userData);
-  const { reFetchArtist } = useSelector(state => state.reFetchSlice);
+  const { userNameIdRoll } = useSelector((state) => state.userData);
+  const { reFetchArtist } = useSelector((state) => state.reFetchSlice);
 
   const [imgLink, setImgLink] = useState(null);
   const [uploadedImage, setUploadedImage] = useState(null);
@@ -153,18 +157,19 @@ function CreateArtist({ fromReleaseForm, openModal, setSearchQuery, selectedItem
     appleId: "",
     facebook: "",
     instagramId: "",
-    youtube: ""
+    youtube: "",
   });
   const [errors, setErrors] = useState({});
 
   const handleChange = ({ target: { name, value } }) => {
-    setFormData(prev => ({ ...prev, [name]: value }));
-    setErrors(prev => ({ ...prev, [name]: "" }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    setErrors((prev) => ({ ...prev, [name]: "" }));
   };
 
   const validate = () => {
     const newErrors = {};
-    if (!formData.artistName.trim()) newErrors.artistName = "Artist Name is required";
+    if (!formData.artistName.trim())
+      newErrors.artistName = "Artist Name is required";
     return newErrors;
   };
 
@@ -184,40 +189,43 @@ function CreateArtist({ fromReleaseForm, openModal, setSearchQuery, selectedItem
     };
 
     try {
-      axios.post(`http://localhost:5000/api/v1/artist/create-artist`, payload)
-  .then(res => {
-    if (res.status === 200) {
-      const createdArtist = res.data.data.insertedId; 
-      const formData = {...payload, _id:createdArtist}      
+      axios
+        .post(
+          `https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/artist/create-artist`,
+          payload
+        )
+        .then((res) => {
+          if (res.status === 200) {
+            const createdArtist = res.data.data.insertedId;
+            const formData = { ...payload, _id: createdArtist };
 
-      if (fromReleaseForm) {
-        const updatedSelectedItems = [...selectedItems, formData]; 
-        console.log(updatedSelectedItems)
-        setSelectedItems(updatedSelectedItems)
-        onSelect(updatedSelectedItems);
-        setSearchQuery('');
-        openModal(false);
-        dispatch(setReFetchArtist(reFetchArtist + 1));
-      } else {
-        navigate('/artist/1/10');
-      }
+            if (fromReleaseForm) {
+              const updatedSelectedItems = [...selectedItems, formData];
+              console.log(updatedSelectedItems);
+              setSelectedItems(updatedSelectedItems);
+              onSelect(updatedSelectedItems);
+              setSearchQuery("");
+              openModal(false);
+              dispatch(setReFetchArtist(reFetchArtist + 1));
+            } else {
+              navigate("/artist/1/10");
+            }
 
-      // Clear form
-      setFormData({
-        artistName: "",
-        spotifyId: "",
-        appleId: "",
-        facebook: "",
-        instagramId: "",
-        youtube: ""
-      });
-      setUploadedImage('');
-    }
-  })
-  .catch(error => {
-    console.error("Failed to create artist:", error);
-  });
-
+            // Clear form
+            setFormData({
+              artistName: "",
+              spotifyId: "",
+              appleId: "",
+              facebook: "",
+              instagramId: "",
+              youtube: "",
+            });
+            setUploadedImage("");
+          }
+        })
+        .catch((error) => {
+          console.error("Failed to create artist:", error);
+        });
     } catch (error) {
       console.error("Failed to create artist:", error);
     }
@@ -227,7 +235,7 @@ function CreateArtist({ fromReleaseForm, openModal, setSearchQuery, selectedItem
     <div className="main-content">
       <div className="artist-editImg-div">
         <ImageUpload
-          link="http://localhost:5000/api/v1/artist/upload-artist-img"
+          link="https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/artist/upload-artist-img"
           setImgLink={setImgLink}
           imgLink={imgLink}
           uploadedImage={uploadedImage}
@@ -240,7 +248,10 @@ function CreateArtist({ fromReleaseForm, openModal, setSearchQuery, selectedItem
 
       <div className="editArtist-info" style={{ marginRight: 0 }}>
         <h4>Basic Information</h4>
-        <label htmlFor="artistName" style={{ marginBottom: "5px", display: "block" }}>
+        <label
+          htmlFor="artistName"
+          style={{ marginBottom: "5px", display: "block" }}
+        >
           Official name
         </label>
         <input
@@ -250,7 +261,9 @@ function CreateArtist({ fromReleaseForm, openModal, setSearchQuery, selectedItem
           onChange={handleChange}
           style={{ width: "100%" }}
         />
-        {errors.artistName && <span className="error">{errors.artistName}</span>}
+        {errors.artistName && (
+          <span className="error">{errors.artistName}</span>
+        )}
       </div>
 
       <br />
@@ -259,7 +272,9 @@ function CreateArtist({ fromReleaseForm, openModal, setSearchQuery, selectedItem
         <h4>Artist Profiles</h4>
 
         <div className="add-atrist">
-          <div><img src={spotifyIcon} alt="spotify" /></div>
+          <div>
+            <img src={spotifyIcon} alt="spotify" />
+          </div>
           <input
             type="text"
             name="spotifyId"
@@ -271,7 +286,9 @@ function CreateArtist({ fromReleaseForm, openModal, setSearchQuery, selectedItem
         </div>
 
         <div className="add-atrist">
-          <div><img src={appleIcon} alt="apple" /></div>
+          <div>
+            <img src={appleIcon} alt="apple" />
+          </div>
           <input
             type="text"
             name="appleId"
@@ -283,7 +300,9 @@ function CreateArtist({ fromReleaseForm, openModal, setSearchQuery, selectedItem
         </div>
 
         <div className="add-atrist">
-          <div><img src={facbookIcon} alt="facebook" /></div>
+          <div>
+            <img src={facbookIcon} alt="facebook" />
+          </div>
           <input
             type="text"
             name="facebook"
@@ -295,7 +314,9 @@ function CreateArtist({ fromReleaseForm, openModal, setSearchQuery, selectedItem
         </div>
 
         <div className="add-atrist">
-          <div><img src={instaIcon} alt="instagram" /></div>
+          <div>
+            <img src={instaIcon} alt="instagram" />
+          </div>
           <input
             type="text"
             name="instagramId"
@@ -307,7 +328,9 @@ function CreateArtist({ fromReleaseForm, openModal, setSearchQuery, selectedItem
         </div>
 
         <div className="add-atrist">
-          <div><img src={youtubeIcon} alt="youtube" /></div>
+          <div>
+            <img src={youtubeIcon} alt="youtube" />
+          </div>
           <input
             type="text"
             name="youtube"
@@ -319,11 +342,11 @@ function CreateArtist({ fromReleaseForm, openModal, setSearchQuery, selectedItem
         </div>
       </div>
 
-      <button onClick={handleSubmit} className="imgUpload-save-btn">Save</button>
+      <button onClick={handleSubmit} className="imgUpload-save-btn">
+        Save
+      </button>
     </div>
   );
 }
 
 export default CreateArtist;
-
-

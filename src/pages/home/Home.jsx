@@ -13,8 +13,7 @@ import NotFoundComponent from "../../components/NotFoundComponent";
 import isEmptyArray from "../../hooks/isEmptyArrayCheck";
 
 const Home = () => {
-
-  const {userData, userNameIdRoll} = useSelector((state) => state.userData);
+  const { userData, userNameIdRoll } = useSelector((state) => state.userData);
 
   const [artistVisibleCount, setArtistVisibleCount] = useState(
     getInitialCount()
@@ -65,59 +64,63 @@ const Home = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-
-  const [artistData, setArtistData] = useState()
-  const [releaseData, setReleaseData] = useState()
-  const [artistNotFound, setArtistNotFound] = useState(false)
-  const [releaseNotFound, setReleaseNotFound] = useState(false)
-  useEffect( () => {
-    setArtistNotFound(false)
-    setReleaseNotFound(false)
-    if(userNameIdRoll){
+  const [artistData, setArtistData] = useState();
+  const [releaseData, setReleaseData] = useState();
+  const [artistNotFound, setArtistNotFound] = useState(false);
+  const [releaseNotFound, setReleaseNotFound] = useState(false);
+  useEffect(() => {
+    setArtistNotFound(false);
+    setReleaseNotFound(false);
+    if (userNameIdRoll) {
       // Artist Data Get From API _____________
-      axios.get(`http://localhost:5000/api/v1/artist/${userNameIdRoll[1]}?page=1&limit=${artistVisibleCount}`)
-        .then( res => {
-          if(res.status == 200){
+      axios
+        .get(
+          `https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/artist/${userNameIdRoll[1]}?page=1&limit=${artistVisibleCount}`
+        )
+        .then((res) => {
+          if (res.status == 200) {
             setArtistData(res.data.data);
-            if(isEmptyArray(res.data.data))setArtistNotFound(true)
+            if (isEmptyArray(res.data.data)) setArtistNotFound(true);
           }
         })
-        .catch(er => console.log(er));
+        .catch((er) => console.log(er));
 
-        // Release Data Get From API ___________
-        axios.get(`http://localhost:5000/api/v1/release/${userNameIdRoll[1]}?page=1&limit=5&status=Approved&search=&years=`)
-        .then( res => {
-          if(res.status == 200){
+      // Release Data Get From API ___________
+      axios
+        .get(
+          `https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/release/${userNameIdRoll[1]}?page=1&limit=5&status=Approved&search=&years=`
+        )
+        .then((res) => {
+          if (res.status == 200) {
             setReleaseData(res.data.data);
-            if(isEmptyArray(res.data.data))setReleaseNotFound(true)
+            if (isEmptyArray(res.data.data)) setReleaseNotFound(true);
           }
         })
-        .catch(er => console.log(er));
+        .catch((er) => console.log(er));
     }
-  },[userNameIdRoll])
- 
+  }, [userNameIdRoll]);
 
-  // Home Page Notice 
+  // Home Page Notice
   const [homePageNotices, setHomePageNotices] = useState();
   useEffect(() => {
-    axios.get('http://localhost:5000/admin/api/v1/settings/home-page-notice')
-    .then(res => {
-      setHomePageNotices(res.data.data);
-    })
-  },[])
-
+    axios
+      .get(
+        "https://dream-records-2025-m2m9a.ondigitalocean.app/admin/api/v1/settings/home-page-notice"
+      )
+      .then((res) => {
+        setHomePageNotices(res.data.data);
+      });
+  }, []);
 
   return (
     <div className="main-content">
-        {
-          homePageNotices && 
-          homePageNotices?.map(notice =>
+      {homePageNotices &&
+        homePageNotices?.map((notice) => (
           <div key={notice._id} className="home-notice">
             <InfoCircledIcon />
-            <p dangerouslySetInnerHTML={{__html: notice?.notice}}></p>
+            <p dangerouslySetInnerHTML={{ __html: notice?.notice }}></p>
           </div>
-         )
-        }
+        ))}
       <section className="hero">
         <div>
           <h1>Hi, {userData?.first_name}</h1>
@@ -126,22 +129,18 @@ const Home = () => {
       </section>
       <Flex as="span" className="artists-flex">
         <p>Artists</p>
-        <Link to={'/artist/1/10'}>See All</Link>
+        <Link to={"/artist/1/10"}>See All</Link>
       </Flex>
       <br />
       <ArtistCard artistsItems={artistData} />
-      {
-        artistNotFound === true && <NotFoundComponent/> 
-      }
+      {artistNotFound === true && <NotFoundComponent />}
       <Flex as="span" className="artists-flex">
         <p>Latest Releases</p>
         <Link to="/releases/1/10/All">See All</Link>
       </Flex>
 
-      <ReleaseCard releaseData={releaseData} /> 
-      {
-        releaseNotFound === true && <NotFoundComponent/> 
-      } 
+      <ReleaseCard releaseData={releaseData} />
+      {releaseNotFound === true && <NotFoundComponent />}
       <br />
     </div>
   );

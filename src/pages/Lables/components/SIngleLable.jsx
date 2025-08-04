@@ -1,6 +1,11 @@
 import { Button, Flex } from "@radix-ui/themes";
-import {  useEffect, useState } from "react";
-import { Link, useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import {
+  Link,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from "react-router-dom";
 import ReleaseCard from "../../../components/ReleaseCard";
 import Dropdown from "../../../components/Dropdown";
 import { InfoCircledIcon } from "@radix-ui/react-icons";
@@ -15,53 +20,60 @@ import { useSelector } from "react-redux";
 import useQueryParams from "../../../hooks/useQueryParams";
 import axios from "axios";
 import Pagination from "../../../components/Pagination";
-import demoLabelImage from "../../../assets/lables/lables-placeholder.png"
-import threedotPng from '../../../assets/icons/vertical-threeDots.png'
-import instagramImg from '../../../assets/social/instagram.png';
-import facebookImg from '../../../assets/social/facebook.png';
-import youtubeImg from '../../../assets/social/youtube-icon.png'
+import demoLabelImage from "../../../assets/lables/lables-placeholder.png";
+import threedotPng from "../../../assets/icons/vertical-threeDots.png";
+import instagramImg from "../../../assets/social/instagram.png";
+import facebookImg from "../../../assets/social/facebook.png";
+import youtubeImg from "../../../assets/social/youtube-icon.png";
 import localDate from "../../../hooks/localDate";
 import useStatusStyle from "../../../hooks/useStatusStyle";
 import LoadingScreen from "../../../components/LoadingScreen";
 
-
 function SingleLable() {
   const navigate = useNavigate();
-  const {id, pageNumber, perPageItem, status} = useParams();
-  const { yearsList, releaseStatusList } = useSelector(state => state.yearsAndStatus);
+  const { id, pageNumber, perPageItem, status } = useParams();
+  const { yearsList, releaseStatusList } = useSelector(
+    (state) => state.yearsAndStatus
+  );
 
   // Filter Query Paramitars_____________________
   const { navigateWithParams } = useQueryParams();
   const [filterParams] = useSearchParams();
-  const search = filterParams.get('search') || '';
-  const years = filterParams.get('years') || '';
+  const search = filterParams.get("search") || "";
+  const years = filterParams.get("years") || "";
 
-  const [label, setLabel] = useState({labelName: 'label'});
-  const [deleteLoading, setDeleteLoading] = useState(false)
+  const [label, setLabel] = useState({ labelName: "label" });
+  const [deleteLoading, setDeleteLoading] = useState(false);
   useEffect(() => {
-    axios.get(`http://localhost:5000/api/v1/labels/single-labels/${id}`)
-      .then(res => {
-        if(res.status == 200) {
-          setLabel(res.data.data[0])
-          console.log(res.data.data[0])
+    axios
+      .get(
+        `https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/labels/single-labels/${id}`
+      )
+      .then((res) => {
+        if (res.status == 200) {
+          setLabel(res.data.data[0]);
+          console.log(res.data.data[0]);
         }
-      })
-  },[id])
+      });
+  }, [id]);
 
   // Delete Label________________________
   const deleteLabel = (id, imgKey) => {
-      setDeleteLoading(true)
-      axios.delete(`http://localhost:5000/api/v1/labels/delete-labels/${id}?imgKey=${imgKey}`)
-      .then( res => {
-          if(res.status == 200){
-              setDeleteLoading(false)
-              navigate('/labels/1/10/All')
-          }else{
-            setDeleteLoading(false)
-          }
+    setDeleteLoading(true);
+    axios
+      .delete(
+        `https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/labels/delete-labels/${id}?imgKey=${imgKey}`
+      )
+      .then((res) => {
+        if (res.status == 200) {
+          setDeleteLoading(false);
+          navigate("/labels/1/10/All");
+        } else {
+          setDeleteLoading(false);
+        }
       })
-      .catch(er => console.log(er));
-  }
+      .catch((er) => console.log(er));
+  };
 
   // Release Under Label __________________________________________________________
   const [currentPage, setCurrentPage] = useState(parseInt(pageNumber));
@@ -71,16 +83,21 @@ function SingleLable() {
   const [totalPages, setTotalPages] = useState();
   // Get Release List ______________________________________________________________
   useEffect(() => {
-    axios.get(`http://localhost:5000/api/v1/release/labels/${id}?page=${pageNumber}&limit=${perPageItem}&status=${status}&search=${search ? search : ''}&years=${years ? years: ''}`)
-      .then( res => {
-        if(res.status == 200){
-          setTotalCount(res.data.totalCount)
-          setFilteredCount(res.data.filteredCount)
+    axios
+      .get(
+        `https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/release/labels/${id}?page=${pageNumber}&limit=${perPageItem}&status=${status}&search=${
+          search ? search : ""
+        }&years=${years ? years : ""}`
+      )
+      .then((res) => {
+        if (res.status == 200) {
+          setTotalCount(res.data.totalCount);
+          setFilteredCount(res.data.filteredCount);
           setReleaseData(res.data.data);
           setTotalPages(res.data.totalPages);
         }
       })
-      .catch(er => console.log(er));
+      .catch((er) => console.log(er));
   }, [pageNumber, status, id, perPageItem, search, years]);
 
   // Responsive Code __________________________________________________
@@ -96,11 +113,17 @@ function SingleLable() {
 
   // Years and status Dropdown__________________________
   const handleYearDropDown = (yearValue) => {
-    navigateWithParams(`/labels/${id}/1/${perPageItem}/${status}`, { search: search, years: yearValue });
-  }
+    navigateWithParams(`/labels/${id}/1/${perPageItem}/${status}`, {
+      search: search,
+      years: yearValue,
+    });
+  };
   const handleStatusDropDown = (statusValue) => {
-    navigateWithParams(`/labels/${id}/1/${perPageItem}/${statusValue}`, { search: search, years: years });
-  }
+    navigateWithParams(`/labels/${id}/1/${perPageItem}/${statusValue}`, {
+      search: search,
+      years: years,
+    });
+  };
   const dropdownItem = (
     <>
       <Dropdown
@@ -117,27 +140,35 @@ function SingleLable() {
     </>
   );
 
-  //  This Function For Label Release Section 
+  //  This Function For Label Release Section
   // Handle Page Change ________________________________
   const handlePageChange = (page) => {
-    navigateWithParams(`/labels/${id}/${page}/${perPageItem}/${status}`, { search: search, years: years });
-  }
+    navigateWithParams(`/labels/${id}/${page}/${perPageItem}/${status}`, {
+      search: search,
+      years: years,
+    });
+  };
   // Search _____________________________________________
   const [searchText, setSearchText] = useState();
   const handleKeyPress = (event) => {
-    if (event.key === 'Enter') {
-      navigateWithParams(`/labels/${id}/1/${perPageItem}/${status}`, { search: searchText, years: years });
+    if (event.key === "Enter") {
+      navigateWithParams(`/labels/${id}/1/${perPageItem}/${status}`, {
+        search: searchText,
+        years: years,
+      });
     }
   };
   // Handle Per Page Item _______________________________
   const handlePerPageItem = (perPageItemValue) => {
-    navigateWithParams(`/labels/${id}/${pageNumber}/${perPageItemValue}/${status}`, { search: search, years: years });
-  }
+    navigateWithParams(
+      `/labels/${id}/${pageNumber}/${perPageItemValue}/${status}`,
+      { search: search, years: years }
+    );
+  };
 
-   if(deleteLoading == true) {
-    return <LoadingScreen/>
+  if (deleteLoading == true) {
+    return <LoadingScreen />;
   }
-
 
   return (
     <div className="main-content">
@@ -148,9 +179,7 @@ function SingleLable() {
               <>
                 <div className="home-notice" style={{ fontSize: "12px" }}>
                   <InfoCircledIcon />
-                  <p>
-                    {label?.actionRequired}
-                  </p>
+                  <p>{label?.actionRequired}</p>
                 </div>
                 <br />
               </>
@@ -159,7 +188,13 @@ function SingleLable() {
               <div>
                 {" "}
                 <img
-                  style={{width: '148px', height: '148px', borderRadius: '50%', objectFit: 'cover', objectPosition: 'center'}}
+                  style={{
+                    width: "148px",
+                    height: "148px",
+                    borderRadius: "50%",
+                    objectFit: "cover",
+                    objectPosition: "center",
+                  }}
                   src={label?.imgUrl ? label.imgUrl : demoLabelImage}
                   className="singleLabel-image"
                   alt={label?.labelName}
@@ -169,13 +204,16 @@ function SingleLable() {
                 <br />
                 <span
                   className="card-type-txt"
-                  style={{...useStatusStyle(label?.status)}}
+                  style={{ ...useStatusStyle(label?.status) }}
                 >
                   {label.status}
                 </span>
                 <div style={{ margin: "auto auto auto 0" }}>
                   <h1>{label?.labelName}</h1>
-                  <h4>Created on {label?.date ? localDate(label.date) : 'Date Not Found'}</h4>
+                  <h4>
+                    Created on{" "}
+                    {label?.date ? localDate(label.date) : "Date Not Found"}
+                  </h4>
                 </div>
               </div>
               <DropdownMenu.Root>
@@ -190,8 +228,7 @@ function SingleLable() {
                   side="bottom"
                   className="dropdown-content singleArtist-dropdown-content"
                 >
-                  {
-                    label.status !== 'Approved' &&
+                  {label.status !== "Approved" && (
                     <>
                       <DropdownMenu.Item className="dropdown-item">
                         <Link
@@ -206,39 +243,44 @@ function SingleLable() {
                         </Link>
                       </DropdownMenu.Item>
                       <hr />
-                        <DropdownMenu.Item
-                          className="dropdown-item"
-                          onSelect={(e) => e.preventDefault()} // Prevent dropdown from closing
-                        >
-                          <Dialog.Root>
-                            <Dialog.Trigger asChild>
-                              <span>
-                                <AiOutlineDelete /> Delete Label
-                              </span>
-                            </Dialog.Trigger>
-                            <Dialog.Portal>
-                              <Dialog.Overlay className="dialog-overlay" />
-                              <Dialog.Content className="dialog-content">
-                                <Modal title="Delete Label Profile?">
-                                  <p className="modal-description">
-                                    Are you sure you want to delete this Label
-                                    profile? This action is irreversible, and all
-                                    associated data, including music releases and
-                                    analytics, will be permanently removed.
-                                  </p>
-                                  <br />
-                                  <div className="singleArtist-deleteModal-btns">
-                                    <Button>No</Button>
-                                    <Button onClick={() => deleteLabel(id, label?.imgkey)}>Yes, Delete</Button>
-                                  </div>
-                                </Modal>
-                              </Dialog.Content>
-                            </Dialog.Portal>
-                          </Dialog.Root>
-                        </DropdownMenu.Item>
+                      <DropdownMenu.Item
+                        className="dropdown-item"
+                        onSelect={(e) => e.preventDefault()} // Prevent dropdown from closing
+                      >
+                        <Dialog.Root>
+                          <Dialog.Trigger asChild>
+                            <span>
+                              <AiOutlineDelete /> Delete Label
+                            </span>
+                          </Dialog.Trigger>
+                          <Dialog.Portal>
+                            <Dialog.Overlay className="dialog-overlay" />
+                            <Dialog.Content className="dialog-content">
+                              <Modal title="Delete Label Profile?">
+                                <p className="modal-description">
+                                  Are you sure you want to delete this Label
+                                  profile? This action is irreversible, and all
+                                  associated data, including music releases and
+                                  analytics, will be permanently removed.
+                                </p>
+                                <br />
+                                <div className="singleArtist-deleteModal-btns">
+                                  <Button>No</Button>
+                                  <Button
+                                    onClick={() =>
+                                      deleteLabel(id, label?.imgkey)
+                                    }
+                                  >
+                                    Yes, Delete
+                                  </Button>
+                                </div>
+                              </Modal>
+                            </Dialog.Content>
+                          </Dialog.Portal>
+                        </Dialog.Root>
+                      </DropdownMenu.Item>
                     </>
-                  }
-                                    
+                  )}
                 </DropdownMenu.Content>
               </DropdownMenu.Root>
             </Flex>
@@ -246,7 +288,11 @@ function SingleLable() {
               <div className="singleArtist-info" style={{ marginBottom: 0 }}>
                 <h4>Total Releases</h4>
                 <h1>{totalCount}</h1>
-                <Button onClick={() => navigate('/release/1/10/All')} style={{cursor: 'pointer'}} className="singleArtist-pg-allRelease-btn">
+                <Button
+                  onClick={() => navigate("/release/1/10/All")}
+                  style={{ cursor: "pointer" }}
+                  className="singleArtist-pg-allRelease-btn"
+                >
                   All Releases &nbsp;&nbsp; <ChevronRight />
                 </Button>
               </div>
@@ -256,18 +302,33 @@ function SingleLable() {
               >
                 <h4>label Profiles</h4>
                 <div className="d-flex single-pg-social">
-                    {
-                        label?.instagram &&
-                        <a className="social-div" target='_blank' href={`https://www.instagram.com/${label.instagram}`}><img src={instagramImg} alt={''} /></a>
-                    }
-                    {
-                        label?.facebook &&
-                        <a className="social-div" target='_blank' href={label.facebook}><img src={facebookImg} alt={''} /></a>
-                    }
-                    {
-                        label?.youtube &&
-                        <a className="social-div" target='_blank' href={label.youtube}><img src={youtubeImg} alt={''} /></a>
-                    }
+                  {label?.instagram && (
+                    <a
+                      className="social-div"
+                      target="_blank"
+                      href={`https://www.instagram.com/${label.instagram}`}
+                    >
+                      <img src={instagramImg} alt={""} />
+                    </a>
+                  )}
+                  {label?.facebook && (
+                    <a
+                      className="social-div"
+                      target="_blank"
+                      href={label.facebook}
+                    >
+                      <img src={facebookImg} alt={""} />
+                    </a>
+                  )}
+                  {label?.youtube && (
+                    <a
+                      className="social-div"
+                      target="_blank"
+                      href={label.youtube}
+                    >
+                      <img src={youtubeImg} alt={""} />
+                    </a>
+                  )}
                 </div>
               </div>
             </div>
@@ -287,7 +348,12 @@ function SingleLable() {
         Releases under this artist
       </h4>
       <div className="search-setion">
-        <input onKeyPress={handleKeyPress} onChange={e => setSearchText(e.target.value)}  type="text" placeholder="Search..." />
+        <input
+          onKeyPress={handleKeyPress}
+          onChange={(e) => setSearchText(e.target.value)}
+          type="text"
+          placeholder="Search..."
+        />
         {isMobile ? (
           <DropdownMenu.Root>
             <DropdownMenu.Trigger asChild>
@@ -318,14 +384,15 @@ function SingleLable() {
         )}
       </div>
       <ReleaseCard releaseData={releaseData} />
-      <Pagination 
-        totalDataCount={filteredCount} 
+      <Pagination
+        totalDataCount={filteredCount}
         totalPages={totalPages}
-        currentPage={currentPage} 
-        perPageItem={perPageItem} 
-        setCurrentPage={setCurrentPage} 
+        currentPage={currentPage}
+        perPageItem={perPageItem}
+        setCurrentPage={setCurrentPage}
         handlePageChange={handlePageChange}
-        customFunDropDown={handlePerPageItem}/>
+        customFunDropDown={handlePerPageItem}
+      />
       <br />
       <br />
     </div>

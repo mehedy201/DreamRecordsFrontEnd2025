@@ -23,137 +23,148 @@ const transactionColumns = [
   { label: "Action", key: "action" },
 ];
 
-
 const Transaction = () => {
-
-  const {userNameIdRoll} = useSelector((state) => state.userData);
-  const {pageNumber, perPageItem, status} = useParams();
+  const { userNameIdRoll } = useSelector((state) => state.userData);
+  const { pageNumber, perPageItem, status } = useParams();
   const { navigateWithParams } = useQueryParams();
 
-
   const [activePaymentMonth, setActivePaymentMonth] = useState(false);
-  const [activePaymentMonthName, setActivePaymentMonthName] = useState()
-  const [userData, setUserData] = useState()
+  const [activePaymentMonthName, setActivePaymentMonthName] = useState();
+  const [userData, setUserData] = useState();
   useEffect(() => {
     // Active Payment Month _____________________________________________
     const currentDate = new Date();
-    const month = currentDate.toLocaleString('default', { month: 'long' });
-    axios.get(`http://localhost:5000/admin/api/v1/active-payment-month/66d80b32544c7126feb39661`)
-      .then(res => {
-      if(res.status === 200){
-        setActivePaymentMonthName(res.data.data)
-        res.data.data.activeMonth.map(activeMonth => {
-            if(activeMonth === month){
-                setActivePaymentMonth(true)
+    const month = currentDate.toLocaleString("default", { month: "long" });
+    axios
+      .get(
+        `https://dream-records-2025-m2m9a.ondigitalocean.app/admin/api/v1/active-payment-month/66d80b32544c7126feb39661`
+      )
+      .then((res) => {
+        if (res.status === 200) {
+          setActivePaymentMonthName(res.data.data);
+          res.data.data.activeMonth.map((activeMonth) => {
+            if (activeMonth === month) {
+              setActivePaymentMonth(true);
             }
-        })
-      }
-    })
+          });
+        }
+      });
 
     // UserData With Balance Month _____________________________________________
-    if(userNameIdRoll){
-      axios.get(`http://localhost:5000/api/v1/users/${userNameIdRoll[1]}`)
-          .then(res => {
-              if(res.status == 200){
-                  setUserData(res.data.data);
-              }
-          })
-          .catch(er => console.log(er)) 
+    if (userNameIdRoll) {
+      axios
+        .get(
+          `https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/users/${userNameIdRoll[1]}`
+        )
+        .then((res) => {
+          if (res.status == 200) {
+            setUserData(res.data.data);
+          }
+        })
+        .catch((er) => console.log(er));
     }
   }, [userNameIdRoll]);
-
 
   const [paymentDetails, setPaymentDetails] = useState();
   const [bankInfo, setBankInfo] = useState();
   const [activeBankInfo, setActiveBankInfo] = useState(null);
-  const [selectBankInfo, setSelectBankInfo] = useState('');
-  const [SelectBankInfoErr, setSelectBankInfoErr] = useState('')
+  const [selectBankInfo, setSelectBankInfo] = useState("");
+  const [SelectBankInfoErr, setSelectBankInfoErr] = useState("");
   // For Pagination ___________________________________________
   const [currentPage, setCurrentPage] = useState(parseInt(pageNumber));
   const [filteredCount, setFilteredCount] = useState();
   const [totalPages, setTotalPages] = useState();
   const [loading, setLoading] = useState(false);
-  const [notFound, setNotFound] = useState(false)
+  const [notFound, setNotFound] = useState(false);
 
   const activeBankAndSelectBank = (id, data) => {
-    setActiveBankInfo(id)
-    setSelectBankInfo(data)
-  }
+    setActiveBankInfo(id);
+    setSelectBankInfo(data);
+  };
   useEffect(() => {
-    setLoading(true)
+    setLoading(true);
     // Get Payment With Balance Month _____________________________________________
-    if(userNameIdRoll){
-      axios.get(`http://localhost:5000/common/api/v1/payment/${userNameIdRoll[1]}?page=${pageNumber}&limit=${perPageItem}`)
-      .then(res => {
-        if(res.status === 200){
-          setPaymentDetails(res.data.data)
-          if(isEmptyArray(res.data.data))setNotFound(true)
-          setFilteredCount(res.data.filteredCount);
-          setTotalPages(res.data.totalPages);
-          console.log(res.data.data)
-        }
-      })
-      axios.get(`http://localhost:5000/api/v1/bank-info/${userNameIdRoll[1]}`)
-      .then(res => {
-          if(res.status == 200){
-            setBankInfo(res.data.data[0])
+    if (userNameIdRoll) {
+      axios
+        .get(
+          `https://dream-records-2025-m2m9a.ondigitalocean.app/common/api/v1/payment/${userNameIdRoll[1]}?page=${pageNumber}&limit=${perPageItem}`
+        )
+        .then((res) => {
+          if (res.status === 200) {
+            setPaymentDetails(res.data.data);
+            if (isEmptyArray(res.data.data)) setNotFound(true);
+            setFilteredCount(res.data.filteredCount);
+            setTotalPages(res.data.totalPages);
+            console.log(res.data.data);
           }
-      })
-      .catch(er => console.log(er)) 
+        });
+      axios
+        .get(
+          `https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/bank-info/${userNameIdRoll[1]}`
+        )
+        .then((res) => {
+          if (res.status == 200) {
+            setBankInfo(res.data.data[0]);
+          }
+        })
+        .catch((er) => console.log(er));
     }
-    setLoading(false)
+    setLoading(false);
   }, [userNameIdRoll]);
-
-
 
   const [isOpen, setIsOpen] = useState(false);
   const withdrowBalance = () => {
-    setSelectBankInfoErr('')
-    if(!bankInfo){
-      setSelectBankInfoErr('Please add Bank INFO first')
+    setSelectBankInfoErr("");
+    if (!bankInfo) {
+      setSelectBankInfoErr("Please add Bank INFO first");
       return;
     }
-    if(!userNameIdRoll){
-      setSelectBankInfoErr('Please Reload the page and try again')
+    if (!userNameIdRoll) {
+      setSelectBankInfoErr("Please Reload the page and try again");
       return;
     }
-    axios.post(`http://localhost:5000/common/api/v1/payment/withdrawal/${userNameIdRoll[1]}`, bankInfo)
-      .then(res => {
-          if(res.status == 200){
-            // setBankInfo(res.data.data)
-            console.log(res)
-            toast.success(res.data.message)
-            setIsOpen(false)
-          }
+    axios
+      .post(
+        `https://dream-records-2025-m2m9a.ondigitalocean.app/common/api/v1/payment/withdrawal/${userNameIdRoll[1]}`,
+        bankInfo
+      )
+      .then((res) => {
+        if (res.status == 200) {
+          // setBankInfo(res.data.data)
+          console.log(res);
+          toast.success(res.data.message);
+          setIsOpen(false);
+        }
       })
-      .catch(er => console.log(er))
-  }
-
+      .catch((er) => console.log(er));
+  };
 
   // Handle Page Change ________________________________
   const handlePageChange = (page) => {
     navigateWithParams(`/transaction/${page}/${perPageItem}/${status}`);
-  }
+  };
 
   // Handle Per Page Item _______________________________
   const handlePerPageItem = (perPageItem) => {
-    console.log('object')
+    console.log("object");
     navigateWithParams(`/transaction/${pageNumber}/${perPageItem}/${status}`);
-  }
+  };
 
   // Withdraw page Notice_______________________________
   const [withdrawPageNotices, setWithdrawPageNotices] = useState();
   useEffect(() => {
-    axios.get('http://localhost:5000/admin/api/v1/settings/withdraw-page-notice')
-    .then(res => {
-      setWithdrawPageNotices(res.data.data);
-    })
-  },[])
+    axios
+      .get(
+        "https://dream-records-2025-m2m9a.ondigitalocean.app/admin/api/v1/settings/withdraw-page-notice"
+      )
+      .then((res) => {
+        setWithdrawPageNotices(res.data.data);
+      });
+  }, []);
 
- if(loading){
-  return <LoadingScreen/>
- }
-
+  if (loading) {
+    return <LoadingScreen />;
+  }
 
   return (
     <div className="main-content">
@@ -171,7 +182,9 @@ const Transaction = () => {
               specified payment method ?
             </p>
             <p className="modal-description">Withdrawal Amount</p>
-            <h1 style={{ fontWeight: "500", margin: 0 }}>&#8377; {userData?.balance?.amount}</h1>
+            <h1 style={{ fontWeight: "500", margin: 0 }}>
+              &#8377; {userData?.balance?.amount}
+            </h1>
             <p className="modal-description">Payment Method</p>
             {/* {
               bankInfo && 
@@ -182,59 +195,66 @@ const Transaction = () => {
               </div>
               )
             } */}
-            {
-              bankInfo &&
-              <div key={bankInfo._id} style={{marginBottom: '5px',cursor: 'pointer'}} className="modal-transaction-method">
-                <p>{bankInfo?.bank_name} {bankInfo?.payoneerID ? `Payoneer`: ''}{bankInfo?.paypalID ? `Paypal`: ''}{bankInfo?.bKashName}</p>
-                <small>{bankInfo?.account_number && `************${bankInfo?.account_number.slice(-4)}`} {bankInfo?.payoneerEmail} {bankInfo?.paypalEmail} {bankInfo?.bKashNumber && bankInfo?.bKashNumber.toSlice(-4)}</small>
+            {bankInfo && (
+              <div
+                key={bankInfo._id}
+                style={{ marginBottom: "5px", cursor: "pointer" }}
+                className="modal-transaction-method"
+              >
+                <p>
+                  {bankInfo?.bank_name} {bankInfo?.payoneerID ? `Payoneer` : ""}
+                  {bankInfo?.paypalID ? `Paypal` : ""}
+                  {bankInfo?.bKashName}
+                </p>
+                <small>
+                  {bankInfo?.account_number &&
+                    `************${bankInfo?.account_number.slice(-4)}`}{" "}
+                  {bankInfo?.payoneerEmail} {bankInfo?.paypalEmail}{" "}
+                  {bankInfo?.bKashNumber && bankInfo?.bKashNumber.toSlice(-4)}
+                </small>
               </div>
-            }
-            {
-              SelectBankInfoErr && <p style={{color: '#ea3958'}}>{SelectBankInfoErr}</p>
-            }
+            )}
+            {SelectBankInfoErr && (
+              <p style={{ color: "#ea3958" }}>{SelectBankInfoErr}</p>
+            )}
             <br />
             <div className="d-flex">
               <Dialog.Close className="modal-cancel-btn">Cancel</Dialog.Close>
-              {
-                activePaymentMonth === true ?
-                <button onClick={withdrowBalance} className="close-button">Yes, Withdraw</button> : <button disabled className="close-button">Can't Withdraw</button>
-              }
+              {activePaymentMonth === true ? (
+                <button onClick={withdrowBalance} className="close-button">
+                  Yes, Withdraw
+                </button>
+              ) : (
+                <button disabled className="close-button">
+                  Can't Withdraw
+                </button>
+              )}
               {/* <button onClick={withdrowBalance} className="close-button">Yes, Withdraw</button> */}
             </div>
           </Modal>
         </Dialog.Root>
       </Flex>
       <br />
-      {
-        withdrawPageNotices && 
-        withdrawPageNotices?.map(notice => 
-        <div key={notice._id} className="home-notice">
-          <InfoCircledIcon />
-          <p dangerouslySetInnerHTML={{__html: notice?.notice}}></p>
-        </div>
-        )
-      }
-
-      {
-        notFound && NotFoundComponent
-      }
-      {
-        paymentDetails &&
-        <TransactionTable
-          columns={transactionColumns}
-          data={paymentDetails}
-        />
-      }
+      {withdrawPageNotices &&
+        withdrawPageNotices?.map((notice) => (
+          <div key={notice._id} className="home-notice">
+            <InfoCircledIcon />
+            <p dangerouslySetInnerHTML={{ __html: notice?.notice }}></p>
+          </div>
+        ))}
+      {paymentDetails && (
+        <TransactionTable columns={transactionColumns} data={paymentDetails} />
+      )}
 
       <Pagination
-        totalDataCount={filteredCount} 
+        totalDataCount={filteredCount}
         totalPages={totalPages}
-        currentPage={currentPage} 
-        perPageItem={perPageItem} 
-        setCurrentPage={setCurrentPage} 
+        currentPage={currentPage}
+        perPageItem={perPageItem}
+        setCurrentPage={setCurrentPage}
         handlePageChange={handlePageChange}
         customFunDropDown={handlePerPageItem}
-       />
+      />
     </div>
   );
 };

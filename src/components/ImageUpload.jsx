@@ -1,7 +1,7 @@
 import { useState } from "react";
 import PropTypes from "prop-types"; // ✅ Import PropTypes
 import { X } from "lucide-react";
-import placeholderImg from '../assets/icons/upload-img.png'
+import placeholderImg from "../assets/icons/upload-img.png";
 import axios from "axios";
 
 const ImageUpload = ({
@@ -13,47 +13,50 @@ const ImageUpload = ({
   className,
   placeholderTxt,
   setUploadedImage,
-  uploadedImage
+  uploadedImage,
 }) => {
   const [error, setError] = useState("");
-  const [uploadLoading, setUploadLoading] = useState(false)
+  const [uploadLoading, setUploadLoading] = useState(false);
 
   const handleFileChange = (e) => {
-    setError('');
-    setUploadLoading(true)
+    setError("");
+    setUploadLoading(true);
     const file = e.target.files[0];
     const formData = new FormData();
-    formData.append('file', file);
+    formData.append("file", file);
     // Check image size ___________________________________
     if (file.size > 2 * 1024 * 1024) {
-      setError('Image size must be less than 2 MB.');
-      setUploadLoading(false)
+      setError("Image size must be less than 2 MB.");
+      setUploadLoading(false);
       return;
     }
-    axios.post(link, formData)
-    .then(res => {
-        if(res.status == 200){
+    axios
+      .post(link, formData)
+      .then((res) => {
+        if (res.status == 200) {
           setImgLink(res.data.data.imgUrl);
           setUploadedImage(res.data.data);
           setUploadLoading(false);
         }
-    })
-    .catch(er => console.log(er))
+      })
+      .catch((er) => console.log(er));
   };
 
-
   const deleteFile = (key) => {
-    if(key){
-        axios.delete(`http://localhost:5000/api/v1/release/delete-file?key=${key}`)
-        .then( res => {
-        if(res.status == 200){
+    if (key) {
+      axios
+        .delete(
+          `https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/release/delete-file?key=${key}`
+        )
+        .then((res) => {
+          if (res.status == 200) {
             setUploadedImage();
-            setImgLink()
-        }
+            setImgLink();
+          }
         })
-        .catch(er => console.log(er));
-      }
-  }
+        .catch((er) => console.log(er));
+    }
+  };
 
   return (
     <div className="upload-container">
@@ -69,8 +72,23 @@ const ImageUpload = ({
             </button>
           </div>
         ) : (
-          <label style={{height: '256px', width: '256px', margin: 'auto', position: 'relative'}} className="upload-label">
-            <div style={{position: 'absolute', top: '50%', left: '50%', transform:'translate(-50%, -50%)'}}>
+          <label
+            style={{
+              height: "256px",
+              width: "256px",
+              margin: "auto",
+              position: "relative",
+            }}
+            className="upload-label"
+          >
+            <div
+              style={{
+                position: "absolute",
+                top: "50%",
+                left: "50%",
+                transform: "translate(-50%, -50%)",
+              }}
+            >
               <img
                 src={placeholderImg}
                 alt="upload-img"
@@ -82,12 +100,23 @@ const ImageUpload = ({
               </p>
               <p style={{ color: "#BBBBBB" }}>Max. File size: 2MB</p>
             </div>
-            {
-              uploadLoading &&
-              <div style={{height: '256px', width: '256px', borderRadius: '10px', position: 'absolute', top: '50%', left: '50%', transform:'translate(-50%, -50%)', backgroundColor: 'black', opacity: '0.5'}}></div>
-            }
+            {uploadLoading && (
+              <div
+                style={{
+                  height: "256px",
+                  width: "256px",
+                  borderRadius: "10px",
+                  position: "absolute",
+                  top: "50%",
+                  left: "50%",
+                  transform: "translate(-50%, -50%)",
+                  backgroundColor: "black",
+                  opacity: "0.5",
+                }}
+              ></div>
+            )}
             <input
-              style={{height: '256px', width: '256px', opacity: '0'}}
+              style={{ height: "256px", width: "256px", opacity: "0" }}
               type="file"
               accept="image/*"
               onChange={handleFileChange}
@@ -122,7 +151,7 @@ ImageUpload.propTypes = {
   imageLink: PropTypes.string,
   setImageLink: PropTypes.func,
   setUploadedImage: PropTypes.func,
-  uploadedImage: PropTypes.object
+  uploadedImage: PropTypes.object,
 };
 
 export default ImageUpload;

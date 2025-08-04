@@ -11,78 +11,103 @@ import axios from "axios";
 import { setReleaseAlbumInfo } from "../../../redux/features/releaseDataHandleSlice/releaseDataHandleSlice";
 
 function AlbumInformation({ step, setStep, steps, handlePrev }) {
-    
-  const {userNameIdRoll} = useSelector((state) => state.userData);
-  const { yearsList } = useSelector(state => state.yearsAndStatus);
-  const { releaseAlbumInfo } = useSelector(state => state.releaseData);
-  const { reFetchLabel, reFetchArtist } = useSelector(state => state.reFetchSlice);
+  const { userNameIdRoll } = useSelector((state) => state.userData);
+  const { yearsList } = useSelector((state) => state.yearsAndStatus);
+  const { releaseAlbumInfo } = useSelector((state) => state.releaseData);
+  const { reFetchLabel, reFetchArtist } = useSelector(
+    (state) => state.reFetchSlice
+  );
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
-
-  const [imgLink, setImgLink] = useState(releaseAlbumInfo ? releaseAlbumInfo?.imgUrl : '');
+  const [imgLink, setImgLink] = useState(
+    releaseAlbumInfo ? releaseAlbumInfo?.imgUrl : ""
+  );
   const defaultImgURL = releaseAlbumInfo.imgURL;
-  const defaultKey = releaseAlbumInfo.key
-  const [uploadedImage, setUploadedImage] = useState({imgURL: defaultImgURL, key: defaultKey});
+  const defaultKey = releaseAlbumInfo.key;
+  const [uploadedImage, setUploadedImage] = useState({
+    imgURL: defaultImgURL,
+    key: defaultKey,
+  });
 
   // Genre Data Get Form API ____________________________
-  const [allGenre, setAllGenre] = useState()
+  const [allGenre, setAllGenre] = useState();
   useEffect(() => {
-    axios.get(`http://localhost:5000/admin/api/v1/settings/genre`)
-    .then(res => {
+    axios
+      .get(
+        `https://dream-records-2025-m2m9a.ondigitalocean.app/admin/api/v1/settings/genre`
+      )
+      .then((res) => {
         const data = res.data.data;
-        const genreArray = data.map(item => item.genre);
+        const genreArray = data.map((item) => item.genre);
         setAllGenre(genreArray);
-    })
-  }, [])
+      });
+  }, []);
 
-      // Label Data Get Form API ____________________________
-    const [lebel, setLabel] = useState()
-    useEffect(() => {
-      if(userNameIdRoll){
-        axios.get(`http://localhost:5000/api/v1/labels/for-release/${userNameIdRoll[1]}`)
-        .then(res => {
-            setLabel(res.data.data);
-        })
-      }
-    }, [userNameIdRoll, reFetchLabel])
+  // Label Data Get Form API ____________________________
+  const [lebel, setLabel] = useState();
+  useEffect(() => {
+    if (userNameIdRoll) {
+      axios
+        .get(
+          `https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/labels/for-release/${userNameIdRoll[1]}`
+        )
+        .then((res) => {
+          setLabel(res.data.data);
+        });
+    }
+  }, [userNameIdRoll, reFetchLabel]);
 
-     // Artist Data Get Form API ____________________________
-    const [artist, setArtist] = useState()
-    useEffect(() => {
-        axios.get(`http://localhost:5000/api/v1/artist/for-release/${userNameIdRoll ? userNameIdRoll[1]: ''}`)
-        .then(res => {
-            setArtist(res.data.data)
-        })
-    }, [userNameIdRoll, reFetchArtist])
+  // Artist Data Get Form API ____________________________
+  const [artist, setArtist] = useState();
+  useEffect(() => {
+    axios
+      .get(
+        `https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/artist/for-release/${
+          userNameIdRoll ? userNameIdRoll[1] : ""
+        }`
+      )
+      .then((res) => {
+        setArtist(res.data.data);
+      });
+  }, [userNameIdRoll, reFetchArtist]);
 
-
-
-  const [isVariousArtists, setIsVariousArtists] = useState(releaseAlbumInfo ? releaseAlbumInfo?.isVariousArtists : "no");
-  const [isUPC, setIsUPC] = useState(releaseAlbumInfo ? releaseAlbumInfo?.haveUPCean : "yes");
+  const [isVariousArtists, setIsVariousArtists] = useState(
+    releaseAlbumInfo ? releaseAlbumInfo?.isVariousArtists : "no"
+  );
+  const [isUPC, setIsUPC] = useState(
+    releaseAlbumInfo ? releaseAlbumInfo?.haveUPCean : "yes"
+  );
 
   // Form For Submit Album Information ____________________________________________________
-  const {register, handleSubmit, setValue, watch, control, formState: {errors}} = useForm({
-    defaultValues: releaseAlbumInfo
-  })
-  const [imgNotFoundErr, setImgNotFoundErr] = useState()
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    watch,
+    control,
+    formState: { errors },
+  } = useForm({
+    defaultValues: releaseAlbumInfo,
+  });
+  const [imgNotFoundErr, setImgNotFoundErr] = useState();
   const onSubmit = async (data) => {
-    setImgNotFoundErr('')
-    if(!uploadedImage) {
-      setImgNotFoundErr('Please Add Image')
+    setImgNotFoundErr("");
+    if (!uploadedImage) {
+      setImgNotFoundErr("Please Add Image");
       return;
-    };
-    if(data.haveUPCean === 'no') delete data?.UPC
-    if(data.isVariousArtists === 'no') delete data?.globalArtist
-    const albumInfoData = {...data, ...uploadedImage}
+    }
+    if (data.haveUPCean === "no") delete data?.UPC;
+    if (data.isVariousArtists === "no") delete data?.globalArtist;
+    const albumInfoData = { ...data, ...uploadedImage };
 
-    console.log(albumInfoData)  
-    dispatch(setReleaseAlbumInfo(albumInfoData))     
+    console.log(albumInfoData);
+    dispatch(setReleaseAlbumInfo(albumInfoData));
 
     if (step < steps.length - 1) {
       setStep(step + 1);
     }
-  }
+  };
 
   return (
     <div>
@@ -90,23 +115,26 @@ function AlbumInformation({ step, setStep, steps, handlePrev }) {
       <div className="createRelease-content-div">
         {" "}
         <ReleaseImgUpload
-          link={`http://localhost:5000/api/v1/release/upload-release-img`}
+          link={`https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/release/upload-release-img`}
           setImgLink={setImgLink}
           imgLink={imgLink}
           uploadedImage={uploadedImage}
           setUploadedImage={setUploadedImage}
         />
-        {
-          imgNotFoundErr && <p style={{color: '#ea3958'}}>{imgNotFoundErr}</p>
-        }
+        {imgNotFoundErr && <p style={{ color: "#ea3958" }}>{imgNotFoundErr}</p>}
         <br />
         <form onSubmit={handleSubmit(onSubmit)}>
           <label>Release Tittle *</label>
-          <input type="text" {...register("releaseTitle", { required: true})}/>
-          {errors.releaseTitle && <span style={{color: '#ea3958'}}>Release Tittle Required</span>}
+          <input
+            type="text"
+            {...register("releaseTitle", { required: true })}
+          />
+          {errors.releaseTitle && (
+            <span style={{ color: "#ea3958" }}>Release Tittle Required</span>
+          )}
 
           <label>Version/subtittle</label>
-          <input type="text" {...register("subTitle")}/>
+          <input type="text" {...register("subTitle")} />
 
           <div className="form-grid release-form-grid">
             <div>
@@ -123,7 +151,7 @@ function AlbumInformation({ step, setStep, steps, handlePrev }) {
                     value={field.value}
                     onValueChange={(value) => {
                       field.onChange(value);
-                      setIsVariousArtists(value)
+                      setIsVariousArtists(value);
                     }}
                   >
                     <label className="radio-label">
@@ -135,30 +163,37 @@ function AlbumInformation({ step, setStep, steps, handlePrev }) {
                   </RadioGroup.Root>
                 )}
               />
-              {errors.isVariousArtists && <span style={{color: '#ea3958'}}>This field Required</span>}
-
+              {errors.isVariousArtists && (
+                <span style={{ color: "#ea3958" }}>This field Required</span>
+              )}
             </div>
-            {isVariousArtists === "yes" && 
+            {isVariousArtists === "yes" && (
               <div>
                 <label htmlFor="">Select Artist *</label>
                 <SearchDropdown
                   items={artist}
                   searchTxt="Search and select artist"
                   itemName="Artist"
-                  register={{...register("artist", { required: true})}}
-                  onSelect={(items) => setValue("artist", items, { shouldValidate: true })}
+                  register={{ ...register("artist", { required: true }) }}
+                  onSelect={(items) =>
+                    setValue("artist", items, { shouldValidate: true })
+                  }
                   value={watch("artist")} // Pass current value
                 />
-                {errors.artist && <span style={{color: '#ea3958'}}>Please Select Artist</span>}
+                {errors.artist && (
+                  <span style={{ color: "#ea3958" }}>Please Select Artist</span>
+                )}
               </div>
-            }
+            )}
           </div>
           <label htmlFor="">Featuring</label>
           <SearchDropdown
             items={artist}
             itemName="Artist"
             searchTxt="Search and select Featuring"
-            onSelect={(items) => setValue("featuring", items, { shouldValidate: true })}
+            onSelect={(items) =>
+              setValue("featuring", items, { shouldValidate: true })
+            }
             value={watch("featuring")}
           />
 
@@ -170,12 +205,14 @@ function AlbumInformation({ step, setStep, steps, handlePrev }) {
                 options={allGenre}
                 placeholder="Select genre..."
                 className="createRelease-dropdown"
-                register={{...register("genre", { required: true})}}
-                dataName='genre'
+                register={{ ...register("genre", { required: true }) }}
+                dataName="genre"
                 setValue={setValue}
                 defaultValue={watch("genre")}
               />
-              {errors.genre && <span style={{color: '#ea3958'}}>Genre Required</span>}
+              {errors.genre && (
+                <span style={{ color: "#ea3958" }}>Genre Required</span>
+              )}
             </div>
             <div>
               <label htmlFor="">Sub-Genre *</label>
@@ -188,8 +225,13 @@ function AlbumInformation({ step, setStep, steps, handlePrev }) {
                 setValue={setValue}
                 defaultValue={watch("subGenre")}
               /> */}
-              <input type="text" {...register("subGenre", { required: true})}/>
-              {errors.subGenre && <span style={{color: '#ea3958'}}>Sub Genre Required</span>}
+              <input
+                type="text"
+                {...register("subGenre", { required: true })}
+              />
+              {errors.subGenre && (
+                <span style={{ color: "#ea3958" }}>Sub Genre Required</span>
+              )}
             </div>
           </div>
           <label htmlFor="">Label Name *</label>
@@ -197,11 +239,15 @@ function AlbumInformation({ step, setStep, steps, handlePrev }) {
             items={lebel}
             itemName="Label"
             searchTxt="Search and select label"
-            onSelect={(items) => setValue("labels", items, { shouldValidate: true })}
-            register={{...register("labels", { required: true})}}
+            onSelect={(items) =>
+              setValue("labels", items, { shouldValidate: true })
+            }
+            register={{ ...register("labels", { required: true }) }}
             value={watch("labels")}
           />
-          {errors.labels && <span style={{color: '#ea3958'}}>Please Select Label</span>}
+          {errors.labels && (
+            <span style={{ color: "#ea3958" }}>Please Select Label</span>
+          )}
 
           <div className="form-grid release-form-grid">
             <div>
@@ -210,17 +256,21 @@ function AlbumInformation({ step, setStep, steps, handlePrev }) {
                 options={yearsList.map(String)}
                 placeholder="Select a year..."
                 className="createRelease-dropdown"
-                dataName='productionYear'
-                register={{...register("productionYear", { required: true})}}
+                dataName="productionYear"
+                register={{ ...register("productionYear", { required: true }) }}
                 setValue={setValue}
                 defaultValue={watch("productionYear")}
               />
-              {errors.productionYear && <span style={{color: '#ea3958'}}>Production Year Required</span>}
+              {errors.productionYear && (
+                <span style={{ color: "#ea3958" }}>
+                  Production Year Required
+                </span>
+              )}
             </div>
             <div>
               <label htmlFor="">Physical/Original release date *</label>
               <input
-                {...register("orginalReleaseDate", { required: true})}
+                {...register("orginalReleaseDate", { required: true })}
                 type="date"
                 style={{
                   width: "auto",
@@ -228,19 +278,27 @@ function AlbumInformation({ step, setStep, steps, handlePrev }) {
                   padding: "0 !important",
                 }}
               />
-              {errors.orginalReleaseDate && <span style={{color: '#ea3958'}}>Physical/Original release date Required</span>}
+              {errors.orginalReleaseDate && (
+                <span style={{ color: "#ea3958" }}>
+                  Physical/Original release date Required
+                </span>
+              )}
             </div>
           </div>
           <div className="form-grid release-form-grid">
             <div>
               <label htmlFor="">℗ line *</label>
-              <input type="text" {...register("pLine", { required: true})}/>
-              {errors.pLine && <span style={{color: '#ea3958'}}>P Line Required</span>}
+              <input type="text" {...register("pLine", { required: true })} />
+              {errors.pLine && (
+                <span style={{ color: "#ea3958" }}>P Line Required</span>
+              )}
             </div>
             <div>
               <label htmlFor="">© line *</label>
-              <input type="text" {...register("cLine", { required: true})}/>
-              {errors.cLine && <span style={{color: '#ea3958'}}>C Line Required</span>}
+              <input type="text" {...register("cLine", { required: true })} />
+              {errors.cLine && (
+                <span style={{ color: "#ea3958" }}>C Line Required</span>
+              )}
             </div>
           </div>
           <div className="form-grid release-form-grid">
@@ -257,7 +315,7 @@ function AlbumInformation({ step, setStep, steps, handlePrev }) {
                     value={field.value}
                     onValueChange={(value) => {
                       field.onChange(value);
-                      setIsUPC(value)
+                      setIsUPC(value);
                     }}
                   >
                     <label className="radio-label">
@@ -269,49 +327,53 @@ function AlbumInformation({ step, setStep, steps, handlePrev }) {
                   </RadioGroup.Root>
                 )}
               />
-              {errors.haveUPCean && <span style={{color: '#ea3958'}}>This field Required</span>}
+              {errors.haveUPCean && (
+                <span style={{ color: "#ea3958" }}>This field Required</span>
+              )}
             </div>
             {isUPC === "yes" && (
               <div>
                 <label htmlFor="">UPC/EAN *</label>
-                <input {...register("UPC", { required: true})} type="text" />
-                {errors.UPC && <span style={{color: '#ea3958'}}>UPC/EAN field Required</span>}
+                <input {...register("UPC", { required: true })} type="text" />
+                {errors.UPC && (
+                  <span style={{ color: "#ea3958" }}>
+                    UPC/EAN field Required
+                  </span>
+                )}
               </div>
             )}
           </div>
-            {step === 4 || (
-              <div className="createRelease-btns">
-                {step > 0 && (
-                  <button
-                    className="theme-btn2"
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                    }}
-                    onClick={handlePrev}
-                  >
-                    <ArrowLeft />
-                    &nbsp; Back
-                  </button>
-                )}
+          {step === 4 || (
+            <div className="createRelease-btns">
+              {step > 0 && (
                 <button
+                  className="theme-btn2"
                   style={{
-                    margin: "auto",
-                    background: "none",
-                    border: "none",
+                    display: "flex",
+                    alignItems: "center",
                   }}
+                  onClick={handlePrev}
                 >
-                  cancel
+                  <ArrowLeft />
+                  &nbsp; Back
                 </button>
-                <button type="submit" className="theme-btn">
-                  Next &nbsp; <ArrowRight />
-                </button>
-              </div>
-            )}
+              )}
+              <button
+                style={{
+                  margin: "auto",
+                  background: "none",
+                  border: "none",
+                }}
+              >
+                cancel
+              </button>
+              <button type="submit" className="theme-btn">
+                Next &nbsp; <ArrowRight />
+              </button>
+            </div>
+          )}
         </form>
       </div>
-
-      
     </div>
   );
 }

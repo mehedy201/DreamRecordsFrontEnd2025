@@ -8,29 +8,32 @@ import { X } from "lucide-react";
 import { setTracksInfo } from "../../../redux/features/releaseDataHandleSlice/releaseDataHandleSlice";
 import axios from "axios";
 
-const TrackViewCollapsSection = ({track, index}) => {
+const TrackViewCollapsSection = ({ track, index }) => {
+  // Get TrackInfo Data State form Redux
+  const { tracksInfo } = useSelector((state) => state.releaseData);
+  const dispatch = useDispatch();
 
-    // Get TrackInfo Data State form Redux 
-    const {tracksInfo} = useSelector(state => state.releaseData);
-    const dispatch = useDispatch()
-    
-    const [albumOverviewSong, setAlbumOverviewSong] = useState(false);
-    const trackTittle = track.tittle;
-    const trackAudioUrl = track.audioUrl;
-    const dataForAudioPlayer = {tittle: trackTittle, audioUrl: trackAudioUrl}
+  const [albumOverviewSong, setAlbumOverviewSong] = useState(false);
+  const trackTittle = track.tittle;
+  const trackAudioUrl = track.audioUrl;
+  const dataForAudioPlayer = { tittle: trackTittle, audioUrl: trackAudioUrl };
 
-    const deleteTrack = (indexNumber) => {
-      const updatedTracks = tracksInfo.filter((item, index) => index !== indexNumber);
-      dispatch(setTracksInfo(updatedTracks))
-      axios.delete(`http://localhost:5000/api/v1/release/delete-file?key=${track.audioKey}`)
-      .then( res => {
-      if(res.status == 200){
-          alert('Deleted')
-      }
+  const deleteTrack = (indexNumber) => {
+    const updatedTracks = tracksInfo.filter(
+      (item, index) => index !== indexNumber
+    );
+    dispatch(setTracksInfo(updatedTracks));
+    axios
+      .delete(
+        `https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/release/delete-file?key=${track.audioKey}`
+      )
+      .then((res) => {
+        if (res.status == 200) {
+          alert("Deleted");
+        }
       })
-      .catch(er => console.log(er));
-    }
-    
+      .catch((er) => console.log(er));
+  };
 
   return (
     <div>
@@ -39,24 +42,40 @@ const TrackViewCollapsSection = ({track, index}) => {
         onOpenChange={setAlbumOverviewSong}
         style={{ background: "#F9F9F9", borderRadius: "4px" }}
       >
-
-        <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
-            <div style={{flexGrow: 1}}>
-                <AudioPlayerForTracViewTab data={dataForAudioPlayer}/>
-            </div>
-            <div style={{flexShrink: 0, display: 'flex', alignItems: 'center', gap: '15px'}}>
-                {/* {
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
+          <div style={{ flexGrow: 1 }}>
+            <AudioPlayerForTracViewTab data={dataForAudioPlayer} />
+          </div>
+          <div
+            style={{
+              flexShrink: 0,
+              display: "flex",
+              alignItems: "center",
+              gap: "15px",
+            }}
+          >
+            {/* {
                   index && 
                 } */}
-                <X size={18} onClick={() => deleteTrack(index)} style={{color: 'red', cursor: 'pointer'}}/>
-                <Collapsible.Trigger asChild>
-                        {albumOverviewSong ? (
-                            <MdKeyboardArrowUp className="release-album-arrowIcon" />
-                        ) : (
-                            <MdKeyboardArrowDown className="release-album-arrowIcon" />
-                        )}
-                    </Collapsible.Trigger>
-            </div>
+            <X
+              size={18}
+              onClick={() => deleteTrack(index)}
+              style={{ color: "red", cursor: "pointer" }}
+            />
+            <Collapsible.Trigger asChild>
+              {albumOverviewSong ? (
+                <MdKeyboardArrowUp className="release-album-arrowIcon" />
+              ) : (
+                <MdKeyboardArrowDown className="release-album-arrowIcon" />
+              )}
+            </Collapsible.Trigger>
+          </div>
         </div>
 
         <Collapsible.Content>
@@ -130,7 +149,7 @@ const TrackViewCollapsSection = ({track, index}) => {
                   <div className="d-flex">
                     <p>ISRC Code:</p>
                     <p>{track?.ISRC}</p>
-                  </div>                  
+                  </div>
                 </div>
               </Tabs.Content>
               <Tabs.Content className="tabs-content" value="Credits">

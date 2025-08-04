@@ -19,7 +19,6 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { setReFetchServiceRequest } from "../../../redux/features/reFetchDataHandleSlice/reFetchDataHandleSlice";
 
-
 function ReleaseClaim({
   years,
   notFound,
@@ -28,27 +27,30 @@ function ReleaseClaim({
   handleKeyPress,
   setSearchText,
 }) {
-
-  const {status} = useParams();
-  const {serviceRequestData} = useSelector((state) => state.serviceRequestPageSlice);
-  const { yearsList } = useSelector(state => state.yearsAndStatus);
-  const {userNameIdRoll} = useSelector((state) => state.userData);
-  const { reFetchServiceRequest } = useSelector(state => state.reFetchSlice);
+  const { status } = useParams();
+  const { serviceRequestData } = useSelector(
+    (state) => state.serviceRequestPageSlice
+  );
+  const { yearsList } = useSelector((state) => state.yearsAndStatus);
+  const { userNameIdRoll } = useSelector((state) => state.userData);
+  const { reFetchServiceRequest } = useSelector((state) => state.reFetchSlice);
   const dispatch = useDispatch();
 
-
   const [releaseData, setReleaseData] = useState();
-  useEffect( () => {
-    if(userNameIdRoll){
-      axios.get(`http://localhost:5000/api/v1/release/${userNameIdRoll[1]}?page=1&limit=1000&status=All`)
-        .then( res => {
-          if(res.status == 200){
+  useEffect(() => {
+    if (userNameIdRoll) {
+      axios
+        .get(
+          `https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/release/${userNameIdRoll[1]}?page=1&limit=1000&status=All`
+        )
+        .then((res) => {
+          if (res.status == 200) {
             setReleaseData(res.data.data);
           }
         })
-        .catch(er => console.log(er));
+        .catch((er) => console.log(er));
     }
-  },[userNameIdRoll]);
+  }, [userNameIdRoll]);
 
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 700);
   useEffect(() => {
@@ -64,39 +66,47 @@ function ReleaseClaim({
     <>
       <SelectDropdown
         options={yearsList}
-        placeholder={`${years ? years : 'All Time'}`}
+        placeholder={`${years ? years : "All Time"}`}
         filterByYearAndStatus={filterByYear}
       />
 
       {isMobile && <br />}
       <SelectDropdown
-        options={['All', 'Pending', 'Solved','Rejected']}
+        options={["All", "Pending", "Solved", "Rejected"]}
         placeholder={status}
         filterByYearAndStatus={filterByStatus}
       />
     </>
   );
 
-
   const [isOpen, setIsOpen] = useState(false);
   // Form  ____________________________________________________
-  const {register, handleSubmit, setValue, watch, formState: {errors}} = useForm()
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    watch,
+    formState: { errors },
+  } = useForm();
   const onSubmit = (data) => {
-    const userName = userNameIdRoll[0]
-    const masterUserId = userNameIdRoll[1]
-    const status = 'Pending';
-    const isoDate = new Date().toISOString()
-    const payload = {...data, userName, masterUserId, status, isoDate};
-    axios.post(`http://localhost:5000/common/api/v1/claim-release`, payload)
-    .then(res => {
-        if(res.status === 200){
-            dispatch(setReFetchServiceRequest(reFetchServiceRequest + 1))
-            toast.success('Successfully Submited');
+    const userName = userNameIdRoll[0];
+    const masterUserId = userNameIdRoll[1];
+    const status = "Pending";
+    const isoDate = new Date().toISOString();
+    const payload = { ...data, userName, masterUserId, status, isoDate };
+    axios
+      .post(
+        `https://dream-records-2025-m2m9a.ondigitalocean.app/common/api/v1/claim-release`,
+        payload
+      )
+      .then((res) => {
+        if (res.status === 200) {
+          dispatch(setReFetchServiceRequest(reFetchServiceRequest + 1));
+          toast.success("Successfully Submited");
         }
-    })
-    setIsOpen(false)
-  }
-
+      });
+    setIsOpen(false);
+  };
 
   return (
     <div>
@@ -105,7 +115,10 @@ function ReleaseClaim({
         <Dialog.Root open={isOpen} onOpenChange={setIsOpen}>
           <Dialog.Trigger className="theme-btn">+ Create New</Dialog.Trigger>
           <Modal title="Create New Service Request">
-            <form onSubmit={handleSubmit(onSubmit)} className="serviceRequest-modal-content">
+            <form
+              onSubmit={handleSubmit(onSubmit)}
+              className="serviceRequest-modal-content"
+            >
               <p className="modal-description">
                 If you want to claim a service request, please fill the details
                 below for associated tracks with appropriate links.
@@ -114,20 +127,24 @@ function ReleaseClaim({
 
               <input
                 type="text"
-                value='Release Claim'
+                value="Release Claim"
                 className="service-modal-input"
-                {...register("claimOption", { required: true})}
+                {...register("claimOption", { required: true })}
                 readOnly
               />
-              {errors.claimOption && <span style={{color: '#ea3958'}}>Release Claim Required</span>}
+              {errors.claimOption && (
+                <span style={{ color: "#ea3958" }}>Release Claim Required</span>
+              )}
 
               <p style={{ fontSize: "12px" }}>Type</p>
-              <Select.Root 
-                onValueChange={e => setValue('type', e, { shouldValidate: true })}
+              <Select.Root
+                onValueChange={(e) =>
+                  setValue("type", e, { shouldValidate: true })
+                }
                 defaultValue="Youtube"
               >
-                <Select.Trigger className='dropdown-trigger Service-modal-dropdown-trigger'>
-                  <Select.Value/>
+                <Select.Trigger className="dropdown-trigger Service-modal-dropdown-trigger">
+                  <Select.Value />
                   <Select.Icon className="select-icon">
                     <ChevronDown />
                   </Select.Icon>
@@ -138,19 +155,19 @@ function ReleaseClaim({
                     style={{ padding: 0, overflowY: "auto" }}
                   >
                     <Select.Viewport>
-                      <Select.Item value='Youtube' className="select-item">
+                      <Select.Item value="Youtube" className="select-item">
                         <Select.ItemText>Youtube</Select.ItemText>
                         <Select.ItemIndicator className="select-item-indicator">
                           <Check size={18} />
                         </Select.ItemIndicator>
                       </Select.Item>
-                      <Select.Item value='Facebook' className="select-item">
+                      <Select.Item value="Facebook" className="select-item">
                         <Select.ItemText>Facebook</Select.ItemText>
                         <Select.ItemIndicator className="select-item-indicator">
                           <Check size={18} />
                         </Select.ItemIndicator>
                       </Select.Item>
-                      <Select.Item value='Instagram' className="select-item">
+                      <Select.Item value="Instagram" className="select-item">
                         <Select.ItemText>Instagram</Select.ItemText>
                         <Select.ItemIndicator className="select-item-indicator">
                           <Check size={18} />
@@ -160,34 +177,49 @@ function ReleaseClaim({
                   </Select.Content>
                 </Select.Portal>
               </Select.Root>
-              {errors.type && <span style={{color: '#ea3958'}}>Type Required</span>}
+              {errors.type && (
+                <span style={{ color: "#ea3958" }}>Type Required</span>
+              )}
 
               <p style={{ fontSize: "12px" }}>Choose Release</p>
               <SearchDropdownRelease
                 items={releaseData}
                 searchTxt="Search and select Release"
-                onSelect={(items) => setValue("release", items, { shouldValidate: true })}
-                register={{...register("release", { required: true})}}
+                onSelect={(items) =>
+                  setValue("release", items, { shouldValidate: true })
+                }
+                register={{ ...register("release", { required: true }) }}
                 value={watch("release")}
               />
-              {errors.release && <span style={{color: '#ea3958'}}>Release Required</span>}
+              {errors.release && (
+                <span style={{ color: "#ea3958" }}>Release Required</span>
+              )}
               <p style={{ fontSize: "12px" }}>Video link*</p>
               <input
                 type="text"
                 placeholder="Paste link here"
                 className="service-modal-input"
-                {...register("claimLink", { required: true})}
+                {...register("claimLink", { required: true })}
               />
-              {errors.claimLink && <span style={{color: '#ea3958'}}>Video Link Required</span>}
+              {errors.claimLink && (
+                <span style={{ color: "#ea3958" }}>Video Link Required</span>
+              )}
 
               {/* <Dialog.Close type="submit" className="close-button">Submit</Dialog.Close> */}
-              <button type="submit" className="close-button">Submit</button>
+              <button type="submit" className="close-button">
+                Submit
+              </button>
             </form>
           </Modal>
         </Dialog.Root>
       </Flex>
       <div className="search-setion">
-        <input onKeyPress={handleKeyPress} onChange={e => setSearchText(e.target.value)} type="text" placeholder="Search..." />
+        <input
+          onKeyPress={handleKeyPress}
+          onChange={(e) => setSearchText(e.target.value)}
+          type="text"
+          placeholder="Search..."
+        />
         {isMobile ? (
           <DropdownMenu.Root>
             <DropdownMenu.Trigger asChild>
@@ -218,16 +250,13 @@ function ReleaseClaim({
         )}
       </div>
 
-      {
-        serviceRequestData &&
+      {serviceRequestData && (
         <Table
           serviceRequestData={serviceRequestData}
           tableFor="ReleaseClaim"
         />
-      }
-      {
-        notFound && <NotFoundComponent/> 
-      }
+      )}
+      {notFound && <NotFoundComponent />}
     </div>
   );
 }

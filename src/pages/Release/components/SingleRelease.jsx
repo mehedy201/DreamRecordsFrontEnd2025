@@ -10,10 +10,10 @@ import Table from "../../../components/Table";
 import Chart from "./Chart";
 import { FiAlertTriangle } from "react-icons/fi";
 import axios from "axios";
-import threeDotImg from '../../../assets/icons/vertical-threeDots.png'
+import threeDotImg from "../../../assets/icons/vertical-threeDots.png";
 import TrackViewCollapsSection from "./TrackViewCollapsSection";
-import downloadImg from "../../../assets/icons/img-download.png"
-import editImg from "../../../assets/icons/editIcon.png"
+import downloadImg from "../../../assets/icons/img-download.png";
+import editImg from "../../../assets/icons/editIcon.png";
 import { useSelector } from "react-redux";
 import * as Select from "@radix-ui/react-select";
 import { ChevronDown, Check } from "lucide-react";
@@ -38,46 +38,49 @@ const totalRevineuStreamColumn = [
 ];
 
 function SingleRelease() {
+  const { id } = useParams();
+  const { yearsList } = useSelector((state) => state.yearsAndStatus);
 
-  const {id} = useParams();
-  const { yearsList } = useSelector(state => state.yearsAndStatus);
-
-
-  const [releaseData, setReleaseData] = useState()
+  const [releaseData, setReleaseData] = useState();
   const [trackData, setTrackData] = useState();
-  const [UPC, setUPC] = useState('')
+  const [UPC, setUPC] = useState("");
   useEffect(() => {
-    axios.get(`http://localhost:5000/api/v1/release/single/${id}`)
-    .then(res => {
-      if(res.status === 200){
-        setReleaseData(res.data.data)
-        setTrackData(res?.data?.data?.tracks)
-        setUPC(res?.data?.data?.UPC)
-        console.log(res.data.data)
-        if(res.data.data.audioUrl){
-          const audioUrl = res.data.data.audioUrl;
-          const tittle = res.data.data.releaseTitle;
-          const artist = res.data.data.artist;
-          const labels = res.data.data.labels;
-          const featuring = res.data.data.featuring;
-          const genre = res.data.data.genre;
-          setTrackData([{audioUrl, tittle, artist, labels, genre, featuring}])
+    axios
+      .get(
+        `https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/release/single/${id}`
+      )
+      .then((res) => {
+        if (res.status === 200) {
+          setReleaseData(res.data.data);
+          setTrackData(res?.data?.data?.tracks);
+          setUPC(res?.data?.data?.UPC);
+          console.log(res.data.data);
+          if (res.data.data.audioUrl) {
+            const audioUrl = res.data.data.audioUrl;
+            const tittle = res.data.data.releaseTitle;
+            const artist = res.data.data.artist;
+            const labels = res.data.data.labels;
+            const featuring = res.data.data.featuring;
+            const genre = res.data.data.genre;
+            setTrackData([
+              { audioUrl, tittle, artist, labels, genre, featuring },
+            ]);
+          }
         }
-      }
-    })
-  },[id])
+      });
+  }, [id]);
 
   // Analytics Table Componet Data Process_________________
   const [tableColumn, setTableColumn] = useState(dspColumn);
   const [tableData, setTableData] = useState();
-  const [dspTableData, setDspTableData] = useState()
-  const [territoryTableData, setTerritoryTableData] = useState()
+  const [dspTableData, setDspTableData] = useState();
+  const [territoryTableData, setTerritoryTableData] = useState();
   const [totalSummary, setTotalSummary] = useState();
   const dspAndTerittoriGet = (data) => {
     // DSP Aggregation
     const dspMap = {};
-    data?.forEach(entry => {
-      entry.byDSP.forEach(dsp => {
+    data?.forEach((entry) => {
+      entry.byDSP.forEach((dsp) => {
         if (!dspMap[dsp.dsp]) {
           dspMap[dsp.dsp] = { revenue: 0, streams: 0 };
         }
@@ -89,13 +92,13 @@ function SingleRelease() {
     const byDsp = Object.entries(dspMap).map(([dsp, { revenue, streams }]) => ({
       dsp,
       revenue: Number(revenue.toFixed(2)),
-      streams
+      streams,
     }));
 
     // =============== Territory Aggregation ==============
     const territoryMap = {};
-    data?.forEach(entry => {
-      entry.byTerritory.forEach(t => {
+    data?.forEach((entry) => {
+      entry.byTerritory.forEach((t) => {
         if (!territoryMap[t.territory]) {
           territoryMap[t.territory] = { revenue: 0, streams: 0 };
         }
@@ -104,11 +107,13 @@ function SingleRelease() {
       });
     });
 
-    const byTerritory = Object.entries(territoryMap).map(([territory, { revenue, streams }]) => ({
-      territory,
-      revenue: Number(revenue.toFixed(2)),
-      streams
-    }));
+    const byTerritory = Object.entries(territoryMap).map(
+      ([territory, { revenue, streams }]) => ({
+        territory,
+        revenue: Number(revenue.toFixed(2)),
+        streams,
+      })
+    );
 
     // ================= Total Summary =================
     const totalSummaryData = data?.reduce(
@@ -117,57 +122,66 @@ function SingleRelease() {
         acc.revenue += entry.summary?.revenue || 0;
         return acc;
       },
-      { total: 'Total', streams: 0, revenue: 0 }
+      { total: "Total", streams: 0, revenue: 0 }
     );
     totalSummaryData.revenue = Number(totalSummaryData.revenue.toFixed(2));
 
-    setTableData(byDsp)
+    setTableData(byDsp);
     setDspTableData(byDsp);
     setTerritoryTableData(byTerritory);
-    setTotalSummary([totalSummaryData])
-  }
+    setTotalSummary([totalSummaryData]);
+  };
 
   // Getting Analytics Chart and Table Data From API ________
   const [chartDataStreams, setChartDataStreams] = useState();
   const [chartDataRevenue, setChartDataRevenue] = useState();
-  const [totalStreams, setTotalStreams] = useState()
+  const [totalStreams, setTotalStreams] = useState();
   const [totalRevenue, setTotalRevenue] = useState();
   const [years, setYears] = useState(Math.max(...yearsList));
   const [dataNotFound, setDataNotFound] = useState(false);
   const [analyticsLoading, setAnalyticsLoading] = useState(false);
   useEffect(() => {
-    setAnalyticsLoading(true)
-    setDataNotFound(false)
-    if(UPC){
-      axios.get(`http://localhost:5000/common/api/v1/analytics-and-balance/upc-analytics?UPC=${UPC}&years=${years}`)
-      .then(res => {
-        console.log(res)
-        if(res.status === 200){
-          if(isEmptyArray(res?.data?.data))setDataNotFound(true)
-          setTotalStreams(res?.data?.totalRevenue)
-          setTotalRevenue(res?.data?.totalStreams)
-          dspAndTerittoriGet(res?.data?.data)
+    setAnalyticsLoading(true);
+    setDataNotFound(false);
+    if (UPC) {
+      axios
+        .get(
+          `${
+            import.meta.env.API_URL
+          }/common/api/v1/analytics-and-balance/upc-analytics?UPC=${UPC}&years=${years}`
+        )
+        .then((res) => {
+          console.log(res);
+          if (res.status === 200) {
+            if (isEmptyArray(res?.data?.data)) setDataNotFound(true);
+            setTotalStreams(res?.data?.totalRevenue);
+            setTotalRevenue(res?.data?.totalStreams);
+            dspAndTerittoriGet(res?.data?.data);
 
-          const rawData = res?.data?.data
-          const streamsData = rawData?.map(item => ({
-            month: item.date,
-            value: item.summary.streams,
-          })).sort((a, b) => new Date(a.month) - new Date(b.month))
-    
-          const revenewData = rawData?.map(item => ({
-            month: item.date,
-            value: item.summary.revenue,
-          })).sort((a, b) => new Date(a.month) - new Date(b.month))
-  
-          setChartDataStreams(streamsData)
-          setChartDataRevenue(revenewData)
-          setAnalyticsLoading(false)
-        }
-      })
+            const rawData = res?.data?.data;
+            const streamsData = rawData
+              ?.map((item) => ({
+                month: item.date,
+                value: item.summary.streams,
+              }))
+              .sort((a, b) => new Date(a.month) - new Date(b.month));
+
+            const revenewData = rawData
+              ?.map((item) => ({
+                month: item.date,
+                value: item.summary.revenue,
+              }))
+              .sort((a, b) => new Date(a.month) - new Date(b.month));
+
+            setChartDataStreams(streamsData);
+            setChartDataRevenue(revenewData);
+            setAnalyticsLoading(false);
+          }
+        });
     }
-  },[UPC, years])
+  }, [UPC, years]);
 
-  const [analyticsCollapse, setAnalyticsCollapse] = useState(true)
+  const [analyticsCollapse, setAnalyticsCollapse] = useState(true);
 
   return (
     <div>
@@ -177,28 +191,34 @@ function SingleRelease() {
       >
         {releaseData && releaseData ? (
           <>
-            {
-              releaseData?.rejectionReasons &&
+            {releaseData?.rejectionReasons && (
               <>
                 {" "}
                 <div className="home-notice">
                   <FiAlertTriangle />
-                  <p dangerouslySetInnerHTML={{__html: releaseData?.actionRequired}}></p>
+                  <p
+                    dangerouslySetInnerHTML={{
+                      __html: releaseData?.actionRequired,
+                    }}
+                  ></p>
                 </div>
                 <br />
               </>
-            }
-            {
-              releaseData?.actionRequired &&
+            )}
+            {releaseData?.actionRequired && (
               <>
                 {" "}
                 <div className="home-notice">
                   <FiAlertTriangle />
-                  <p dangerouslySetInnerHTML={{__html: releaseData?.actionRequired}}></p>
+                  <p
+                    dangerouslySetInnerHTML={{
+                      __html: releaseData?.actionRequired,
+                    }}
+                  ></p>
                 </div>
                 <br />
               </>
-            }
+            )}
             <div className="d-flex release-overview-img-div">
               <img
                 src={releaseData?.imgUrl}
@@ -210,7 +230,7 @@ function SingleRelease() {
                   <span
                     className="card-type-txt"
                     style={
-                        releaseData?.status == "Takedown"
+                      releaseData?.status == "Takedown"
                         ? { background: "#FEEBEC", color: "#E5484D" }
                         : releaseData?.status == "QC Approval"
                         ? { background: "#FFEBD8", color: "#FFA552" }
@@ -225,7 +245,11 @@ function SingleRelease() {
                   </span>
                   <br />
                   <h1>{releaseData?.releaseTitle}</h1>
-                  <h2>{releaseData?.artist?.map(artist => artist.artistName).join(', ')}</h2>
+                  <h2>
+                    {releaseData?.artist
+                      ?.map((artist) => artist.artistName)
+                      .join(", ")}
+                  </h2>
                 </div>
 
                 <DropdownMenu.Root>
@@ -252,7 +276,7 @@ function SingleRelease() {
                           textDecoration: "none",
                           display: "flex",
                           alignItems: "center",
-                          marginBottom: '15px'
+                          marginBottom: "15px",
                         }}
                       >
                         <img src={downloadImg} />
@@ -289,7 +313,11 @@ function SingleRelease() {
               </div>
               <div className="d-flex">
                 <p>Primary Artist:</p>
-                <p>{releaseData?.artist?.map(artist => artist.artistName).join(', ')}</p>
+                <p>
+                  {releaseData?.artist
+                    ?.map((artist) => artist.artistName)
+                    .join(", ")}
+                </p>
               </div>
               <div className="d-flex">
                 <p>Format:</p>
@@ -297,7 +325,14 @@ function SingleRelease() {
               </div>
               <div className="d-flex">
                 <p>Featuring:</p>
-                <p>{releaseData?.featuring?.map(artist => artist.artistName).join(', ')} {releaseData?.featureing?.map(artist => artist.artistName).join(', ')}</p>
+                <p>
+                  {releaseData?.featuring
+                    ?.map((artist) => artist.artistName)
+                    .join(", ")}{" "}
+                  {releaseData?.featureing
+                    ?.map((artist) => artist.artistName)
+                    .join(", ")}
+                </p>
               </div>
               <div className="d-flex">
                 <p>℗ line:</p>
@@ -321,7 +356,14 @@ function SingleRelease() {
               </div>
               <div className="d-flex">
                 <p>Label Name:</p>
-                <p>{releaseData?.labels?.map(label => label.labelName).join(', ')} {releaseData?.label?.map(label => label.labelName).join(', ')}</p>
+                <p>
+                  {releaseData?.labels
+                    ?.map((label) => label.labelName)
+                    .join(", ")}{" "}
+                  {releaseData?.label
+                    ?.map((label) => label.labelName)
+                    .join(", ")}
+                </p>
               </div>
               <div className="d-flex">
                 <p>UPC/EAN</p>
@@ -329,7 +371,11 @@ function SingleRelease() {
               </div>
               <div className="d-flex">
                 <p>Release Date:</p>
-                <p>{releaseData?.releaseDate ? releaseData.releaseDate : releaseData?.releaseOption}</p>
+                <p>
+                  {releaseData?.releaseDate
+                    ? releaseData.releaseDate
+                    : releaseData?.releaseOption}
+                </p>
               </div>
               <div className="d-flex">
                 <p>Producer Catalog Number:</p>
@@ -340,14 +386,12 @@ function SingleRelease() {
             <h3 className="release-album-title">Tracks</h3>
             <br />
 
-            {
-                trackData &&
-                trackData?.map((track, index) => 
-                  <div key={index}>
-                    <TrackViewCollapsSection track={track} index=''/>
-                  </div>
-                )
-              }
+            {trackData &&
+              trackData?.map((track, index) => (
+                <div key={index}>
+                  <TrackViewCollapsSection track={track} index="" />
+                </div>
+              ))}
           </>
         ) : (
           <p>No release found! Try selecting an release first.</p>
@@ -408,10 +452,12 @@ function SingleRelease() {
                     <div style={{ width: "100%" }}>
                       {" "}
                       <label htmlFor="">Period</label>
-
-                      <Select.Root defaultValue={Math.max(...yearsList)} onValueChange={(value) => setYears(value.toString())}>
+                      <Select.Root
+                        defaultValue={Math.max(...yearsList)}
+                        onValueChange={(value) => setYears(value.toString())}
+                      >
                         <Select.Trigger className={`dropdown-trigger`}>
-                          <Select.Value/>
+                          <Select.Value />
                           <Select.Icon className="select-icon">
                             <ChevronDown />
                           </Select.Icon>
@@ -423,7 +469,11 @@ function SingleRelease() {
                           >
                             <Select.Viewport>
                               {yearsList?.map((option, index) => (
-                                <Select.Item key={index} value={option} className="select-item">
+                                <Select.Item
+                                  key={index}
+                                  value={option}
+                                  className="select-item"
+                                >
                                   <Select.ItemText>{option}</Select.ItemText>
                                   <Select.ItemIndicator className="select-item-indicator">
                                     <Check size={18} />
@@ -434,17 +484,28 @@ function SingleRelease() {
                           </Select.Content>
                         </Select.Portal>
                       </Select.Root>
-
                     </div>
                     <div style={{ width: "100%" }}>
                       <label htmlFor="">By</label>
-                      <Select.Root defaultValue="DSP" onValueChange={(value) => {
-                          if(value === 'DSP'){setTableData(dspTableData); setTableColumn(dspColumn)}
-                          if(value === 'Territory'){setTableData(territoryTableData); setTableColumn(territoryColumn)}
-                          if(value === 'Total'){setTableData(totalSummary); setTableColumn(totalRevineuStreamColumn)}
-                      }}>
+                      <Select.Root
+                        defaultValue="DSP"
+                        onValueChange={(value) => {
+                          if (value === "DSP") {
+                            setTableData(dspTableData);
+                            setTableColumn(dspColumn);
+                          }
+                          if (value === "Territory") {
+                            setTableData(territoryTableData);
+                            setTableColumn(territoryColumn);
+                          }
+                          if (value === "Total") {
+                            setTableData(totalSummary);
+                            setTableColumn(totalRevineuStreamColumn);
+                          }
+                        }}
+                      >
                         <Select.Trigger className={`dropdown-trigger`}>
-                          <Select.Value placeholder='Filter by DSP/Territory'/>
+                          <Select.Value placeholder="Filter by DSP/Territory" />
                           <Select.Icon className="select-icon">
                             <ChevronDown />
                           </Select.Icon>
@@ -455,24 +516,30 @@ function SingleRelease() {
                             style={{ padding: 0, overflowY: "auto" }}
                           >
                             <Select.Viewport>
-                                <Select.Item value='DSP' className="select-item">
-                                  <Select.ItemText>DSP</Select.ItemText>
-                                  <Select.ItemIndicator className="select-item-indicator">
-                                    <Check size={18} />
-                                  </Select.ItemIndicator>
-                                </Select.Item>
-                                <Select.Item value='Territory' className="select-item">
-                                  <Select.ItemText>Territory</Select.ItemText>
-                                  <Select.ItemIndicator className="select-item-indicator">
-                                    <Check size={18} />
-                                  </Select.ItemIndicator>
-                                </Select.Item>
-                                <Select.Item value='Total' className="select-item">
-                                  <Select.ItemText>Total</Select.ItemText>
-                                  <Select.ItemIndicator className="select-item-indicator">
-                                    <Check size={18} />
-                                  </Select.ItemIndicator>
-                                </Select.Item>
+                              <Select.Item value="DSP" className="select-item">
+                                <Select.ItemText>DSP</Select.ItemText>
+                                <Select.ItemIndicator className="select-item-indicator">
+                                  <Check size={18} />
+                                </Select.ItemIndicator>
+                              </Select.Item>
+                              <Select.Item
+                                value="Territory"
+                                className="select-item"
+                              >
+                                <Select.ItemText>Territory</Select.ItemText>
+                                <Select.ItemIndicator className="select-item-indicator">
+                                  <Check size={18} />
+                                </Select.ItemIndicator>
+                              </Select.Item>
+                              <Select.Item
+                                value="Total"
+                                className="select-item"
+                              >
+                                <Select.ItemText>Total</Select.ItemText>
+                                <Select.ItemIndicator className="select-item-indicator">
+                                  <Check size={18} />
+                                </Select.ItemIndicator>
+                              </Select.Item>
                             </Select.Viewport>
                           </Select.Content>
                         </Select.Portal>
@@ -483,28 +550,28 @@ function SingleRelease() {
               </Tabs.List>
 
               <Tabs.Content className="tabs-content" value="Streams">
-                {
-                  dataNotFound === false &&
+                {dataNotFound === false && (
                   <>
                     <Chart chartData={chartDataStreams} />
-                    <SingleReleasePageTable columns={tableColumn} data={tableData}/>
+                    <SingleReleasePageTable
+                      columns={tableColumn}
+                      data={tableData}
+                    />
                   </>
-                }
-                {
-                  dataNotFound === true && <NotFoundComponent/>
-                }
+                )}
+                {dataNotFound === true && <NotFoundComponent />}
               </Tabs.Content>
               <Tabs.Content className="tabs-content" value="Revenue">
-                {
-                  dataNotFound === false && 
+                {dataNotFound === false && (
                   <>
                     <Chart chartData={chartDataRevenue} />
-                    <SingleReleasePageTable columns={tableColumn} data={tableData}/>
+                    <SingleReleasePageTable
+                      columns={tableColumn}
+                      data={tableData}
+                    />
                   </>
-                }
-                {
-                  dataNotFound === true && <NotFoundComponent/>
-                }
+                )}
+                {dataNotFound === true && <NotFoundComponent />}
               </Tabs.Content>
             </Tabs.Root>
           </Collapsible.Content>

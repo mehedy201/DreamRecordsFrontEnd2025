@@ -52,33 +52,37 @@ const releaseColumns = [
 // };
 
 const ServiceRequest = () => {
-
-  const {userNameIdRoll} = useSelector((state) => state.userData);
-  const { reFetchServiceRequest } = useSelector(state => state.reFetchSlice);
+  const { userNameIdRoll } = useSelector((state) => state.userData);
+  const { reFetchServiceRequest } = useSelector((state) => state.reFetchSlice);
   const dispatch = useDispatch();
-  const {pageNumber, perPageItem, status, request} = useParams();
+  const { pageNumber, perPageItem, status, request } = useParams();
   const navigate = useNavigate();
 
-   // Filter Query Paramitars_____________________
+  // Filter Query Paramitars_____________________
   const { navigateWithParams } = useQueryParams();
   const [filterParams] = useSearchParams();
-  const search = filterParams.get('search') || '';
-  const years = filterParams.get('years') || '';
+  const search = filterParams.get("search") || "";
+  const years = filterParams.get("years") || "";
 
   const filterByYear = (yearValue) => {
-    navigateWithParams(`/service-request/${request}/1/10/${status}`, { search: search, years: yearValue });
-  }
+    navigateWithParams(`/service-request/${request}/1/10/${status}`, {
+      search: search,
+      years: yearValue,
+    });
+  };
   const filterByStatus = (statusValue) => {
-    navigateWithParams(`/service-request/${request}/1/10/${statusValue}`, { search: search, years: years });
-  }
-
+    navigateWithParams(`/service-request/${request}/1/10/${statusValue}`, {
+      search: search,
+      years: years,
+    });
+  };
 
   const modifyRequest = (request) => {
     if (request.includes("-")) {
-        return request.replace("-", " ");
+      return request.replace("-", " ");
     }
     return request;
-  }
+  };
 
   // Fatch Service Request Data _______________________________________________
   const [currentPage, setCurrentPage] = useState(parseInt(pageNumber));
@@ -86,50 +90,76 @@ const ServiceRequest = () => {
   const [totalPages, setTotalPages] = useState();
   const [loading, setLoading] = useState(false);
   const [serviceCount, setServiceCount] = useState();
-  const [notFound, setNotFound] = useState(false)
+  const [notFound, setNotFound] = useState(false);
   useEffect(() => {
-    setLoading(true)
+    setLoading(true);
     // All Service Request Count _______________________
-    axios.get(`http://localhost:5000/common/api/v1/claim-release/service-request/${userNameIdRoll ? userNameIdRoll[1] : ''}`)
-    .then(res => {
-      if(res.status === 200){
-        setServiceCount(res.data.data)
-      }
-    })
-    axios.get(`http://localhost:5000/common/api/v1/claim-release/users-claim/${userNameIdRoll ? userNameIdRoll[1] : ''}?type=${request}&page=${pageNumber}&limit=${perPageItem}&status=${status}&search=${search}&years=${years}`)
-    .then(res => {
-        if(res.status === 200){
-          dispatch(setServiceRequestData(res.data.data))
-          if(isEmptyArray(res.data.data))setNotFound(true)
+    axios
+      .get(
+        `https://dream-records-2025-m2m9a.ondigitalocean.app/common/api/v1/claim-release/service-request/${
+          userNameIdRoll ? userNameIdRoll[1] : ""
+        }`
+      )
+      .then((res) => {
+        if (res.status === 200) {
+          setServiceCount(res.data.data);
+        }
+      });
+    axios
+      .get(
+        `https://dream-records-2025-m2m9a.ondigitalocean.app/common/api/v1/claim-release/users-claim/${
+          userNameIdRoll ? userNameIdRoll[1] : ""
+        }?type=${request}&page=${pageNumber}&limit=${perPageItem}&status=${status}&search=${search}&years=${years}`
+      )
+      .then((res) => {
+        if (res.status === 200) {
+          dispatch(setServiceRequestData(res.data.data));
+          if (isEmptyArray(res.data.data)) setNotFound(true);
           setFilteredCount(res.data.filteredCount);
           setTotalPages(res.data.totalPages);
-          setLoading(false)
+          setLoading(false);
         }
-    })
-    setLoading(false)
-  },[userNameIdRoll, pageNumber, perPageItem, years, search, reFetchServiceRequest])
+      });
+    setLoading(false);
+  }, [
+    userNameIdRoll,
+    pageNumber,
+    perPageItem,
+    years,
+    search,
+    reFetchServiceRequest,
+  ]);
 
   // Handle Page Change ________________________________
   const handlePageChange = (page) => {
-    navigateWithParams(`/service-request/${request}/${page}/${perPageItem}/${status}`, { search: search, years: years });
-  }
+    navigateWithParams(
+      `/service-request/${request}/${page}/${perPageItem}/${status}`,
+      { search: search, years: years }
+    );
+  };
   // Search _____________________________________________
   const [searchText, setSearchText] = useState();
   const handleKeyPress = (event) => {
-    if (event.key === 'Enter') {
-      navigateWithParams(`/service-request/${request}/1/${perPageItem}/${status}`, { search: searchText, years: years });
+    if (event.key === "Enter") {
+      navigateWithParams(
+        `/service-request/${request}/1/${perPageItem}/${status}`,
+        { search: searchText, years: years }
+      );
     }
   };
 
   // Handle Per Page Item _______________________________
   const handlePerPageItem = (perPageItem) => {
-    console.log('object')
-    navigateWithParams(`/service-request/${request}/${pageNumber}/${perPageItem}/${status}`, { search: search, years: years });
-  }
+    console.log("object");
+    navigateWithParams(
+      `/service-request/${request}/${pageNumber}/${perPageItem}/${status}`,
+      { search: search, years: years }
+    );
+  };
 
- if(loading){
-  return <LoadingScreen/>
- }
+  if (loading) {
+    return <LoadingScreen />;
+  }
 
   return (
     <div className="main-content" style={{ position: "relative" }}>
@@ -139,10 +169,16 @@ const ServiceRequest = () => {
         style={{ marginTop: "85px" }}
       >
         <Tabs.List className="tabs-list">
-          <Tabs.Trigger onClick={() => navigate('/service-request/Release-Claim/1/10/All')} className="tabs-trigger" value="Release Claim">
+          <Tabs.Trigger
+            onClick={() => navigate("/service-request/Release-Claim/1/10/All")}
+            className="tabs-trigger"
+            value="Release Claim"
+          >
             Release Claim
             <div className="tabs-notification">
-              <p>{serviceCount?.ReleaseClaim ? serviceCount?.ReleaseClaim : 0}</p>
+              <p>
+                {serviceCount?.ReleaseClaim ? serviceCount?.ReleaseClaim : 0}
+              </p>
             </div>
           </Tabs.Trigger>
           {/* <Tabs.Trigger onClick={() => navigate('/service-request/Content-ID/1/10/All')} className="tabs-trigger" value="Content ID">
@@ -151,28 +187,52 @@ const ServiceRequest = () => {
               <p>{serviceCount?.ContentID ? serviceCount?.ContentID : 0}</p>
             </div>
           </Tabs.Trigger> */}
-          <Tabs.Trigger onClick={() => navigate('/service-request/Claim-Video/1/10/All')} className="tabs-trigger" value="Claim Video">
+          <Tabs.Trigger
+            onClick={() => navigate("/service-request/Claim-Video/1/10/All")}
+            className="tabs-trigger"
+            value="Claim Video"
+          >
             Claim Video
             <div className="tabs-notification">
               <p>{serviceCount?.ClaimVideo ? serviceCount?.ClaimVideo : 0}</p>
             </div>
           </Tabs.Trigger>
-          <Tabs.Trigger onClick={() => navigate('/service-request/Blocked-Video/1/10/All')} className="tabs-trigger" value="Blocked Video">
+          <Tabs.Trigger
+            onClick={() => navigate("/service-request/Blocked-Video/1/10/All")}
+            className="tabs-trigger"
+            value="Blocked Video"
+          >
             Blocked Video
             <div className="tabs-notification">
-              <p>{serviceCount?.BlockedVideo ? serviceCount?.BlockedVideo : 0}</p>
+              <p>
+                {serviceCount?.BlockedVideo ? serviceCount?.BlockedVideo : 0}
+              </p>
             </div>
           </Tabs.Trigger>
-          <Tabs.Trigger onClick={() => navigate('/service-request/OAC/1/10/All')} className="tabs-trigger" value="OAC">
+          <Tabs.Trigger
+            onClick={() => navigate("/service-request/OAC/1/10/All")}
+            className="tabs-trigger"
+            value="OAC"
+          >
             OAC
             <div className="tabs-notification">
               <p>{serviceCount?.OAC ? serviceCount?.OAC : 0}</p>
             </div>
           </Tabs.Trigger>
-          <Tabs.Trigger onClick={() => navigate('/service-request/Profile-Linking/1/10/All')} className="tabs-trigger" value="Profile Linking">
+          <Tabs.Trigger
+            onClick={() =>
+              navigate("/service-request/Profile-Linking/1/10/All")
+            }
+            className="tabs-trigger"
+            value="Profile Linking"
+          >
             Profile Linking{" "}
             <div className="tabs-notification">
-              <p>{serviceCount?.ProfileLinking ? serviceCount?.ProfileLinking : 0}</p>
+              <p>
+                {serviceCount?.ProfileLinking
+                  ? serviceCount?.ProfileLinking
+                  : 0}
+              </p>
             </div>
           </Tabs.Trigger>
           {/* <Tabs.Trigger onClick={() => navigate('/service-request/Whitelist/1/10/All')} className="tabs-trigger" value="Whitelist">
@@ -264,12 +324,12 @@ const ServiceRequest = () => {
           </Tabs.Content> */}
         </div>
       </Tabs.Root>
-      <Pagination 
-        totalDataCount={filteredCount} 
+      <Pagination
+        totalDataCount={filteredCount}
         totalPages={totalPages}
-        currentPage={currentPage} 
-        perPageItem={perPageItem} 
-        setCurrentPage={setCurrentPage} 
+        currentPage={currentPage}
+        perPageItem={perPageItem}
+        setCurrentPage={setCurrentPage}
         handlePageChange={handlePageChange}
         customFunDropDown={handlePerPageItem}
       />

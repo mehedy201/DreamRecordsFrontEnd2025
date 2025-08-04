@@ -20,7 +20,7 @@
 //       const date = new Date().toISOString();
 //       const formData = {...data, ...uploadedImage, masterUserId: userNameIdRoll[1], userName: userNameIdRoll[0], status: 'Pending', date};
 //       console.log(formData)
-//       axios.post(`http://localhost:5000/api/v1/labels/create-labels`, formData)
+//       axios.post(`https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/labels/create-labels`, formData)
 //       .then(res => {
 //           if(res.status == 200){
 //             setUploadedImage()
@@ -39,7 +39,7 @@
 //             }
 //           }
 //       })
-//       .catch(er => console.log(er))    
+//       .catch(er => console.log(er))
 //   }
 
 //   return (
@@ -47,7 +47,7 @@
 //       <div className="artist-editImg-div">
 //         {" "}
 //         <ImageUpload
-//           link={`http://localhost:5000/api/v1/labels/upload-labels-img`}
+//           link={`https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/labels/upload-labels-img`}
 //           setImgLink={setImgLink}
 //           imgLink={imgLink}
 //           uploadedImage={uploadedImage}
@@ -62,7 +62,7 @@
 //         <div className="editLable-info">
 //             <h4>Basic Information</h4>
 //             <label>Label name</label>
-//             <input {...register("labelName", { required: true})} type="text" />   
+//             <input {...register("labelName", { required: true})} type="text" />
 //             {errors.labelName && <span>Label Name Required</span>}
 //         </div>
 //         <br />
@@ -105,15 +105,14 @@
 
 // export default CreateLabel;
 
-
 import ImageUpload from "../../../components/ImageUpload";
 import PropTypes from "prop-types";
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import facbookIcon from '../../../assets/social/facebook.png';
-import instaIcon from '../../../assets/social/instagram.png';
-import youtubeIcon from '../../../assets/social/youtube-icon.png';
+import facbookIcon from "../../../assets/social/facebook.png";
+import instaIcon from "../../../assets/social/instagram.png";
+import youtubeIcon from "../../../assets/social/youtube-icon.png";
 import axios from "axios";
 import { setReFetchLabel } from "../../../redux/features/reFetchDataHandleSlice/reFetchDataHandleSlice";
 import toast from "react-hot-toast";
@@ -121,8 +120,8 @@ import toast from "react-hot-toast";
 function CreateLabel({ fromReleaseForm, openModal, setSearchQuery }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { userNameIdRoll } = useSelector(state => state.userData);
-  const { reFetchLabel } = useSelector(state => state.reFetchSlice);
+  const { userNameIdRoll } = useSelector((state) => state.userData);
+  const { reFetchLabel } = useSelector((state) => state.reFetchSlice);
 
   const [imgLink, setImgLink] = useState(null);
   const [uploadedImage, setUploadedImage] = useState(null);
@@ -130,18 +129,19 @@ function CreateLabel({ fromReleaseForm, openModal, setSearchQuery }) {
     labelName: "",
     facebook: "",
     instagram: "",
-    youtube: ""
+    youtube: "",
   });
   const [errors, setErrors] = useState({});
 
   const handleChange = ({ target: { name, value } }) => {
-    setFormData(prev => ({ ...prev, [name]: value }));
-    setErrors(prev => ({ ...prev, [name]: "" }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    setErrors((prev) => ({ ...prev, [name]: "" }));
   };
 
   const validate = () => {
     const newErrors = {};
-    if (!formData.labelName.trim()) newErrors.labelName = "Label Name is required";
+    if (!formData.labelName.trim())
+      newErrors.labelName = "Label Name is required";
     return newErrors;
   };
 
@@ -161,16 +161,22 @@ function CreateLabel({ fromReleaseForm, openModal, setSearchQuery }) {
       date: new Date().toISOString(),
     };
 
-    axios.post(`http://localhost:5000/api/v1/labels/create-labels`, payload)
-      .then(res => {
+    axios
+      .post(
+        `https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/labels/create-labels`,
+        payload
+      )
+      .then((res) => {
         if (res.status === 200) {
           if (fromReleaseForm) {
-            toast.success("Successfully created the Label, but you can't add it now. Because it is pending now!")
-            setSearchQuery('');
+            toast.success(
+              "Successfully created the Label, but you can't add it now. Because it is pending now!"
+            );
+            setSearchQuery("");
             dispatch(setReFetchLabel(reFetchLabel + 1));
             openModal(false);
           } else {
-            navigate('/labels/1/10/All');
+            navigate("/labels/1/10/All");
           }
 
           // Reset form
@@ -178,12 +184,12 @@ function CreateLabel({ fromReleaseForm, openModal, setSearchQuery }) {
             labelName: "",
             facebook: "",
             instagram: "",
-            youtube: ""
+            youtube: "",
           });
         }
-        setUploadedImage('');
+        setUploadedImage("");
       })
-      .catch(error => {
+      .catch((error) => {
         console.error("Failed to create label:", error);
       });
   };
@@ -192,7 +198,7 @@ function CreateLabel({ fromReleaseForm, openModal, setSearchQuery }) {
     <div className="main-content">
       <div className="artist-editImg-div">
         <ImageUpload
-          link={`http://localhost:5000/api/v1/labels/upload-labels-img`}
+          link={`https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/labels/upload-labels-img`}
           setImgLink={setImgLink}
           imgLink={imgLink}
           uploadedImage={uploadedImage}
@@ -213,7 +219,9 @@ function CreateLabel({ fromReleaseForm, openModal, setSearchQuery }) {
           value={formData.labelName}
           onChange={handleChange}
         />
-        {errors.labelName && <span style={{ color: "red" }}>{errors.labelName}</span>}
+        {errors.labelName && (
+          <span style={{ color: "red" }}>{errors.labelName}</span>
+        )}
       </div>
 
       <br />
@@ -222,7 +230,9 @@ function CreateLabel({ fromReleaseForm, openModal, setSearchQuery }) {
         <h4>Label Profiles</h4>
 
         <div className="add-atrist">
-          <div style={{ margin: "auto" }}><img src={facbookIcon} alt="facebook" /></div>
+          <div style={{ margin: "auto" }}>
+            <img src={facbookIcon} alt="facebook" />
+          </div>
           <input
             type="text"
             name="facebook"
@@ -234,7 +244,9 @@ function CreateLabel({ fromReleaseForm, openModal, setSearchQuery }) {
         </div>
 
         <div className="add-atrist">
-          <div style={{ margin: "auto" }}><img src={instaIcon} alt="instagram" /></div>
+          <div style={{ margin: "auto" }}>
+            <img src={instaIcon} alt="instagram" />
+          </div>
           <input
             type="text"
             name="instagram"
@@ -246,7 +258,9 @@ function CreateLabel({ fromReleaseForm, openModal, setSearchQuery }) {
         </div>
 
         <div className="add-atrist">
-          <div style={{ margin: "auto" }}><img src={youtubeIcon} alt="youtube" /></div>
+          <div style={{ margin: "auto" }}>
+            <img src={youtubeIcon} alt="youtube" />
+          </div>
           <input
             type="text"
             name="youtube"
@@ -259,7 +273,9 @@ function CreateLabel({ fromReleaseForm, openModal, setSearchQuery }) {
       </div>
 
       <br />
-      <button onClick={handleSubmit} className="imgUpload-save-btn">Save</button>
+      <button onClick={handleSubmit} className="imgUpload-save-btn">
+        Save
+      </button>
     </div>
   );
 }
@@ -269,8 +285,7 @@ CreateLabel.propTypes = {
   openModal: PropTypes.func,
   setSearchQuery: PropTypes.func,
   selectedItems: PropTypes.array,
-  onSelect: PropTypes.func
+  onSelect: PropTypes.func,
 };
 
 export default CreateLabel;
-

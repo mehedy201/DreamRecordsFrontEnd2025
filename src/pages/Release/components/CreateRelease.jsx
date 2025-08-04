@@ -15,22 +15,23 @@ const steps = [
 ];
 
 function CreateRelease() {
-
   const navigate = useNavigate();
-  const {userNameIdRoll} = useSelector((state) => state.userData);
+  const { userNameIdRoll } = useSelector((state) => state.userData);
 
   useEffect(() => {
-    if(userNameIdRoll){
-      axios.get(`http://localhost:5000/api/v1/release/${userNameIdRoll[1]}?page=1&limit=6&status=All`)
-      .then( res => {
-        if(res.status == 200){
-          console.log(res.data.data);
-        }
-      })
-      .catch(er => console.log(er));
+    if (userNameIdRoll) {
+      axios
+        .get(
+          `https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/release/${userNameIdRoll[1]}?page=1&limit=6&status=All`
+        )
+        .then((res) => {
+          if (res.status == 200) {
+            console.log(res.data.data);
+          }
+        })
+        .catch((er) => console.log(er));
     }
-  },[])
-
+  }, []);
 
   const [step, setStep] = useState(0);
   const handlePrev = () => {
@@ -38,9 +39,6 @@ function CreateRelease() {
       setStep(step - 1);
     }
   };
-
-
-  
 
   return (
     <div
@@ -57,8 +55,17 @@ function CreateRelease() {
           </p>
           <br />
           <div className="d-flex">
-            <button onClick={() => navigate('/')} className="release-backDash-btn">Back to Dashboard</button>
-            <button onClick={() => navigate('/releases/1/10/All')} className="theme-btn" style={{ width: "100%" }}>
+            <button
+              onClick={() => navigate("/")}
+              className="release-backDash-btn"
+            >
+              Back to Dashboard
+            </button>
+            <button
+              onClick={() => navigate("/releases/1/10/All")}
+              className="theme-btn"
+              style={{ width: "100%" }}
+            >
               View Track
             </button>
           </div>
@@ -100,12 +107,14 @@ function CreateRelease() {
           handlePrev={handlePrev}
         />
       )}
-      {step === 2 && 
-      <ReleaseDate
+      {step === 2 && (
+        <ReleaseDate
           step={step}
           steps={steps}
           setStep={setStep}
-          handlePrev={handlePrev}/>}
+          handlePrev={handlePrev}
+        />
+      )}
       {step === 3 && (
         <ReleaseOverview
           step={step}

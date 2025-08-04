@@ -1,5 +1,10 @@
 import PropTypes from "prop-types";
-import { Link, useNavigate, useParams, useSearchParams } from "react-router-dom";
+import {
+  Link,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from "react-router-dom";
 import { useEffect, useState } from "react";
 import "../Artists.css";
 import { Button, Flex } from "@radix-ui/themes";
@@ -14,57 +19,62 @@ import Modal from "../../../components/Modal";
 import { HiOutlineAdjustmentsHorizontal } from "react-icons/hi2";
 import axios from "axios";
 import Pagination from "../../../components/Pagination";
-import appleImg from '../../../assets/social/apple-music.png';
-import instagramImg from '../../../assets/social/instagram.png';
-import spotifyImg from '../../../assets/social/spotify-icon.png';
-import facebookImg from '../../../assets/social/facebook.png';
-import youtubeImg from '../../../assets/social/youtube-icon.png'
-import artistDemoImg from '../../../assets/artists/artist4.png'
+import appleImg from "../../../assets/social/apple-music.png";
+import instagramImg from "../../../assets/social/instagram.png";
+import spotifyImg from "../../../assets/social/spotify-icon.png";
+import facebookImg from "../../../assets/social/facebook.png";
+import youtubeImg from "../../../assets/social/youtube-icon.png";
+import artistDemoImg from "../../../assets/artists/artist4.png";
 import { useSelector } from "react-redux";
 import useQueryParams from "../../../hooks/useQueryParams";
-import threedotPng from '../../../assets/icons/vertical-threeDots.png'
+import threedotPng from "../../../assets/icons/vertical-threeDots.png";
 import localDate from "../../../hooks/localDate";
 import LoadingScreen from "../../../components/LoadingScreen";
 
 const SingleArtist = () => {
-
   const navigate = useNavigate();
-  const {id, pageNumber, perPageItem, status} = useParams();
-  const { yearsList, releaseStatusList } = useSelector(state => state.yearsAndStatus);
+  const { id, pageNumber, perPageItem, status } = useParams();
+  const { yearsList, releaseStatusList } = useSelector(
+    (state) => state.yearsAndStatus
+  );
 
   // Filter Query Paramitars_____________________
   const { navigateWithParams } = useQueryParams();
   const [filterParams] = useSearchParams();
-  const search = filterParams.get('search') || '';
-  const years = filterParams.get('years') || '';
+  const search = filterParams.get("search") || "";
+  const years = filterParams.get("years") || "";
 
   const [artist, setArtist] = useState();
-  const [deleteLoading, setDeleteLoading] = useState(false)
+  const [deleteLoading, setDeleteLoading] = useState(false);
   useEffect(() => {
-    axios.get(`http://localhost:5000/api/v1/artist/single-artist/${id}`)
-      .then(res => {
-        if(res.status == 200) {
-          setArtist(res.data.data[0])
+    axios
+      .get(
+        `https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/artist/single-artist/${id}`
+      )
+      .then((res) => {
+        if (res.status == 200) {
+          setArtist(res.data.data[0]);
         }
-      })
-  },[id, deleteLoading])
+      });
+  }, [id, deleteLoading]);
 
   // Delete Artist________________________
   const deleteArtist = (id, imgKey) => {
-      setDeleteLoading(true)
-      axios.delete(`http://localhost:5000/api/v1/artist/delete-artist/${id}?imgKey=${imgKey}`)
-      .then( res => {
-          if(res.status == 200){
-              setDeleteLoading(false)
-              navigate('/artist/1/10')
-          }else{
-            setDeleteLoading(false)
-          }
+    setDeleteLoading(true);
+    axios
+      .delete(
+        `https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/artist/delete-artist/${id}?imgKey=${imgKey}`
+      )
+      .then((res) => {
+        if (res.status == 200) {
+          setDeleteLoading(false);
+          navigate("/artist/1/10");
+        } else {
+          setDeleteLoading(false);
+        }
       })
-      .catch(er => console.log(er));
-  }
-
-
+      .catch((er) => console.log(er));
+  };
 
   // Release Under Artist __________________________________________________________
   const [currentPage, setCurrentPage] = useState(parseInt(pageNumber));
@@ -73,22 +83,23 @@ const SingleArtist = () => {
   const [filteredCount, setFilteredCount] = useState();
   const [totalPages, setTotalPages] = useState();
   // Get Release List ______________________________________________________________
-    useEffect(() => {
-      axios.get(`http://localhost:5000/api/v1/release/artist/${id}?page=${pageNumber}&limit=${perPageItem}&status=${status}&search=${search ? search : ''}&years=${years ? years: ''}`)
-        .then( res => {
-          if(res.status == 200){
-            setTotalCount(res.data.totalCount)
-            setFilteredCount(res.data.filteredCount)
-            setReleaseData(res.data.data);
-            setTotalPages(res.data.totalPages);
-          }
-        })
-        .catch(er => console.log(er));
-    }, [pageNumber, status, id, perPageItem, search, years]);
-
-
-
-  
+  useEffect(() => {
+    axios
+      .get(
+        `https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/release/artist/${id}?page=${pageNumber}&limit=${perPageItem}&status=${status}&search=${
+          search ? search : ""
+        }&years=${years ? years : ""}`
+      )
+      .then((res) => {
+        if (res.status == 200) {
+          setTotalCount(res.data.totalCount);
+          setFilteredCount(res.data.filteredCount);
+          setReleaseData(res.data.data);
+          setTotalPages(res.data.totalPages);
+        }
+      })
+      .catch((er) => console.log(er));
+  }, [pageNumber, status, id, perPageItem, search, years]);
 
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 700);
   useEffect(() => {
@@ -100,14 +111,20 @@ const SingleArtist = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-// Years and status Dropdown__________________________
+  // Years and status Dropdown__________________________
   const handleYearDropDown = (yearValue) => {
-    navigateWithParams(`/artist-details/${id}/1/${perPageItem}/${status}`, { search: search, years: yearValue });
-  }
+    navigateWithParams(`/artist-details/${id}/1/${perPageItem}/${status}`, {
+      search: search,
+      years: yearValue,
+    });
+  };
 
   const handleStatusDropDown = (statusValue) => {
-    navigateWithParams(`/artist-details/${id}/1/${perPageItem}/${statusValue}`, { search: search, years: years });
-  }
+    navigateWithParams(
+      `/artist-details/${id}/1/${perPageItem}/${statusValue}`,
+      { search: search, years: years }
+    );
+  };
 
   const dropdownItem = (
     <>
@@ -125,28 +142,35 @@ const SingleArtist = () => {
     </>
   );
 
-//  This Function For Artist Release Section 
+  //  This Function For Artist Release Section
   // Handle Page Change ________________________________
   const handlePageChange = (page) => {
-    navigateWithParams(`/artist-details/${id}/${page}/${perPageItem}/${status}`, { search: search, years: years });
-  }
+    navigateWithParams(
+      `/artist-details/${id}/${page}/${perPageItem}/${status}`,
+      { search: search, years: years }
+    );
+  };
   // Search _____________________________________________
   const [searchText, setSearchText] = useState();
   const handleKeyPress = (event) => {
-    if (event.key === 'Enter') {
-      navigateWithParams(`/artist-details/${id}/1/${perPageItem}/${status}`, { search: searchText, years: years });
+    if (event.key === "Enter") {
+      navigateWithParams(`/artist-details/${id}/1/${perPageItem}/${status}`, {
+        search: searchText,
+        years: years,
+      });
     }
   };
   // Handle Per Page Item _______________________________
   const handlePerPageItem = (perPageItemValue) => {
-    navigateWithParams(`/artist-details/${id}/${pageNumber}/${perPageItemValue}/${status}`, { search: search, years: years });
+    navigateWithParams(
+      `/artist-details/${id}/${pageNumber}/${perPageItemValue}/${status}`,
+      { search: search, years: years }
+    );
+  };
+
+  if (deleteLoading == true) {
+    return <LoadingScreen />;
   }
-
-
-  if(deleteLoading == true) {
-    return <LoadingScreen/>
-  }
-
 
   return (
     <div className="main-content">
@@ -156,7 +180,13 @@ const SingleArtist = () => {
             <Flex className="artist-image-row">
               <div>
                 <img
-                  style={{width: '148px', height: '148px', borderRadius: '50%', objectFit: 'cover', objectPosition: 'center'}}
+                  style={{
+                    width: "148px",
+                    height: "148px",
+                    borderRadius: "50%",
+                    objectFit: "cover",
+                    objectPosition: "center",
+                  }}
                   className="singleArtist-image"
                   src={`${artist?.imgUrl ? artist.imgUrl : artistDemoImg}`}
                   alt={artist?.artistName}
@@ -164,10 +194,11 @@ const SingleArtist = () => {
               </div>
               <div style={{ margin: "auto auto auto 0" }}>
                 <h1>{artist?.artistName}</h1>
-                {
-                  artist?.date ?
-                  <p>Created on {localDate(artist?.date) }</p> : <p>Created on Date Not Found</p> 
-                }
+                {artist?.date ? (
+                  <p>Created on {localDate(artist?.date)}</p>
+                ) : (
+                  <p>Created on Date Not Found</p>
+                )}
               </div>
               <DropdownMenu.Root>
                 <DropdownMenu.Trigger asChild>
@@ -219,7 +250,13 @@ const SingleArtist = () => {
                             <br />
                             <div className="singleArtist-deleteModal-btns">
                               <Button>No</Button>
-                              <Button onClick={() => deleteArtist(artist._id, artist?.imgKey)}>Yes, Delete</Button>
+                              <Button
+                                onClick={() =>
+                                  deleteArtist(artist._id, artist?.imgKey)
+                                }
+                              >
+                                Yes, Delete
+                              </Button>
                             </div>
                           </Modal>
                         </Dialog.Content>
@@ -233,33 +270,62 @@ const SingleArtist = () => {
               <div className="singleArtist-info">
                 <h4>Total Releases</h4>
                 <h1>{totalCount}</h1>
-                <Button style={{cursor:'pointer'}} onClick={() => navigate('/release/1/10/All')} className="singleArtist-pg-allRelease-btn">
+                <Button
+                  style={{ cursor: "pointer" }}
+                  onClick={() => navigate("/release/1/10/All")}
+                  className="singleArtist-pg-allRelease-btn"
+                >
                   All Releases &nbsp;&nbsp; <ChevronRight />
                 </Button>
               </div>
               <div className="singleArtist-social-div">
                 <h4>Artist Profiles</h4>
                 <div className="d-flex single-pg-social">
-                  {
-                      artist?.appleId &&
-                      <a className="social-div" target='_blank' href={`https://music.apple.com/profile/${artist.appleId}`}><img src={appleImg} alt={appleImg} /></a>
-                  }
-                  {
-                      artist?.spotifyId &&
-                      <a className="social-div" target='_blank' href={`https://open.spotify.com/user/${artist.spotifyId}`}><img src={spotifyImg} alt={spotifyImg} /></a>
-                  }
-                  {
-                      artist?.instagramId &&
-                      <a className="social-div" target='_blank' href={`https://www.instagram.com/${artist.instagramId}`}><img src={instagramImg} alt={instagramImg} /></a>
-                  }
-                  {
-                      artist?.facebook &&
-                      <a className="social-div" target='_blank' href={artist.facebook}><img src={facebookImg} alt={facebookImg} /></a>
-                  }
-                  {
-                      artist?.youtube &&
-                      <a className="social-div" target='_blank' href={artist.youtube}><img src={youtubeImg} alt={youtubeImg} /></a>
-                  }
+                  {artist?.appleId && (
+                    <a
+                      className="social-div"
+                      target="_blank"
+                      href={`https://music.apple.com/profile/${artist.appleId}`}
+                    >
+                      <img src={appleImg} alt={appleImg} />
+                    </a>
+                  )}
+                  {artist?.spotifyId && (
+                    <a
+                      className="social-div"
+                      target="_blank"
+                      href={`https://open.spotify.com/user/${artist.spotifyId}`}
+                    >
+                      <img src={spotifyImg} alt={spotifyImg} />
+                    </a>
+                  )}
+                  {artist?.instagramId && (
+                    <a
+                      className="social-div"
+                      target="_blank"
+                      href={`https://www.instagram.com/${artist.instagramId}`}
+                    >
+                      <img src={instagramImg} alt={instagramImg} />
+                    </a>
+                  )}
+                  {artist?.facebook && (
+                    <a
+                      className="social-div"
+                      target="_blank"
+                      href={artist.facebook}
+                    >
+                      <img src={facebookImg} alt={facebookImg} />
+                    </a>
+                  )}
+                  {artist?.youtube && (
+                    <a
+                      className="social-div"
+                      target="_blank"
+                      href={artist.youtube}
+                    >
+                      <img src={youtubeImg} alt={youtubeImg} />
+                    </a>
+                  )}
                 </div>
               </div>
             </div>
@@ -279,12 +345,22 @@ const SingleArtist = () => {
         Releases under this artist
       </h4>
       <div className="search-setion">
-        <input onKeyPress={handleKeyPress} onChange={e => setSearchText(e.target.value)} type="text" placeholder="Search..." />
+        <input
+          onKeyPress={handleKeyPress}
+          onChange={(e) => setSearchText(e.target.value)}
+          type="text"
+          placeholder="Search..."
+        />
         {isMobile ? (
           <DropdownMenu.Root>
             <DropdownMenu.Trigger asChild>
               <button
-                className="dropdown-trigger" style={{width: "56px", justifyContent: "center", marginRight: "0",}}
+                className="dropdown-trigger"
+                style={{
+                  width: "56px",
+                  justifyContent: "center",
+                  marginRight: "0",
+                }}
               >
                 <HiOutlineAdjustmentsHorizontal
                   style={{ width: "24px", height: "24px" }}
@@ -305,14 +381,15 @@ const SingleArtist = () => {
         )}
       </div>
       <ReleaseCard releaseData={releaseData} />
-      <Pagination 
-        totalDataCount={filteredCount} 
+      <Pagination
+        totalDataCount={filteredCount}
         totalPages={totalPages}
-        currentPage={currentPage} 
-        perPageItem={perPageItem} 
-        setCurrentPage={setCurrentPage} 
+        currentPage={currentPage}
+        perPageItem={perPageItem}
+        setCurrentPage={setCurrentPage}
         handlePageChange={handlePageChange}
-        customFunDropDown={handlePerPageItem}/>
+        customFunDropDown={handlePerPageItem}
+      />
       <br />
       <br />
     </div>

@@ -17,38 +17,38 @@ import NotFoundComponent from "../../../components/NotFoundComponent";
 import toast from "react-hot-toast";
 import { setReFetchServiceRequest } from "../../../redux/features/reFetchDataHandleSlice/reFetchDataHandleSlice";
 
-
 function ClaimVideo({
-    years,
-    notFound,
-    filterByYear,
-    filterByStatus,
-    handleKeyPress,
-    setSearchText,
+  years,
+  notFound,
+  filterByYear,
+  filterByStatus,
+  handleKeyPress,
+  setSearchText,
 }) {
-
-
-  const {status} = useParams();
-  const {serviceRequestData} = useSelector((state) => state.serviceRequestPageSlice);
-  const { yearsList } = useSelector(state => state.yearsAndStatus);
-  const {userNameIdRoll} = useSelector((state) => state.userData);
-  const { reFetchServiceRequest } = useSelector(state => state.reFetchSlice);
+  const { status } = useParams();
+  const { serviceRequestData } = useSelector(
+    (state) => state.serviceRequestPageSlice
+  );
+  const { yearsList } = useSelector((state) => state.yearsAndStatus);
+  const { userNameIdRoll } = useSelector((state) => state.userData);
+  const { reFetchServiceRequest } = useSelector((state) => state.reFetchSlice);
   const dispatch = useDispatch();
 
-
   const [releaseData, setReleaseData] = useState();
-  useEffect( () => {
-    if(userNameIdRoll){
-      axios.get(`http://localhost:5000/api/v1/release/${userNameIdRoll[1]}?page=1&limit=1000&status=All`)
-        .then( res => {
-          if(res.status == 200){
+  useEffect(() => {
+    if (userNameIdRoll) {
+      axios
+        .get(
+          `https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/release/${userNameIdRoll[1]}?page=1&limit=1000&status=All`
+        )
+        .then((res) => {
+          if (res.status == 200) {
             setReleaseData(res.data.data);
           }
         })
-        .catch(er => console.log(er));
+        .catch((er) => console.log(er));
     }
-  },[userNameIdRoll]);
-
+  }, [userNameIdRoll]);
 
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 700);
   useEffect(() => {
@@ -60,17 +60,16 @@ function ClaimVideo({
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  
   const dropdownItem = (
     <>
       <SelectDropdown
         options={yearsList}
-        placeholder={`${years ? years : 'All Time'}`}
+        placeholder={`${years ? years : "All Time"}`}
         filterByYearAndStatus={filterByYear}
       />
       {isMobile && <br />}
       <SelectDropdown
-        options={['All', 'Pending', 'Solved','Rejected']}
+        options={["All", "Pending", "Solved", "Rejected"]}
         placeholder={status}
         filterByYearAndStatus={filterByStatus}
       />
@@ -78,23 +77,33 @@ function ClaimVideo({
   );
   const [isOpen, setIsOpen] = useState(false);
   // Form  ____________________________________________________
-  const {register, handleSubmit, setValue, watch, control, formState: {errors}} = useForm()
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    watch,
+    control,
+    formState: { errors },
+  } = useForm();
   const onSubmit = (data) => {
-    const userName = userNameIdRoll[0]
-    const masterUserId = userNameIdRoll[1]
-    const status = 'Pending';
-    const isoDate = new Date().toISOString()
-    const payload = {...data, userName, masterUserId, status, isoDate};
-    axios.post(`http://localhost:5000/common/api/v1/claim-release`, payload)
-    .then(res => {
-        if(res.status === 200){
-            dispatch(setReFetchServiceRequest(reFetchServiceRequest + 1))
-            toast.success('Successfully Submited');
+    const userName = userNameIdRoll[0];
+    const masterUserId = userNameIdRoll[1];
+    const status = "Pending";
+    const isoDate = new Date().toISOString();
+    const payload = { ...data, userName, masterUserId, status, isoDate };
+    axios
+      .post(
+        `https://dream-records-2025-m2m9a.ondigitalocean.app/common/api/v1/claim-release`,
+        payload
+      )
+      .then((res) => {
+        if (res.status === 200) {
+          dispatch(setReFetchServiceRequest(reFetchServiceRequest + 1));
+          toast.success("Successfully Submited");
         }
-    })
-    setIsOpen(false)
-  }
-
+      });
+    setIsOpen(false);
+  };
 
   return (
     <div>
@@ -103,7 +112,10 @@ function ClaimVideo({
         <Dialog.Root open={isOpen} onOpenChange={setIsOpen}>
           <Dialog.Trigger className="theme-btn">+ Create New</Dialog.Trigger>
           <Modal title="Create New Service Request">
-            <form onSubmit={handleSubmit(onSubmit)} className="serviceRequest-modal-content">
+            <form
+              onSubmit={handleSubmit(onSubmit)}
+              className="serviceRequest-modal-content"
+            >
               <p className="modal-description">
                 If you want to claim a service request, please fill the details
                 below for associated tracks with appropriate links.
@@ -111,37 +123,52 @@ function ClaimVideo({
               <p style={{ fontSize: "12px" }}>Service Request</p>
               <input
                 type="text"
-                value='Claim Video'
+                value="Claim Video"
                 className="service-modal-input"
-                {...register("claimOption", { required: true})}
+                {...register("claimOption", { required: true })}
                 readOnly
               />
-              {errors.claimOption && <span style={{color: '#ea3958'}}>Claim Video Required</span>}
+              {errors.claimOption && (
+                <span style={{ color: "#ea3958" }}>Claim Video Required</span>
+              )}
 
               <p style={{ fontSize: "12px" }}>Choose Release</p>
               <SearchDropdownRelease
                 items={releaseData}
                 searchTxt="Search and select Release"
-                onSelect={(items) => setValue("release", items, { shouldValidate: true })}
-                register={{...register("release", { required: true})}}
+                onSelect={(items) =>
+                  setValue("release", items, { shouldValidate: true })
+                }
+                register={{ ...register("release", { required: true }) }}
                 value={watch("release")}
               />
-              {errors.release && <span style={{color: '#ea3958'}}>Release Required</span>}
+              {errors.release && (
+                <span style={{ color: "#ea3958" }}>Release Required</span>
+              )}
               <p style={{ fontSize: "12px" }}>Video link*</p>
               <input
                 type="text"
                 placeholder="Paste link here"
                 className="service-modal-input"
-                {...register("claimLink", { required: true})}
+                {...register("claimLink", { required: true })}
               />
-              {errors.claimLink && <span style={{color: '#ea3958'}}>Video Link Required</span>}
-              <button type="submit" className="close-button">Submit</button>
+              {errors.claimLink && (
+                <span style={{ color: "#ea3958" }}>Video Link Required</span>
+              )}
+              <button type="submit" className="close-button">
+                Submit
+              </button>
             </form>
           </Modal>
         </Dialog.Root>
       </Flex>
       <div className="search-setion">
-        <input onKeyPress={handleKeyPress} onChange={e => setSearchText(e.target.value)} type="text" placeholder="Search..." />
+        <input
+          onKeyPress={handleKeyPress}
+          onChange={(e) => setSearchText(e.target.value)}
+          type="text"
+          placeholder="Search..."
+        />
         {isMobile ? (
           <DropdownMenu.Root>
             <DropdownMenu.Trigger asChild>
@@ -171,16 +198,10 @@ function ClaimVideo({
           dropdownItem
         )}
       </div>
-      {
-        serviceRequestData &&
-        <Table
-          serviceRequestData={serviceRequestData}
-          tableFor="ClaimVideo"
-        />
-      }
-      {
-        notFound && <NotFoundComponent/> 
-      }
+      {serviceRequestData && (
+        <Table serviceRequestData={serviceRequestData} tableFor="ClaimVideo" />
+      )}
+      {notFound && <NotFoundComponent />}
     </div>
   );
 }
