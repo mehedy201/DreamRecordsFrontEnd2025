@@ -86,9 +86,7 @@ const Transaction = () => {
     // Get Payment With Balance Month _____________________________________________
     if (userNameIdRoll) {
       axios
-        .get(
-          `https://dream-records-2025-m2m9a.ondigitalocean.app/common/api/v1/payment/${userNameIdRoll[1]}?page=${pageNumber}&limit=${perPageItem}`
-        )
+        .get(`https://dream-records-2025-m2m9a.ondigitalocean.app/common/api/v1/payment/${userNameIdRoll[1]}?page=${pageNumber}&limit=${perPageItem}`)
         .then((res) => {
           if (res.status === 200) {
             setPaymentDetails(res.data.data);
@@ -99,9 +97,7 @@ const Transaction = () => {
           }
         });
       axios
-        .get(
-          `https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/bank-info/${userNameIdRoll[1]}`
-        )
+        .get(`https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/bank-info/${userNameIdRoll[1]}`)
         .then((res) => {
           if (res.status == 200) {
             setBankInfo(res.data.data[0]);
@@ -124,10 +120,7 @@ const Transaction = () => {
       return;
     }
     axios
-      .post(
-        `https://dream-records-2025-m2m9a.ondigitalocean.app/common/api/v1/payment/withdrawal/${userNameIdRoll[1]}`,
-        bankInfo
-      )
+      .post(`https://dream-records-2025-m2m9a.ondigitalocean.app/common/api/v1/payment/withdrawal/${userNameIdRoll[1]}`,bankInfo)
       .then((res) => {
         if (res.status == 200) {
           // setBankInfo(res.data.data)

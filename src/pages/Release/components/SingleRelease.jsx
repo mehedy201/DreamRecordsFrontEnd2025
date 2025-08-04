@@ -40,14 +40,13 @@ const totalRevineuStreamColumn = [
 function SingleRelease() {
   const { id } = useParams();
   const { yearsList } = useSelector((state) => state.yearsAndStatus);
-
   const [releaseData, setReleaseData] = useState();
   const [trackData, setTrackData] = useState();
   const [UPC, setUPC] = useState("");
   useEffect(() => {
     axios
       .get(
-        `http://localhost:5000/api/v1/release/single/${id}`
+        `https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/release/single/${id}`
       )
       .then((res) => {
         if (res.status === 200) {
@@ -91,7 +90,7 @@ function SingleRelease() {
 
     const byDsp = Object.entries(dspMap).map(([dsp, { revenue, streams }]) => ({
       dsp,
-      revenue: Number(revenue.toFixed(2)),
+      revenue: Number(revenue?.toFixed(2)),
       streams,
     }));
 
@@ -124,7 +123,9 @@ function SingleRelease() {
       },
       { total: "Total", streams: 0, revenue: 0 }
     );
-    totalSummaryData.revenue = Number(totalSummaryData.revenue.toFixed(2));
+    console.log('totalSummaryData', totalSummaryData)
+    totalSummaryData.revenue = Number(totalSummaryData?.revenue?.toFixed(2));
+
 
     setTableData(byDsp);
     setDspTableData(byDsp);
@@ -145,11 +146,7 @@ function SingleRelease() {
     setDataNotFound(false);
     if (UPC) {
       axios
-        .get(
-          `${
-            import.meta.env.API_URL
-          }/common/api/v1/analytics-and-balance/upc-analytics?UPC=${UPC}&years=${years}`
-        )
+        .get(`https://dream-records-2025-m2m9a.ondigitalocean.app/common/api/v1/analytics-and-balance/upc-analytics?UPC=${UPC}&years=${years}`)
         .then((res) => {
           console.log(res);
           if (res.status === 200) {
@@ -183,7 +180,6 @@ function SingleRelease() {
 
   const [analyticsCollapse, setAnalyticsCollapse] = useState(true);
 
-  console.log('mehedi')
 
   return (
     <div>

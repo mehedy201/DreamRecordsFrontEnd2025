@@ -88,7 +88,7 @@ const Home = () => {
       // Release Data Get From API ___________
       axios
         .get(
-          `https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/release/${userNameIdRoll[1]}?page=1&limit=5&status=Approved&search=&years=`
+          `https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/release/${userNameIdRoll[1]}?page=1&limit=5&status=Live&search=&years=`
         )
         .then((res) => {
           if (res.status == 200) {
