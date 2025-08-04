@@ -145,12 +145,12 @@ const ServiceRequest = () => {
               <p>{serviceCount?.ReleaseClaim ? serviceCount?.ReleaseClaim : 0}</p>
             </div>
           </Tabs.Trigger>
-          <Tabs.Trigger onClick={() => navigate('/service-request/Content-ID/1/10/All')} className="tabs-trigger" value="Content ID">
+          {/* <Tabs.Trigger onClick={() => navigate('/service-request/Content-ID/1/10/All')} className="tabs-trigger" value="Content ID">
             Content ID
             <div className="tabs-notification">
               <p>{serviceCount?.ContentID ? serviceCount?.ContentID : 0}</p>
             </div>
-          </Tabs.Trigger>
+          </Tabs.Trigger> */}
           <Tabs.Trigger onClick={() => navigate('/service-request/Claim-Video/1/10/All')} className="tabs-trigger" value="Claim Video">
             Claim Video
             <div className="tabs-notification">
@@ -175,12 +175,12 @@ const ServiceRequest = () => {
               <p>{serviceCount?.ProfileLinking ? serviceCount?.ProfileLinking : 0}</p>
             </div>
           </Tabs.Trigger>
-          <Tabs.Trigger onClick={() => navigate('/service-request/Whitelist/1/10/All')} className="tabs-trigger" value="Whitelist">
+          {/* <Tabs.Trigger onClick={() => navigate('/service-request/Whitelist/1/10/All')} className="tabs-trigger" value="Whitelist">
             Whitelist{" "}
             <div className="tabs-notification">
               <p>{serviceCount?.Whitelist ? serviceCount?.Whitelist : 0}</p>
             </div>
-          </Tabs.Trigger>
+          </Tabs.Trigger> */}
         </Tabs.List>
 
         <div className="tabs-content">
@@ -195,7 +195,7 @@ const ServiceRequest = () => {
             />
           </Tabs.Content>
 
-          <Tabs.Content className="tab-panel" value="Content ID">
+          {/* <Tabs.Content className="tab-panel" value="Content ID">
             <ContentID
               years={years}
               notFound={notFound}
@@ -205,7 +205,7 @@ const ServiceRequest = () => {
               handleKeyPress={handleKeyPress}
               setSearchText={setSearchText}
             />
-          </Tabs.Content>
+          </Tabs.Content> */}
 
           <Tabs.Content className="tab-panel" value="Claim Video">
             <ClaimVideo
@@ -251,7 +251,7 @@ const ServiceRequest = () => {
               setSearchText={setSearchText}
             />
           </Tabs.Content>
-          <Tabs.Content className="tab-panel" value="Whitelist">
+          {/* <Tabs.Content className="tab-panel" value="Whitelist">
             <Whitelist
               years={years}
               notFound={notFound}
@@ -261,7 +261,7 @@ const ServiceRequest = () => {
               handleKeyPress={handleKeyPress}
               setSearchText={setSearchText}
             />
-          </Tabs.Content>
+          </Tabs.Content> */}
         </div>
       </Tabs.Root>
       <Pagination 
