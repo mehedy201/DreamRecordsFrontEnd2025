@@ -133,12 +133,15 @@ function SingleRelease() {
   const [totalStreams, setTotalStreams] = useState()
   const [totalRevenue, setTotalRevenue] = useState();
   const [years, setYears] = useState(Math.max(...yearsList));
-  const [dataNotFound, setDataNotFound] = useState(false)
+  const [dataNotFound, setDataNotFound] = useState(false);
+  const [analyticsLoading, setAnalyticsLoading] = useState(false);
   useEffect(() => {
+    setAnalyticsLoading(true)
     setDataNotFound(false)
     if(UPC){
       axios.get(`http://localhost:5000/common/api/v1/analytics-and-balance/upc-analytics?UPC=${UPC}&years=${years}`)
       .then(res => {
+        console.log(res)
         if(res.status === 200){
           if(isEmptyArray(res?.data?.data))setDataNotFound(true)
           setTotalStreams(res?.data?.totalRevenue)
@@ -158,6 +161,7 @@ function SingleRelease() {
   
           setChartDataStreams(streamsData)
           setChartDataRevenue(revenewData)
+          setAnalyticsLoading(false)
         }
       })
     }
@@ -173,18 +177,28 @@ function SingleRelease() {
       >
         {releaseData && releaseData ? (
           <>
+            {
+              releaseData?.rejectionReasons &&
               <>
                 {" "}
                 <div className="home-notice">
                   <FiAlertTriangle />
-                  <p>
-                    We are upgrading our platform to enhance your experience.
-                    You may notice new user interfaces appearing periodically.
-                    Thank you for your patience as we make these improvements.
-                  </p>
+                  <p dangerouslySetInnerHTML={{__html: releaseData?.actionRequired}}></p>
                 </div>
                 <br />
               </>
+            }
+            {
+              releaseData?.actionRequired &&
+              <>
+                {" "}
+                <div className="home-notice">
+                  <FiAlertTriangle />
+                  <p dangerouslySetInnerHTML={{__html: releaseData?.actionRequired}}></p>
+                </div>
+                <br />
+              </>
+            }
             <div className="d-flex release-overview-img-div">
               <img
                 src={releaseData?.imgUrl}

@@ -131,33 +131,23 @@ function App() {
           />
           <Route
             path="/release/:id"
-            element={
-              <SingleRelease
-                singleReleaseATrackData={singleReleaseATrackData}
-                singleReleaseARevenueData={singleReleaseARevenueData}
-                chartData={chartData}
-              />
-            }
+            element={ <Authorization><SingleRelease/></Authorization> }
           />
           <Route
             path="/create-release"
-            element={
-              <CreateRelease
-                releaseAlbumInfo={releaseAlbumInfo}
-                albumTrackList={albumTrackList}
-                releaseTrackDetails={releaseTrackDetails}
-              />
-            }
+            element={ <Authorization><CreateRelease/></Authorization>}
           />
-          <Route path="/AlbumInformation" element={<AlbumInformation />} />
+          <Route path="/AlbumInformation" element={<Authorization><AlbumInformation /></Authorization>} />
 
           <Route
             path="/ReleaseOverview"
             element={
-              <ReleaseOverview
-                releaseAlbumInfo={releaseAlbumInfo}
-                releaseTrackDetails={releaseTrackDetails}
-              />
+              <Authorization>
+                <ReleaseOverview
+                  releaseAlbumInfo={releaseAlbumInfo}
+                  releaseTrackDetails={releaseTrackDetails}
+                />
+              </Authorization>
             }
           />
           {/* Release Route End_____________________________________ */}
@@ -165,38 +155,38 @@ function App() {
           {/* Artist Route Start ___________________________________ */}
           <Route
             path="/artist/:pageNumber/:perPageItem/"
-            element={<Artists />}
+            element={<Authorization><Artists /></Authorization>}
           />
           <Route
             path="/artist-details/:id/:pageNumber/:perPageItem/:status"
-            element={<SingleArtist/>}/>
+            element={<Authorization><SingleArtist/></Authorization>}/>
 
           <Route
             path="/create-artist"
-            element={<CreateArtist />}
+            element={<Authorization><CreateArtist /></Authorization>}
           />
           <Route
             path="/edit-artist/:id"
-            element={<EditSingleArtist/>}
+            element={<Authorization><EditSingleArtist/></Authorization>}
           />
           {/* Artist Route End ___________________________________ */}
 
           {/* Label Route Start __________________________________ */}
           <Route
             path="/labels/:pageNumber/:perPageItem/:status"
-            element={<Lables />}
+            element={<Authorization><Lables /></Authorization>}
           />
           <Route
             path="/labels/:id/:pageNumber/:perPageItem/:status"
-            element={<SingleLable />}
+            element={<Authorization><SingleLable /></Authorization>}
           />
           <Route
             path="/create-label"
-            element={<CreateLabel />}
+            element={<Authorization><CreateLabel /></Authorization>}
           />
           <Route
             path="/edit-label/:id"
-            element={<EditLable/>}
+            element={<Authorization><EditLable/></Authorization>}
           />
 
           {/* Label Route End __________________________________ */}
@@ -204,7 +194,7 @@ function App() {
 
           <Route
             path="/transaction/:pageNumber/:perPageItem/:status"
-            element={<Transaction transactions={transactions} />}
+            element={<Authorization><Transaction /></Authorization>}
           />
 
           {/* Service Request Route Start _______________________ */}
@@ -212,17 +202,16 @@ function App() {
             path="/service-request/:request/:pageNumber/:perPageItem/:status"
             // path="/serviceRequest"
             element={
-              <ServiceRequest
-                artistsItems={artistsItems}
-                Release_Claim={Release_Claim}
-              />
+              <Authorization>
+                <ServiceRequest/>
+              </Authorization>
             }
           />
           {/* Service Request Route End _________________________ */}
 
           
-          <Route path="/Profile" element={<Profile />} />
-          <Route path="/settings" element={<Settings />} />
+          <Route path="/Profile" element={<Authorization><Profile /></Authorization>} />
+          <Route path="/settings" element={<Authorization><Settings /></Authorization>} />
           <Route
             path="/Support"
             element={
