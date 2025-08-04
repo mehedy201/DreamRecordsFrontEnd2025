@@ -8,6 +8,7 @@ import { useSelector } from "react-redux";
 import axios from "axios";
 import { Check, ChevronDown } from "lucide-react";
 import toast from "react-hot-toast";
+import isEmptyArray from "../../hooks/isEmptyArrayCheck";
 
 function Settings() {
   const { userNameIdRoll } = useSelector((state) => state.userData);
@@ -26,6 +27,7 @@ function Settings() {
 
   const [bankInfo, setBankInfo] = useState();
   const [bankInfoReFetch, setBankInfoReFetch] = useState(1);
+  const [notBankInfo, setNotBankInfo] = useState(false);
   useEffect(() => {
     if (userNameIdRoll) {
       axios
@@ -34,6 +36,11 @@ function Settings() {
         )
         .then((res) => {
           if (res.status == 200) {
+            if(isEmptyArray(res.data.data)){
+              setNotBankInfo(false)
+            }else{
+              setNotBankInfo(true)
+            }
             setBankInfo(res.data.data);
           }
         })
@@ -136,7 +143,7 @@ function Settings() {
               </Select.Content>
             </Select.Portal>
           </Select.Root>
-          {!bankInfo && (
+          {!notBankInfo && (
             <form
               onSubmit={handleSubmit(onSubmit)}
               className="form-container"
@@ -464,7 +471,7 @@ function Settings() {
       </div>
       <div>
         <h4>Bank Information</h4>
-        {bankInfo &&
+        {notBankInfo &&
           bankInfo.map((bank) => (
             <div
               key={bank._id}

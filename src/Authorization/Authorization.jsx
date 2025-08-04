@@ -50,6 +50,7 @@ const Authorization = ({ children }) => {
         const res = await axios.get(
           `https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/users/${userId}`
         );
+        console.log('user', res)
         dispatch(setUserData(res.data.data));
         const isLocked = res.data?.data?.userLocked;
         if (isLocked) {

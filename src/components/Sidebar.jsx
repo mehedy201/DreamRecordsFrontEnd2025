@@ -16,7 +16,7 @@ import helpIcon from '../assets/icons/Help.png'
 import profileIcon from '../assets/icons/Profile.png'
 import settingsIcon from '../assets/icons/Settings.png'
 
-import beleveIcon from '../assets/believe.png'
+import warner from '../assets/warner-logo.png'
 
 const menuItems = [
   { name: "Home", path: "/", icon: homeIcon },
@@ -67,7 +67,7 @@ const Sidebar = () => {
       </nav>
       <div className="sidebar-bottomTxt-div">
         <p>Powered by</p>
-        <img src={beleveIcon} alt="" />
+        <img style={{width: '100px', height: 'auto'}} src={warner} alt="" />
       </div>
     </aside>
   );

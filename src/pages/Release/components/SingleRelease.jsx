@@ -47,7 +47,7 @@ function SingleRelease() {
   useEffect(() => {
     axios
       .get(
-        `https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/release/single/${id}`
+        `http://localhost:5000/api/v1/release/single/${id}`
       )
       .then((res) => {
         if (res.status === 200) {
@@ -182,6 +182,8 @@ function SingleRelease() {
   }, [UPC, years]);
 
   const [analyticsCollapse, setAnalyticsCollapse] = useState(true);
+
+  console.log('mehedi')
 
   return (
     <div>
