@@ -35,9 +35,6 @@ function NewPassword() {
 
     if (res.data.token) {
       setMessage(res.data.message);
-      axios.patch(
-        `https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/users/last-log-in/${userId}`
-      );
       localStorage.setItem("token", res.data.token); // ✅ Token save
       navigate("/"); // redirect
       setLoading(false);

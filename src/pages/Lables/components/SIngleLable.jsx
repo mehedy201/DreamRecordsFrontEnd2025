@@ -84,11 +84,7 @@ function SingleLable() {
   // Get Release List ______________________________________________________________
   useEffect(() => {
     axios
-      .get(
-        `https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/release/labels/${id}?page=${pageNumber}&limit=${perPageItem}&status=${status}&search=${
-          search ? search : ""
-        }&years=${years ? years : ""}`
-      )
+      .get(`https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/release/labels/${id}?page=${pageNumber}&limit=${perPageItem}&status=${status}&search=${search ? search : ""}&years=${years ? years : ""}`)
       .then((res) => {
         if (res.status == 200) {
           setTotalCount(res.data.totalCount);
