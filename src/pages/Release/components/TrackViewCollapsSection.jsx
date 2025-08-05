@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { X } from "lucide-react";
 import { setTracksInfo } from "../../../redux/features/releaseDataHandleSlice/releaseDataHandleSlice";
 import axios from "axios";
-
+import artistDemoImg from '../../../assets/artists/artist4.png'
 const TrackViewCollapsSection = ({ track, index }) => {
   // Get TrackInfo Data State form Redux
   const { tracksInfo } = useSelector((state) => state.releaseData);
@@ -153,7 +153,80 @@ const TrackViewCollapsSection = ({ track, index }) => {
                 </div>
               </Tabs.Content>
               <Tabs.Content className="tabs-content" value="Credits">
-                <p>Access and update your documents.</p>
+                <div className="form-grid releaseCredit-formGrid">
+                    <div className="d-flex releaseCredit-items">
+                      <p className="releaseCredit-items-title">
+                        Primary Atrist
+                      </p>
+                      <div>
+                        {
+                            track?.artist?.map((data, index) => {
+                                <div key={index} className="d-flex">
+                                    <img
+                                        src={data?.imgUrl ? data?.imgUrl : artistDemoImg}
+                                        alt=""
+                                    />
+                                    <p>{data?.artistName}</p>
+                                </div>
+                            })
+                        }
+                      </div>
+                    </div>
+                    <div className="d-flex releaseCredit-items">
+                      <p className="releaseCredit-items-title">
+                        Lyricist
+                      </p>
+                      <div>
+                        {   
+                            track?.lyricist?.map((data, index) => 
+                                <div key={index} className="d-flex">
+                                    <img
+                                        src={data?.imgUrl ? data?.imgUrl : artistDemoImg}
+                                        alt=""
+                                    />
+                                    <p>{data?.artistName}</p>
+                                </div>
+                            )
+                        }
+                      </div>
+                    </div>
+                    <div className="d-flex releaseCredit-items">
+                      <p className="releaseCredit-items-title">
+                        Featuring
+                      </p>
+                      <div>
+                        {   
+                            track?.featuring?.map((data, index) => 
+                                <div key={index} className="d-flex">
+                                    <img
+                                        src={data?.imgUrl ? data?.imgUrl : artistDemoImg}
+                                        alt=""
+                                    />
+                                    <p>{data?.artistName}</p>
+                                </div>
+                            )
+                        }
+                      </div>
+                    </div>
+                    <div className="d-flex releaseCredit-items">
+                      <p className="releaseCredit-items-title">
+                        Composer
+                      </p>
+                      <div>
+                        {   
+                            track?.composer?.map((data, index) => 
+                                <div key={index} className="d-flex">
+                                    <img
+                                        src={data?.imgUrl ? data?.imgUrl : artistDemoImg}
+                                        alt=""
+                                    />
+                                    <p>{data?.artistName}</p>
+                                </div>
+                            )
+                        }
+                      </div>
+                    </div>
+                </div>
               </Tabs.Content>
             </Tabs.Root>
           </div>

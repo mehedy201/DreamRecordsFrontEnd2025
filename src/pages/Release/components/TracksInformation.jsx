@@ -45,7 +45,7 @@ function TracksInformation({ step, setStep, steps, handlePrev}) {
           onValueChange={(value) => dispatch(setTrackFormat(value))}
         >
           <label className="radio-label">
-            <span><RadioGroup.Item className="radio-item" value="Singles" />&nbsp; Singles</span>
+            <span><RadioGroup.Item className="radio-item" value="Single" />&nbsp; Single</span>
           </label>
           <label className="radio-label">
             <span><RadioGroup.Item className="radio-item" value="Album" />&nbsp; Album</span>
@@ -53,7 +53,7 @@ function TracksInformation({ step, setStep, steps, handlePrev}) {
         </RadioGroup.Root>
 
         {
-          trackFormat === "Singles" &&
+          trackFormat === "Single" &&
           <>
             {
               tracksInfo.length > 1 && 

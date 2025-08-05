@@ -3,6 +3,16 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 
 const TestPage = () => {
+
+  const analyticsUplaod = (e) => {
+        const file = e[0];
+        const formData = new FormData();
+        formData.append('file', file);
+        axios.post(`http://localhost:5000/common/api/v1/analytics-and-balance`, formData)
+        .then(res => {
+            console.log(res)
+        })
+    }
   
   return (
     <div>

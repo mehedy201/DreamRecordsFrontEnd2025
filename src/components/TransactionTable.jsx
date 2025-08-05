@@ -82,7 +82,7 @@ const TransactionTable = ({ columns, data }) => {
                 )}
               </td>
               <td>
-                {d?.type === "Withdraw" ? "-" : "+"} € {d?.amount}
+                {d?.type === "Withdraw" ? "-" : "+"} &#8377; {d?.amount}
               </td>
               <td>
                 <span
