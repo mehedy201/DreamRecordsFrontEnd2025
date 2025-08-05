@@ -56,6 +56,9 @@ function SignUpVerificationEmail() {
       .then((res) => {
         if (res.data.status === 200) {
           localStorage.setItem("token", res.data.token);
+          axios.patch(
+          `https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/users/last-log-in/${userId}`
+          );
           navigate("/sign-up-profile-info");
         }
       });

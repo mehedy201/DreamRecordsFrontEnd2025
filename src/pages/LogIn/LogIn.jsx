@@ -26,8 +26,10 @@ function LogIn() {
         data
       )
       .then((res) => {
-        console.log(res);
         if (res.data.status === 200) {
+          axios.patch(
+          `https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/users/last-log-in/${userId}`
+          );
           localStorage.setItem("token", res.data.token);
           toast.success(res.data.message);
           navigate("/");
