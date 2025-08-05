@@ -69,7 +69,7 @@ function ReleaseOverview({ step, setStep, handlePrev }) {
           console.log(res);
           dispatch(setReleaseAlbumInfo({}));
           dispatch(setTracksInfo([]));
-          dispatch(setTrackFormat("Singles"));
+          dispatch(setTrackFormat("Single"));
           dispatch(setReleaseDate({}));
           setStep(4);
         }

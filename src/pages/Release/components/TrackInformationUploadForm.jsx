@@ -61,17 +61,17 @@ const TrackInformationUploadForm = ({
       });
   }, [userNameIdRoll, reFetchArtist]);
 
-  const preAudioKey = trackFormat === "Singles" ? tracksInfo[0]?.audioKey : "";
-  const preAudioUrl = trackFormat === "Singles" ? tracksInfo[0]?.audioUrl : "";
+  const preAudioKey = trackFormat === "Single" ? tracksInfo[0]?.audioKey : "";
+  const preAudioUrl = trackFormat === "Single" ? tracksInfo[0]?.audioUrl : "";
   const preAudioName =
-    trackFormat === "Singles" ? tracksInfo[0]?.audioName : "";
+    trackFormat === "Single" ? tracksInfo[0]?.audioName : "";
   const fullPreAudioData = {
     audioKey: preAudioKey,
     audioName: preAudioName,
     audioUrl: preAudioUrl,
   };
   const [audioData, setAudioData] = useState(
-    trackFormat === "Singles" && tracksInfo[0]?.audioUrl ? fullPreAudioData : ""
+    trackFormat === "Single" && tracksInfo[0]?.audioUrl ? fullPreAudioData : ""
   );
   const [audioErr, setAudioErr] = useState();
 
@@ -85,7 +85,7 @@ const TrackInformationUploadForm = ({
     control,
     formState: { errors },
   } = useForm({
-    defaultValues: trackFormat === "Singles" ? tracksInfo[0] : {},
+    defaultValues: trackFormat === "Single" ? tracksInfo[0] : {},
   });
 
   const onSubmit = async (data) => {
@@ -94,7 +94,7 @@ const TrackInformationUploadForm = ({
       setAudioErr("Please add Audio File");
       return;
     }
-    if (trackFormat === "Singles") {
+    if (trackFormat === "Single") {
       const nData = [{ ...data, ...audioData }];
       dispatch(setTracksInfo(nData));
       setAudioData("");
@@ -390,7 +390,7 @@ const TrackInformationUploadForm = ({
           <textarea {...register("lyrics")}></textarea>
           <br />
           <br />
-          {trackFormat === "Singles" ? (
+          {trackFormat === "Single" ? (
             <>
               {step === 4 || (
                 <div className="createRelease-btns">

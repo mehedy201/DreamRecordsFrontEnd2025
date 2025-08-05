@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   releaseAlbumInfo: {},
-  trackFormat: 'Singles',
+  trackFormat: 'Single',
   tracksInfo: [],
   releaseDate: {},
   isLoading: false,
