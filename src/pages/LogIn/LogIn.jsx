@@ -6,6 +6,7 @@ import axios from "axios";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import FormSubmitLoading from "../../components/FormSubmitLoading";
+import logo from '../../assets/Logo.png'
 
 function LogIn() {
   const navigate = useNavigate();
@@ -44,7 +45,7 @@ function LogIn() {
 
       <div className="login-form-section">
         <div style={{ textAlign: "center" }}>
-          <img src="src/assets/Logo.png" alt="" />
+          <img src={logo} alt="" />
         </div>
         <h5>
           Login to release and distribute your content, check to streamline data
