@@ -156,13 +156,13 @@ const TrackInformationUploadForm = ({
                 items={artist}
                 searchTxt="Search and select primary artist"
                 itemName="Artist"
-                register={{ ...register("primaryArtist", { required: true }) }}
+                register={{ ...register("artist", { required: true }) }}
                 onSelect={(items) =>
-                  setValue("primaryArtist", items, { shouldValidate: true })
+                  setValue("artist", items, { shouldValidate: true })
                 }
-                value={watch("primaryArtist")}
+                value={watch("artist")}
               />
-              {errors.primaryArtist && (
+              {errors.artist && (
                 <span style={{ color: "#ea3958" }}>Please Select Artist</span>
               )}
             </div>

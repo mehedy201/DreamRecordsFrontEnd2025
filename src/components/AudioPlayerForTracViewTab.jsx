@@ -10,6 +10,7 @@ const formatTime = (time) => {
 };
 
 const AudioPlayerForTracViewTab = ({data}) => {
+  // console.log(data)
   const audioRef = useRef(null);
   const progressBarRef = useRef(null);
   const animationRef = useRef(null);
@@ -118,7 +119,7 @@ const handleDownload = (url) => {
             </div>
             <div>
                 <p>{data?.tittle}</p>
-                <small>Ayuska Bhowmik</small>
+                <small>{data?.artist?.map((artist) => artist.artistName).join(", ")} {data?.primaryArtist?.map((artist) => artist.artistName).join(", ")}</small>
             </div>
             <div className="d-flex release-album-RangeDiv">
                 {/* Duration _______________________________________ */}

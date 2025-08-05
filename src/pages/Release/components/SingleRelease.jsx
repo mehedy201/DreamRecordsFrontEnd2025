@@ -48,6 +48,7 @@ function SingleRelease() {
       .get(`https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/release/release/${id}`)
       .then((res) => {
         if (res.status === 200) {
+          console.log(res.data.data)
           setReleaseData(res.data.data);
           setTrackData(res?.data?.data?.tracks);
           setUPC(res?.data?.data?.UPC);
@@ -230,9 +231,7 @@ function SingleRelease() {
                   <br />
                   <h1>{releaseData?.releaseTitle}</h1>
                   <h2>
-                    {releaseData?.artist
-                      ?.map((artist) => artist.artistName)
-                      .join(", ")}
+                    {releaseData?.artist?.map((artist) => artist.artistName).join(", ")}
                   </h2>
                 </div>
 

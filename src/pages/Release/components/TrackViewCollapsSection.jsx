@@ -14,9 +14,11 @@ const TrackViewCollapsSection = ({ track, index }) => {
   const dispatch = useDispatch();
 
   const [albumOverviewSong, setAlbumOverviewSong] = useState(false);
-  const trackTittle = track.tittle;
-  const trackAudioUrl = track.audioUrl;
-  const dataForAudioPlayer = { tittle: trackTittle, audioUrl: trackAudioUrl };
+  // const trackTittle = track.tittle;
+  // const trackAudioUrl = track.audioUrl;
+  // const trackArtist = track.artist;
+  // const primaryArtist = track?.primaryArtist;
+  // const dataForAudioPlayer = { tittle: trackTittle, audioUrl: trackAudioUrl, artist: trackArtist};
 
   const deleteTrack = (indexNumber) => {
     const updatedTracks = tracksInfo.filter(
@@ -50,7 +52,7 @@ const TrackViewCollapsSection = ({ track, index }) => {
           }}
         >
           <div style={{ flexGrow: 1 }}>
-            <AudioPlayerForTracViewTab data={dataForAudioPlayer} />
+            <AudioPlayerForTracViewTab data={track} />
           </div>
           <div
             style={{
