@@ -71,7 +71,7 @@ const Authorization = ({ children }) => {
       } catch (err) {
         console.error("Auth check failed:", err.message);
         // localStorage.removeItem("token");
-        navigate("/login");
+        // navigate("/login");
       } finally {
         setChecking(false);
       }
