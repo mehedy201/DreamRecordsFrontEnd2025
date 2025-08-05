@@ -45,26 +45,12 @@ function SingleRelease() {
   const [UPC, setUPC] = useState("");
   useEffect(() => {
     axios
-      .get(
-        `https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/release/single/${id}`
-      )
+      .get(`https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/release/release/${id}`)
       .then((res) => {
         if (res.status === 200) {
           setReleaseData(res.data.data);
           setTrackData(res?.data?.data?.tracks);
           setUPC(res?.data?.data?.UPC);
-          console.log(res.data.data);
-          if (res.data.data.audioUrl) {
-            const audioUrl = res.data.data.audioUrl;
-            const tittle = res.data.data.releaseTitle;
-            const artist = res.data.data.artist;
-            const labels = res.data.data.labels;
-            const featuring = res.data.data.featuring;
-            const genre = res.data.data.genre;
-            setTrackData([
-              { audioUrl, tittle, artist, labels, genre, featuring },
-            ]);
-          }
         }
       });
   }, [id]);
@@ -123,9 +109,8 @@ function SingleRelease() {
       },
       { total: "Total", streams: 0, revenue: 0 }
     );
-    console.log('totalSummaryData', totalSummaryData)
+    console.log("totalSummaryData", totalSummaryData);
     totalSummaryData.revenue = Number(totalSummaryData?.revenue?.toFixed(2));
-
 
     setTableData(byDsp);
     setDspTableData(byDsp);
@@ -146,7 +131,9 @@ function SingleRelease() {
     setDataNotFound(false);
     if (UPC) {
       axios
-        .get(`https://dream-records-2025-m2m9a.ondigitalocean.app/common/api/v1/analytics-and-balance/upc-analytics?UPC=${UPC}&years=${years}`)
+        .get(
+          `https://dream-records-2025-m2m9a.ondigitalocean.app/common/api/v1/analytics-and-balance/upc-analytics?UPC=${UPC}&years=${years}`
+        )
         .then((res) => {
           console.log(res);
           if (res.status === 200) {
@@ -179,7 +166,6 @@ function SingleRelease() {
   }, [UPC, years]);
 
   const [analyticsCollapse, setAnalyticsCollapse] = useState(true);
-
 
   return (
     <div>

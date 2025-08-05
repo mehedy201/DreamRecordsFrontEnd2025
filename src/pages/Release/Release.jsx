@@ -81,11 +81,10 @@ const Release = () => {
     if (userNameIdRoll) {
       setLoading(true);
       axios
-        .get(
-          `https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/release/${userNameIdRoll[1]}?page=${pageNumber}&limit=${perPageItem}&status=${status}&search=${search}&years=${years}`
-        )
+        .get(`https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/release/${userNameIdRoll[1]}?page=${pageNumber}&limit=${perPageItem}&status=${status}&search=${search}&years=${years}`)
         .then((res) => {
           if (res.status == 200) {
+            console.log(res.data.data);
             setReleaseData(res.data.data);
             setFilteredCount(res.data.filteredCount);
             setTotalPages(res.data.totalPages);
