@@ -14,11 +14,10 @@ const TrackViewCollapsSection = ({ track, index }) => {
   const dispatch = useDispatch();
 
   const [albumOverviewSong, setAlbumOverviewSong] = useState(false);
-  // const trackTittle = track.tittle;
-  // const trackAudioUrl = track.audioUrl;
-  // const trackArtist = track.artist;
-  // const primaryArtist = track?.primaryArtist;
-  // const dataForAudioPlayer = { tittle: trackTittle, audioUrl: trackAudioUrl, artist: trackArtist};
+
+  // const currentUrl = window.location.href;
+  const pathname = window.location.pathname
+  console.log(pathname)
 
   const deleteTrack = (indexNumber) => {
     const updatedTracks = tracksInfo.filter(
@@ -65,11 +64,14 @@ const TrackViewCollapsSection = ({ track, index }) => {
             {/* {
                   index && 
                 } */}
-            <X
-              size={18}
-              onClick={() => deleteTrack(index)}
-              style={{ color: "red", cursor: "pointer" }}
-            />
+            {
+              pathname == '/create-release' &&
+              <X
+                size={18}
+                onClick={() => deleteTrack(index)}
+                style={{ color: "red", cursor: "pointer" }}
+              />
+            }
             <Collapsible.Trigger asChild>
               {albumOverviewSong ? (
                 <MdKeyboardArrowUp className="release-album-arrowIcon" />
@@ -128,10 +130,10 @@ const TrackViewCollapsSection = ({ track, index }) => {
                     <p>℗ line:</p>
                     <p>{track?.pLine}</p>
                   </div>
-                  <div className="d-flex">
+                  {/* <div className="d-flex">
                     <p>Track Tittle Language:</p>
                     <p>{track?.language}</p>
-                  </div>
+                  </div> */}
                   <div className="d-flex">
                     <p>Production Year:</p>
                     <p>{track?.productionYear}</p>

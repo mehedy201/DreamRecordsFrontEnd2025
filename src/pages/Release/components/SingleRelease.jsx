@@ -20,6 +20,7 @@ import { ChevronDown, Check } from "lucide-react";
 import SingleReleasePageTable from "../../../components/singleReleasePageTable";
 import isEmptyArray from "../../../hooks/isEmptyArrayCheck";
 import NotFoundComponent from "../../../components/NotFoundComponent";
+import localDate from "../../../hooks/localDate";
 
 const dspColumn = [
   { label: "DSPs", key: "DSPs" },
@@ -354,16 +355,12 @@ function SingleRelease() {
               </div>
               <div className="d-flex">
                 <p>Release Date:</p>
-                <p>
-                  {releaseData?.releaseDate
-                    ? releaseData.releaseDate
-                    : releaseData?.releaseOption}
-                </p>
+                <p>{releaseData.releaseDate }</p>
               </div>
-              <div className="d-flex">
+              {/* <div className="d-flex">
                 <p>Producer Catalog Number:</p>
                 <p>1111111111</p>
-              </div>
+              </div> */}
             </div>
             <hr />
             <h3 className="release-album-title">Tracks</h3>

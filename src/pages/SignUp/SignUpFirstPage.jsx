@@ -35,9 +35,7 @@ const SignUpFirstPage = () => {
       }
       try {
         const res = await axios.post(
-          `${
-            import.meta.env.API_URL
-          }/common/api/v1/authentication/check-existing-user`,
+          `https://dream-records-2025-m2m9a.ondigitalocean.app/common/api/v1/authentication/check-existing-user`,
           { userName: debouncedUsername }
         );
         if (res.data.message === "Exist User") {
@@ -127,12 +125,12 @@ const SignUpFirstPage = () => {
           <input type="text" onChange={(e) => setUserName(e.target.value)} />
           {availability === "available" && (
             <p style={{ color: "green", fontSize: "8px", marginTop: "-15px" }}>
-              ✅ Username available
+              Username available
             </p>
           )}
           {availability === "unavailable" && (
             <p style={{ color: "red", fontSize: "8px", marginTop: "-15px" }}>
-              ❌ Username taken
+              Username taken
             </p>
           )}
           {userNameErr && (

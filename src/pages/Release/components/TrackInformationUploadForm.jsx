@@ -368,10 +368,10 @@ const TrackInformationUploadForm = ({
                 </span>
               )}
             </div>
-            <div>
+            {/* <div>
               <label htmlFor="">Preview start </label>
               <input type="number" {...register("previewStart")} />
-            </div>
+            </div> */}
           </div>
           <label htmlFor="">Lyrics Language *</label>
           <SelectDropdownForCreateRelease

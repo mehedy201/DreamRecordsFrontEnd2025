@@ -25,10 +25,12 @@ function ReleaseDate({ step, setStep, steps, handlePrev }) {
   });
 
   const selectedOption = watch("releaseOption");
-
+  const tomorrow = new Date();
+tomorrow.setDate(tomorrow.getDate() + 1);
+const isoDate = tomorrow.toISOString().split('T')[0];
   const onSubmit = (data) => {
     if(data.releaseOption === 'AsSoonAsPossible'){
-      delete data.releaseDate
+      data.releaseDate = isoDate
     }
     console.log(data)
     dispatch(setReleaseDate(data))

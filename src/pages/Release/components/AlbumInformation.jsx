@@ -152,6 +152,7 @@ function AlbumInformation({ step, setStep, steps, handlePrev }) {
                     onValueChange={(value) => {
                       field.onChange(value);
                       setIsVariousArtists(value);
+                      console.log(value)
                     }}
                   >
                     <label className="radio-label">
@@ -167,14 +168,14 @@ function AlbumInformation({ step, setStep, steps, handlePrev }) {
                 <span style={{ color: "#ea3958" }}>This field Required</span>
               )}
             </div>
-            {isVariousArtists === "yes" && (
+            {isVariousArtists === "no" && (
               <div>
                 <label htmlFor="">Select Artist *</label>
                 <SearchDropdown
                   items={artist}
                   searchTxt="Search and select artist"
                   itemName="Artist"
-                  register={{ ...register("artist", { required: true }) }}
+                  register={{ ...register("artist", { required: isVariousArtists === "no" ? true : false }) }}
                   onSelect={(items) =>
                     setValue("artist", items, { shouldValidate: true })
                   }
