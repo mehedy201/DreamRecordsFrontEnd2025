@@ -124,12 +124,12 @@ const SignUpFirstPage = () => {
           <label>User Name</label>
           <input type="text" onChange={(e) => setUserName(e.target.value)} />
           {availability === "available" && (
-            <p style={{ color: "green", fontSize: "8px", marginTop: "-15px" }}>
+            <p style={{ color: "green", fontSize: "12px", marginTop: "-15px" }}>
               Username available
             </p>
           )}
           {availability === "unavailable" && (
-            <p style={{ color: "red", fontSize: "8px", marginTop: "-15px" }}>
+            <p style={{ color: "red", fontSize: "12px", marginTop: "-15px" }}>
               Username taken
             </p>
           )}
