@@ -164,7 +164,7 @@ const TrackViewCollapsSection = ({ track, index }) => {
                       </p>
                       <div>
                         {
-                            track?.artist?.map((data, index) => {
+                            track?.artist?.map((data, index) => 
                                 <div key={index} className="d-flex">
                                     <img
                                         src={data?.imgUrl ? data?.imgUrl : artistDemoImg}
@@ -172,7 +172,7 @@ const TrackViewCollapsSection = ({ track, index }) => {
                                     />
                                     <p>{data?.artistName}</p>
                                 </div>
-                            })
+                            )
                         }
                       </div>
                     </div>
