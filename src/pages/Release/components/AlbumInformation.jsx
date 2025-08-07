@@ -136,7 +136,7 @@ function AlbumInformation({ step, setStep, steps, handlePrev }) {
           <label>Version/subtittle</label>
           <input type="text" {...register("subTitle")} />
 
-          <div className="form-grid release-form-grid">
+          {/* <div className="form-grid release-form-grid">
             <div>
               <label htmlFor="">
                 Is this a compilation of various artists? *
@@ -196,7 +196,7 @@ function AlbumInformation({ step, setStep, steps, handlePrev }) {
               setValue("featuring", items, { shouldValidate: true })
             }
             value={watch("featuring")}
-          />
+          /> */}
 
           <div className="form-grid release-form-grid">
             <div>
@@ -216,7 +216,7 @@ function AlbumInformation({ step, setStep, steps, handlePrev }) {
               )}
             </div>
             <div>
-              <label htmlFor="">Sub-Genre *</label>
+              <label htmlFor="">Sub-Genre</label>
               {/* <SelectDropdownForCreateRelease
                 options={allGenre}
                 placeholder="Select sub-genre..."
@@ -228,7 +228,7 @@ function AlbumInformation({ step, setStep, steps, handlePrev }) {
               /> */}
               <input
                 type="text"
-                {...register("subGenre", { required: true })}
+                {...register("subGenre")}
               />
               {errors.subGenre && (
                 <span style={{ color: "#ea3958" }}>Sub Genre Required</span>
@@ -359,15 +359,6 @@ function AlbumInformation({ step, setStep, steps, handlePrev }) {
                   &nbsp; Back
                 </button>
               )}
-              <button
-                style={{
-                  margin: "auto",
-                  background: "none",
-                  border: "none",
-                }}
-              >
-                cancel
-              </button>
               <button type="submit" className="theme-btn">
                 Next &nbsp; <ArrowRight />
               </button>

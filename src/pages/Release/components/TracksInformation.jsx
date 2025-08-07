@@ -136,15 +136,6 @@ function TracksInformation({ step, setStep, steps, handlePrev}) {
                 <ArrowLeft /> &nbsp; Back
               </button>
             )}
-            <button
-              style={{
-                margin: "auto",
-                background: "none",
-                border: "none",
-              }}
-            >
-              cancel
-            </button>
             {
               trackFormat === 'Album' && !showForm &&
               <button className="theme-btn" onClick={handleNext}>

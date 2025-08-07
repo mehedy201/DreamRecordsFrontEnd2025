@@ -295,14 +295,14 @@ function SingleRelease() {
                 <p>Version/Subtittle:</p>
                 <p>{releaseData?.subTitle}</p>
               </div>
-              <div className="d-flex">
+              {/* <div className="d-flex">
                 <p>Primary Artist:</p>
                 <p>
                   {releaseData?.artist
                     ?.map((artist) => artist.artistName)
                     .join(", ")}
                 </p>
-              </div>
+              </div> */}
               <div className="d-flex">
                 <p>Format:</p>
                 <p>{releaseData?.format}</p>

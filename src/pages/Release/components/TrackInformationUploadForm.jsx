@@ -1,8 +1,8 @@
 import * as RadioGroup from "@radix-ui/react-radio-group";
 import ReleaseAudioUpload from "../../../components/ReleaseAudioUpload";
 import SearchDropdown from "../../../components/SearchDropdown";
-import { ArrowLeft, ArrowRight, X } from "lucide-react";
-import { Controller, useForm } from "react-hook-form";
+import { ArrowLeft, ArrowRight, PlusIcon, X, XIcon } from "lucide-react";
+import { Controller, useFieldArray, useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import SelectDropdownForCreateRelease from "../../../components/SelectDropdownForCreateRelease";
@@ -75,6 +75,55 @@ const TrackInformationUploadForm = ({
   );
   const [audioErr, setAudioErr] = useState();
 
+  // Composer ______________________________________
+  // const [composer, setComposer] = useState()
+  // const [composerValue, setComposerValue] = useState();
+  // const [composerErr, setComposerErr] = useState();
+  // const handleComposerValue = () => {
+  //   setComposerErr("");
+  //   if (!composerValue) {
+  //     setComposerErr("Composer name required");
+  //     return;
+  //   }
+  //   if(composer){
+  //     const addNew = [...composer, composerValue];
+  //     setComposer(addNew);
+  //     document.getElementById("composer").value = "";
+  //     setComposerErr("");
+  //     setComposerValue('')
+  //   }else{
+  //     const addNew = [composerValue];
+  //     setComposer(addNew);
+  //     document.getElementById("composer").value = "";
+  //     setComposerErr("");
+  //     setComposerValue('')
+  //   }
+
+  // };
+
+  // const handleDeleteComposer = (name) => {
+  //   const removeName = composer.filter((item) => item !== name);
+  //   setComposer(removeName);
+  //   if (removeName.length === 0) {
+  //     setComposer("");
+  //   }
+  // };
+
+
+
+
+  // Composer ____________________________________
+  const defaultComposers =
+  (trackFormat === "Single" && tracksInfo[0]?.composer?.length
+    ? tracksInfo[0].composer.map((c) => ({ value: c }))
+    : [{ value: "" }]);
+
+  // Lyricist ____________________________________
+  const defaultLyricist =
+  (trackFormat === "Single" && tracksInfo[0]?.lyricist?.length
+    ? tracksInfo[0].lyricist.map((l) => ({ value: l }))
+    : [{ value: "" }]);
+
   const [isISRC, setIsISRC] = useState();
   const {
     register,
@@ -85,15 +134,44 @@ const TrackInformationUploadForm = ({
     control,
     formState: { errors },
   } = useForm({
-    defaultValues: trackFormat === "Single" ? tracksInfo[0] : {},
+    defaultValues: {
+      ...(trackFormat === "Single" ? tracksInfo[0] : {}),
+      composer: defaultComposers,
+      lyricist: defaultLyricist,
+    },
+  });
+
+ const {
+    fields: lyricistFields,
+    append: appendLyricist,
+    remove: removeLyricist,
+  } = useFieldArray({
+    control,
+    name: "lyricist",
+  });
+
+const {
+    fields: composerFields,
+    append: appendComposer,
+    remove: removeComposer,
+  } = useFieldArray({
+    control,
+    name: "composer",
   });
 
   const onSubmit = async (data) => {
+    console.log(data)
     setAudioErr("");
     if (!audioData) {
       setAudioErr("Please add Audio File");
       return;
     }
+
+    data.composer = data.composer.map((c) => c.value.trim()).filter(Boolean);
+    data.lyricist = data.lyricist.map((l) => l.value.trim()).filter(Boolean);
+
+
+
     if (trackFormat === "Single") {
       const nData = [{ ...data, ...audioData }];
       dispatch(setTracksInfo(nData));
@@ -180,9 +258,11 @@ const TrackInformationUploadForm = ({
               />
             </div>
             <div>
+
+              {/* Lyricist ______________________________________ */}
               <label htmlFor="">Lyricist *</label>
 
-              <SearchDropdown
+              {/* <SearchDropdown
                 items={artist}
                 searchTxt="Search and select lyricist"
                 itemName="Artist"
@@ -194,25 +274,136 @@ const TrackInformationUploadForm = ({
               />
               {errors.lyricist && (
                 <span style={{ color: "#ea3958" }}>Please Select Lyricist</span>
-              )}
+              )} */}
+
+              {lyricistFields.map((field, index) => (
+                <div
+                  key={field.id}
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: 4,
+                    marginBottom: 8,
+                  }}
+                >
+                  <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                    <input
+                      type="text"
+                      {...register(`lyricist.${index}.value`, {
+                        required: "Lyricist required",
+                        validate: (v) => v.trim() !== "" || "Lyricist required",
+                      })}
+                      placeholder="Lyricist name"
+                      style={{ flex: 1 }}
+                      autoComplete="off"
+                    />
+                    {lyricistFields.length > 1 && (
+                      <button
+                        type="button"
+                        onClick={() => removeLyricist(index)}
+                        style={{
+                          border: "none",
+                          background: "transparent",
+                          cursor: "pointer",
+                        }}
+                        aria-label="Remove lyricist"
+                      >
+                        <XIcon />
+                      </button>
+                    )}
+                  </div>
+                  {errors.lyricist?.[index]?.value && (
+                    <span style={{ color: "red" }}>
+                      {errors.lyricist[index].value.message}
+                    </span>
+                  )}
+                </div>
+              ))}
+              <button
+                type="button"
+                onClick={() => appendLyricist({ value: "" })}
+                style={{
+                  border: "1px solid #ea3958",
+                  display: "flex",
+                  gap: "5px",
+                  padding: "6px 10px",
+                  borderRadius: "6px",
+                  alignItems: "center",
+                  cursor: "pointer",
+                  background: "none",
+                  marginBottom: 8,
+                }}
+              >
+                <PlusIcon /> Add New Lyricist
+              </button>
             </div>
+            {/* Composer ______________________________________ */}
             <div>
               <label htmlFor="">Composer *</label>
-
-              <SearchDropdown
-                items={artist}
-                searchTxt="Search and select composer"
-                itemName="Artist"
-                register={{ ...register("composer", { required: true }) }}
-                onSelect={(items) =>
-                  setValue("composer", items, { shouldValidate: true })
-                }
-                value={watch("composer")}
-              />
-              {errors.composer && (
-                <span style={{ color: "#ea3958" }}>Please Select Composer</span>
-              )}
+              {composerFields.map((field, index) => (
+                <div
+                  key={field.id}
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: 4,
+                    marginBottom: 8,
+                  }}
+                >
+                  <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                    <input
+                      type="text"
+                      {...register(`composer.${index}.value`, {
+                        required: "Composer required",
+                        validate: (v) => v.trim() !== "" || "Composer required",
+                      })}
+                      placeholder="Composer name"
+                      style={{ flex: 1 }}
+                      autoComplete="off"
+                    />
+                    {composerFields.length > 1 && (
+                      <button
+                        type="button"
+                        onClick={() => removeComposer(index)}
+                        style={{
+                          border: "none",
+                          background: "transparent",
+                          cursor: "pointer",
+                        }}
+                        aria-label="Remove composer"
+                      >
+                        <XIcon />
+                      </button>
+                    )}
+                  </div>
+                  {errors.composer?.[index]?.value && (
+                    <span style={{ color: "red" }}>
+                      {errors.composer[index].value.message}
+                    </span>
+                  )}
+                </div>
+              ))}
+              <button
+                type="button"
+                onClick={() => appendComposer({ value: "" })}
+                style={{
+                  border: "1px solid #ea3958",
+                  display: "flex",
+                  gap: "5px",
+                  padding: "6px 10px",
+                  borderRadius: "6px",
+                  alignItems: "center",
+                  cursor: "pointer",
+                  background: "none",
+                  marginBottom: 8,
+                }}
+              >
+                <PlusIcon /> Add New Composer
+              </button>
             </div>
+
+
+
             <div>
               <label>Arranger</label>
               <input type="text" {...register("arranger")} />
@@ -225,7 +416,7 @@ const TrackInformationUploadForm = ({
           <label>Publisher</label>
           <input type="text" {...register("publisher")} />
           <div className="form-grid release-form-grid">
-            <div>
+            {/* <div>
               <label htmlFor="">Genre *</label>
               <SelectDropdownForCreateRelease
                 options={allGenre}
@@ -239,10 +430,10 @@ const TrackInformationUploadForm = ({
               {errors.genre && (
                 <span style={{ color: "#ea3958" }}>Genre Required</span>
               )}
-            </div>
-            <div>
+            </div> */}
+            {/* <div>
               <label htmlFor="">Sub-Genre *</label>
-              {/* <SelectDropdownForCreateRelease
+              <SelectDropdownForCreateRelease
                     options={allGenre}
                     placeholder="Select sub-genre..."
                     className="createRelease-dropdown"
@@ -250,7 +441,7 @@ const TrackInformationUploadForm = ({
                     dataName='subGenre'
                     setValue={setValue}
                     defaultValue={watch("subGenre")}
-                /> */}
+                />
               <input
                 type="text"
                 {...register("subGenre", { required: true })}
@@ -258,15 +449,15 @@ const TrackInformationUploadForm = ({
               {errors.subGenre && (
                 <span style={{ color: "#ea3958" }}>Sub Genre Required</span>
               )}
-            </div>
-            <div>
+            </div> */}
+            {/* <div>
               <label>℗ line *</label>
               <input type="text" {...register("pLine", { required: true })} />
               {errors.pLine && (
                 <span style={{ color: "#ea3958" }}>P line field Required</span>
               )}
-            </div>
-            <div>
+            </div> */}
+            {/* <div>
               <label htmlFor="">Production Year *</label>
               <SelectDropdownForCreateRelease
                 options={yearsList.map(String)}
@@ -282,7 +473,7 @@ const TrackInformationUploadForm = ({
                   Production Year Required
                 </span>
               )}
-            </div>
+            </div> */}
             <div>
               <label htmlFor="">Do you already have a ISRC? *</label>
               <Controller
@@ -406,15 +597,6 @@ const TrackInformationUploadForm = ({
                       <ArrowLeft /> &nbsp; Back
                     </button>
                   )}
-                  <button
-                    style={{
-                      margin: "auto",
-                      background: "none",
-                      border: "none",
-                    }}
-                  >
-                    cancel
-                  </button>
                   {step < steps.length - 1 ? (
                     <button className="theme-btn" type="submit">
                       Next &nbsp; <ArrowRight />

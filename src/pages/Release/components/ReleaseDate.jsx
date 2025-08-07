@@ -127,16 +127,6 @@ const isoDate = tomorrow.toISOString().split('T')[0];
                   &nbsp; Back
                 </button>
               )}
-              <button
-                style={{
-                  margin: "auto",
-                  background: "none",
-                  border: "none",
-                }}
-                type="button"
-              >
-                cancel
-              </button>
               {step < steps.length - 1 ? (
                 <button className="theme-btn" type="submit">
                   Next &nbsp; <ArrowRight />

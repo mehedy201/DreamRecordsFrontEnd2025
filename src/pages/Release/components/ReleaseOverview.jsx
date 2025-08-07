@@ -102,9 +102,11 @@ function ReleaseOverview({ step, setStep, handlePrev }) {
             className="release-overview-img"
             alt=""
           />
-          <div style={{ margin: "auto" }}>
+          <div style={{ margin: "auto 10px" }}>
             <h1>{releaseAlbumInfo?.releaseTitle}</h1>
-            <h2>Ayuska Bhowmik</h2>
+            <h2>
+              {releaseAlbumInfo?.labels[0]?.labelName || "No Label Name"}
+            </h2>
           </div>
         </div>
         <hr />
@@ -114,7 +116,7 @@ function ReleaseOverview({ step, setStep, handlePrev }) {
             <p>Release Tittle:</p>
             <p>{releaseAlbumInfo?.releaseTitle}</p>
           </div>
-          <div className="d-flex">
+          {/* <div className="d-flex">
             <p>Primary Artist:</p>
             <p>
               {releaseAlbumInfo?.artist
@@ -129,7 +131,7 @@ function ReleaseOverview({ step, setStep, handlePrev }) {
                 ?.map((artist) => artist.artistName)
                 .join(", ")}
             </p>
-          </div>
+          </div> */}
           <div className="d-flex">
             <p>Genre:</p>
             <p>{releaseAlbumInfo?.genre}</p>
@@ -178,10 +180,10 @@ function ReleaseOverview({ step, setStep, handlePrev }) {
             <p>UPC/EAN</p>
             <p>{releaseAlbumInfo?.UPC}</p>
           </div>
-          <div className="d-flex">
+          {/* <div className="d-flex">
             <p>Producer Catalog Number:</p>
             <p>1111111111</p>
-          </div>
+          </div> */}
         </div>
         <hr />
         <h3 className="release-album-title">Tracks</h3>
@@ -210,15 +212,6 @@ function ReleaseOverview({ step, setStep, handlePrev }) {
               &nbsp; Back
             </button>
           )}
-          <button
-            style={{
-              margin: "auto",
-              background: "none",
-              border: "none",
-            }}
-          >
-            cancel
-          </button>
           <button className="theme-btn" onClick={releaseUpload}>
             Submit &nbsp; <ArrowRight />
           </button>

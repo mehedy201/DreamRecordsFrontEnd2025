@@ -102,22 +102,22 @@ const TrackViewCollapsSection = ({ track, index }) => {
 
               <Tabs.Content className="tabs-content" value="TrackDetails">
                 <div className="release-track-details">
-                  <div className="d-flex">
+                  {/* <div className="d-flex">
                     <p>Track type:</p>
                     <p>Cover</p>
-                  </div>
-                  <div className="d-flex">
+                  </div> */}
+                  {/* <div className="d-flex">
                     <p>Genre:</p>
                     <p>{track?.genre}</p>
-                  </div>
+                  </div> */}
                   <div className="d-flex">
                     <p>Tittle :</p>
                     <p>{track?.tittle}</p>
                   </div>
-                  <div className="d-flex">
+                  {/* <div className="d-flex">
                     <p>Sub-genre:</p>
                     <p>{track?.subGenre}</p>
-                  </div>
+                  </div> */}
                   <div className="d-flex">
                     <p>Version/Subtittle:</p>
                     <p>{track?.versionSubtittle}</p>
@@ -126,18 +126,18 @@ const TrackViewCollapsSection = ({ track, index }) => {
                     <p>Parental Advisory:</p>
                     <p>{track?.parentalAdvisory}</p>
                   </div>
-                  <div className="d-flex">
+                  {/* <div className="d-flex">
                     <p>℗ line:</p>
                     <p>{track?.pLine}</p>
-                  </div>
+                  </div> */}
                   {/* <div className="d-flex">
                     <p>Track Tittle Language:</p>
                     <p>{track?.language}</p>
                   </div> */}
-                  <div className="d-flex">
+                  {/* <div className="d-flex">
                     <p>Production Year:</p>
                     <p>{track?.productionYear}</p>
-                  </div>
+                  </div> */}
                   <div className="d-flex">
                     <p>Lyrics Language:</p>
                     <p>{track?.language}</p>
@@ -148,7 +148,7 @@ const TrackViewCollapsSection = ({ track, index }) => {
                   </div>
                   <div className="d-flex">
                     <p>Lyrics:</p>
-                    <p>{track?.language}</p>
+                    <p>{track?.lyrics}</p>
                   </div>
                   <div className="d-flex">
                     <p>ISRC Code:</p>
@@ -176,23 +176,37 @@ const TrackViewCollapsSection = ({ track, index }) => {
                         }
                       </div>
                     </div>
-                    <div className="d-flex releaseCredit-items">
+                    <div style={{alignItems: 'center'}} className="d-flex releaseCredit-items">
                       <p className="releaseCredit-items-title">
                         Lyricist
                       </p>
-                      <div>
-                        {   
-                            track?.lyricist?.map((data, index) => 
+                        {
+                          Array.isArray(track?.lyricist) && track.lyricist.length > 0 && (
+                            typeof track.lyricist[0] === 'object' ? (
+                              track.lyricist.map((data, index) => 
                                 <div key={index} className="d-flex">
-                                    <img
-                                        src={data?.imgUrl ? data?.imgUrl : artistDemoImg}
-                                        alt=""
-                                    />
-                                    <p>{data?.artistName}</p>
+                                  <img
+                                    src={data?.imgUrl ? data?.imgUrl : artistDemoImg}
+                                    alt=""
+                                  />
+                                  <p>{data?.artistName}</p>
                                 </div>
+                              )
+                            ) : (
+                              track.lyricist.map((l, index) => 
+                                <span style={{paddingRight: '5px'}} key={index}>{l}, </span>
+                              )
                             )
+                          )
                         }
-                      </div>
+                        {
+                          track?.authors &&
+                          track.authors.map((author, index) => (
+                            <span key={index} style={{paddingRight: '5px'}}>
+                              {author}
+                            </span>
+                          ))
+                        }
                     </div>
                     <div className="d-flex releaseCredit-items">
                       <p className="releaseCredit-items-title">
@@ -212,12 +226,11 @@ const TrackViewCollapsSection = ({ track, index }) => {
                         }
                       </div>
                     </div>
-                    <div className="d-flex releaseCredit-items">
+                    <div style={{alignItems: 'center'}} className="d-flex releaseCredit-items">
                       <p className="releaseCredit-items-title">
                         Composer
                       </p>
-                      <div>
-                        {   
+                        {/* {   
                             track?.composer?.map((data, index) => 
                                 <div key={index} className="d-flex">
                                     <img
@@ -227,8 +240,26 @@ const TrackViewCollapsSection = ({ track, index }) => {
                                     <p>{data?.artistName}</p>
                                 </div>
                             )
+                        } */}
+                        {
+                          Array.isArray(track?.composer) && track.composer.length > 0 && (
+                            typeof track.composer[0] === 'object' ? (
+                              track.composer.map((data, index) => 
+                                <div key={index} className="d-flex">
+                                  <img
+                                    src={data?.imgUrl ? data?.imgUrl : artistDemoImg}
+                                    alt=""
+                                  />
+                                  <p>{data?.artistName}</p>
+                                </div>
+                              )
+                            ) : (
+                              track.composer.map((c, index) => 
+                                <span style={{paddingRight: '5px'}} key={index}>{c},</span>
+                              )
+                            )
+                          )
                         }
-                      </div>
                     </div>
                 </div>
               </Tabs.Content>
