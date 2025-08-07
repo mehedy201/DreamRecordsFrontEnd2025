@@ -232,7 +232,7 @@ function SingleRelease() {
                   <br />
                   <h1>{releaseData?.releaseTitle}</h1>
                   <h2>
-                    {releaseData?.artist?.map((artist) => artist.artistName).join(", ")}
+                    {releaseData?.labels[0]?.labelName || "No Label Name"}
                   </h2>
                 </div>
 
