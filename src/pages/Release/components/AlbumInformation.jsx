@@ -3,14 +3,14 @@ import SearchDropdown from "../../../components/SearchDropdown";
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import SelectDropdownForCreateRelease from "../../../components/SelectDropdownForCreateRelease";
-import { ArrowLeft, ArrowRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import ReleaseImgUpload from "../../../components/ReleaseImgUpload";
 import { Controller, useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { setReleaseAlbumInfo } from "../../../redux/features/releaseDataHandleSlice/releaseDataHandleSlice";
 
-function AlbumInformation({ step, setStep, steps, handlePrev }) {
+function AlbumInformation({ step, setStep, steps }) {
   const { userNameIdRoll } = useSelector((state) => state.userData);
   const { yearsList } = useSelector((state) => state.yearsAndStatus);
   const { releaseAlbumInfo } = useSelector((state) => state.releaseData);
@@ -58,23 +58,7 @@ function AlbumInformation({ step, setStep, steps, handlePrev }) {
     }
   }, [userNameIdRoll, reFetchLabel]);
 
-  // Artist Data Get Form API ____________________________
-  const [artist, setArtist] = useState();
-  useEffect(() => {
-    axios
-      .get(
-        `https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/artist/for-release/${
-          userNameIdRoll ? userNameIdRoll[1] : ""
-        }`
-      )
-      .then((res) => {
-        setArtist(res.data.data);
-      });
-  }, [userNameIdRoll, reFetchArtist]);
 
-  const [isVariousArtists, setIsVariousArtists] = useState(
-    releaseAlbumInfo ? releaseAlbumInfo?.isVariousArtists : "no"
-  );
   const [isUPC, setIsUPC] = useState(
     releaseAlbumInfo ? releaseAlbumInfo?.haveUPCean : "yes"
   );
@@ -98,10 +82,10 @@ function AlbumInformation({ step, setStep, steps, handlePrev }) {
       return;
     }
     if (data.haveUPCean === "no") delete data?.UPC;
-    if (data.isVariousArtists === "no") delete data?.globalArtist;
+
     const albumInfoData = { ...data, ...uploadedImage };
 
-    console.log(albumInfoData);
+
     dispatch(setReleaseAlbumInfo(albumInfoData));
 
     if (step < steps.length - 1) {
