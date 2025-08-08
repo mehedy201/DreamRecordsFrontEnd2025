@@ -119,6 +119,7 @@ const isoDate = tomorrow.toISOString().split('T')[0];
                   style={{
                     display: "flex",
                     alignItems: "center",
+                    ustifyContent: "space-between",
                   }}
                   onClick={handlePrev}
                   type="button"

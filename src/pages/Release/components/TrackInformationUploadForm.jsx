@@ -401,9 +401,6 @@ const {
                 <PlusIcon /> Add New Composer
               </button>
             </div>
-
-
-
             <div>
               <label>Arranger</label>
               <input type="text" {...register("arranger")} />
@@ -591,6 +588,7 @@ const {
                       style={{
                         display: "flex",
                         alignItems: "center",
+                        ustifyContent: "space-between",
                       }}
                       onClick={handlePrev}
                     >

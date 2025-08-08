@@ -111,6 +111,9 @@ const Transaction = () => {
   const [isOpen, setIsOpen] = useState(false);
   const withdrowBalance = () => {
     setSelectBankInfoErr("");
+    if (userData?.balance?.amount < 5000 ) return;
+
+
     if (!bankInfo) {
       setSelectBankInfoErr("Please add Bank INFO first");
       return;
@@ -211,9 +214,16 @@ const Transaction = () => {
               <p style={{ color: "#ea3958" }}>{SelectBankInfoErr}</p>
             )}
             <br />
+
+            {
+              userData?.balance?.amount < 5000  && 
+              <p style={{ color: "#ea3958" }}>
+                You can withdraw your balance only if it is more than ₹5000.
+              </p>
+            }
             <div className="d-flex">
               <Dialog.Close className="modal-cancel-btn">Cancel</Dialog.Close>
-              {activePaymentMonth === true ? (
+              {(activePaymentMonth === true && userData?.balance?.amount > 5000) ? (
                 <button onClick={withdrowBalance} className="close-button">
                   Yes, Withdraw
                 </button>

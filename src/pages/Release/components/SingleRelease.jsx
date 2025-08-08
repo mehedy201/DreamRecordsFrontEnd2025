@@ -306,7 +306,7 @@ function SingleRelease() {
                 <p>Format:</p>
                 <p>{releaseData?.format}</p>
               </div>
-              <div className="d-flex">
+              {/* <div className="d-flex">
                 <p>Featuring:</p>
                 <p>
                   {releaseData?.featuring
@@ -316,7 +316,7 @@ function SingleRelease() {
                     ?.map((artist) => artist.artistName)
                     .join(", ")}
                 </p>
-              </div>
+              </div> */}
               <div className="d-flex">
                 <p>℗ line:</p>
                 <p>{releaseData?.pLine}</p>

@@ -153,6 +153,7 @@
   left: 0;
   width: 100%;
   background-color: #f0f0f0;
+  justify-content: space-between;;
 }
 .createRelease-btns .theme-btn {
   border-radius: 0;
