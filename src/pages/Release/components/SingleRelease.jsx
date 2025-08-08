@@ -1,12 +1,9 @@
 import * as Collapsible from "@radix-ui/react-collapsible";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { Tabs } from "radix-ui";
-import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
-import { Link, useLocation, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
-import Dropdown from "../../../components/Dropdown";
-import Table from "../../../components/Table";
 import Chart from "./Chart";
 import { FiAlertTriangle } from "react-icons/fi";
 import axios from "axios";
@@ -20,7 +17,6 @@ import { ChevronDown, Check } from "lucide-react";
 import SingleReleasePageTable from "../../../components/singleReleasePageTable";
 import isEmptyArray from "../../../hooks/isEmptyArrayCheck";
 import NotFoundComponent from "../../../components/NotFoundComponent";
-import localDate from "../../../hooks/localDate";
 
 const dspColumn = [
   { label: "DSPs", key: "DSPs" },
@@ -232,7 +228,10 @@ function SingleRelease() {
                   <br />
                   <h1>{releaseData?.releaseTitle}</h1>
                   <h2>
-                    {releaseData?.labels[0]?.labelName || "No Label Name"}
+                    {
+                      releaseData?.labels && 
+                      releaseData?.labels?.map((label) => label.labelName).join(", ")
+                    }
                   </h2>
                 </div>
 

@@ -1,6 +1,5 @@
 import PropTypes from "prop-types";
 import { useEffect, useRef, useState } from "react";
-import { useLocation } from "react-router-dom";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import TrackViewCollapsSection from "./TrackViewCollapsSection";
@@ -105,7 +104,10 @@ function ReleaseOverview({ step, setStep, handlePrev }) {
           <div style={{ margin: "auto 10px" }}>
             <h1>{releaseAlbumInfo?.releaseTitle}</h1>
             <h2>
-              {releaseAlbumInfo?.labels[0]?.labelName || "No Label Name"}
+              {/* {
+                releaseAlbumInfo?.labels && 
+                releaseAlbumInfo?.labels?.map((label) => label.labelName).join(", ")
+              } */}
             </h2>
           </div>
         </div>

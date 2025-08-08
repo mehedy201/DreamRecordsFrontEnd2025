@@ -345,20 +345,7 @@ function AlbumInformation({ step, setStep, steps, handlePrev }) {
             )}
           </div>
           {step === 4 || (
-            <div className="createRelease-btns">
-              {step > 0 && (
-                <button
-                  className="theme-btn2"
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                  }}
-                  onClick={handlePrev}
-                >
-                  <ArrowLeft />
-                  &nbsp; Back
-                </button>
-              )}
+            <div style={{justifyContent: 'end'}} className="createRelease-btns">
               <button type="submit" className="theme-btn">
                 Next &nbsp; <ArrowRight />
               </button>
