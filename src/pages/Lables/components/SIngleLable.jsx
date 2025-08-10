@@ -1,7 +1,7 @@
 import { Button, Flex } from "@radix-ui/themes";
 import { useEffect, useState } from "react";
 import {
-  Link,
+  // Link,
   useNavigate,
   useParams,
   useSearchParams,
@@ -10,10 +10,11 @@ import ReleaseCard from "../../../components/ReleaseCard";
 import Dropdown from "../../../components/Dropdown";
 import { InfoCircledIcon } from "@radix-ui/react-icons";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
-import * as Dialog from "@radix-ui/react-dialog";
-import { GoPencil } from "react-icons/go";
-import Modal from "../../../components/Modal";
-import { AiOutlineDelete } from "react-icons/ai";
+// import * as Dialog from "@radix-ui/react-dialog";
+// import { GoPencil } from "react-icons/go";
+// import Modal from "../../../components/Modal";
+// import { AiOutlineDelete } from "react-icons/ai";
+// import threedotPng from "../../../assets/icons/vertical-threeDots.png";
 import { ChevronRight } from "lucide-react";
 import { HiOutlineAdjustmentsHorizontal } from "react-icons/hi2";
 import { useSelector } from "react-redux";
@@ -21,7 +22,6 @@ import useQueryParams from "../../../hooks/useQueryParams";
 import axios from "axios";
 import Pagination from "../../../components/Pagination";
 import demoLabelImage from "../../../assets/lables/lables-placeholder.png";
-import threedotPng from "../../../assets/icons/vertical-threeDots.png";
 import instagramImg from "../../../assets/social/instagram.png";
 import facebookImg from "../../../assets/social/facebook.png";
 import youtubeImg from "../../../assets/social/youtube-icon.png";
@@ -216,7 +216,7 @@ function SingleLable() {
                   </h4>
                 </div>
               </div>
-              <DropdownMenu.Root>
+              {/* <DropdownMenu.Root>
                 <DropdownMenu.Trigger asChild>
                   <button className="dropdown-trigger singleLabel-dropdown-btn">
                     <img src={threedotPng} />
@@ -282,7 +282,7 @@ function SingleLable() {
                     </>
                   )}
                 </DropdownMenu.Content>
-              </DropdownMenu.Root>
+              </DropdownMenu.Root> */}
             </Flex>
             <div className="singleLabel-social-row">
               <div className="singleArtist-info" style={{ marginBottom: 0 }}>

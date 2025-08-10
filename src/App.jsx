@@ -165,10 +165,10 @@ function App() {
             path="/create-artist"
             element={<Authorization><CreateArtist /></Authorization>}
           />
-          <Route
+          {/* <Route
             path="/edit-artist/:id"
             element={<Authorization><EditSingleArtist/></Authorization>}
-          />
+          /> */}
           {/* Artist Route End ___________________________________ */}
 
           {/* Label Route Start __________________________________ */}
@@ -184,10 +184,10 @@ function App() {
             path="/create-label"
             element={<Authorization><CreateLabel /></Authorization>}
           />
-          <Route
+          {/* <Route
             path="/edit-label/:id"
             element={<Authorization><EditLable/></Authorization>}
-          />
+          /> */}
 
           {/* Label Route End __________________________________ */}
 
