@@ -167,6 +167,10 @@ function SingleRelease() {
 
   const [analyticsCollapse, setAnalyticsCollapse] = useState(true);
 
+  
+
+
+
   return (
     <div>
       <div
@@ -180,11 +184,11 @@ function SingleRelease() {
                 {" "}
                 <div className="home-notice">
                   <FiAlertTriangle />
-                  <p
+                  <span
                     dangerouslySetInnerHTML={{
                       __html: releaseData?.actionRequired,
                     }}
-                  ></p>
+                  ></span>
                 </div>
                 <br />
               </>
@@ -194,11 +198,11 @@ function SingleRelease() {
                 {" "}
                 <div className="home-notice">
                   <FiAlertTriangle />
-                  <p
+                  <span
                     dangerouslySetInnerHTML={{
                       __html: releaseData?.actionRequired,
                     }}
-                  ></p>
+                  ></span>
                 </div>
                 <br />
               </>
@@ -230,10 +234,20 @@ function SingleRelease() {
                   <br />
                   <h1>{releaseData?.releaseTitle}</h1>
                   <h2>
-                    {releaseData?.labels &&
-                      releaseData?.labels
-                        ?.map((label) => label.labelName)
-                        .join(", ")}
+                    {
+                      [...new Set(
+                        releaseData?.tracks?.flatMap(track =>
+                          track?.artist?.map(a => a.artistName.toLowerCase())
+                        )
+                      )].join(', ')
+                    }
+                    {
+                      [...new Set(
+                        releaseData?.tracks?.flatMap(track =>
+                          track?.primaryArtist?.map(a => a.artistName.toLowerCase())
+                        )
+                      )].join(', ')
+                    }
                   </h2>
                 </div>
 

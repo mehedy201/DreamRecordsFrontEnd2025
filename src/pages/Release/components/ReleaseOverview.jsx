@@ -104,10 +104,20 @@ function ReleaseOverview({ step, setStep, handlePrev }) {
           <div style={{ margin: "auto 10px" }}>
             <h1>{releaseAlbumInfo?.releaseTitle}</h1>
             <h2>
-              {/* {
-                releaseAlbumInfo?.labels && 
-                releaseAlbumInfo?.labels?.map((label) => label.labelName).join(", ")
-              } */}
+              {
+                [...new Set(
+                  tracksInfo?.tracks?.flatMap(track =>
+                    track?.artist?.map(a => a.artistName.toLowerCase())
+                  )
+                )].join(', ')
+              }
+              {
+                [...new Set(
+                  tracksInfo?.tracks?.flatMap(track =>
+                    track?.primaryArtist?.map(a => a.artistName.toLowerCase())
+                  )
+                )].join(', ')
+              }
             </h2>
           </div>
         </div>
