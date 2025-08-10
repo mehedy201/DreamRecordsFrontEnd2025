@@ -101,7 +101,7 @@ const ReleaseAudioUpload = ({ className, audioData, setAudioData }) => {
                 Drop your audio here or &nbsp;
                 <span className="browse-file">Browse File</span>
               </p>
-              <p style={{ color: "#BBBBBB" }}>Max. File size: 50MB</p>
+              {/* <p style={{ color: "#BBBBBB" }}>Max. File size: 50MB</p> */}
             </div>
             {uploadLoading && (
               <div

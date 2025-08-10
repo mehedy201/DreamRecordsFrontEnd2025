@@ -74,40 +74,6 @@ const TrackInformationUploadForm = ({
   );
   const [audioErr, setAudioErr] = useState();
 
-  // Composer ______________________________________
-  // const [composer, setComposer] = useState()
-  // const [composerValue, setComposerValue] = useState();
-  // const [composerErr, setComposerErr] = useState();
-  // const handleComposerValue = () => {
-  //   setComposerErr("");
-  //   if (!composerValue) {
-  //     setComposerErr("Composer name required");
-  //     return;
-  //   }
-  //   if(composer){
-  //     const addNew = [...composer, composerValue];
-  //     setComposer(addNew);
-  //     document.getElementById("composer").value = "";
-  //     setComposerErr("");
-  //     setComposerValue('')
-  //   }else{
-  //     const addNew = [composerValue];
-  //     setComposer(addNew);
-  //     document.getElementById("composer").value = "";
-  //     setComposerErr("");
-  //     setComposerValue('')
-  //   }
-
-  // };
-
-  // const handleDeleteComposer = (name) => {
-  //   const removeName = composer.filter((item) => item !== name);
-  //   setComposer(removeName);
-  //   if (removeName.length === 0) {
-  //     setComposer("");
-  //   }
-  // };
-
   // Composer ____________________________________
   const defaultComposers =
     trackFormat === "Single" && tracksInfo[0]?.composer?.length
