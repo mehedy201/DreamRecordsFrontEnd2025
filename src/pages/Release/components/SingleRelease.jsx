@@ -410,11 +410,11 @@ function SingleRelease() {
             <div className="analytics-card-row">
               <div className="analytics-card">
                 <h6>Total Streams</h6>
-                <h2>{totalStreams}</h2>
+                <h2>{releaseData?.totalStreams?.toFixed(2)}</h2>
               </div>
               <div className="analytics-card">
                 <h6>Total Revenue</h6>
-                <h2>€{totalRevenue?.toFixed(2)}</h2>
+                <h2>&#8377; {releaseData?.totalRevenue?.toFixed(2)}</h2>
               </div>
             </div>
             <Tabs.Root
