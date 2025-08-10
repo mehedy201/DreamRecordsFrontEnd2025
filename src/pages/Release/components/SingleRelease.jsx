@@ -145,15 +145,15 @@ function SingleRelease() {
             const rawData = res?.data?.data;
             const streamsData = rawData
               ?.map((item) => ({
-                month: item.date,
-                value: item.summary.streams,
+                month: item.reportsDate,
+                value: item.totalStreams,
               }))
               .sort((a, b) => new Date(a.month) - new Date(b.month));
 
             const revenewData = rawData
               ?.map((item) => ({
-                month: item.date,
-                value: item.summary.revenue,
+                month: item.reportsDate,
+                value: item.totalRevenue,
               }))
               .sort((a, b) => new Date(a.month) - new Date(b.month));
 
