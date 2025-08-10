@@ -30,10 +30,7 @@ const Table = ({ tableFor, serviceRequestData }) => {
                 </>
             }
             {
-              tableFor === 'ClaimVideo' && <th>Video Link</th>
-            }
-            {
-              tableFor === 'BlockedVideo' && <th>Video Link</th>
+              (tableFor === 'ClaimVideo' || tableFor === 'BlockedVideo') && <th>Video Link</th>
             }
             {
               tableFor === 'OAC' && <th>Topic Channel Link</th>
@@ -85,17 +82,17 @@ const Table = ({ tableFor, serviceRequestData }) => {
                       </>
                   }
                   {
-                    (tableFor === 'ClaimVideo' || tableFor === 'BlockedVideo')&& <td>Video Link</td>
+                    (tableFor === 'ClaimVideo' || tableFor === 'BlockedVideo')&& <td>{data?.claimLink}</td>
                   }
                   {
-                    tableFor === 'OAC' && <td>Topic Channel Link</td>
+                    tableFor === 'OAC' && <td>{data?.artistsTopicChannelLink}</td>
                   }
                   {
-                    tableFor === 'ProfileLinking' && <td>Artist's Profile Link</td>
+                    tableFor === 'ProfileLinking' && <td>{data?.artistProfileLink}</td>
                   }
-                  {
+                  {/* {
                     tableFor === 'Whitelist' && <td>Whitelist Link</td>
-                  }
+                  } */}
                   <td>{data?.isoDate ? localDate(data?.isoDate) : '--'}</td>
                   <td><span className={`status ${data?.status?.toLowerCase()}`}>{data?.status}</span></td>
                   <td>
