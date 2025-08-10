@@ -165,11 +165,10 @@ function Profile() {
           </div>
       </div>
 
-      <div className="row profile-download-row">
+      {/* <div className="row profile-download-row">
         <div className="col-6">
           <div className="profile-info">
             <h5>Label Info</h5>
-            {/* {userData?.label &&  */}
                 <div style={{marginTop: '14px'}}>
                   <div className="d-flex">
                     <p className="profile-downloadRow-label">Label Name:</p>
@@ -192,10 +191,11 @@ function Profile() {
                     <p className="profile-value-text">11</p>
                   </div>
                 </div>
-            {/* } */}
           </div>
         </div>
-        {/* Govorment Document _________________________________ */}
+
+
+
         <div className="col-6">
           <div className="profile-info" style={{ marginLeft: "16px" }}>
             <h5 style={{ marginBottom: "10px" }}>Documents</h5>
@@ -217,7 +217,10 @@ function Profile() {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
+
+
+      
       <div className="profile-info d-flex">
         <div style={{ width: "80%" }}>
             <div >
