@@ -58,7 +58,6 @@ function AlbumInformation({ step, setStep, steps }) {
     }
   }, [userNameIdRoll, reFetchLabel]);
 
-
   const [isUPC, setIsUPC] = useState(
     releaseAlbumInfo ? releaseAlbumInfo?.haveUPCean : "yes"
   );
@@ -84,7 +83,6 @@ function AlbumInformation({ step, setStep, steps }) {
     if (data.haveUPCean === "no") delete data?.UPC;
 
     const albumInfoData = { ...data, ...uploadedImage };
-
 
     dispatch(setReleaseAlbumInfo(albumInfoData));
 
@@ -210,10 +208,7 @@ function AlbumInformation({ step, setStep, steps }) {
                 setValue={setValue}
                 defaultValue={watch("subGenre")}
               /> */}
-              <input
-                type="text"
-                {...register("subGenre")}
-              />
+              <input type="text" {...register("subGenre")} />
               {errors.subGenre && (
                 <span style={{ color: "#ea3958" }}>Sub Genre Required</span>
               )}
@@ -329,7 +324,10 @@ function AlbumInformation({ step, setStep, steps }) {
             )}
           </div>
           {step === 4 || (
-            <div style={{justifyContent: 'end'}} className="createRelease-btns">
+            <div
+              style={{ justifyContent: "end" }}
+              className="createRelease-btns"
+            >
               <button type="submit" className="theme-btn">
                 Next &nbsp; <ArrowRight />
               </button>

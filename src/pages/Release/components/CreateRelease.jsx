@@ -126,7 +126,6 @@ function CreateRelease() {
 
       <br />
       <br />
-      
     </div>
   );
 }

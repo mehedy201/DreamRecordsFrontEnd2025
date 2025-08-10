@@ -63,8 +63,7 @@ const TrackInformationUploadForm = ({
 
   const preAudioKey = trackFormat === "Single" ? tracksInfo[0]?.audioKey : "";
   const preAudioUrl = trackFormat === "Single" ? tracksInfo[0]?.audioUrl : "";
-  const preAudioName =
-    trackFormat === "Single" ? tracksInfo[0]?.audioName : "";
+  const preAudioName = trackFormat === "Single" ? tracksInfo[0]?.audioName : "";
   const fullPreAudioData = {
     audioKey: preAudioKey,
     audioName: preAudioName,
@@ -109,20 +108,17 @@ const TrackInformationUploadForm = ({
   //   }
   // };
 
-
-
-
   // Composer ____________________________________
   const defaultComposers =
-  (trackFormat === "Single" && tracksInfo[0]?.composer?.length
-    ? tracksInfo[0].composer.map((c) => ({ value: c }))
-    : [{ value: "" }]);
+    trackFormat === "Single" && tracksInfo[0]?.composer?.length
+      ? tracksInfo[0].composer.map((c) => ({ value: c }))
+      : [{ value: "" }];
 
   // Lyricist ____________________________________
   const defaultLyricist =
-  (trackFormat === "Single" && tracksInfo[0]?.lyricist?.length
-    ? tracksInfo[0].lyricist.map((l) => ({ value: l }))
-    : [{ value: "" }]);
+    trackFormat === "Single" && tracksInfo[0]?.lyricist?.length
+      ? tracksInfo[0].lyricist.map((l) => ({ value: l }))
+      : [{ value: "" }];
 
   const [isISRC, setIsISRC] = useState();
   const {
@@ -141,7 +137,7 @@ const TrackInformationUploadForm = ({
     },
   });
 
- const {
+  const {
     fields: lyricistFields,
     append: appendLyricist,
     remove: removeLyricist,
@@ -150,7 +146,7 @@ const TrackInformationUploadForm = ({
     name: "lyricist",
   });
 
-const {
+  const {
     fields: composerFields,
     append: appendComposer,
     remove: removeComposer,
@@ -160,7 +156,7 @@ const {
   });
 
   const onSubmit = async (data) => {
-    console.log(data)
+    console.log(data);
     setAudioErr("");
     if (!audioData) {
       setAudioErr("Please add Audio File");
@@ -169,8 +165,6 @@ const {
 
     data.composer = data.composer.map((c) => c.value.trim()).filter(Boolean);
     data.lyricist = data.lyricist.map((l) => l.value.trim()).filter(Boolean);
-
-
 
     if (trackFormat === "Single") {
       const nData = [{ ...data, ...audioData }];
@@ -258,7 +252,6 @@ const {
               />
             </div>
             <div>
-
               {/* Lyricist ______________________________________ */}
               <label htmlFor="">Lyricist *</label>
 
@@ -286,7 +279,9 @@ const {
                     marginBottom: 8,
                   }}
                 >
-                  <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                  <div
+                    style={{ display: "flex", alignItems: "center", gap: 8 }}
+                  >
                     <input
                       type="text"
                       {...register(`lyricist.${index}.value`, {
@@ -350,7 +345,9 @@ const {
                     marginBottom: 8,
                   }}
                 >
-                  <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                  <div
+                    style={{ display: "flex", alignItems: "center", gap: 8 }}
+                  >
                     <input
                       type="text"
                       {...register(`composer.${index}.value`, {

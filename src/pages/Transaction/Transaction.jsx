@@ -58,6 +58,7 @@ const Transaction = () => {
         )
         .then((res) => {
           if (res.status == 200) {
+            console.log(res);
             setUserData(res.data.data);
           }
         })
@@ -86,7 +87,9 @@ const Transaction = () => {
     // Get Payment With Balance Month _____________________________________________
     if (userNameIdRoll) {
       axios
-        .get(`https://dream-records-2025-m2m9a.ondigitalocean.app/common/api/v1/payment/${userNameIdRoll[1]}?page=${pageNumber}&limit=${perPageItem}`)
+        .get(
+          `https://dream-records-2025-m2m9a.ondigitalocean.app/common/api/v1/payment/${userNameIdRoll[1]}?page=${pageNumber}&limit=${perPageItem}`
+        )
         .then((res) => {
           if (res.status === 200) {
             setPaymentDetails(res.data.data);
@@ -97,7 +100,9 @@ const Transaction = () => {
           }
         });
       axios
-        .get(`https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/bank-info/${userNameIdRoll[1]}`)
+        .get(
+          `https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/bank-info/${userNameIdRoll[1]}`
+        )
         .then((res) => {
           if (res.status == 200) {
             setBankInfo(res.data.data[0]);
@@ -111,8 +116,7 @@ const Transaction = () => {
   const [isOpen, setIsOpen] = useState(false);
   const withdrowBalance = () => {
     setSelectBankInfoErr("");
-    if (userData?.balance?.amount < 5000 ) return;
-
+    if (userData?.balance?.amount < 5000) return;
 
     if (!bankInfo) {
       setSelectBankInfoErr("Please add Bank INFO first");
@@ -123,7 +127,10 @@ const Transaction = () => {
       return;
     }
     axios
-      .post(`https://dream-records-2025-m2m9a.ondigitalocean.app/common/api/v1/payment/withdrawal/${userNameIdRoll[1]}`,bankInfo)
+      .post(
+        `https://dream-records-2025-m2m9a.ondigitalocean.app/common/api/v1/payment/withdrawal/${userNameIdRoll[1]}`,
+        bankInfo
+      )
       .then((res) => {
         if (res.status == 200) {
           // setBankInfo(res.data.data)
@@ -215,15 +222,15 @@ const Transaction = () => {
             )}
             <br />
 
-            {
-              userData?.balance?.amount < 5000  && 
+            {userData?.balance?.amount < 5000 && (
               <p style={{ color: "#ea3958" }}>
                 You can withdraw your balance only if it is more than ₹5000.
               </p>
-            }
+            )}
             <div className="d-flex">
               <Dialog.Close className="modal-cancel-btn">Cancel</Dialog.Close>
-              {(activePaymentMonth === true && userData?.balance?.amount > 5000) ? (
+              {activePaymentMonth === true &&
+              userData?.balance?.amount > 5000 ? (
                 <button onClick={withdrowBalance} className="close-button">
                   Yes, Withdraw
                 </button>

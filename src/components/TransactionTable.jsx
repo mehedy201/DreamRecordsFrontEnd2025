@@ -4,7 +4,6 @@ import downImg from "../assets/icons/Withdrawn.png";
 import localDate from "../hooks/localDate";
 
 const TransactionTable = ({ columns, data }) => {
-  console.log(data);
   const handleReportDownloadExcel = async (masterUserId, date) => {
     try {
       const query = new URLSearchParams({ masterUserId, date }).toString();

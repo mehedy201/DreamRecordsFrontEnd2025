@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { X } from "lucide-react";
 import { setTracksInfo } from "../../../redux/features/releaseDataHandleSlice/releaseDataHandleSlice";
 import axios from "axios";
-import artistDemoImg from '../../../assets/artists/artist4.png'
+import artistDemoImg from "../../../assets/artists/artist4.png";
 const TrackViewCollapsSection = ({ track, index }) => {
   // Get TrackInfo Data State form Redux
   const { tracksInfo } = useSelector((state) => state.releaseData);
@@ -16,8 +16,8 @@ const TrackViewCollapsSection = ({ track, index }) => {
   const [albumOverviewSong, setAlbumOverviewSong] = useState(false);
 
   // const currentUrl = window.location.href;
-  const pathname = window.location.pathname
-  console.log(pathname)
+  const pathname = window.location.pathname;
+  console.log(pathname);
 
   const deleteTrack = (indexNumber) => {
     const updatedTracks = tracksInfo.filter(
@@ -64,14 +64,13 @@ const TrackViewCollapsSection = ({ track, index }) => {
             {/* {
                   index && 
                 } */}
-            {
-              pathname == '/create-release' &&
+            {pathname == "/create-release" && (
               <X
                 size={18}
                 onClick={() => deleteTrack(index)}
                 style={{ color: "red", cursor: "pointer" }}
               />
-            }
+            )}
             <Collapsible.Trigger asChild>
               {albumOverviewSong ? (
                 <MdKeyboardArrowUp className="release-album-arrowIcon" />
@@ -158,79 +157,71 @@ const TrackViewCollapsSection = ({ track, index }) => {
               </Tabs.Content>
               <Tabs.Content className="tabs-content" value="Credits">
                 <div className="form-grid releaseCredit-formGrid">
-                    <div className="d-flex releaseCredit-items">
-                      <p className="releaseCredit-items-title">
-                        Primary Atrist
-                      </p>
-                      <div>
-                        {
-                            track?.artist?.map((data, index) => 
-                                <div key={index} className="d-flex">
-                                    <img
-                                        src={data?.imgUrl ? data?.imgUrl : artistDemoImg}
-                                        alt=""
-                                    />
-                                    <p>{data?.artistName}</p>
-                                </div>
-                            )
-                        }
-                      </div>
+                  <div className="d-flex releaseCredit-items">
+                    <p className="releaseCredit-items-title">Primary Atrist</p>
+                    <div>
+                      {track?.artist?.map((data, index) => (
+                        <div key={index} className="d-flex">
+                          <img
+                            src={data?.imgUrl ? data?.imgUrl : artistDemoImg}
+                            alt=""
+                          />
+                          <p>{data?.artistName}</p>
+                        </div>
+                      ))}
                     </div>
-                    <div style={{alignItems: 'center'}} className="d-flex releaseCredit-items">
-                      <p className="releaseCredit-items-title">
-                        Lyricist
-                      </p>
-                        {
-                          Array.isArray(track?.lyricist) && track.lyricist.length > 0 && (
-                            typeof track.lyricist[0] === 'object' ? (
-                              track.lyricist.map((data, index) => 
-                                <div key={index} className="d-flex">
-                                  <img
-                                    src={data?.imgUrl ? data?.imgUrl : artistDemoImg}
-                                    alt=""
-                                  />
-                                  <p>{data?.artistName}</p>
-                                </div>
-                              )
-                            ) : (
-                              track.lyricist.map((l, index) => 
-                                <span style={{paddingRight: '5px'}} key={index}>{l}, </span>
-                              )
-                            )
-                          )
-                        }
-                        {
-                          track?.authors &&
-                          track.authors.map((author, index) => (
-                            <span key={index} style={{paddingRight: '5px'}}>
-                              {author}
-                            </span>
+                  </div>
+                  <div
+                    style={{ alignItems: "center" }}
+                    className="d-flex releaseCredit-items"
+                  >
+                    <p className="releaseCredit-items-title">Lyricist</p>
+                    {Array.isArray(track?.lyricist) &&
+                      track.lyricist.length > 0 &&
+                      (typeof track.lyricist[0] === "object"
+                        ? track.lyricist.map((data, index) => (
+                            <div key={index} className="d-flex">
+                              <img
+                                src={
+                                  data?.imgUrl ? data?.imgUrl : artistDemoImg
+                                }
+                                alt=""
+                              />
+                              <p>{data?.artistName}</p>
+                            </div>
                           ))
-                        }
+                        : track.lyricist.map((l, index) => (
+                            <span style={{ paddingRight: "5px" }} key={index}>
+                              {l},{" "}
+                            </span>
+                          )))}
+                    {track?.authors &&
+                      track.authors.map((author, index) => (
+                        <span key={index} style={{ paddingRight: "5px" }}>
+                          {author}
+                        </span>
+                      ))}
+                  </div>
+                  <div className="d-flex releaseCredit-items">
+                    <p className="releaseCredit-items-title">Featuring</p>
+                    <div>
+                      {track?.featuring?.map((data, index) => (
+                        <div key={index} className="d-flex">
+                          <img
+                            src={data?.imgUrl ? data?.imgUrl : artistDemoImg}
+                            alt=""
+                          />
+                          <p>{data?.artistName}</p>
+                        </div>
+                      ))}
                     </div>
-                    <div className="d-flex releaseCredit-items">
-                      <p className="releaseCredit-items-title">
-                        Featuring
-                      </p>
-                      <div>
-                        {   
-                            track?.featuring?.map((data, index) => 
-                                <div key={index} className="d-flex">
-                                    <img
-                                        src={data?.imgUrl ? data?.imgUrl : artistDemoImg}
-                                        alt=""
-                                    />
-                                    <p>{data?.artistName}</p>
-                                </div>
-                            )
-                        }
-                      </div>
-                    </div>
-                    <div style={{alignItems: 'center'}} className="d-flex releaseCredit-items">
-                      <p className="releaseCredit-items-title">
-                        Composer
-                      </p>
-                        {/* {   
+                  </div>
+                  <div
+                    style={{ alignItems: "center" }}
+                    className="d-flex releaseCredit-items"
+                  >
+                    <p className="releaseCredit-items-title">Composer</p>
+                    {/* {   
                             track?.composer?.map((data, index) => 
                                 <div key={index} className="d-flex">
                                     <img
@@ -241,34 +232,40 @@ const TrackViewCollapsSection = ({ track, index }) => {
                                 </div>
                             )
                         } */}
-                        {
-                          Array.isArray(track?.composer) && track.composer.length > 0 && (
-                            typeof track.composer[0] === 'object' ? (
-                              track.composer.map((data, index) => 
-                                <div key={index} className="d-flex">
-                                  <img
-                                    src={data?.imgUrl ? data?.imgUrl : artistDemoImg}
-                                    alt=""
-                                  />
-                                  <p>{data?.artistName}</p>
-                                </div>
-                              )
-                            ) : (
-                              track.composer.map((c, index) => 
-                                <span style={{paddingRight: '5px'}} key={index}>{c},</span>
-                              )
-                            )
-                          )
-                        }
-                    </div>
-                    <div style={{alignItems: 'center'}} className="d-flex releaseCredit-items">
-                      <p className="releaseCredit-items-title">Producer</p>
-                      <p>{track?.producer}</p>
-                    </div>
-                    <div style={{alignItems: 'center'}} className="d-flex releaseCredit-items">
-                      <p className="releaseCredit-items-title">Arranger</p>
-                      <p>{track?.arranger}</p>
-                    </div>
+                    {Array.isArray(track?.composer) &&
+                      track.composer.length > 0 &&
+                      (typeof track.composer[0] === "object"
+                        ? track.composer.map((data, index) => (
+                            <div key={index} className="d-flex">
+                              <img
+                                src={
+                                  data?.imgUrl ? data?.imgUrl : artistDemoImg
+                                }
+                                alt=""
+                              />
+                              <p>{data?.artistName}</p>
+                            </div>
+                          ))
+                        : track.composer.map((c, index) => (
+                            <span style={{ paddingRight: "5px" }} key={index}>
+                              {c},
+                            </span>
+                          )))}
+                  </div>
+                  <div
+                    style={{ alignItems: "center" }}
+                    className="d-flex releaseCredit-items"
+                  >
+                    <p className="releaseCredit-items-title">Producer</p>
+                    <p>{track?.producer}</p>
+                  </div>
+                  <div
+                    style={{ alignItems: "center" }}
+                    className="d-flex releaseCredit-items"
+                  >
+                    <p className="releaseCredit-items-title">Arranger</p>
+                    <p>{track?.arranger}</p>
+                  </div>
                 </div>
               </Tabs.Content>
             </Tabs.Root>

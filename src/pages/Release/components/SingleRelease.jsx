@@ -42,10 +42,12 @@ function SingleRelease() {
   const [UPC, setUPC] = useState("");
   useEffect(() => {
     axios
-      .get(`https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/release/release/${id}`)
+      .get(
+        `https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/release/release/${id}`
+      )
       .then((res) => {
         if (res.status === 200) {
-          console.log(res.data.data)
+          console.log(res.data.data);
           setReleaseData(res.data.data);
           setTrackData(res?.data?.data?.tracks);
           setUPC(res?.data?.data?.UPC);
@@ -228,10 +230,10 @@ function SingleRelease() {
                   <br />
                   <h1>{releaseData?.releaseTitle}</h1>
                   <h2>
-                    {
-                      releaseData?.labels && 
-                      releaseData?.labels?.map((label) => label.labelName).join(", ")
-                    }
+                    {releaseData?.labels &&
+                      releaseData?.labels
+                        ?.map((label) => label.labelName)
+                        .join(", ")}
                   </h2>
                 </div>
 
@@ -354,7 +356,7 @@ function SingleRelease() {
               </div>
               <div className="d-flex">
                 <p>Release Date:</p>
-                <p>{releaseData.releaseDate }</p>
+                <p>{releaseData.releaseDate}</p>
               </div>
               {/* <div className="d-flex">
                 <p>Producer Catalog Number:</p>
@@ -412,7 +414,7 @@ function SingleRelease() {
               </div>
               <div className="analytics-card">
                 <h6>Total Revenue</h6>
-                <h2>€{totalRevenue}</h2>
+                <h2>€{totalRevenue?.toFixed(2)}</h2>
               </div>
             </div>
             <Tabs.Root

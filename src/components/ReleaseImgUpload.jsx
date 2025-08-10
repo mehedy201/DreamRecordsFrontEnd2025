@@ -66,8 +66,8 @@ const ReleaseImgUpload = ({
         )
         .then((res) => {
           if (res.status == 200) {
-            setUploadedImage('');
-            setImgLink('');
+            setUploadedImage("");
+            setImgLink("");
           }
         })
         .catch((er) => console.log(er));

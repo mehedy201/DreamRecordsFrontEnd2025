@@ -6,7 +6,7 @@ import axios from "axios";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import FormSubmitLoading from "../../components/FormSubmitLoading";
-import logo from '../../assets/Logo.png'
+import logo from "../../assets/Logo.png";
 
 function LogIn() {
   const navigate = useNavigate();
