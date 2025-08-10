@@ -41,7 +41,7 @@ function ReleaseClaim({
     if (userNameIdRoll) {
       axios
         .get(
-          `https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/release/${userNameIdRoll[1]}?page=1&limit=1000&status=All`
+          `https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/release/${userNameIdRoll[1]}?page=1&limit=1000&status=Live`
         )
         .then((res) => {
           if (res.status == 200) {
@@ -163,12 +163,6 @@ function ReleaseClaim({
                       </Select.Item>
                       <Select.Item value="Facebook" className="select-item">
                         <Select.ItemText>Facebook</Select.ItemText>
-                        <Select.ItemIndicator className="select-item-indicator">
-                          <Check size={18} />
-                        </Select.ItemIndicator>
-                      </Select.Item>
-                      <Select.Item value="Instagram" className="select-item">
-                        <Select.ItemText>Instagram</Select.ItemText>
                         <Select.ItemIndicator className="select-item-indicator">
                           <Check size={18} />
                         </Select.ItemIndicator>

@@ -1,15 +1,14 @@
 import "./ServiceRequest.css";
 import * as Tabs from "@radix-ui/react-tabs";
 import Pagination from "../../components/Pagination";
-
 import PropTypes from "prop-types";
 import ReleaseClaim from "./components/ReleaseClaim";
-import ContentID from "./components/ContentID";
+// import ContentID from "./components/ContentID";
+// import Whitelist from "./components/Whitelist";
 import ClaimVideo from "./components/ClaimVideo";
 import BlockedVideo from "./components/BlockedVideo";
 import OAC from "./components/OAC";
 import ProfileLinking from "./components/ProfileLinking";
-import Whitelist from "./components/Whitelist";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";

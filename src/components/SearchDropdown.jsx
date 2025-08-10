@@ -13,7 +13,8 @@ const SearchDropdown = ({
   onSelect,
   searchTxt = "Search...",
   itemName,
-  value
+  value, 
+  selectArtist
 }) => {
   // const [data, setData] = useState(items)
   const [searchQuery, setSearchQuery] = useState("");
@@ -35,9 +36,14 @@ const SearchDropdown = ({
         setSelectedItems([item])
         onSelect([item])
       }else{
-        setSelectedItems([...selectedItems, item]);
-        const selectItem = [...selectedItems, item];
-        onSelect(selectItem)
+        if(selectArtist === 'Single'){
+          setSelectedItems([item])
+          onSelect([item])
+        }else{
+          setSelectedItems([...selectedItems, item]);
+          const selectItem = [...selectedItems, item];
+          onSelect(selectItem)
+        }
       }
     }
 

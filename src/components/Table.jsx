@@ -85,10 +85,7 @@ const Table = ({ tableFor, serviceRequestData }) => {
                       </>
                   }
                   {
-                    tableFor === 'ClaimVideo' && <td>Video Link</td>
-                  }
-                  {
-                    tableFor === 'BlockedVideo' && <td>Video Link</td>
+                    (tableFor === 'ClaimVideo' || tableFor === 'BlockedVideo')&& <td>Video Link</td>
                   }
                   {
                     tableFor === 'OAC' && <td>Topic Channel Link</td>
@@ -136,7 +133,7 @@ const Table = ({ tableFor, serviceRequestData }) => {
                             </>
                         }
                         {
-                          tableFor === 'ClaimVideo' || tableFor === 'BlockedVideo' && 
+                          (tableFor === 'ClaimVideo' || tableFor === 'BlockedVideo') && 
                           <div style={{gap: '10px'}} className="d-flex">
                             <p>Video Link:</p>
                             <p>{data?.claimLink}</p>
@@ -172,7 +169,7 @@ const Table = ({ tableFor, serviceRequestData }) => {
                             </div>
                           </>
                         }
-                        {
+                        {/* {
                           tableFor === 'Whitelist' && 
                           <>
                             <div style={{gap: '10px'}} className="d-flex">
@@ -188,7 +185,7 @@ const Table = ({ tableFor, serviceRequestData }) => {
                               <p>{data?.label?.map(label => label.labelName).join(', ')}</p>
                             </div>
                           </>
-                        }
+                        } */}
                         <div style={{gap: '10px'}} className="d-flex">
                           <p>Created At:</p>
                           <p>{data?.isoDate ? localDate(data?.isoDate) : '--'}</p>
@@ -197,12 +194,15 @@ const Table = ({ tableFor, serviceRequestData }) => {
                           <p>Status:</p>
                           <p>{data?.status}</p>
                         </div>
-                        <div style={{gap: '10px'}} className="">
-                          <p style={{ fontSize: "14px", color: "#838383" }}>
-                            Reject Reason:
-                          </p>
-                          <div dangerouslySetInnerHTML={{ __html: data?.actionRequired }} />
-                        </div>
+                        {
+                          data?.status === 'Rejected' &&
+                          <div style={{gap: '10px'}} className="">
+                            <p style={{ fontSize: "14px", color: "#838383" }}>
+                              Reject Reason:
+                            </p>
+                            <div dangerouslySetInnerHTML={{ __html: data?.actionRequired }} />
+                          </div>
+                        }
                       </Modal>
                     </Dialog.Root>
                   </td>

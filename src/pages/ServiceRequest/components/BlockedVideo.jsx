@@ -38,7 +38,7 @@ function BlockedVideo({
     if (userNameIdRoll) {
       axios
         .get(
-          `https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/release/${userNameIdRoll[1]}?page=1&limit=1000&status=All`
+          `https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/release/${userNameIdRoll[1]}?page=1&limit=1000&status=Live`
         )
         .then((res) => {
           if (res.status == 200) {

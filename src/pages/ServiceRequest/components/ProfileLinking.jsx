@@ -38,21 +38,21 @@ function ProfileLinking({
   const { reFetchServiceRequest } = useSelector((state) => state.reFetchSlice);
   const dispatch = useDispatch();
 
-  const [releaseData, setReleaseData] = useState();
-  useEffect(() => {
-    if (userNameIdRoll) {
-      axios
-        .get(
-          `https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/release/${userNameIdRoll[1]}?page=1&limit=1000&status=All`
-        )
-        .then((res) => {
-          if (res.status == 200) {
-            setReleaseData(res.data.data);
-          }
-        })
-        .catch((er) => console.log(er));
-    }
-  }, [userNameIdRoll]);
+  // const [releaseData, setReleaseData] = useState();
+  // useEffect(() => {
+  //   if (userNameIdRoll) {
+  //     axios
+  //       .get(
+  //         `https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/release/${userNameIdRoll[1]}?page=1&limit=1000&status=Live`
+  //       )
+  //       .then((res) => {
+  //         if (res.status == 200) {
+  //           setReleaseData(res.data.data);
+  //         }
+  //       })
+  //       .catch((er) => console.log(er));
+  //   }
+  // }, [userNameIdRoll]);
 
   // Artist Data Get Form API ____________________________
   const [artist, setArtist] = useState();
@@ -104,6 +104,10 @@ function ProfileLinking({
     formState: { errors },
   } = useForm();
   const onSubmit = (data) => {
+    if(data.release.length < 5) {
+      toast.error("Please select 5 releases");
+      return;
+    }
     const userName = userNameIdRoll[0];
     const masterUserId = userNameIdRoll[1];
     const status = "Pending";
@@ -122,6 +126,27 @@ function ProfileLinking({
       });
     setIsOpen(false);
   };
+
+
+  const artistData = watch("artist");
+  const [releaseData, setReleaseData] = useState();
+  const [loading, setLoading] = useState(false);
+  useEffect(() => {
+    if (artistData) {
+      setLoading(true);
+      axios
+      .get(
+        `https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/release/artist/${artistData[0]?._id}?page=1&limit=1000&status=Live`
+      )
+      .then((res) => {
+        if (res.status == 200) {
+          setReleaseData(res.data.data);
+          setLoading(false);
+        }
+      })
+      .catch((er) => setLoading(false));
+    }
+  }, [artistData]);
 
   return (
     <div>
@@ -157,7 +182,7 @@ function ProfileLinking({
                 onValueChange={(e) =>
                   setValue("type", e, { shouldValidate: true })
                 }
-                defaultValue="Youtube"
+                defaultValue="Instagram"
               >
                 <Select.Trigger className="dropdown-trigger Service-modal-dropdown-trigger">
                   <Select.Value />
@@ -171,7 +196,7 @@ function ProfileLinking({
                     style={{ padding: 0, overflowY: "auto" }}
                   >
                     <Select.Viewport>
-                      <Select.Item value="Youtube" className="select-item">
+                      {/* <Select.Item value="Youtube" className="select-item">
                         <Select.ItemText>Youtube</Select.ItemText>
                         <Select.ItemIndicator className="select-item-indicator">
                           <Check size={18} />
@@ -182,7 +207,7 @@ function ProfileLinking({
                         <Select.ItemIndicator className="select-item-indicator">
                           <Check size={18} />
                         </Select.ItemIndicator>
-                      </Select.Item>
+                      </Select.Item> */}
                       <Select.Item value="Instagram" className="select-item">
                         <Select.ItemText>Instagram</Select.ItemText>
                         <Select.ItemIndicator className="select-item-indicator">
@@ -201,6 +226,7 @@ function ProfileLinking({
               <SearchDropdown
                 items={artist}
                 searchTxt="Search and select artist"
+                selectArtist='Single'
                 itemName="Artist"
                 register={{ ...register("artist", { required: true }) }}
                 onSelect={(items) =>

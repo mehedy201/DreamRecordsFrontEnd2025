@@ -35,21 +35,9 @@ function OAC({
   const { reFetchServiceRequest } = useSelector((state) => state.reFetchSlice);
   const dispatch = useDispatch();
 
-  const [releaseData, setReleaseData] = useState();
-  useEffect(() => {
-    if (userNameIdRoll) {
-      axios
-        .get(
-          `https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/release/${userNameIdRoll[1]}?page=1&limit=1000&status=All`
-        )
-        .then((res) => {
-          if (res.status == 200) {
-            setReleaseData(res.data.data);
-          }
-        })
-        .catch((er) => console.log(er));
-    }
-  }, [userNameIdRoll]);
+  
+
+  
 
   // Artist Data Get Form API ____________________________
   const [artist, setArtist] = useState();
@@ -100,6 +88,10 @@ function OAC({
     formState: { errors },
   } = useForm();
   const onSubmit = (data) => {
+    if(data.release.length < 5) {
+      toast.error("Please select 5 releases");
+      return;
+    }
     const userName = userNameIdRoll[0];
     const masterUserId = userNameIdRoll[1];
     const status = "Pending";
@@ -118,6 +110,28 @@ function OAC({
       });
     setIsOpen(false);
   };
+
+  const artistData = watch("artist");
+  const [releaseData, setReleaseData] = useState();
+  const [loading, setLoading] = useState(false);
+  useEffect(() => {
+    if (artistData) {
+      setLoading(true);
+      axios
+      .get(
+        `https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/release/artist/${artistData[0]?._id}?page=1&limit=1000&status=Live`
+      )
+      .then((res) => {
+        if (res.status == 200) {
+          setReleaseData(res.data.data);
+          setLoading(false);
+        }
+      })
+      .catch((er) => setLoading(false));
+    }
+  }, [artistData]);
+
+
 
   return (
     <div>
@@ -149,6 +163,7 @@ function OAC({
               <p style={{ fontSize: "12px" }}>Choose Artist</p>
               <SearchDropdown
                 items={artist}
+                selectArtist='Single'
                 searchTxt="Search and select artist"
                 itemName="Artist"
                 register={{ ...register("artist", { required: true }) }}
@@ -160,6 +175,11 @@ function OAC({
               {errors.artist && (
                 <span style={{ color: "#ea3958" }}>Please Select Artist</span>
               )}
+
+              {
+                loading && 
+                <p className="loading-text">Loading Releases...</p>
+              }
 
               <p style={{ fontSize: "12px" }}>Choose 5 Release below</p>
               <SearchDropdownRelease
