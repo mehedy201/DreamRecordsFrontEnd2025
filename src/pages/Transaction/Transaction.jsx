@@ -96,7 +96,6 @@ const Transaction = () => {
             if (isEmptyArray(res.data.data)) setNotFound(true);
             setFilteredCount(res.data.filteredCount);
             setTotalPages(res.data.totalPages);
-            console.log(res.data.data);
           }
         });
       axios
