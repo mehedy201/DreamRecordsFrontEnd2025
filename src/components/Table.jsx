@@ -78,17 +78,18 @@ const Table = ({ tableFor, serviceRequestData }) => {
                     tableFor === 'ReleaseClaim' &&
                       <>
                       <td>{data?.type ? data?.type : 'Youtube'}</td>
-                      <td>{data?.claimLink}</td>
+                      <td><a href={data?.claimLink?.startsWith("http") ? data?.claimLink : `https://${data?.claimLink}`}target="_blank" rel="noopener noreferrer">{data?.claimLink?.length > 50 ? `${data?.claimLink.slice(0, 50)}...` : data?.claimLink}</a></td>
                       </>
                   }
                   {
-                    (tableFor === 'ClaimVideo' || tableFor === 'BlockedVideo')&& <td>{data?.claimLink}</td>
+                    (tableFor === 'ClaimVideo' || tableFor === 'BlockedVideo')&& 
+                    <td><a href={data?.claimLink?.startsWith("http") ? data?.claimLink : `https://${data?.claimLink}`}target="_blank" rel="noopener noreferrer">{data?.claimLink?.length > 50 ? `${data?.claimLink.slice(0, 50)}...` : data?.claimLink}</a></td>
                   }
                   {
-                    tableFor === 'OAC' && <td>{data?.artistsTopicChannelLink}</td>
+                    tableFor === 'OAC' && <td><a href={data?.artistsTopicChannelLink?.startsWith("http") ? data?.artistsTopicChannelLink : `https://${data?.artistsTopicChannelLink}`}target="_blank" rel="noopener noreferrer">{data?.artistsTopicChannelLink?.length > 50 ? `${data?.artistsTopicChannelLink.slice(0, 50)}...` : data?.artistsTopicChannelLink}</a></td>
                   }
                   {
-                    tableFor === 'ProfileLinking' && <td>{data?.artistProfileLink}</td>
+                    tableFor === 'ProfileLinking' && <td><a href={data?.artistProfileLink?.startsWith("http") ? data?.artistProfileLink : `https://${data?.artistProfileLink}`}target="_blank" rel="noopener noreferrer">{data?.artistProfileLink?.length > 50 ? `${data?.artistProfileLink.slice(0, 50)}...` : data?.artistProfileLink}</a></td>
                   }
                   {/* {
                     tableFor === 'Whitelist' && <td>Whitelist Link</td>
@@ -125,7 +126,7 @@ const Table = ({ tableFor, serviceRequestData }) => {
                             </div>
                             <div style={{gap: '10px'}} className="d-flex">
                               <p>URL:</p>
-                              <p>{data?.claimLink}</p>
+                              <p><a href={data?.claimLink?.startsWith("http") ? data?.claimLink : `https://${data?.claimLink}`}target="_blank" rel="noopener noreferrer">{data?.claimLink?.length > 50 ? `${data?.claimLink.slice(0, 50)}...` : data?.claimLink}</a></p>
                             </div>
                             </>
                         }
@@ -133,7 +134,7 @@ const Table = ({ tableFor, serviceRequestData }) => {
                           (tableFor === 'ClaimVideo' || tableFor === 'BlockedVideo') && 
                           <div style={{gap: '10px'}} className="d-flex">
                             <p>Video Link:</p>
-                            <p>{data?.claimLink}</p>
+                            <p><a href={data?.claimLink?.startsWith("http") ? data?.claimLink : `https://${data?.claimLink}`}target="_blank" rel="noopener noreferrer">{data?.claimLink?.length > 50 ? `${data?.claimLink.slice(0, 50)}...` : data?.claimLink}</a></p>
                           </div>
                         }
                         {
@@ -149,11 +150,11 @@ const Table = ({ tableFor, serviceRequestData }) => {
                             </div>
                             <div style={{gap: '10px'}} className="d-flex">
                               <p>Topic Channel Link:</p>
-                              <p>{data?.artistsTopicChannelLink}</p>
+                              <p><a href={data?.artistsTopicChannelLink?.startsWith("http") ? data?.artistsTopicChannelLink : `https://${data?.artistsTopicChannelLink}`}target="_blank" rel="noopener noreferrer">{data?.artistsTopicChannelLink?.length > 50 ? `${data?.artistsTopicChannelLink.slice(0, 50)}...` : data?.artistsTopicChannelLink}</a></p>
                             </div>
                             <div style={{gap: '10px'}} className="d-flex">
                               <p>Artist Youtube Link:</p>
-                              <p>{data?.artistsYoutubeChannelLink}</p>
+                              <p><a href={data?.artistsYoutubeChannelLink?.startsWith("http") ? data?.artistsYoutubeChannelLink : `https://${data?.artistsYoutubeChannelLink}`}target="_blank" rel="noopener noreferrer">{data?.artistsYoutubeChannelLink?.length > 50 ? `${data?.artistsYoutubeChannelLink.slice(0, 50)}...` : data?.artistsYoutubeChannelLink}</a></p>
                             </div>
                           </>
                         }
@@ -166,7 +167,7 @@ const Table = ({ tableFor, serviceRequestData }) => {
                             </div>
                             <div style={{gap: '10px'}} className="d-flex">
                               <p>Artist's Profile Link:</p>
-                              <p>{data?.artistProfileLink}</p>
+                              <p><a href={data?.artistProfileLink?.startsWith("http") ? data?.artistProfileLink : `https://${data?.artistProfileLink}`}target="_blank" rel="noopener noreferrer">{data?.artistProfileLink?.length > 50 ? `${data?.artistProfileLink.slice(0, 50)}...` : data?.artistProfileLink}</a></p>
                             </div>
                           </>
                         }
