@@ -52,7 +52,6 @@ function SingleLable() {
       .then((res) => {
         if (res.status == 200) {
           setLabel(res.data.data[0]);
-          console.log(res.data.data[0]);
         }
       });
   }, [id]);
@@ -85,7 +84,7 @@ function SingleLable() {
   useEffect(() => {
     axios
       .get(
-        `http://localhost:5000/api/v1/release/labels/${id}?page=${pageNumber}&limit=${perPageItem}&status=${status}&search=${
+        `https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/release/labels/${id}?page=${pageNumber}&limit=${perPageItem}&status=${status}&search=${
           search ? search : ""
         }&years=${years ? years : ""}`
       )

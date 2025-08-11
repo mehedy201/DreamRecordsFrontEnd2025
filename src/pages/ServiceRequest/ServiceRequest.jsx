@@ -17,38 +17,7 @@ import { setServiceRequestData } from "../../redux/features/serviceRequestPageDa
 import useQueryParams from "../../hooks/useQueryParams";
 import isEmptyArray from "../../hooks/isEmptyArrayCheck";
 import LoadingScreen from "../../components/LoadingScreen";
-const releaseColumns = [
-  { label: "Release", key: "release" },
-  { label: "Type", key: "type" },
-  { label: "URL", key: "url" },
-  { label: "Created At", key: "date" },
-  { label: "Status", key: "status" },
-  { label: "Reason", key: "reason" },
-];
 
-// const renderReleaseCell = (key, row) => {
-//   if (key === "release") {
-//     return (
-//       <div className="release-table-img-td">
-//         <img src={`src/assets/${row.img}`} alt="" />
-//         <div>
-//           <p>{row.release}</p>
-//           <small>UPC: {row.release_sample}</small>
-//         </div>
-//       </div>
-//     );
-//   }
-//   if (key === "url") {
-//     return row.url.length > 22 ? row.url.slice(0, 22) + "..." : row.url;
-//   }
-//   if (key === "status") {
-//     return (
-//       <span className={`status ${row.status.toLowerCase()}`}>{row.status}</span>
-//     );
-//   }
-
-//   return row[key];
-// };
 
 const ServiceRequest = () => {
   const { userNameIdRoll } = useSelector((state) => state.userData);

@@ -118,7 +118,7 @@ const Home = () => {
         homePageNotices?.map((notice) => (
           <div key={notice._id} className="home-notice">
             <InfoCircledIcon />
-            <p dangerouslySetInnerHTML={{ __html: notice?.notice }}></p>
+            <p style={{whiteSpace: 'normal',wordBreak: 'break-word',overflowWrap: 'break-word',}} dangerouslySetInnerHTML={{ __html: notice?.notice }}></p>
           </div>
         ))}
       <section className="hero">

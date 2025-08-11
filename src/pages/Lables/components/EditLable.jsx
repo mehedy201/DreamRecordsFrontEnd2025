@@ -50,13 +50,6 @@ function EditLable() {
         if (res.status == 200) {
           setUploadedImage();
           navigate("/labels/1/10/All");
-          // axios.patch(``, formData)
-          //   .then(res => {
-          //       if(res.status == 200){
-          //           setUploadedImage()
-          //           navigate('/artist/1/10')
-          //       }
-          //   })
         }
       })
       .catch((er) => console.log(er));

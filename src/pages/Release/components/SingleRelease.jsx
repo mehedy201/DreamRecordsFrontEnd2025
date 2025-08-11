@@ -47,7 +47,6 @@ function SingleRelease() {
       )
       .then((res) => {
         if (res.status === 200) {
-          console.log(res.data.data);
           setReleaseData(res.data.data);
           setTrackData(res?.data?.data?.tracks);
           setUPC(res?.data?.data?.UPC);
@@ -177,28 +176,28 @@ function SingleRelease() {
         className="main-content createRelease-content-div createRelease-overview-div"
         style={{ marginBottom: "20px" }}
       >
-        {releaseData && releaseData ? (
+        {releaseData? (
           <>
-            {releaseData?.rejectionReasons && (
+            {(releaseData?.rejectionReasons && (releaseData.status === 'Error' || releaseData.status === 'Blocked' || releaseData.status === 'Takedown')) && (
               <>
-                {" "}
-                <div className="home-notice">
-                  <FiAlertTriangle />
-                  <span
-                    dangerouslySetInnerHTML={{
-                      __html: releaseData?.actionRequired,
-                    }}
-                  ></span>
-                </div>
+                {
+                  releaseData?.rejectionReasons.map((reason, index) => 
+                    <div className="home-notice">
+                      <FiAlertTriangle />
+                      <span>{reason}</span>
+                    </div>
+                  )
+                }
+                
                 <br />
               </>
             )}
-            {releaseData?.actionRequired && (
+            {(releaseData?.actionRequired && (releaseData.status === 'Error' || releaseData.status === 'Blocked' || releaseData.status === 'Takedown')) &&(
               <>
-                {" "}
                 <div className="home-notice">
                   <FiAlertTriangle />
                   <span
+                    style={{whiteSpace: 'normal',wordBreak: 'break-word',overflowWrap: 'break-word',}}
                     dangerouslySetInnerHTML={{
                       __html: releaseData?.actionRequired,
                     }}
