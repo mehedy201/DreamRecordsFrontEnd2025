@@ -98,14 +98,16 @@ const TransactionTable = ({ columns, data }) => {
                   : d?.paymentReportDate}
               </td>
               <td>
-                {d?.type === "Withdraw" ? (
+                {(d?.type === "Withdraw" && d?.status === 'Approved') && (
                   <button
                     style={{ cursor: "pointer" }}
                     className="non-transjection-btn"
                   >
                     Invoice
                   </button>
-                ) : (
+                )}
+                {
+                  d?.type === 'Payment' && 
                   <button
                     style={{ cursor: "pointer" }}
                     className="non-transjection-btn"
@@ -118,7 +120,7 @@ const TransactionTable = ({ columns, data }) => {
                   >
                     Download Reports
                   </button>
-                )}
+                }
               </td>
             </tr>
           ))}

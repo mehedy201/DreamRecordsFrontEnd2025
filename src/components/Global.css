@@ -946,3 +946,8 @@ label {
     top: 17px;
     right: 6px;
 }
+
+img{
+  object-fit: "cover";
+  object-position: "center"
+}

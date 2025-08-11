@@ -85,12 +85,13 @@ function SingleLable() {
   useEffect(() => {
     axios
       .get(
-        `https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/release/labels/${id}?page=${pageNumber}&limit=${perPageItem}&status=${status}&search=${
+        `http://localhost:5000/api/v1/release/labels/${id}?page=${pageNumber}&limit=${perPageItem}&status=${status}&search=${
           search ? search : ""
         }&years=${years ? years : ""}`
       )
       .then((res) => {
         if (res.status == 200) {
+          console.log(res.data.data)
           setTotalCount(res.data.totalCount);
           setFilteredCount(res.data.filteredCount);
           setReleaseData(res.data.data);
@@ -289,7 +290,7 @@ function SingleLable() {
                 <h4>Total Releases</h4>
                 <h1>{totalCount}</h1>
                 <Button
-                  onClick={() => navigate("/release/1/10/All")}
+                  onClick={() => navigate("/distribution/queue/live/1/10")}
                   style={{ cursor: "pointer" }}
                   className="singleArtist-pg-allRelease-btn"
                 >
@@ -349,7 +350,7 @@ function SingleLable() {
       </h4>
       <div className="search-setion">
         <input
-          onKeyPress={handleKeyPress}
+          onKeyDown={handleKeyPress}
           onChange={(e) => setSearchText(e.target.value)}
           type="text"
           placeholder="Search..."

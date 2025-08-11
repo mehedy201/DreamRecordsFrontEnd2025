@@ -9,7 +9,7 @@ import axios from "axios";
 const AddressInformation = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { userNameIdRoll } = useSelector((state) => state.userData);
+  const { userNameIdRoll, userData } = useSelector((state) => state.userData);
 
   // Country State Select
   const [countryid, setCountryid] = useState(0);
@@ -41,8 +41,10 @@ const AddressInformation = () => {
       instagram: "",
       facebook: "",
       youtube: "",
+      email: userData.email? userData.email : "",
       date: new Date().toISOString(),
       masterUserId: userNameIdRoll[1],
+      userName: userNameIdRoll[0],
     };
 
     const payload = { ...data, country, state, label, status: "Active" };

@@ -3,7 +3,6 @@ import Pagination from "../../components/Pagination";
 import { useEffect, useState } from "react";
 import "./Lables.css";
 import { Link, useParams, useSearchParams } from "react-router-dom";
-import PropTypes from "prop-types";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { HiOutlineAdjustmentsHorizontal } from "react-icons/hi2";
 import SelectDropdown from "../../components/SelectDropdown";
@@ -66,7 +65,7 @@ const Lables = () => {
     </>
   );
 
-  // Fatch Artist Data _______________________________________________
+  // Fatch Label Data _______________________________________________
   const [currentPage, setCurrentPage] = useState(parseInt(pageNumber));
   const [labelData, setLabelData] = useState();
   const [totalCount, setTotalCount] = useState();
@@ -184,8 +183,8 @@ const Lables = () => {
                   width: "148px",
                   height: "148px",
                   borderRadius: "50%",
-                  objectFit: "cover",
-                  objectPosition: "center",
+                  // objectFit: "cover",
+                  // objectPosition: "center",
                 }}
                 src={item?.imgUrl ? item.imgUrl : labelDemoImg}
                 alt={item.labelName}
