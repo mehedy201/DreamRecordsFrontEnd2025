@@ -12,9 +12,10 @@ import {
 } from "../../../redux/features/releaseDataHandleSlice/releaseDataHandleSlice";
 import axios from "axios";
 function ReleaseOverview({ step, setStep, handlePrev }) {
+
+  const pathname = window.location.pathname;
   const { userNameIdRoll } = useSelector((state) => state.userData);
-  const { releaseAlbumInfo, tracksInfo, releaseDate, trackFormat } =
-    useSelector((state) => state.releaseData);
+  const { releaseAlbumInfo, tracksInfo, releaseDate, trackFormat } = useSelector((state) => state.releaseData);
 
   const dispatch = useDispatch();
 
@@ -58,14 +59,31 @@ function ReleaseOverview({ step, setStep, handlePrev }) {
       masterUserId: userNameIdRoll[1],
       status: "QC Approval",
     };
-    axios
+    
+    if(pathname.includes("edit-release")) {
+      axios
+        .put(
+          `https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/release/update-release/${pathname.split("/").pop()}`,
+          payload
+        )
+        .then((res) => {
+          if (res.status === 200) {
+            dispatch(setReleaseAlbumInfo({}));
+            dispatch(setTracksInfo([]));
+            dispatch(setTrackFormat("Single"));
+            dispatch(setReleaseDate({}));
+            setStep(4);
+          }
+        });
+    }
+    else {
+      axios
       .post(
         `https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/release/create-release`,
         payload
       )
       .then((res) => {
         if (res.status === 200) {
-          console.log(res);
           dispatch(setReleaseAlbumInfo({}));
           dispatch(setTracksInfo([]));
           dispatch(setTrackFormat("Single"));
@@ -73,6 +91,7 @@ function ReleaseOverview({ step, setStep, handlePrev }) {
           setStep(4);
         }
       });
+    }
   };
 
   // This useEffect will run after the error message renders
@@ -106,14 +125,14 @@ function ReleaseOverview({ step, setStep, handlePrev }) {
             <h2>
               {
                 [...new Set(
-                  tracksInfo?.tracks?.flatMap(track =>
+                  tracksInfo?.flatMap(track =>
                     track?.artist?.map(a => a.artistName.toLowerCase())
                   )
                 )].join(', ')
               }
               {
                 [...new Set(
-                  tracksInfo?.tracks?.flatMap(track =>
+                  tracksInfo?.flatMap(track =>
                     track?.primaryArtist?.map(a => a.artistName.toLowerCase())
                   )
                 )].join(', ')

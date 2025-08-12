@@ -86,7 +86,7 @@ const Release = () => {
         )
         .then((res) => {
           if (res.status == 200) {
-            console.log(res.data.data);
+            // console.log(res.data.data);
             setReleaseData(res.data.data);
             setFilteredCount(res.data.filteredCount);
             setTotalPages(res.data.totalPages);

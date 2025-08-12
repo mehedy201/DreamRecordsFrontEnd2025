@@ -23,10 +23,10 @@ function AlbumInformation({ step, setStep, steps }) {
   const [imgLink, setImgLink] = useState(
     releaseAlbumInfo ? releaseAlbumInfo?.imgUrl : ""
   );
-  const defaultImgURL = releaseAlbumInfo.imgURL;
+  const defaultImgURL = releaseAlbumInfo?.imgUrl;
   const defaultKey = releaseAlbumInfo.key;
   const [uploadedImage, setUploadedImage] = useState({
-    imgURL: defaultImgURL,
+    imgUrl: defaultImgURL,
     key: defaultKey,
   });
 
@@ -85,6 +85,8 @@ function AlbumInformation({ step, setStep, steps }) {
     const albumInfoData = { ...data, ...uploadedImage };
 
     dispatch(setReleaseAlbumInfo(albumInfoData));
+    console.log(data)
+
 
     if (step < steps.length - 1) {
       setStep(step + 1);

@@ -108,7 +108,7 @@ function SingleRelease() {
       },
       { total: "Total", streams: 0, revenue: 0 }
     );
-    console.log("totalSummaryData", totalSummaryData);
+    // console.log("totalSummaryData", totalSummaryData);
     totalSummaryData.revenue = Number(totalSummaryData?.revenue?.toFixed(2));
 
     setTableData(byDsp);
@@ -134,7 +134,7 @@ function SingleRelease() {
           `https://dream-records-2025-m2m9a.ondigitalocean.app/common/api/v1/analytics-and-balance/upc-analytics?UPC=${UPC}&years=${years}`
         )
         .then((res) => {
-          console.log(res);
+          // console.log(res);
           if (res.status === 200) {
             if (isEmptyArray(res?.data?.data)) setDataNotFound(true);
             setTotalStreams(res?.data?.totalRevenue);
@@ -188,8 +188,6 @@ function SingleRelease() {
                     </div>
                   )
                 }
-                
-                <br />
               </>
             )}
             {(releaseData?.actionRequired && (releaseData.status === 'Error' || releaseData.status === 'Blocked' || releaseData.status === 'Takedown')) &&(
@@ -280,19 +278,22 @@ function SingleRelease() {
                         <img src={downloadImg} />
                         Download Artwork
                       </Link>
-                      <Link
-                        to="/edit-release"
-                        style={{
-                          cursor: "pointer",
-                          color: "#202020",
-                          textDecoration: "none",
-                          display: "flex",
-                          alignItems: "center",
-                        }}
-                      >
-                        <img src={editImg} />
-                        Edit Metadata
-                      </Link>
+                      {
+                        releaseData?.status === 'Error' &&
+                        <Link
+                          to={`/edit-release/${releaseData?._id}`}
+                          style={{
+                            cursor: "pointer",
+                            color: "#202020",
+                            textDecoration: "none",
+                            display: "flex",
+                            alignItems: "center",
+                          }}
+                        >
+                          <img src={editImg} />
+                          Edit Metadata
+                        </Link>
+                      }
                     </DropdownMenu.Item>
                   </DropdownMenu.Content>
                 </DropdownMenu.Root>
@@ -383,7 +384,7 @@ function SingleRelease() {
             {trackData &&
               trackData?.map((track, index) => (
                 <div key={index}>
-                  <TrackViewCollapsSection track={track} index="" />
+                  <TrackViewCollapsSection track={track} index={index} />
                 </div>
               ))}
           </>

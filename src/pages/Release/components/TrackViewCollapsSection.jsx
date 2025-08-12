@@ -15,9 +15,7 @@ const TrackViewCollapsSection = ({ track, index }) => {
 
   const [albumOverviewSong, setAlbumOverviewSong] = useState(false);
 
-  // const currentUrl = window.location.href;
   const pathname = window.location.pathname;
-  console.log(pathname);
 
   const deleteTrack = (indexNumber) => {
     const updatedTracks = tracksInfo.filter(
@@ -64,7 +62,7 @@ const TrackViewCollapsSection = ({ track, index }) => {
             {/* {
                   index && 
                 } */}
-            {pathname == "/create-release" && (
+            {(pathname == "/create-release" || pathname.includes("edit-release")) && (
               <X
                 size={18}
                 onClick={() => deleteTrack(index)}

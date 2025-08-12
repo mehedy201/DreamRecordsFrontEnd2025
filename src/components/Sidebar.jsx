@@ -17,6 +17,8 @@ import profileIcon from '../assets/icons/Profile.png'
 import settingsIcon from '../assets/icons/Settings.png'
 
 import warner from '../assets/warner-logo.png'
+import { useDispatch } from "react-redux";
+import { setReleaseAlbumInfo, setReleaseDate, setTrackFormat, setTracksInfo } from "../redux/features/releaseDataHandleSlice/releaseDataHandleSlice";
 
 const menuItems = [
   { name: "Home", path: "/", icon: homeIcon },
@@ -32,7 +34,9 @@ const menuItems = [
 ];
 
 const Sidebar = () => {
+
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   return (
     <aside className="sidebar">
       {/* Logo */}
@@ -42,7 +46,13 @@ const Sidebar = () => {
 
       {/* Create Button */}
 
-      <button onClick={() => navigate('/create-release')} className="theme-btn">+ Create</button>
+      <button onClick={() => {
+        dispatch(setReleaseAlbumInfo({}));
+        dispatch(setTracksInfo([]));
+        dispatch(setTrackFormat("Single"));
+        dispatch(setReleaseDate({}));
+        navigate("/create-release");
+      }} className="theme-btn">+ Create</button>
 
       {/* Navigation Links */}
       <nav className="nav">

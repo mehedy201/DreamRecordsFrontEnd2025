@@ -1,11 +1,9 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import PropTypes from "prop-types";
 import AlbumInformation from "./AlbumInformation";
 import TracksInformation from "./TracksInformation";
 import ReleaseDate from "./ReleaseDate";
 import ReleaseOverview from "./ReleaseOverview";
-import axios from "axios";
-import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 const steps = [
   "Album Information",
@@ -16,22 +14,6 @@ const steps = [
 
 function CreateRelease() {
   const navigate = useNavigate();
-  const { userNameIdRoll } = useSelector((state) => state.userData);
-
-  useEffect(() => {
-    if (userNameIdRoll) {
-      axios
-        .get(
-          `https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/release/${userNameIdRoll[1]}?page=1&limit=6&status=All`
-        )
-        .then((res) => {
-          if (res.status == 200) {
-            console.log(res.data.data);
-          }
-        })
-        .catch((er) => console.log(er));
-    }
-  }, []);
 
   const [step, setStep] = useState(0);
   const handlePrev = () => {

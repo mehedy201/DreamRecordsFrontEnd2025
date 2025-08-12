@@ -18,26 +18,13 @@ import Transaction from "./pages/Transaction/Transaction";
 import ServiceRequest from "./pages/ServiceRequest/ServiceRequest";
 import SingleArtist from "./pages/Artists/components/SingleArtist";
 import Profile from "./pages/Profile/Profile";
-import EditSingleArtist from "./pages/Artists/components/EditSingleArtist";
-import EditLable from "./pages/Lables/components/EditLable";
 import Settings from "./pages/Settings/Settings";
 import Support from "./pages/Support/Support";
-import SignUp from "./pages/SignUp/SignUp";
 import SupportMessageBox from "./pages/Support/SupportMessageBox";
 import {
-  artistsItems,
   releaseItems,
   Release_Claim,
-  LablesItems,
   support,
-  transactions,
-  releaseAlbumInfo,
-  releaseTrackDetails,
-  albumTrackList,
-  singleReleaseATrackData,
-  chartData,
-  singleReleaseARevenueData,
-  releaseCredits,
 } from "./data";
 // import { IoEyeOutline } from "react-icons/io5";
 import LogIn from "./pages/LogIn/LogIn";
@@ -45,7 +32,6 @@ import ResetPassword from "./pages/LogIn/ResetPassword";
 import NewPassword from "./pages/LogIn/NewPassword";
 import CreateRelease from "./pages/Release/components/CreateRelease";
 import SingleRelease from "./pages/Release/components/SingleRelease";
-import SignUpVerificationEmailSent from "./pages/SignUp/SignUpVerificationEmailSent";
 import SignUpVerificationEmail from "./pages/SignUp/SignUpVerificationEmail";
 import { useEffect, useState } from "react";
 import LoadingScreen from "./components/LoadingScreen";
@@ -61,6 +47,7 @@ import Authorization from "./Authorization/Authorization";
 import SignUpFirstPage from "./pages/SignUp/SignUpFirstPage";
 import PersonalDetails from "./pages/SignUp/signUpSteps/PersonalDetails";
 import AddressInformation from "./pages/SignUp/signUpSteps/AddressInformation";
+import EditRelease from "./pages/Release/EditRelease/EditRelease";
 
 function Layout() {
   const location = useLocation();
@@ -137,16 +124,17 @@ function App() {
             path="/create-release"
             element={ <Authorization><CreateRelease/></Authorization>}
           />
+          <Route
+            path="/edit-release/:id"
+            element={ <Authorization><EditRelease/></Authorization>}
+          />
           <Route path="/AlbumInformation" element={<Authorization><AlbumInformation /></Authorization>} />
 
           <Route
             path="/ReleaseOverview"
             element={
               <Authorization>
-                <ReleaseOverview
-                  releaseAlbumInfo={releaseAlbumInfo}
-                  releaseTrackDetails={releaseTrackDetails}
-                />
+                <ReleaseOverview/>
               </Authorization>
             }
           />
