@@ -7,6 +7,7 @@ import Modal from "./Modal";
 import { useParams } from "react-router-dom";
 const Table = ({ tableFor, serviceRequestData }) => {
 
+
   const {request} = useParams();
   const modifyRequest = (request) => {
     if (request.includes("-")) {
@@ -141,10 +142,6 @@ const Table = ({ tableFor, serviceRequestData }) => {
                           tableFor === 'OAC' && 
                           <>
                             <div style={{gap: '10px'}} className="d-flex">
-                              <p>Type: </p>
-                              <p>{data?.type ? data?.type : 'Youtube'}</p>
-                            </div>
-                            <div style={{gap: '10px'}} className="d-flex">
                               <p>Artist's:</p>
                               <p>{data?.artist?.map(artist => artist.artistName).join(', ')}</p>
                             </div>
@@ -161,6 +158,10 @@ const Table = ({ tableFor, serviceRequestData }) => {
                         {
                           tableFor === 'ProfileLinking' && 
                           <>
+                            <div style={{gap: '10px'}} className="d-flex">
+                              <p>Type:</p>
+                              <p>{data?.type}</p>
+                            </div>
                             <div style={{gap: '10px'}} className="d-flex">
                               <p>Artist's:</p>
                               <p>{data?.artist?.map(artist => artist.artistName).join(', ')}</p>
