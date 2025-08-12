@@ -100,6 +100,7 @@ function ProfileLinking({
     handleSubmit,
     setValue,
     watch,
+    resetField,
     control,
     formState: { errors },
   } = useForm();
@@ -147,6 +148,11 @@ function ProfileLinking({
       .catch((er) => setLoading(false));
     }
   }, [artistData]);
+
+
+  useEffect(() => {
+    resetField("release");
+  }, [artistData, resetField]);
 
   return (
     <div>

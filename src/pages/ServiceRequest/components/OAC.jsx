@@ -84,6 +84,7 @@ function OAC({
     handleSubmit,
     setValue,
     watch,
+    resetField,
     control,
     formState: { errors },
   } = useForm();
@@ -130,6 +131,11 @@ function OAC({
       .catch((er) => setLoading(false));
     }
   }, [artistData]);
+
+
+  useEffect(() => {
+    resetField("release");
+  }, [artistData, resetField]);
 
 
 

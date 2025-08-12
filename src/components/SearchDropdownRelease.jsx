@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import * as Popover from "@radix-ui/react-popover";
 import { Cross1Icon } from "@radix-ui/react-icons";
@@ -14,11 +14,16 @@ const SearchDropdownRelease = ({
   onSelect,
   value,
   searchTxt = "Search...",
+  selectRelease,
 }) => {
   // const [data, setData] = useState(items)
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedItems, setSelectedItems] = useState(value ? value : []);
   const [showResults, setShowResults] = useState(false);
+
+  useEffect(() => {
+    setSelectedItems(value ? value : [])
+  },[value])
 
   const handleSearch = (e) => {
     setSearchQuery(e.target.value);
@@ -31,9 +36,15 @@ const SearchDropdownRelease = ({
         (selectedItem) => selectedItem._id === item._id
       )
     ) {
-      setSelectedItems([...selectedItems, item]);
-      const selectItem = [...selectedItems, item];
-      onSelect(selectItem)
+      if(selectRelease &&  selectRelease === 'Single') {
+        setSelectedItems([item]);
+        onSelect([item]);
+      }else{
+        setSelectedItems([...selectedItems, item]);
+        const selectItem = [...selectedItems, item];
+        onSelect(selectItem)
+      }
+      
     }
 
     // Slight delay to ensure input is cleared properly
