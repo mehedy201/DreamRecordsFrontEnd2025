@@ -13,6 +13,10 @@ function SignUpVerificationEmail() {
 
   const [tempData, setTempData] = useState();
   useEffect(() => {
+    const token = localStorage.getItem("token");
+    if(token){
+      navigate('/')
+    }
     axios
       .get(
         `https://dream-records-2025-m2m9a.ondigitalocean.app/common/api/v1/authentication/get-temp-user/${id}`
@@ -33,7 +37,9 @@ function SignUpVerificationEmail() {
   };
 
   const [otpErr, setOtpErr] = useState();
+  const [errorMessage, setErrorMessage] = useState()
   const verifyOtp = () => {
+    setErrorMessage('')
     setOtpErr("");
     if (!otp) {
       setOtpErr("OTP Required");
@@ -50,13 +56,15 @@ function SignUpVerificationEmail() {
     const payload = { otp, id };
     axios
       .post(
-        `https://dream-records-2025-m2m9a.ondigitalocean.app/common/api/v1/authentication/verify-user-otp`,
+        `http://localhost:5000/common/api/v1/authentication/verify-user-otp`,
         payload
       )
       .then((res) => {
-        if (res.data.status === 200) {
+        if (res.status === 200) {
           localStorage.setItem("token", res.data.token);
           navigate("/sign-up-profile-info");
+        }else{
+          setErrorMessage(res.data.message)
         }
       });
 
@@ -143,6 +151,7 @@ function SignUpVerificationEmail() {
           </div>
         </div>
         {otpErr && <p style={{ color: "red" }}>{otpErr}</p>}
+        {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
         <button
           className="theme-btn"
           style={{ width: "100%", margin: "0 0 0px 0" }}
