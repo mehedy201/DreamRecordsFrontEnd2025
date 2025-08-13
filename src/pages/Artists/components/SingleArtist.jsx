@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import {
-  // Link,
+  Link,
   useNavigate,
   useParams,
   useSearchParams,
@@ -12,11 +12,11 @@ import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { ChevronRight } from "lucide-react";
 import Dropdown from "../../../components/Dropdown";
 import ReleaseCard from "../../../components/ReleaseCard";
-// import { GoPencil } from "react-icons/go";
+import { GoPencil } from "react-icons/go";
 // import { AiOutlineDelete } from "react-icons/ai";
 // import * as Dialog from "@radix-ui/react-dialog";
 // import Modal from "../../../components/Modal";
-// import threedotPng from "../../../assets/icons/vertical-threeDots.png";
+import threedotPng from "../../../assets/icons/vertical-threeDots.png";
 import { HiOutlineAdjustmentsHorizontal } from "react-icons/hi2";
 import axios from "axios";
 import Pagination from "../../../components/Pagination";
@@ -200,7 +200,7 @@ const SingleArtist = () => {
                   <p>Created on Date Not Found</p>
                 )}
               </div>
-              {/* <DropdownMenu.Root>
+              <DropdownMenu.Root>
                 <DropdownMenu.Trigger asChild>
                   <button className="dropdown-trigger singleArtist-dropdown-btn">
                     <img src={threedotPng} />
@@ -227,7 +227,7 @@ const SingleArtist = () => {
                   </DropdownMenu.Item>
                   <hr />
 
-                  <DropdownMenu.Item
+                  {/* <DropdownMenu.Item
                     className="dropdown-item"
                     onSelect={(e) => e.preventDefault()} // Prevent dropdown from closing
                   >
@@ -262,9 +262,9 @@ const SingleArtist = () => {
                         </Dialog.Content>
                       </Dialog.Portal>
                     </Dialog.Root>
-                  </DropdownMenu.Item>
+                  </DropdownMenu.Item> */}
                 </DropdownMenu.Content>
-              </DropdownMenu.Root> */}
+              </DropdownMenu.Root>
             </Flex>
             <div className="singleArtist-social-row">
               <div className="singleArtist-info">

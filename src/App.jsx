@@ -48,6 +48,8 @@ import SignUpFirstPage from "./pages/SignUp/SignUpFirstPage";
 import PersonalDetails from "./pages/SignUp/signUpSteps/PersonalDetails";
 import AddressInformation from "./pages/SignUp/signUpSteps/AddressInformation";
 import EditRelease from "./pages/Release/EditRelease/EditRelease";
+import EditSingleArtist from "./pages/Artists/components/EditSingleArtist";
+import EditLable from "./pages/Lables/components/EditLable";
 
 function Layout() {
   const location = useLocation();
@@ -153,10 +155,10 @@ function App() {
             path="/create-artist"
             element={<Authorization><CreateArtist /></Authorization>}
           />
-          {/* <Route
+          <Route
             path="/edit-artist/:id"
             element={<Authorization><EditSingleArtist/></Authorization>}
-          /> */}
+          />
           {/* Artist Route End ___________________________________ */}
 
           {/* Label Route Start __________________________________ */}
@@ -172,10 +174,10 @@ function App() {
             path="/create-label"
             element={<Authorization><CreateLabel /></Authorization>}
           />
-          {/* <Route
+          <Route
             path="/edit-label/:id"
             element={<Authorization><EditLable/></Authorization>}
-          /> */}
+          />
 
           {/* Label Route End __________________________________ */}
 

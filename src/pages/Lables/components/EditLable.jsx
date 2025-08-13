@@ -80,6 +80,7 @@ function EditLable() {
               defaultValue={preLabelData?.labelName}
               {...register("labelName", { required: true })}
               type="text"
+              disabled
             />
             {errors.labelName && <span>Label Name Required</span>}
           </div>

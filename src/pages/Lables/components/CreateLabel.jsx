@@ -157,7 +157,7 @@ function CreateLabel({ fromReleaseForm, openModal, setSearchQuery }) {
       ...uploadedImage,
       masterUserId: userNameIdRoll[1],
       userName: userNameIdRoll[0],
-      status: "Pending",
+      status: "Approved",
       date: new Date().toISOString(),
     };
 

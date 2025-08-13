@@ -278,8 +278,10 @@ function SingleRelease() {
                         <img src={downloadImg} />
                         Download Artwork
                       </Link>
-                      {
-                        releaseData?.status === 'Error' &&
+                    </DropdownMenu.Item>
+                    {
+                      releaseData?.status === 'Error' &&
+                      <DropdownMenu.Item className="dropdown-item">
                         <Link
                           to={`/edit-release/${releaseData?._id}`}
                           style={{
@@ -293,8 +295,8 @@ function SingleRelease() {
                           <img src={editImg} />
                           Edit Metadata
                         </Link>
-                      }
                     </DropdownMenu.Item>
+                    }
                   </DropdownMenu.Content>
                 </DropdownMenu.Root>
               </div>

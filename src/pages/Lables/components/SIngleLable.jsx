@@ -1,7 +1,7 @@
 import { Button, Flex } from "@radix-ui/themes";
 import { useEffect, useState } from "react";
 import {
-  // Link,
+  Link,
   useNavigate,
   useParams,
   useSearchParams,
@@ -10,11 +10,11 @@ import ReleaseCard from "../../../components/ReleaseCard";
 import Dropdown from "../../../components/Dropdown";
 import { InfoCircledIcon } from "@radix-ui/react-icons";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
+import { GoPencil } from "react-icons/go";
 // import * as Dialog from "@radix-ui/react-dialog";
-// import { GoPencil } from "react-icons/go";
 // import Modal from "../../../components/Modal";
 // import { AiOutlineDelete } from "react-icons/ai";
-// import threedotPng from "../../../assets/icons/vertical-threeDots.png";
+import threedotPng from "../../../assets/icons/vertical-threeDots.png";
 import { ChevronRight } from "lucide-react";
 import { HiOutlineAdjustmentsHorizontal } from "react-icons/hi2";
 import { useSelector } from "react-redux";
@@ -216,7 +216,7 @@ function SingleLable() {
                   </h4>
                 </div>
               </div>
-              {/* <DropdownMenu.Root>
+              <DropdownMenu.Root>
                 <DropdownMenu.Trigger asChild>
                   <button className="dropdown-trigger singleLabel-dropdown-btn">
                     <img src={threedotPng} />
@@ -228,7 +228,8 @@ function SingleLable() {
                   side="bottom"
                   className="dropdown-content singleArtist-dropdown-content"
                 >
-                  {label.status !== "Approved" && (
+
+                  {label.status == "Approved" && (
                     <>
                       <DropdownMenu.Item className="dropdown-item">
                         <Link
@@ -242,7 +243,7 @@ function SingleLable() {
                           <GoPencil /> Edit Label
                         </Link>
                       </DropdownMenu.Item>
-                      <hr />
+                      {/* <hr />
                       <DropdownMenu.Item
                         className="dropdown-item"
                         onSelect={(e) => e.preventDefault()} // Prevent dropdown from closing
@@ -278,11 +279,11 @@ function SingleLable() {
                             </Dialog.Content>
                           </Dialog.Portal>
                         </Dialog.Root>
-                      </DropdownMenu.Item>
+                      </DropdownMenu.Item> */}
                     </>
                   )}
                 </DropdownMenu.Content>
-              </DropdownMenu.Root> */}
+              </DropdownMenu.Root>
             </Flex>
             <div className="singleLabel-social-row">
               <div className="singleArtist-info" style={{ marginBottom: 0 }}>

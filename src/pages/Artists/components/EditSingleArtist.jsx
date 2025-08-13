@@ -50,14 +50,14 @@ function EditSingleArtist() {
         if (res.status == 200) {
           setUploadedImage();
           navigate("/artist/1/10");
-          console.log(res);
-          // axios.patch(`https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/artist/update-release-artist`, formData)
-          //   .then(res => {
-          //       if(res.status == 200){
-          //           setUploadedImage()
-          //           navigate('/artist/1/10')
-          //       }
-          //   })
+          // console.log(res);
+          axios.patch(`https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/artist/update-release-artist`, formData)
+            .then(res => {
+                if(res.status == 200){
+                    setUploadedImage()
+                    navigate('/artist/1/10')
+                }
+            })
         }
       })
       .catch((er) => console.log(er));
@@ -90,6 +90,7 @@ function EditSingleArtist() {
               {...register("artistName", { required: true })}
               type="text"
               style={{ width: "100%" }}
+              disabled
             />
             {errors.artistName && <span>Artist Name Required</span>}
           </div>
