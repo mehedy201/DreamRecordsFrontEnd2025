@@ -18,7 +18,6 @@ function Profile() {
 
   // const dispatch = useDispatch();
   const {userData} = useSelector((state) => state.userData);
-  console.log(userData)
 
   // Handle Image Upload
   const [image, setImage] = useState(null);
