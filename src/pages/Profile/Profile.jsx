@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Flex } from "@radix-ui/themes";
 import "./Profile.css";
 import * as Dialog from "@radix-ui/react-dialog";
@@ -6,16 +6,18 @@ import { FaCamera } from "react-icons/fa";
 import Modal from "../../components/Modal";
 import { useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
-import auth from "../../../firebase.config";
-import { EmailAuthProvider, updatePassword, reauthenticateWithCredential } from "firebase/auth";
 import defultUserImg from '../../assets/artists/artist4.png'
 import localDate from "../../hooks/localDate";
+import axios from "axios";
+import toast from "react-hot-toast";
+import FormSubmitLoading from "../../components/FormSubmitLoading";
+import localTime from "../../hooks/localTime";
 
 
 function Profile() {
 
   // const dispatch = useDispatch();
-  const {userData, userNameIdRoll} = useSelector((state) => state.userData);
+  const {userData} = useSelector((state) => state.userData);
   console.log(userData)
 
   // Handle Image Upload
@@ -44,35 +46,51 @@ function Profile() {
         return;
     }
 
-    const user = auth.currentUser;
-    try {
-        // 1. Verify current password
-      const credential = EmailAuthProvider.credential(
-        user.email, 
-        data.currentPass
-      );
-      // 2. Reauthenticate user
-      await reauthenticateWithCredential(user, credential);
-        // If reauthentication succeeds, update password
-        await updatePassword(user, data.pass1);
-        setPassMatchErr('');
-        setLoading(false);
+    const token = localStorage.getItem('token')
+
+    const payload = {newPassword: data.pass1, token}
+    axios.patch(`http://localhost:5000/common/api/v1/authentication/change-password`, payload)
+    .then(res => {
+      if(res.data.status === 200){
+        toast.success(res.data.message)
+        setLoading(false)
         setOpen(false)
-        alert('Password updated successfully');
-    } catch (error) {
-        setLoading(false);
-        if (error.code === 'auth/wrong-password') {
-            setError('Current password is incorrect');
-        } 
-        else if (error.code === 'auth/requires-recent-login') {
-            setError('Session expired. Please sign in again.');
-            // You might want to redirect to login here
-        }
-        else {
-            setError('Password update failed: ' + error.message);
-        }
+      }else{
+        toast.error(res.data.message)
+        setOpen(false)
+        setLoading(false)
+      }
+    })
+  }
+
+
+  const emailCloseRef = useRef(null);
+  const [email, setEmail] = useState();
+  const [emailErr, setEmailErr] = useState();
+  const [emailChangeLoading, setEmailChangeLoading] = useState(false);
+  const changeEmailFunc = () => {
+    setEmailChangeLoading(true)
+    setEmailErr('')
+    if(!email){
+      setEmailErr('Email required')
     }
-    setOpen(false)
+    const token = localStorage.getItem('token')
+
+    const payload = {newEmail: email, token}
+    axios.patch(`http://localhost:5000/common/api/v1/authentication/change-email`, payload)
+    .then(res => {
+      console.log(res)
+      if(res.data.status === 200){
+        toast.success(res.data.message)
+        setEmailChangeLoading(false)
+        emailCloseRef.current?.click();
+      }else{
+        // toast.error(res.data.message.message)
+        setEmailErr(res.data.message.message)
+        setEmailChangeLoading(false)
+      }
+    })
+
   }
 
 
@@ -243,6 +261,41 @@ function Profile() {
                 <p>Email:</p>
                 <p className="profile-value-text">{userData?.email}</p>
               </div>
+            </div>
+        </div>
+        <Dialog.Root>
+          <Dialog.Trigger className="profile-pass-btn">
+            Change Email
+          </Dialog.Trigger>
+          <Modal title="Change Email">
+              <div className="prodile-modal">
+                  <label>New Email</label>
+                  <input type="email" onChange={e => setEmail(e.target.value)}/>
+                  {errors.currentPass && <p>Current Password Required</p>}
+                  {
+                    emailChangeLoading && <FormSubmitLoading/>
+                  }
+                  {
+                    emailErr && <p style={{color: 'red'}}>{emailErr}</p>
+                  }
+              </div>
+              <button onClick={changeEmailFunc} className="close-button">
+                Change Email
+              </button>
+
+              {/* Hidden Dialog.Close for programmatic close */}
+              <Dialog.Close asChild>
+                <button
+                  ref={emailCloseRef}
+                  style={{ display: "none" }}
+                />
+              </Dialog.Close>
+          </Modal>
+        </Dialog.Root>
+      </div>
+      <div style={{margin: '0px'}} className="profile-info d-flex">
+        <div style={{ width: "80%" }}>
+            <div >
               <div className="d-flex">
                 <p>Password:</p>
                 <p className="profile-value-text">*********</p>
@@ -256,9 +309,9 @@ function Profile() {
           <Modal title="Change Password">
             <form onSubmit={handleSubmit(onSubmit)}>
               <div className="prodile-modal">
-                  <label>Enter current Password</label>
+                  {/* <label>Enter current Password</label>
                   <input type="password" placeholder="************" {...register('currentPass', {required: true})}/>
-                  {errors.currentPass && <p>Current Password Required</p>}
+                  {errors.currentPass && <p>Current Password Required</p>} */}
                   <label>Enter New Password</label>
                   <input type="password" placeholder="************" {...register('pass1', {required: true})}/>
                   {errors.pass1 && <p>Password Required</p>}
