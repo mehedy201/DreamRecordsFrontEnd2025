@@ -9,6 +9,7 @@ import { useForm } from "react-hook-form";
 import auth from "../../../firebase.config";
 import { EmailAuthProvider, updatePassword, reauthenticateWithCredential } from "firebase/auth";
 import defultUserImg from '../../assets/artists/artist4.png'
+import localDate from "../../hooks/localDate";
 
 
 function Profile() {
@@ -132,6 +133,17 @@ function Profile() {
         <div className="d-flex">
           <p>Phone:</p>
           <p className="profile-value-text ">{userData?.phone}</p>
+        </div>
+        <div className="d-flex">
+          <p>Created Date &amp; Time:</p>
+          <p className="user-value-text">
+            {userData?.openingDateISO
+              ? localDate(userData?.openingDateISO)
+              : userData?.openingDate}{" "}
+            {userData?.openingDateISO
+              ? localTime(userData?.openingDateISO)
+              : ""}
+          </p>
         </div>
       </div>
 
