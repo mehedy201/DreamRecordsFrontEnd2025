@@ -727,7 +727,7 @@ label {
   margin-top: 50px !important;
 }
 .searchDropdown-modal-content {
-  width: 1178px;
+  width: 80%;
   height: 650px;
   z-index: 111;
   overflow-y: auto;
