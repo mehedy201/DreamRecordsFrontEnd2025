@@ -28,9 +28,11 @@ const AddressInformation = () => {
     setLoading(true);
     if (!country) {
       setCountryError("Please select your Country");
+      return;
     }
-    if (!state && state.length > 2) {
+    if (!state) {
       setStateError("Please select your State");
+      return
     }
 
     const label = {
@@ -98,7 +100,7 @@ const AddressInformation = () => {
                     setCountryid(e.id);
                     const name = e.name;
                     const emoji = e.emoji;
-                    const v = { name, emoji };
+                    const v = { name, emoji, countryId: e.id };
                     setCountry(v);
                   }}
                   defaultValue={country}
