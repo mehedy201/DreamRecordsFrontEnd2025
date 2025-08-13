@@ -52,7 +52,7 @@ const Authorization = ({ children }) => {
         );
         dispatch(setUserData(res.data.data));
         const isLocked = res.data?.data?.userLocked;
-        if (isLocked) {
+        if (isLocked || res.data?.data?.status === 'Suspended') {
           navigate("/locked/:userId");
           return;
         }
