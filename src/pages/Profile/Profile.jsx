@@ -63,34 +63,33 @@ function Profile() {
   }
 
 
-  const emailCloseRef = useRef(null);
-  const [email, setEmail] = useState();
-  const [emailErr, setEmailErr] = useState();
-  const [emailChangeLoading, setEmailChangeLoading] = useState(false);
-  const changeEmailFunc = () => {
-    setEmailChangeLoading(true)
-    setEmailErr('')
-    if(!email){
-      setEmailErr('Email required')
-    }
-    const token = localStorage.getItem('token')
+  // const emailCloseRef = useRef(null);
+  // const [email, setEmail] = useState();
+  // const [emailErr, setEmailErr] = useState();
+  // const [emailChangeLoading, setEmailChangeLoading] = useState(false);
+  // const changeEmailFunc = () => {
+  //   setEmailChangeLoading(true)
+  //   setEmailErr('')
+  //   if(!email){
+  //     setEmailErr('Email required')
+  //   }
+  //   const token = localStorage.getItem('token')
 
-    const payload = {newEmail: email, token}
-    axios.patch(`http://localhost:5000/common/api/v1/authentication/change-email`, payload)
-    .then(res => {
-      console.log(res)
-      if(res.data.status === 200){
-        toast.success(res.data.message)
-        setEmailChangeLoading(false)
-        emailCloseRef.current?.click();
-      }else{
-        // toast.error(res.data.message.message)
-        setEmailErr(res.data.message.message)
-        setEmailChangeLoading(false)
-      }
-    })
-
-  }
+  //   const payload = {newEmail: email, token}
+  //   axios.patch(`http://localhost:5000/common/api/v1/authentication/change-email`, payload)
+  //   .then(res => {
+  //     console.log(res)
+  //     if(res.data.status === 200){
+  //       toast.success(res.data.message)
+  //       setEmailChangeLoading(false)
+  //       emailCloseRef.current?.click();
+  //     }else{
+  //       // toast.error(res.data.message.message)
+  //       setEmailErr(res.data.message.message)
+  //       setEmailChangeLoading(false)
+  //     }
+  //   })
+  // }
 
 
 
@@ -193,108 +192,16 @@ function Profile() {
               <p className="profile-value-text">{userData?.country?.name}</p>
             </div>
           </div>
-      </div>
+      </div>     
 
-      {/* <div className="row profile-download-row">
-        <div className="col-6">
-          <div className="profile-info">
-            <h5>Label Info</h5>
-                <div style={{marginTop: '14px'}}>
-                  <div className="d-flex">
-                    <p className="profile-downloadRow-label">Label Name:</p>
-                    <p className="profile-value-text">demo</p>
-                  </div>
-                  <div className="d-flex">
-                    <p className="profile-downloadRow-label">Channel Name:</p>
-                    <p className="profile-value-text">demo</p>
-                  </div>
-                  <div className="d-flex">
-                    <p className="profile-downloadRow-label">Channel URL:</p>
-                    <p className="profile-value-text">demo</p>
-                  </div>
-                  <div className="d-flex">
-                    <p className="profile-downloadRow-label">Subscriber Count:</p>
-                    <p className="profile-value-text">1</p>
-                  </div>
-                  <div className="d-flex">
-                    <p className="profile-downloadRow-label">Videos Count:</p>
-                    <p className="profile-value-text">11</p>
-                  </div>
-                </div>
-          </div>
-        </div>
-
-
-
-        <div className="col-6">
-          <div className="profile-info" style={{ marginLeft: "16px" }}>
-            <h5 style={{ marginBottom: "10px" }}>Documents</h5>
-            <span
-              className="profile-downloadRow-label"
-              style={{ fontSize: "14px" }}
-            >
-              Government ID
-            </span>
-            <div className="d-flex">
-              <div className="profile-info-download-div">
-                <p>Front Page.PDF</p>
-                <button>Download</button>
-              </div>
-              <div className="profile-info-download-div">
-                <p>Front Page.PDF</p>
-                <button>Download</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div> */}
-
-
-      
       <div className="profile-info d-flex">
         <div style={{ width: "80%" }}>
-            <div >
-              <h5>Security Info</h5>
-
-              <div style={{marginTop: '14px'}} className="d-flex">
+           <h5>Security Info</h5>
+            <div style={{marginTop: '10px'}}>
+              <div className="d-flex">
                 <p>Email:</p>
                 <p className="profile-value-text">{userData?.email}</p>
               </div>
-            </div>
-        </div>
-        <Dialog.Root>
-          <Dialog.Trigger className="profile-pass-btn">
-            Change Email
-          </Dialog.Trigger>
-          <Modal title="Change Email">
-              <div className="prodile-modal">
-                  <label>New Email</label>
-                  <input type="email" onChange={e => setEmail(e.target.value)}/>
-                  {errors.currentPass && <p>Current Password Required</p>}
-                  {
-                    emailChangeLoading && <FormSubmitLoading/>
-                  }
-                  {
-                    emailErr && <p style={{color: 'red'}}>{emailErr}</p>
-                  }
-              </div>
-              <button onClick={changeEmailFunc} className="close-button">
-                Change Email
-              </button>
-
-              {/* Hidden Dialog.Close for programmatic close */}
-              <Dialog.Close asChild>
-                <button
-                  ref={emailCloseRef}
-                  style={{ display: "none" }}
-                />
-              </Dialog.Close>
-          </Modal>
-        </Dialog.Root>
-      </div>
-      <div style={{margin: '0px'}} className="profile-info d-flex">
-        <div style={{ width: "80%" }}>
-            <div >
               <div className="d-flex">
                 <p>Password:</p>
                 <p className="profile-value-text">*********</p>
@@ -308,9 +215,9 @@ function Profile() {
           <Modal title="Change Password">
             <form onSubmit={handleSubmit(onSubmit)}>
               <div className="prodile-modal">
-                  {/* <label>Enter current Password</label>
+                  <label>Enter current Password</label>
                   <input type="password" placeholder="************" {...register('currentPass', {required: true})}/>
-                  {errors.currentPass && <p>Current Password Required</p>} */}
+                  {errors.currentPass && <p>Current Password Required</p>}
                   <label>Enter New Password</label>
                   <input type="password" placeholder="************" {...register('pass1', {required: true})}/>
                   {errors.pass1 && <p>Password Required</p>}

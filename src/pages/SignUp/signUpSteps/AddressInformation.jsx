@@ -11,7 +11,7 @@ const AddressInformation = () => {
   const dispatch = useDispatch();
   const { userNameIdRoll, userData } = useSelector((state) => state.userData);
 
-  // Country State Select
+  // Country State Select____________________________________________________
   const [countryid, setCountryid] = useState(0);
   const [country, setCountry] = useState();
   const [state, setState] = useState();
@@ -29,7 +29,7 @@ const AddressInformation = () => {
     if (!country) {
       setCountryError("Please select your Country");
     }
-    if (!state) {
+    if (!state && state.length > 2) {
       setStateError("Please select your State");
     }
 
