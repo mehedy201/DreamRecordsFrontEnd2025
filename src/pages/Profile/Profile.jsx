@@ -8,6 +8,7 @@ import { useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
 import auth from "../../../firebase.config";
 import { EmailAuthProvider, updatePassword, reauthenticateWithCredential } from "firebase/auth";
+import defultUserImg from '../../assets/artists/artist4.png'
 
 
 function Profile() {
@@ -90,7 +91,7 @@ function Profile() {
           ) : (
             <>
               <img
-                src={userData?.photoURL}
+                src={userData?.photoURL ? userData?.photoURL : defultUserImg}
                 alt="Profile"
                 onClick={() => document.getElementById("fileInput").click()}
               />
