@@ -27,7 +27,6 @@ function EditLable() {
           imgUrl = res?.data?.data[0]?.imgUrl;
           key = res?.data?.data[0]?.key;
           setUploadedImage({ imgUrl, key });
-          console.log(res.data.data[0]);
         }
       });
   }, [id]);

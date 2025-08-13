@@ -948,6 +948,6 @@ label {
 }
 
 img{
-  object-fit: "cover";
-  object-position: "center"
+  object-fit: "cover" !important;
+  object-position: "center" !important;
 }

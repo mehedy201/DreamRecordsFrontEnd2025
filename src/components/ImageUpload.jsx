@@ -50,7 +50,7 @@ const ImageUpload = ({
         )
         .then((res) => {
           if (res.status == 200) {
-            setUploadedImage();
+            setUploadedImage({imgUrl: '', key: ''});
             setImgLink();
           }
         })

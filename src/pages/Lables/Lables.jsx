@@ -183,8 +183,8 @@ const Lables = () => {
                   width: "148px",
                   height: "148px",
                   borderRadius: "50%",
-                  // objectFit: "cover",
-                  // objectPosition: "center",
+                  objectFit: "cover",
+                  objectPosition: "center",
                 }}
                 src={item?.imgUrl ? item.imgUrl : labelDemoImg}
                 alt={item.labelName}
