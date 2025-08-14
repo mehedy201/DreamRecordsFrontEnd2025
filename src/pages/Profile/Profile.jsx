@@ -45,9 +45,7 @@ function Profile() {
         return;
     }
 
-    const token = localStorage.getItem('token')
-
-    const payload = {newPassword: data.pass1, token, currentPass: data.currentPass}
+    const payload = {newPassword: data.pass1, currentPass: data.currentPass, id: userData?._id}
     axios.patch(`https://dream-records-2025-m2m9a.ondigitalocean.app/common/api/v1/authentication/change-password`, payload)
     .then(res => {
       if(res.data.status === 200){
@@ -61,36 +59,6 @@ function Profile() {
       }
     })
   }
-
-
-  // const emailCloseRef = useRef(null);
-  // const [email, setEmail] = useState();
-  // const [emailErr, setEmailErr] = useState();
-  // const [emailChangeLoading, setEmailChangeLoading] = useState(false);
-  // const changeEmailFunc = () => {
-  //   setEmailChangeLoading(true)
-  //   setEmailErr('')
-  //   if(!email){
-  //     setEmailErr('Email required')
-  //   }
-  //   const token = localStorage.getItem('token')
-
-  //   const payload = {newEmail: email, token}
-  //   axios.patch(`http://localhost:5000/common/api/v1/authentication/change-email`, payload)
-  //   .then(res => {
-  //     console.log(res)
-  //     if(res.data.status === 200){
-  //       toast.success(res.data.message)
-  //       setEmailChangeLoading(false)
-  //       emailCloseRef.current?.click();
-  //     }else{
-  //       // toast.error(res.data.message.message)
-  //       setEmailErr(res.data.message.message)
-  //       setEmailChangeLoading(false)
-  //     }
-  //   })
-  // }
-
 
 
 
@@ -225,7 +193,7 @@ function Profile() {
                   <input type="password" placeholder="************" {...register('pass2', {required: true})}/>
                   {errors.pass2 && <p>Password Required</p>}
                   {
-                    loading && <p>Loading ......</p>
+                    loading && <FormSubmitLoading/>
                   }
                   {
                     passMatchErr && <p>{passMatchErr}</p>

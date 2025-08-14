@@ -57,6 +57,11 @@ const Authorization = ({ children }) => {
           return;
         }
 
+        if(res?.data?.data?.password !== decoded.password){
+          localStorage.removeItem("token");
+          return navigate('/login');
+        }
+
         if (!res?.data?.data.first_name && !res?.data?.data.first_name) {
           navigate("/sign-up-profile-info");
           return;
