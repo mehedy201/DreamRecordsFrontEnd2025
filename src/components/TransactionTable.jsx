@@ -10,6 +10,7 @@ const TransactionTable = ({ columns, data }) => {
       const response = await fetch(
         `https://dream-records-2025-m2m9a.ondigitalocean.app/common/api/v1/analytics-and-balance/download?${query}`
       );
+      
 
       if (!response.ok) {
         throw new Error("Download failed");

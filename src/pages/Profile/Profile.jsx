@@ -140,7 +140,7 @@ function Profile() {
               <p className="profile-value-text">{userData?.addressLine1}</p>
             </div>
             <div className="d-flex">
-              <p>Address Line 1:</p>
+              <p>Address Line 2:</p>
               <p className="profile-value-text">{userData?.addressLine2}</p>
             </div>
             <div className="d-flex">
