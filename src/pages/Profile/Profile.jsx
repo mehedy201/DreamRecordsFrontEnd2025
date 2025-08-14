@@ -47,8 +47,8 @@ function Profile() {
 
     const token = localStorage.getItem('token')
 
-    const payload = {newPassword: data.pass1, token}
-    axios.patch(`http://localhost:5000/common/api/v1/authentication/change-password`, payload)
+    const payload = {newPassword: data.pass1, token, currentPass: data.currentPass}
+    axios.patch(`https://dream-records-2025-m2m9a.ondigitalocean.app/common/api/v1/authentication/change-password`, payload)
     .then(res => {
       if(res.data.status === 200){
         toast.success(res.data.message)

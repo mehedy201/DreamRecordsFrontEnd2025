@@ -56,7 +56,7 @@ function SignUpVerificationEmail() {
     const payload = { otp, id };
     axios
       .post(
-        `http://localhost:5000/common/api/v1/authentication/verify-user-otp`,
+        `https://dream-records-2025-m2m9a.ondigitalocean.app/common/api/v1/authentication/verify-user-otp`,
         payload
       )
       .then((res) => {
