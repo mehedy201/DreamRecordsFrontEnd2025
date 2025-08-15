@@ -234,14 +234,14 @@ function SingleRelease() {
                     {
                       [...new Set(
                         releaseData?.tracks?.flatMap(track =>
-                          track?.artist?.map(a => a.artistName.toLowerCase())
+                          track?.artist?.map(a => a.artistName)
                         )
                       )].join(', ')
                     }
                     {
                       [...new Set(
                         releaseData?.tracks?.flatMap(track =>
-                          track?.primaryArtist?.map(a => a.artistName.toLowerCase())
+                          track?.primaryArtist?.map(a => a.artistName)
                         )
                       )].join(', ')
                     }

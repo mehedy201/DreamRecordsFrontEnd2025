@@ -108,14 +108,20 @@ const Table = ({ tableFor, serviceRequestData }) => {
                           data?.release?.map(item => 
                             <div key={item?._id} style={{gap: '10px'}} className="d-flex">
                               <p>Tittle:</p>
-                              <p>{item?.releaseTitle}</p>
+                              <div>
+                                <p>{item?.releaseTitle}</p>
+                                <p>{item?.UPC}</p>
+                              </div>
                             </div>
                           )
                         }
                         { data?.release?.releaseTitle &&
                           <div style={{gap: '10px'}} className="d-flex">
                               <p>Tittle:</p>
-                              <p>{data?.release?.releaseTitle}</p>
+                              <div>
+                                <p>{data?.release?.releaseTitle}</p>
+                                <p>{data?.release?.UPC}</p>
+                              </div>
                           </div>
                         }
                         {

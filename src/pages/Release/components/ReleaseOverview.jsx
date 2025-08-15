@@ -126,14 +126,14 @@ function ReleaseOverview({ step, setStep, handlePrev }) {
               {
                 [...new Set(
                   tracksInfo?.flatMap(track =>
-                    track?.artist?.map(a => a.artistName.toLowerCase())
+                    track?.artist?.map(a => a.artistName)
                   )
                 )].join(', ')
               }
               {
                 [...new Set(
                   tracksInfo?.flatMap(track =>
-                    track?.primaryArtist?.map(a => a.artistName.toLowerCase())
+                    track?.primaryArtist?.map(a => a.artistName)
                   )
                 )].join(', ')
               }
