@@ -120,7 +120,7 @@ import toast from "react-hot-toast";
 function CreateLabel({ fromReleaseForm, openModal, setSearchQuery }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { userNameIdRoll } = useSelector((state) => state.userData);
+  const { userData } = useSelector((state) => state.userData);
   const { reFetchLabel } = useSelector((state) => state.reFetchSlice);
 
   const [imgLink, setImgLink] = useState(null);
@@ -155,8 +155,9 @@ function CreateLabel({ fromReleaseForm, openModal, setSearchQuery }) {
     const payload = {
       ...formData,
       ...uploadedImage,
-      masterUserId: userNameIdRoll[1],
-      userName: userNameIdRoll[0],
+      masterUserId: userData._id,
+      userName: userData.userName,
+      email: userData.email,
       status: "Approved",
       date: new Date().toISOString(),
     };
