@@ -188,11 +188,8 @@ const TrackViewCollapsSection = ({ track, index }) => {
                               <p>{data?.artistName}</p>
                             </div>
                           ))
-                        : track.lyricist.map((l, index) => (
-                            <span style={{ paddingRight: "5px" }} key={index}>
-                              {l},{" "}
-                            </span>
-                          )))}
+                        : track.lyricist.join(", "))}
+
                     {track?.authors &&
                       track.authors.map((author, index) => (
                         <span key={index} style={{ paddingRight: "5px" }}>
@@ -244,11 +241,7 @@ const TrackViewCollapsSection = ({ track, index }) => {
                               <p>{data?.artistName}</p>
                             </div>
                           ))
-                        : track.composer.map((c, index) => (
-                            <span style={{ paddingRight: "5px" }} key={index}>
-                              {c},
-                            </span>
-                          )))}
+                        : track.composer.join(", "))}
                   </div>
                   <div
                     style={{ alignItems: "center" }}
