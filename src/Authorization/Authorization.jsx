@@ -28,14 +28,12 @@ const Authorization = ({ children }) => {
           return;
         }
 
-        // 2. Token ডিকোড করে মেয়াদ চেক করো
         const decoded = jwtDecode(token);
         if (decoded.exp * 1000 < Date.now()) {
           navigate("/login");
           return;
         }
 
-        // 3. displayName থেকে ID বের করো
         const displayName = decoded.displayName;
         const userNameIdRoll = displayName?.split("'__'"); // ['username', 'id', 'role']
         const userId = userNameIdRoll[1];
@@ -46,14 +44,13 @@ const Authorization = ({ children }) => {
           return;
         }
 
-        // 4. API দিয়ে ইউসার ডেটা আনো এবং লকড কিনা চেক করো
         const res = await axios.get(
           `https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/users/${userId}`
         );
         dispatch(setUserData(res.data.data));
         const isLocked = res.data?.data?.userLocked;
         if (isLocked || res.data?.data?.status === 'Suspended') {
-          navigate("/locked/:userId");
+          navigate(`/locked/${res?.data?.data?._id}`);
           return;
         }
 

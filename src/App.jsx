@@ -50,6 +50,7 @@ import AddressInformation from "./pages/SignUp/signUpSteps/AddressInformation";
 import EditRelease from "./pages/Release/EditRelease/EditRelease";
 import EditSingleArtist from "./pages/Artists/components/EditSingleArtist";
 import EditLable from "./pages/Lables/components/EditLable";
+import SuspendPage from "./pages/SuspendPage/SuspendPage";
 
 function Layout() {
   const location = useLocation();
@@ -210,6 +211,9 @@ function App() {
           />
           <Route path="/SupportMessageBox" element={<SupportMessageBox />} />
         </Route>
+
+        <Route path="/locked/:id" element={<SuspendPage />} />
+
 
         {/* Route WITHOUT Sidebar & Navbar */}
         <Route path="/sign-up" element={<SignUpFirstPage />} />
