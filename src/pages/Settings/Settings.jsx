@@ -114,7 +114,6 @@ function Settings() {
           <h4>Payout Preference</h4>
           <p>Default Payout Method</p>
           <p style={{ fontWeight: "bold", fontSize: "16px" }}>Bank Account</p>
-          {bankInfo && (
             <form
               onSubmit={handleSubmit(onSubmit)}
               className="form-container"
@@ -219,7 +218,6 @@ function Settings() {
                 </button>
               )}
             </form>
-          )}
         </div>
       </div>
     </div>
