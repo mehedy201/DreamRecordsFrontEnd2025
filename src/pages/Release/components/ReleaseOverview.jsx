@@ -14,7 +14,7 @@ import axios from "axios";
 function ReleaseOverview({ step, setStep, handlePrev }) {
 
   const pathname = window.location.pathname;
-  const { userNameIdRoll } = useSelector((state) => state.userData);
+  const { userNameIdRoll, userData } = useSelector((state) => state.userData);
   const { releaseAlbumInfo, tracksInfo, releaseDate, trackFormat } = useSelector((state) => state.releaseData);
 
   const dispatch = useDispatch();
@@ -55,7 +55,7 @@ function ReleaseOverview({ step, setStep, handlePrev }) {
       ...releaseDate,
       format: trackFormat,
       date: new Date().toISOString(),
-      userName: userNameIdRoll[0],
+      userName: userData?.userName,
       masterUserId: userNameIdRoll[1],
       status: "QC Approval",
     };
