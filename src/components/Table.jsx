@@ -106,22 +106,17 @@ const Table = ({ tableFor, serviceRequestData }) => {
                         {
                           Array.isArray(data?.release) &&
                           data?.release?.map(item => 
-                            <div key={item?._id} style={{gap: '10px'}} className="d-flex">
-                              <p>Tittle:</p>
-                              <div>
-                                <p>{item?.releaseTitle}</p>
-                                <p>{item?.UPC}</p>
-                              </div>
+                            <div style={{margin: '3px'}} key={item?._id}>
+                                <p style={{margin: '10px 0px 4px 0px'}}> Tittle: {item?.releaseTitle}</p>
+                                <small>UPC: {item?.UPC}</small>
                             </div>
                           )
                         }
-                        { data?.release?.releaseTitle &&
-                          <div style={{gap: '10px'}} className="d-flex">
-                              <p>Tittle:</p>
-                              <div>
-                                <p>{data?.release?.releaseTitle}</p>
-                                <p>{data?.release?.UPC}</p>
-                              </div>
+                        {
+                          typeof data?.release === 'object' && data?.release?.releaseTitle &&
+                          <div>
+                              <p style={{margin: '10px 0px 4px 0px'}}> Tittle: {data?.release?.releaseTitle}</p>
+                              <small>UPC: {data?.release?.UPC}</small>
                           </div>
                         }
                         {
