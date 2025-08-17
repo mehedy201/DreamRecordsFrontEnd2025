@@ -33,7 +33,7 @@ function ProfileLinking({
     (state) => state.serviceRequestPageSlice
   );
   const { yearsList } = useSelector((state) => state.yearsAndStatus);
-  const { userNameIdRoll } = useSelector((state) => state.userData);
+  const { userNameIdRoll, userData } = useSelector((state) => state.userData);
   const { reFetchArtist } = useSelector((state) => state.reFetchSlice);
   const { reFetchServiceRequest } = useSelector((state) => state.reFetchSlice);
   const dispatch = useDispatch();
@@ -109,7 +109,7 @@ function ProfileLinking({
       toast.error("Please select 5 releases");
       return;
     }
-    const userName = userNameIdRoll[0];
+    const userName = userData?.userName;
     const masterUserId = userNameIdRoll[1];
     const status = "Pending";
     const isoDate = new Date().toISOString();
