@@ -216,6 +216,7 @@ function SingleLable() {
                   </h4>
                 </div>
               </div>
+              {label.status == "Approved" && (
               <DropdownMenu.Root>
                 <DropdownMenu.Trigger asChild>
                   <button className="dropdown-trigger singleLabel-dropdown-btn">
@@ -229,7 +230,6 @@ function SingleLable() {
                   className="dropdown-content singleArtist-dropdown-content"
                 >
 
-                  {label.status == "Approved" && (
                     <>
                       <DropdownMenu.Item className="dropdown-item">
                         <Link
@@ -281,9 +281,10 @@ function SingleLable() {
                         </Dialog.Root>
                       </DropdownMenu.Item> */}
                     </>
-                  )}
+                  
                 </DropdownMenu.Content>
               </DropdownMenu.Root>
+              )}
             </Flex>
             <div className="singleLabel-social-row">
               <div className="singleArtist-info" style={{ marginBottom: 0 }}>
