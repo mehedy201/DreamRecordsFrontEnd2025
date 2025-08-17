@@ -55,8 +55,8 @@ function ReleaseOverview({ step, setStep, handlePrev }) {
       ...releaseDate,
       format: trackFormat,
       date: new Date().toISOString(),
-      userName: userData?.userName,
-      masterUserId: userNameIdRoll[1],
+      userName: userData?.userName || userNameIdRoll[0],
+      masterUserId: userNameIdRoll[1] || userData?._id,
       status: "QC Approval",
     };
     
