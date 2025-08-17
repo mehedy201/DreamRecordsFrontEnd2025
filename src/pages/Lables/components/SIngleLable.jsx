@@ -346,7 +346,7 @@ function SingleLable() {
           margin: "24px 0 0 0",
         }}
       >
-        Releases under this artist
+        Releases under this Label
       </h4>
       <div className="search-setion">
         <input
