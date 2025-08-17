@@ -37,14 +37,18 @@ const Table = ({ tableFor, serviceRequestData }) => {
               tableFor === 'OAC' && <th>Topic Channel Link</th>
             }
             {
-              tableFor === 'ProfileLinking' && <th>Artist's Profile Link</th>
+              tableFor === 'ProfileLinking' && 
+              <>
+                <th>Type</th>
+                <th>Artist's Profile Link</th>
+              </>
             }
             {
               tableFor === 'Whitelist' && <th>Whitelist Link</th>
             }
             <th>Created At</th>
             <th>Status</th>
-            <th>Reason</th>
+            <th>Action</th>
           </tr>
         </thead>
         <tbody>
@@ -90,7 +94,11 @@ const Table = ({ tableFor, serviceRequestData }) => {
                     tableFor === 'OAC' && <td><a href={data?.artistsTopicChannelLink?.startsWith("http") ? data?.artistsTopicChannelLink : `https://${data?.artistsTopicChannelLink}`}target="_blank" rel="noopener noreferrer">{data?.artistsTopicChannelLink?.length > 50 ? `${data?.artistsTopicChannelLink.slice(0, 50)}...` : data?.artistsTopicChannelLink}</a></td>
                   }
                   {
-                    tableFor === 'ProfileLinking' && <td><a href={data?.artistProfileLink?.startsWith("http") ? data?.artistProfileLink : `https://${data?.artistProfileLink}`}target="_blank" rel="noopener noreferrer">{data?.artistProfileLink?.length > 50 ? `${data?.artistProfileLink.slice(0, 50)}...` : data?.artistProfileLink}</a></td>
+                    tableFor === 'ProfileLinking' && 
+                    <>
+                      <td>{data?.type ? data?.type : 'Instagram'}</td>
+                      <td><a href={data?.artistProfileLink?.startsWith("http") ? data?.artistProfileLink : `https://${data?.artistProfileLink}`}target="_blank" rel="noopener noreferrer">{data?.artistProfileLink?.length > 50 ? `${data?.artistProfileLink.slice(0, 50)}...` : data?.artistProfileLink}</a></td>
+                    </>
                   }
                   {/* {
                     tableFor === 'Whitelist' && <td>Whitelist Link</td>
