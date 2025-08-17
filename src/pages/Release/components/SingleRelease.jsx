@@ -61,7 +61,7 @@ function SingleRelease() {
   const [territoryTableData, setTerritoryTableData] = useState();
   const [totalSummary, setTotalSummary] = useState();
   const dspAndTerittoriGet = (data) => {
-    // DSP Aggregation
+    // ========== DSP Aggregation ==========
     const dspMap = {};
     data?.forEach((entry) => {
       entry.byDSP.forEach((dsp) => {
@@ -73,13 +73,30 @@ function SingleRelease() {
       });
     });
 
-    const byDsp = Object.entries(dspMap).map(([dsp, { revenue, streams }]) => ({
+    let byDsp = Object.entries(dspMap).map(([dsp, { revenue, streams }]) => ({
       dsp,
-      revenue: Number(revenue?.toFixed(2)),
+      revenue: Number(revenue.toFixed(2)),
       streams,
     }));
 
-    // =============== Territory Aggregation ==============
+    // sort dsp data (highest first)
+    byDsp.sort(
+      (a, b) => b.streams + b.revenue - (a.streams + a.revenue)
+    );
+
+    // add total row for dsp
+    const totalDsp = byDsp.reduce(
+      (acc, item) => {
+        acc.streams += item.streams;
+        acc.revenue += item.revenue;
+        return acc;
+      },
+      { dsp: "TOTAL", streams: 0, revenue: 0 }
+    );
+    totalDsp.revenue = Number(totalDsp.revenue.toFixed(2));
+    byDsp.push(totalDsp);
+
+    // ========== Territory Aggregation ==========
     const territoryMap = {};
     data?.forEach((entry) => {
       entry.byTerritory.forEach((t) => {
@@ -91,7 +108,7 @@ function SingleRelease() {
       });
     });
 
-    const byTerritory = Object.entries(territoryMap).map(
+    let byTerritory = Object.entries(territoryMap).map(
       ([territory, { revenue, streams }]) => ({
         territory,
         revenue: Number(revenue.toFixed(2)),
@@ -99,18 +116,36 @@ function SingleRelease() {
       })
     );
 
-    // ================= Total Summary =================
-    const totalSummaryData = data?.reduce(
-      (acc, entry) => {
-        acc.streams += entry.summary?.streams || 0;
-        acc.revenue += entry.summary?.revenue || 0;
+    // sort territory data (highest first)
+    byTerritory.sort(
+      (a, b) => b.streams + b.revenue - (a.streams + a.revenue)
+    );
+
+    // add total row for territory
+    const totalTerritory = byTerritory.reduce(
+      (acc, item) => {
+        acc.streams += item.streams;
+        acc.revenue += item.revenue;
         return acc;
       },
-      { total: "Total", streams: 0, revenue: 0 }
+      { territory: "TOTAL", streams: 0, revenue: 0 }
     );
-    // console.log("totalSummaryData", totalSummaryData);
-    totalSummaryData.revenue = Number(totalSummaryData?.revenue?.toFixed(2));
+    totalTerritory.revenue = Number(totalTerritory.revenue.toFixed(2));
+    byTerritory.push(totalTerritory);
 
+    // ========== Global Total Summary ==========
+    const totalSummaryData = data?.reduce(
+      (acc, entry) => {
+        acc.streams += entry?.totalStreams || 0;
+        acc.revenue += entry?.totalRevenue || 0;
+        return acc;
+      },
+      { total: "TOTAL", streams: 0, revenue: 0 }
+    );
+
+    totalSummaryData.revenue = Number(totalSummaryData.revenue.toFixed(2));
+
+    // ========== Save State ==========
     setTableData(byDsp);
     setDspTableData(byDsp);
     setTerritoryTableData(byTerritory);
@@ -120,8 +155,6 @@ function SingleRelease() {
   // Getting Analytics Chart and Table Data From API ________
   const [chartDataStreams, setChartDataStreams] = useState();
   const [chartDataRevenue, setChartDataRevenue] = useState();
-  const [totalStreams, setTotalStreams] = useState();
-  const [totalRevenue, setTotalRevenue] = useState();
   const [years, setYears] = useState(Math.max(...yearsList));
   const [dataNotFound, setDataNotFound] = useState(false);
   const [analyticsLoading, setAnalyticsLoading] = useState(false);
@@ -137,8 +170,6 @@ function SingleRelease() {
           // console.log(res);
           if (res.status === 200) {
             if (isEmptyArray(res?.data?.data)) setDataNotFound(true);
-            setTotalStreams(res?.data?.totalRevenue);
-            setTotalRevenue(res?.data?.totalStreams);
             dspAndTerittoriGet(res?.data?.data);
 
             const rawData = res?.data?.data;
