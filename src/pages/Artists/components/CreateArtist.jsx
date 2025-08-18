@@ -146,7 +146,7 @@ function CreateArtist({
 }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { userNameIdRoll } = useSelector((state) => state.userData);
+  const { userNameIdRoll, userData } = useSelector((state) => state.userData);
   const { reFetchArtist } = useSelector((state) => state.reFetchSlice);
 
   const [imgLink, setImgLink] = useState(null);
@@ -184,7 +184,8 @@ function CreateArtist({
       ...formData,
       ...uploadedImage,
       masterUserId: userNameIdRoll[1],
-      userName: userNameIdRoll[0],
+      email: userData?.email,
+      userName: userData?.userName || userNameIdRoll[0],
       date: new Date().toISOString(),
     };
 
