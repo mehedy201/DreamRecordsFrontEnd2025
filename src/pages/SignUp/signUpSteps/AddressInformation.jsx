@@ -1,15 +1,22 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CountrySelect, StateSelect } from "react-country-state-city";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import FormSubmitLoading from "../../../components/FormSubmitLoading";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { setUserData } from "../../../redux/features/userDataHandleSlice/userDataHandleSlice";
 
 const AddressInformation = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { userNameIdRoll, userData } = useSelector((state) => state.userData);
+
+  useEffect(() => {
+    if(userData.country){
+      navigate('/')
+    }
+  },[])
 
   // Country State Select____________________________________________________
   const [countryid, setCountryid] = useState(0);
@@ -46,10 +53,10 @@ const AddressInformation = () => {
       email: userData.email? userData.email : "",
       date: new Date().toISOString(),
       masterUserId: userNameIdRoll[1],
-      userName: userNameIdRoll[0],
+      userName: userData?.userName || userNameIdRoll[0],
     };
 
-    const payload = { ...data, country, state, label, status: "Active" };
+    const payload = { ...data, country, state, status: "Active" };
 
     axios.post(
       `https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/labels/create-labels`,
@@ -57,7 +64,7 @@ const AddressInformation = () => {
     );
     axios
       .patch(
-        `https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/users/${userNameIdRoll[1]}`,
+        `https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/users/${userData?._id}`,
         payload
       )
       .then((res) => {
