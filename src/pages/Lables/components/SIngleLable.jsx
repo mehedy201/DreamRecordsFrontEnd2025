@@ -290,13 +290,13 @@ function SingleLable() {
               <div className="singleArtist-info" style={{ marginBottom: 0 }}>
                 <h4>Total Releases</h4>
                 <h1>{totalCount}</h1>
-                <Button
+                {/* <Button
                   onClick={() => navigate("/distribution/queue/live/1/10")}
                   style={{ cursor: "pointer" }}
                   className="singleArtist-pg-allRelease-btn"
                 >
                   All Releases &nbsp;&nbsp; <ChevronRight />
-                </Button>
+                </Button> */}
               </div>
               <div
                 className="singleArtist-social-div"
