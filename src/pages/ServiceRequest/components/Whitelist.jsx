@@ -46,22 +46,6 @@ function Whitelist({
   const { reFetchServiceRequest } = useSelector((state) => state.reFetchSlice);
   const dispatch = useDispatch();
 
-  const [releaseData, setReleaseData] = useState();
-  useEffect(() => {
-    if (userNameIdRoll) {
-      axios
-        .get(
-          `https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/release/${userNameIdRoll[1]}?page=1&limit=1000&status=Live`
-        )
-        .then((res) => {
-          if (res.status == 200) {
-            setReleaseData(res.data.data);
-          }
-        })
-        .catch((er) => console.log(er));
-    }
-  }, [userNameIdRoll]);
-
   // Artist Data Get Form API ____________________________
   const [artist, setArtist] = useState();
   useEffect(() => {
@@ -116,15 +100,23 @@ function Whitelist({
     </>
   );
   const [isOpen, setIsOpen] = useState(false);
+  const [minReleaseSelectErr, setMinReleaseSelectErr] = useState();
   // Form  ____________________________________________________
   const {
     register,
     handleSubmit,
     setValue,
     watch,
+    resetField,
+    clearErrors,
+    unregister,
     formState: { errors },
   } = useForm();
   const onSubmit = (data) => {
+    if(data.release.length < 10) {
+      setMinReleaseSelectErr("You must select at least 10");
+      return;
+    }
     const userName = userNameIdRoll[0];
     const masterUserId = userNameIdRoll[1];
     const status = "Pending";
@@ -139,10 +131,63 @@ function Whitelist({
         if (res.status === 200) {
           dispatch(setReFetchServiceRequest(reFetchServiceRequest + 1));
           toast.success("Successfully Submited");
+          setIsOpen(false);
         }
       });
-    setIsOpen(false);
   };
+
+
+  const chooseArtistOrLabel = watch("chooseArtistOrLabel");
+  const artistData = watch("artist");
+  const labelData = watch("labels");
+
+  const [releaseData, setReleaseData] = useState();
+  const [loading, setLoading] = useState(false);
+  useEffect(() => {
+    if (chooseArtistOrLabel === 'Artist') {
+      unregister("labels");
+      clearErrors("labels");
+      if(artistData){
+        setLoading(true);
+        axios
+        .get(
+          `https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/release/artist/${artistData[0]?._id}?page=1&limit=1000&status=Live`
+        )
+        .then((res) => {
+          if (res.status == 200) {
+            setReleaseData(res.data.data);
+            setLoading(false);
+          }
+        })
+        .catch((er) => setLoading(false));
+      }
+    }
+    if (chooseArtistOrLabel === 'Label') {
+      unregister("artist");
+      clearErrors("artist");
+      if(labelData){
+        setLoading(true);
+        axios
+        .get(
+          `https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/release/labels/${labelData[0]?._id}?page=1&limit=1000&status=Live`
+        )
+        .then((res) => {
+          if (res.status == 200) {
+            setReleaseData(res.data.data);
+            setLoading(false);
+          }
+        })
+        .catch((er) => setLoading(false));
+      }
+    }
+  }, [artistData, labelData,]);
+
+
+  useEffect(() => {
+    resetField("release");
+  }, [chooseArtistOrLabel, artistData, labelData, resetField]);
+
+
 
   return (
     <div>
@@ -171,12 +216,12 @@ function Whitelist({
                 <span style={{ color: "#ea3958" }}>Whitelist Required</span>
               )}
 
-              <p style={{ fontSize: "12px" }}>Type</p>
+              <p style={{ fontSize: "12px" }}>Type*</p>
               <Select.Root
                 onValueChange={(e) =>
                   setValue("type", e, { shouldValidate: true })
                 }
-                defaultValue="Youtube"
+                defaultValue="Facebook"
               >
                 <Select.Trigger className="dropdown-trigger Service-modal-dropdown-trigger">
                   <Select.Value />
@@ -190,20 +235,8 @@ function Whitelist({
                     style={{ padding: 0, overflowY: "auto" }}
                   >
                     <Select.Viewport>
-                      <Select.Item value="Youtube" className="select-item">
-                        <Select.ItemText>Youtube</Select.ItemText>
-                        <Select.ItemIndicator className="select-item-indicator">
-                          <Check size={18} />
-                        </Select.ItemIndicator>
-                      </Select.Item>
                       <Select.Item value="Facebook" className="select-item">
                         <Select.ItemText>Facebook</Select.ItemText>
-                        <Select.ItemIndicator className="select-item-indicator">
-                          <Check size={18} />
-                        </Select.ItemIndicator>
-                      </Select.Item>
-                      <Select.Item value="Instagram" className="select-item">
-                        <Select.ItemText>Instagram</Select.ItemText>
                         <Select.ItemIndicator className="select-item-indicator">
                           <Check size={18} />
                         </Select.ItemIndicator>
@@ -216,49 +249,103 @@ function Whitelist({
                 <span style={{ color: "#ea3958" }}>Type Required</span>
               )}
 
-              <p style={{ fontSize: "12px" }}>Choose Artist*</p>
-              <SearchDropdown
-                items={artist}
-                searchTxt="Search and select artist"
-                itemName="Artist"
-                register={{ ...register("artist", { required: true }) }}
-                onSelect={(items) =>
-                  setValue("artist", items, { shouldValidate: true })
+              <p style={{ fontSize: "12px" }}>Choose Artist/Label *</p>
+              <Select.Root
+                onValueChange={(e) =>
+                  setValue("chooseArtistOrLabel", e, { shouldValidate: true })
                 }
-                value={watch("artist")}
-              />
-              {errors.artist && (
-                <span style={{ color: "#ea3958" }}>Please Select Artist</span>
+              >
+                <Select.Trigger className="dropdown-trigger Service-modal-dropdown-trigger">
+                  <Select.Value placeholder="Select Artist/Label" />
+                  <Select.Icon className="select-icon">
+                    <ChevronDown />
+                  </Select.Icon>
+                </Select.Trigger>
+                <Select.Portal>
+                  <Select.Content
+                    className="dropdown-content"
+                    style={{ padding: 0, overflowY: "auto" }}
+                  >
+                    <Select.Viewport>
+                      <Select.Item value="Artist" className="select-item">
+                        <Select.ItemText>Artist</Select.ItemText>
+                        <Select.ItemIndicator className="select-item-indicator">
+                          <Check size={18} />
+                        </Select.ItemIndicator>
+                      </Select.Item>
+                      <Select.Item value="Label" className="select-item">
+                        <Select.ItemText>Label</Select.ItemText>
+                        <Select.ItemIndicator className="select-item-indicator">
+                          <Check size={18} />
+                        </Select.ItemIndicator>
+                      </Select.Item>
+                    </Select.Viewport>
+                  </Select.Content>
+                </Select.Portal>
+              </Select.Root>
+              {errors.chooseArtistOrLabel && (
+                <span style={{ color: "#ea3958" }}>Artist/Label Required</span>
               )}
 
-              <p style={{ fontSize: "12px" }}>Label Name *</p>
-              <SearchDropdown
-                items={lebel}
-                itemName="Label"
-                searchTxt="Search and select label"
-                onSelect={(items) =>
-                  setValue("labels", items, { shouldValidate: true })
-                }
-                register={{ ...register("labels", { required: true }) }}
-                value={watch("labels")}
-              />
-              {errors.labels && (
-                <span style={{ color: "#ea3958" }}>Please Select Label</span>
-              )}
+              {
+                chooseArtistOrLabel === 'Artist' &&
+                <>
+                  <p style={{ fontSize: "12px" }}>Choose Artist*</p>
+                  <SearchDropdown
+                    items={artist}
+                    searchTxt="Search and select artist"
+                    selectArtist='Single'
+                    itemName="Artist"
+                    register={{ ...register("artist", { required: true }) }}
+                    onSelect={(items) =>
+                      setValue("artist", items, { shouldValidate: true })
+                    }
+                    value={watch("artist")}
+                  />
+                  {errors.artist && (
+                    <span style={{ color: "#ea3958" }}>Please Select Artist</span>
+                  )}
+                </>
+              }
+
+              {
+                chooseArtistOrLabel === 'Label' &&
+                <>
+                  <p style={{ fontSize: "12px" }}>Label Name *</p>
+                  <SearchDropdown
+                    items={lebel}
+                    itemName="Label"
+                    searchTxt="Search and select label"
+                    onSelect={(items) =>
+                      setValue("labels", items, { shouldValidate: true })
+                    }
+                    register={{ ...register("labels", { required: true }) }}
+                    value={watch("labels")}
+                  />
+                  {errors.labels && (
+                    <span style={{ color: "#ea3958" }}>Please Select Label</span>
+                  )}
+                </>
+              }
+
 
               <p style={{ fontSize: "12px" }}>Choose 10 Release below</p>
               <SearchDropdownRelease
                 items={releaseData}
                 searchTxt="Search and select Release"
-                onSelect={(items) =>
-                  setValue("release", items, { shouldValidate: true })
-                }
+                onSelect={(items) =>{
+                  setMinReleaseSelectErr('')
+                  return setValue("release", items, { shouldValidate: true })
+                }}
                 register={{ ...register("release", { required: true }) }}
                 value={watch("release")}
               />
               {errors.release && (
                 <span style={{ color: "#ea3958" }}>Release Required</span>
               )}
+              {
+                minReleaseSelectErr && <span style={{ color: "#ea3958" }}>Have to select more than 10</span>
+              }
 
               <p style={{ fontSize: "12px" }}>Give the link to whitelist *</p>
               <input
@@ -267,7 +354,7 @@ function Whitelist({
                 className="service-modal-input"
                 {...register("whiteListLink", { required: true })}
               />
-              {errors.artistProfileLink && (
+              {errors.whiteListLink && (
                 <span style={{ color: "#ea3958" }}>
                   Whitelist Link Required
                 </span>
@@ -281,7 +368,7 @@ function Whitelist({
       </Flex>
       <div className="search-setion">
         <input
-          onKeyPress={handleKeyPress}
+          onKeyDown={handleKeyPress}
           onChange={(e) => setSearchText(e.target.value)}
           type="text"
           placeholder="Search..."

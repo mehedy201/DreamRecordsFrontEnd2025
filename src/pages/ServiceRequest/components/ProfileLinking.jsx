@@ -94,6 +94,7 @@ function ProfileLinking({
     </>
   );
   const [isOpen, setIsOpen] = useState(false);
+  const [minReleaseSelectErr, setMinReleaseSelectErr] = useState();
   // Form  ____________________________________________________
   const {
     register,
@@ -106,7 +107,7 @@ function ProfileLinking({
   } = useForm();
   const onSubmit = (data) => {
     if(data.release.length < 5) {
-      toast.error("Please select 5 releases");
+      setMinReleaseSelectErr("You must select at least 5");
       return;
     }
     const userName = userData?.userName;
@@ -123,9 +124,9 @@ function ProfileLinking({
         if (res.status === 200) {
           dispatch(setReFetchServiceRequest(reFetchServiceRequest + 1));
           toast.success("Successfully Submited");
+          setIsOpen(false);
         }
       });
-    setIsOpen(false);
   };
 
 
@@ -247,9 +248,10 @@ function ProfileLinking({
               <SearchDropdownRelease
                 items={releaseData}
                 searchTxt="Search and select Release"
-                onSelect={(items) =>
-                  setValue("release", items, { shouldValidate: true })
-                }
+                onSelect={(items) =>{
+                  setMinReleaseSelectErr('')
+                  return setValue("release", items, { shouldValidate: true })
+                }}
                 register={{ ...register("release", { required: true }) }}
                 value={watch("release")}
               />

@@ -3,9 +3,9 @@ import * as Tabs from "@radix-ui/react-tabs";
 import Pagination from "../../components/Pagination";
 import PropTypes from "prop-types";
 import ReleaseClaim from "./components/ReleaseClaim";
-// import ContentID from "./components/ContentID";
-// import Whitelist from "./components/Whitelist";
-import ClaimVideo from "./components/ClaimVideo";
+import ContentID from "./components/ContentID";
+import Whitelist from "./components/Whitelist";
+// import ClaimVideo from "./components/ClaimVideo";
 import BlockedVideo from "./components/BlockedVideo";
 import OAC from "./components/OAC";
 import ProfileLinking from "./components/ProfileLinking";
@@ -149,13 +149,13 @@ const ServiceRequest = () => {
               </p>
             </div>
           </Tabs.Trigger>
-          {/* <Tabs.Trigger onClick={() => navigate('/service-request/Content-ID/1/10/All')} className="tabs-trigger" value="Content ID">
+          <Tabs.Trigger onClick={() => navigate('/service-request/Content-ID/1/10/All')} className="tabs-trigger" value="Content ID">
             Content ID
             <div className="tabs-notification">
               <p>{serviceCount?.ContentID ? serviceCount?.ContentID : 0}</p>
             </div>
-          </Tabs.Trigger> */}
-          <Tabs.Trigger
+          </Tabs.Trigger>
+          {/* <Tabs.Trigger
             onClick={() => navigate("/service-request/Claim-Video/1/10/All")}
             className="tabs-trigger"
             value="Claim Video"
@@ -164,7 +164,7 @@ const ServiceRequest = () => {
             <div className="tabs-notification">
               <p>{serviceCount?.ClaimVideo ? serviceCount?.ClaimVideo : 0}</p>
             </div>
-          </Tabs.Trigger>
+          </Tabs.Trigger> */}
           <Tabs.Trigger
             onClick={() => navigate("/service-request/Blocked-Video/1/10/All")}
             className="tabs-trigger"
@@ -203,12 +203,12 @@ const ServiceRequest = () => {
               </p>
             </div>
           </Tabs.Trigger>
-          {/* <Tabs.Trigger onClick={() => navigate('/service-request/Whitelist/1/10/All')} className="tabs-trigger" value="Whitelist">
+          <Tabs.Trigger onClick={() => navigate('/service-request/Whitelist/1/10/All')} className="tabs-trigger" value="Whitelist">
             Whitelist{" "}
             <div className="tabs-notification">
               <p>{serviceCount?.Whitelist ? serviceCount?.Whitelist : 0}</p>
             </div>
-          </Tabs.Trigger> */}
+          </Tabs.Trigger>
         </Tabs.List>
 
         <div className="tabs-content">
@@ -223,7 +223,7 @@ const ServiceRequest = () => {
             />
           </Tabs.Content>
 
-          {/* <Tabs.Content className="tab-panel" value="Content ID">
+          <Tabs.Content className="tab-panel" value="Content ID">
             <ContentID
               years={years}
               notFound={notFound}
@@ -233,9 +233,9 @@ const ServiceRequest = () => {
               handleKeyPress={handleKeyPress}
               setSearchText={setSearchText}
             />
-          </Tabs.Content> */}
+          </Tabs.Content>
 
-          <Tabs.Content className="tab-panel" value="Claim Video">
+          {/* <Tabs.Content className="tab-panel" value="Claim Video">
             <ClaimVideo
               years={years}
               notFound={notFound}
@@ -245,7 +245,7 @@ const ServiceRequest = () => {
               handleKeyPress={handleKeyPress}
               setSearchText={setSearchText}
             />
-          </Tabs.Content>
+          </Tabs.Content> */}
           <Tabs.Content className="tab-panel" value="Blocked Video">
             <BlockedVideo
               years={years}
@@ -279,7 +279,7 @@ const ServiceRequest = () => {
               setSearchText={setSearchText}
             />
           </Tabs.Content>
-          {/* <Tabs.Content className="tab-panel" value="Whitelist">
+          <Tabs.Content className="tab-panel" value="Whitelist">
             <Whitelist
               years={years}
               notFound={notFound}
@@ -289,7 +289,7 @@ const ServiceRequest = () => {
               handleKeyPress={handleKeyPress}
               setSearchText={setSearchText}
             />
-          </Tabs.Content> */}
+          </Tabs.Content>
         </div>
       </Tabs.Root>
       <Pagination
