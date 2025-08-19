@@ -270,13 +270,13 @@ const SingleArtist = () => {
               <div className="singleArtist-info">
                 <h4>Total Releases</h4>
                 <h1>{totalCount}</h1>
-                <Button
+                {/* <Button
                   style={{ cursor: "pointer" }}
                   onClick={() => navigate("/release/1/10/All")}
                   className="singleArtist-pg-allRelease-btn"
                 >
                   All Releases &nbsp;&nbsp; <ChevronRight />
-                </Button>
+                </Button> */}
               </div>
               <div className="singleArtist-social-div">
                 <h4>Artist Profiles</h4>
