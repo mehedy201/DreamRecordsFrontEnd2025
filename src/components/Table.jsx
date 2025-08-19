@@ -44,7 +44,11 @@ const Table = ({ tableFor, serviceRequestData }) => {
               </>
             }
             {
-              tableFor === 'Whitelist' && <th>Whitelist Link</th>
+              tableFor === 'Whitelist' && 
+              <>
+                <th>Type</th>
+                <th>Whitelist Link</th>
+              </>
             }
             <th>Created At</th>
             <th>Status</th>
@@ -100,9 +104,13 @@ const Table = ({ tableFor, serviceRequestData }) => {
                       <td><a href={data?.artistProfileLink?.startsWith("http") ? data?.artistProfileLink : `https://${data?.artistProfileLink}`}target="_blank" rel="noopener noreferrer">{data?.artistProfileLink?.length > 50 ? `${data?.artistProfileLink.slice(0, 50)}...` : data?.artistProfileLink}</a></td>
                     </>
                   }
-                  {/* {
-                    tableFor === 'Whitelist' && <td>Whitelist Link</td>
-                  } */}
+                  {
+                    tableFor === 'Whitelist' && 
+                    <>
+                      <td>{data?.type || 'Facebook'}</td>
+                      <td>{data?.whiteListLink}</td>
+                    </>
+                  }
                   <td>{data?.isoDate ? localDate(data?.isoDate) : '--'}</td>
                   <td><span className={`status ${data?.status?.toLowerCase()}`}>{data?.status}</span></td>
                   <td>
@@ -181,9 +189,13 @@ const Table = ({ tableFor, serviceRequestData }) => {
                             </div>
                           </>
                         }
-                        {/* {
+                        {
                           tableFor === 'Whitelist' && 
                           <>
+                            <div style={{gap: '10px'}} className="d-flex">
+                              <p>Type</p>
+                              <p>{data?.type || 'Facebook'}</p>
+                            </div>
                             <div style={{gap: '10px'}} className="d-flex">
                               <p>Whitelist Link</p>
                               <p>{data?.whiteListLink}</p>
@@ -197,7 +209,7 @@ const Table = ({ tableFor, serviceRequestData }) => {
                               <p>{data?.label?.map(label => label.labelName).join(', ')}</p>
                             </div>
                           </>
-                        } */}
+                        }
                         <div style={{gap: '10px'}} className="d-flex">
                           <p>Created At:</p>
                           <p>{data?.isoDate ? localDate(data?.isoDate) : '--'}</p>
