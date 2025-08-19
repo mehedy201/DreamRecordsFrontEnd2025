@@ -1,15 +1,26 @@
 import { Flex } from "@radix-ui/themes";
 import { useForm } from "react-hook-form";
 import "./logIn.css";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import FormSubmitLoading from "../../components/FormSubmitLoading";
 import logo from "../../assets/Logo.png";
 
 function LogIn() {
   const navigate = useNavigate();
+
+  const [searchParams] = useSearchParams();
+  useEffect(() => {
+    const token = searchParams.get("token");
+    if (token) {
+      localStorage.setItem("token", token);
+      navigate("/"); 
+    } else {
+      navigate("/login");
+    }
+  }, []);
 
   const [loading, setLoading] = useState(false);
   const {
