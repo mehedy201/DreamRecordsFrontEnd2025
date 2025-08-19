@@ -193,7 +193,7 @@ const Table = ({ tableFor, serviceRequestData }) => {
                           tableFor === 'Whitelist' && 
                           <>
                             <div style={{gap: '10px'}} className="d-flex">
-                              <p>Type</p>
+                              <p>Type: </p>
                               <p>{data?.type || 'Facebook'}</p>
                             </div>
                             <div style={{gap: '10px'}} className="d-flex">
