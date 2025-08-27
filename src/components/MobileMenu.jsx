@@ -8,6 +8,7 @@ import homeIcon from '../assets/icons/home.png'
 import releaseIcon from '../assets/icons/Releases.png'
 import groupIcon from '../assets/icons/group.png'
 import labelsIcon from '../assets/icons/Labels.png'
+import analyticsIcon from '../assets/icons/analytics.png'
 import serviceRequestIcon from '../assets/icons/Service Request.png'
 import transactionsIcon from '../assets/icons/indian-rupee.png'
 import supportIcon from '../assets/icons/Support.png'
@@ -21,6 +22,7 @@ const menuItems = [
   { name: "Releases", path: "/releases/1/10/All", icon: releaseIcon },
   { name: "Artists", path: "/artist/1/10", icon: groupIcon },
   { name: "Lables", path: "/labels/1/10/All", icon: labelsIcon},
+  { name: "Analytics", path: "/analytics", icon: analyticsIcon},
   { name: "Service Request", path: "/service-request/Release-Claim/1/10/All", icon: serviceRequestIcon,},
   { name: "Transactions", path: "/transaction/1/10/All", icon: transactionsIcon },
   // { name: "Support", path: "/", icon: supportIcon, divider: true },

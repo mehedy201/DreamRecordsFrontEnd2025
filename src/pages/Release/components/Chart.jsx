@@ -9,7 +9,8 @@ import {
 } from "recharts";
 import PropTypes from "prop-types";
 
-function Chart({ chartData }) {
+function Chart({ chartData, value }) {
+
   return (
     <div className="release-chart" style={{ width: "102%", height: 330 }}>
       <ResponsiveContainer>
@@ -29,7 +30,7 @@ function Chart({ chartData }) {
           <CartesianGrid vertical={false} strokeDasharray="3 3" />
           <Area
             type="monotone"
-            dataKey="value"
+            dataKey={value}
             stroke="#e63946"
             fill="url(#colorValue)"
             strokeWidth={2}

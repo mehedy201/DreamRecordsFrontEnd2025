@@ -51,6 +51,7 @@ import EditRelease from "./pages/Release/EditRelease/EditRelease";
 import EditSingleArtist from "./pages/Artists/components/EditSingleArtist";
 import EditLable from "./pages/Lables/components/EditLable";
 import SuspendPage from "./pages/SuspendPage/SuspendPage";
+import Analytics from "./pages/Analytics/Analytics";
 
 function Layout() {
   const location = useLocation();
@@ -181,6 +182,12 @@ function App() {
           />
 
           {/* Label Route End __________________________________ */}
+          {/* Analytics Route Start __________________________________ */}
+          <Route
+            path="/analytics"
+            element={<Authorization><Analytics/></Authorization>}
+          />
+          {/* Analytics Route End __________________________________ */}
 
 
           <Route

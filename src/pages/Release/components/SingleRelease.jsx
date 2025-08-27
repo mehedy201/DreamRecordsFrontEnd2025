@@ -580,7 +580,7 @@ function SingleRelease() {
               <Tabs.Content className="tabs-content" value="Streams">
                 {dataNotFound === false && (
                   <>
-                    <Chart chartData={chartDataStreams} />
+                    <Chart chartData={chartDataStreams} value='Streams'/>
                     <SingleReleasePageTable
                       columns={tableColumn}
                       data={tableData}
@@ -592,7 +592,7 @@ function SingleRelease() {
               <Tabs.Content className="tabs-content" value="Revenue">
                 {dataNotFound === false && (
                   <>
-                    <Chart chartData={chartDataRevenue} />
+                    <Chart chartData={chartDataRevenue} value='Revenue'/>
                     <SingleReleasePageTable
                       columns={tableColumn}
                       data={tableData}
