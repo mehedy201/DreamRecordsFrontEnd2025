@@ -111,7 +111,11 @@ function Whitelist({
     clearErrors,
     unregister,
     formState: { errors },
-  } = useForm();
+  } = useForm({
+    defaultValues: {
+      type: "Facebook"
+    }
+  });
   const onSubmit = (data) => {
     if(data.release.length < 10) {
       setMinReleaseSelectErr("You must select at least 10");

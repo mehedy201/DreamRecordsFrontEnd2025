@@ -4,12 +4,8 @@ import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import * as Tabs from "@radix-ui/react-tabs";
 import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import SelectDropdown from "../../components/SelectDropdown";
-import SearchDropdown from "../../components/SearchDropdown";
 import PieChartComponent from "./components/PieChartComponent";
 import PaddingPieChart from "./components/PaddingPieChart";
-import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
-import { HiOutlineAdjustmentsHorizontal } from "react-icons/hi2";
 import Chart from "../Release/components/Chart";
 import axios from "axios";
 import { useSelector } from "react-redux";
@@ -17,6 +13,11 @@ import isEmptyArray from "../../hooks/isEmptyArrayCheck";
 import AnalyticsPageTableDSPandTerritoryTable from "../../components/analyticsPageTableDSPandTerritoryTable";
 import AnalyticsPageTopReleaseTable from "../../components/AnalyticsPageTopReleaseTable";
 import LoadingScreen from "../../components/LoadingScreen";
+import * as Select from "@radix-ui/react-select";
+import { Check, ChevronDown } from "lucide-react";
+import { Controller, useForm } from "react-hook-form";
+import SearchDropdownRelease from "../../components/SearchDropdownRelease";
+
 const analyticsStorageColumn = [
   { label: "Stores", key: "Stores" },
   { label: "Streams", key: "Streams" },
@@ -36,18 +37,10 @@ const releaseColumns = [
     { label: "Total Revenue", key: "Total Revenue" },
 ]
 
-function Analytics({
-  chartData,
-  artistsItems,
-  analyticsStorageTable,
-  analyticsTerritoriesTable,
-}) {
+function Analytics() {
 
     const {userData} = useSelector((state) => state.userData);
     const { yearsList } = useSelector((state) => state.yearsAndStatus);
-
-
-
 
 
   const [analyticsCollapse, setAnalyticsCollapse] = useState(true);
@@ -60,35 +53,6 @@ function Analytics({
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
-  const dropdownItem = (
-    <>
-      <SelectDropdown
-        options={["Option 1", "Option 2"]}
-        placeholder="All Release"
-        className="analytics-filter-flex-item"
-      />
-      <div className="d-flex analytics-filter-flex">
-        <div className="analytics-filter-flex-item">
-          <SearchDropdown
-            items={artistsItems}
-            itemKey="name"
-            imagePath="artists/"
-            imageKey="img"
-            searchTxt="Search and select artist"
-            itemName="Artist"
-          />
-        </div>
-        <SelectDropdown
-          options={["Option 1", "Option 2", "Option 3"]}
-          placeholder="All time"
-          className="analytics-filter-flex-item"
-        />
-        <button className="theme-btn analytics-filter-btn analytics-filter-flex-item">
-          Filter
-        </button>
-      </div>
-    </>
-  );
 
 
   // Analytics Table Componet Data Process_________________
@@ -255,6 +219,74 @@ function Analytics({
   }, [userData, years]);
 
 
+
+
+  // Filter Function___________________
+  const {
+      register,
+      handleSubmit,
+      setValue,
+      watch,
+      resetField,
+      control,
+      formState: { errors },
+    } = useForm({
+        defaultValues: {
+            type: "All Release",
+        }
+    });
+
+    const filterType = watch('type')
+
+
+    const onSubmit = (data) =>{
+        setAnalyticsLoading(true)
+        axios
+        .get(
+          `https://dream-records-2025-m2m9a.ondigitalocean.app/common/api/v1/analytics-and-balance/upc-analytics?UPC=${data?.release[0]?.UPC}&years=${Number(data.years)}`
+        )
+        .then((res) => {
+          // console.log(res);
+          if (res.status === 200) {
+            if (isEmptyArray(res?.data?.data)) setDataNotFound(true);
+            dspAndTerittoriGet(res?.data?.data);
+            setTotalRevenue(data?.release[0]?.totalRevenue.toFixed(2))
+            setTotalStreams(data?.release[0]?.totalStreams)
+
+            const rawData = res?.data?.data;
+            const streamsData = rawData
+              ?.map((item) => ({
+                month: item.reportsDate,
+                Streams: item.totalStreams,
+              }))
+              .sort((a, b) => new Date(a.month) - new Date(b.month));
+
+            const revenewData = rawData
+              ?.map((item) => ({
+                month: item.reportsDate,
+                Revenue: item.totalRevenue,
+              }))
+              .sort((a, b) => new Date(a.month) - new Date(b.month));
+
+            setChartDataStreams(streamsData);
+            setChartDataRevenue(revenewData);
+            setAnalyticsLoading(false);
+          }
+        });
+
+        axios
+        .get(
+            `https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/release/release/${data?.release[0]?._id}`
+        )
+        .then((res) => {
+            if (res.status === 200) {
+            setReleaseData([res.data.data]);
+            }
+        });
+    }
+
+
+
   if(analyticsLoading){
     return <LoadingScreen/>
   }
@@ -292,34 +324,107 @@ function Analytics({
 
           <Collapsible.Content>
             <div className="analytics-filter-div">
-              {isMobile ? (
-                <DropdownMenu.Root>
-                  <DropdownMenu.Trigger asChild>
-                    <button
-                      className="dropdown-trigger"
-                      style={{
-                        width: "56px",
-                        justifyContent: "center",
-                        marginLeft: "auto",
-                      }}
+              <form className="analytics_filter_div_grid" onSubmit={handleSubmit(onSubmit)}>
+                <div>
+                    <Select.Root
+                        onValueChange={(e) =>
+                        setValue("type", e, { shouldValidate: true })
+                        }
+                        defaultValue="All Release"
                     >
-                      <HiOutlineAdjustmentsHorizontal
-                        style={{ width: "24px", height: "24px" }}
-                      />
-                    </button>
-                  </DropdownMenu.Trigger>
+                        <Select.Trigger className="dropdown-trigger Service-modal-dropdown-trigger">
+                        <Select.Value />
+                        <Select.Icon className="select-icon">
+                            <ChevronDown />
+                        </Select.Icon>
+                        </Select.Trigger>
+                        <Select.Portal>
+                        <Select.Content
+                            className="dropdown-content"
+                            style={{ padding: 0, overflowY: "auto" }}
+                        >
+                            <Select.Viewport>
+                            <Select.Item value="All Release" className="select-item">
+                                <Select.ItemText>All Release</Select.ItemText>
+                                <Select.ItemIndicator className="select-item-indicator">
+                                <Check size={18} />
+                                </Select.ItemIndicator>
+                            </Select.Item>
+                            </Select.Viewport>
+                        </Select.Content>
+                        </Select.Portal>
+                    </Select.Root>
+                    {errors.type && (
+                        <span style={{ color: "#ea3958" }}>Type Required</span>
+                    )}
+                </div>
 
-                  <DropdownMenu.Content
-                    align="left"
-                    side="bottom"
-                    className="dropdown-content"
-                  >
-                    <div style={{ marginRight: "30px" }}>{dropdownItem}</div>
-                  </DropdownMenu.Content>
-                </DropdownMenu.Root>
-              ) : (
-                dropdownItem
-              )}
+                {
+                    filterType === 'All Release' && 
+                    <div>
+                        <SearchDropdownRelease
+                            items={releaseData}
+                            searchTxt="Search and select Release"
+                            selectRelease='Single'
+                            onSelect={(items) =>setValue("release", items, { shouldValidate: true })}
+                            register={{ ...register("release", { required: true }) }}
+                            value={watch("release")}
+                        />
+                        {errors.release && (
+                          <span style={{ color: "#ea3958" }}>Release Required</span>
+                        )}
+                    </div>
+                }
+
+                <div>
+                    <Controller
+                    name="years"
+                    control={control}
+                    rules={{ required: "Years Required" }} // 👈 Validation rule
+                    render={({ field }) => (
+                        <Select.Root
+                        value={field.value || ""}
+                        onValueChange={(value) => field.onChange(value)}
+                        >
+                        <Select.Trigger className="dropdown-trigger Service-modal-dropdown-trigger">
+                            <Select.Value placeholder="Select Year">
+                                {watch("years") || yearsList[0]} {/* 👈 Always display a value */}
+                            </Select.Value>
+                            <Select.Icon className="select-icon">
+                            <ChevronDown />
+                            </Select.Icon>
+                        </Select.Trigger>
+                        <Select.Portal>
+                            <Select.Content
+                            className="dropdown-content"
+                            style={{ padding: 0, overflowY: "auto" }}
+                            >
+                            <Select.Viewport>
+                                {yearsList.map((year) => (
+                                <Select.Item key={year} value={year} className="select-item">
+                                    <Select.ItemText>{year}</Select.ItemText>
+                                    <Select.ItemIndicator className="select-item-indicator">
+                                    <Check size={18} />
+                                    </Select.ItemIndicator>
+                                </Select.Item>
+                                ))}
+                            </Select.Viewport>
+                            </Select.Content>
+                        </Select.Portal>
+                        </Select.Root>
+                    )}
+                    />
+
+                    {errors.years && (
+                    <span style={{ color: "#ea3958" }}>{errors.years.message}</span>
+                    )}
+                </div>
+                <div>
+                    <button type="submit" style={{width: '100%'}} className="theme-btn analytics-filter-btn analytics-filter-flex-item">
+                        Filter
+                    </button>
+                </div>
+              </form>
             </div>
 
             <div className="analytics-card-row">

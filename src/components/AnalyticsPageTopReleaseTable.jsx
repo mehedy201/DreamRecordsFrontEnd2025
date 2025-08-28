@@ -1,10 +1,8 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
 import releasePlaceHolderImg from '../assets/release-placeholder.png'
-import localDate from '../hooks/localDate';
 
 const AnalyticsPageTopReleaseTable = ({columns, data}) => {
-    console.log(data)
+
     return (
         <div className="table-wrapper">
             <table className="theme-table">

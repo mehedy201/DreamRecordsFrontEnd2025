@@ -7,7 +7,6 @@ import SearchDropdown from "../../../components/SearchDropdown";
 import { HiOutlineAdjustmentsHorizontal } from "react-icons/hi2";
 import PropTypes from "prop-types";
 import Table from "../../../components/Table";
-import { IoEyeOutline } from "react-icons/io5";
 import SelectDropdown from "../../../components/SelectDropdown";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -104,7 +103,11 @@ function ProfileLinking({
     resetField,
     control,
     formState: { errors },
-  } = useForm();
+  } = useForm({
+    defaultValues: {
+      type: "Instagram"
+    }
+  });
   const onSubmit = (data) => {
     if(data.release.length < 5) {
       setMinReleaseSelectErr("You must select at least 5");

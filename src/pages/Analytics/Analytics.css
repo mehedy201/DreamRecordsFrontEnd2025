@@ -165,3 +165,21 @@
     width: auto !important;
   }
 }
+
+.analytics_filter_div_grid {
+  width: 100%;
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(4, 1fr);
+}
+
+@media screen and (max-width: 1120px) {
+  .analytics_filter_div_grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media screen and (max-width: 667px) {
+  .analytics_filter_div_grid {
+    grid-template-columns: repeat(1, 1fr);
+  }
+}
