@@ -2,14 +2,11 @@ import * as Collapsible from "@radix-ui/react-collapsible";
 import "./Analytics.css";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import * as Tabs from "@radix-ui/react-tabs";
-// import Chart from "../../components/Chart";
-// import Table from "../../../components/Table";
 import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import SelectDropdown from "../../components/SelectDropdown";
 import SearchDropdown from "../../components/SearchDropdown";
 import PieChartComponent from "./components/PieChartComponent";
-import Table from "../../components/Table";
 import PaddingPieChart from "./components/PaddingPieChart";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { HiOutlineAdjustmentsHorizontal } from "react-icons/hi2";
@@ -18,6 +15,8 @@ import axios from "axios";
 import { useSelector } from "react-redux";
 import isEmptyArray from "../../hooks/isEmptyArrayCheck";
 import AnalyticsPageTableDSPandTerritoryTable from "../../components/analyticsPageTableDSPandTerritoryTable";
+import AnalyticsPageTopReleaseTable from "../../components/AnalyticsPageTopReleaseTable";
+import LoadingScreen from "../../components/LoadingScreen";
 const analyticsStorageColumn = [
   { label: "Stores", key: "Stores" },
   { label: "Streams", key: "Streams" },
@@ -28,6 +27,14 @@ const analyticsTerritoriesColumn = [
   { label: "Streams", key: "Streams" },
   { label: "Revenue", key: "Revenue" },
 ];
+
+const releaseColumns = [
+    { label: "Release", key: "releaseName" },
+    { label: "Label", key: "label" },
+    { label: "UPC", key: "upc" },
+    { label: "Total Streams", key: "Total Streams" },
+    { label: "Total Revenue", key: "Total Revenue" },
+]
 
 function Analytics({
   chartData,
@@ -86,7 +93,6 @@ function Analytics({
 
   // Analytics Table Componet Data Process_________________
     // const [tableColumn, setTableColumn] = useState(dspColumn);
-    const [tableData, setTableData] = useState();
     const [dspTableData, setDspTableData] = useState();
     const [territoryTableData, setTerritoryTableData] = useState();
     const [totalSummary, setTotalSummary] = useState();
@@ -176,10 +182,10 @@ function Analytics({
       totalSummaryData.revenue = Number(totalSummaryData.revenue.toFixed(2));
   
       // ========== Save State ==========
-      console.log('by dsp',byDsp);
-      console.log('by dsp',byDsp);
-      console.log('by territory',byTerritory);
-      console.log('by totalSumary',[totalSummaryData]);
+    //   console.log('by dsp',byDsp);
+    //   console.log('by dsp',byDsp);
+    //   console.log('by territory',byTerritory);
+    //   console.log('by totalSumary',[totalSummaryData]);
     //   setTableData(byDsp);
       setDspTableData(byDsp);
       setTerritoryTableData(byTerritory);
@@ -198,18 +204,20 @@ function Analytics({
   const [analyticsLoading, setAnalyticsLoading] = useState(false);
   const [totalRevenue, setTotalRevenue] = useState();
   const [totalStreams, setTotalStreams] = useState();
+  const [releaseData, setReleaseData] = useState();
   useEffect(() => {
     setAnalyticsLoading(true);
     setDataNotFound(false);
     if (userData) {
-      axios
+        setAnalyticsLoading(true);
+        axios
         .get(
-          `http://localhost:5000/common/api/v1/analytics-and-balance/masterUserId-analytics/?id=${userData._id}&years=${years}`
+        `http://localhost:5000/common/api/v1/analytics-and-balance/masterUserId-analytics/?id=${userData._id}&years=${years}`
         )
         .then((res) => {
-          // console.log(res);
-          console.log('res.data.data', res.data)
-          if (res.status === 200) {
+        // console.log(res);
+        //   console.log('res.data.data', res.data)
+        if (res.status === 200) {
             if (isEmptyArray(res?.data?.data)) setDataNotFound(true);
             dspAndTerittoriGet(res?.data?.data);
 
@@ -218,28 +226,38 @@ function Analytics({
 
             const rawData = res?.data?.monthlyTotals;
             const streamsData = rawData
-              ?.map((item) => ({
+            ?.map((item) => ({
                 month: item.reportsDate,
                 Streams: item.totalStreams,
-              }))
-              .sort((a, b) => new Date(a.month) - new Date(b.month));
+            }))
+            .sort((a, b) => new Date(a.month) - new Date(b.month));
 
             const revenewData = rawData
-              ?.map((item) => ({
+            ?.map((item) => ({
                 month: item.reportsDate,
                 Revenue: item.totalRevenue,
-              }))
-              .sort((a, b) => new Date(a.month) - new Date(b.month));
+            }))
+            .sort((a, b) => new Date(a.month) - new Date(b.month));
 
             setChartDataStreams(streamsData);
             setChartDataRevenue(revenewData);
             setAnalyticsLoading(false);
-          }
+        }
         });
+
+
+        axios.get(`http://localhost:5000/common/api/v1/analytics-and-balance/top-release-based-revenue/${userData._id}`)
+        .then(res => {
+            setReleaseData(res.data.data)
+        })
+
     }
   }, [userData, years]);
 
 
+  if(analyticsLoading){
+    return <LoadingScreen/>
+  }
 
 
 
@@ -338,6 +356,18 @@ function Analytics({
             </Tabs.Root>
             <br />
             <br />
+
+            <div style={{padding: '16px'}}>
+                <div>
+                    <h4 className="chart-title" style={{marginBottom: '10px'}}>Top Releases</h4>
+                    <div className="analytics-table">
+                        <AnalyticsPageTopReleaseTable columns={releaseColumns} data={releaseData}/>
+                    </div>
+                </div>
+            </div>
+
+            <br />
+
             <div className="analytics-pie-grid">
               <PieChartComponent data={dspTableData}/>
               <div className="analytics-table">

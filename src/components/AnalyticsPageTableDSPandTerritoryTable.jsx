@@ -1,7 +1,5 @@
-import React from 'react';
 
 const AnalyticsPageTableDSPandTerritoryTable = ({columns, data}) => {
-    console.log('data table', data)
     return (
         <div className="table-wrapper">
             <table className={`theme-table`}>
