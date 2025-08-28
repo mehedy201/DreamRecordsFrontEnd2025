@@ -177,7 +177,7 @@ function Analytics() {
         setAnalyticsLoading(true);
         axios
         .get(
-        `http://localhost:5000/common/api/v1/analytics-and-balance/masterUserId-analytics/?id=${userData._id}&years=${years}`
+        `https://dream-records-2025-m2m9a.ondigitalocean.app/common/api/v1/analytics-and-balance/masterUserId-analytics/?id=${userData._id}&years=${years}`
         )
         .then((res) => {
         // console.log(res);
@@ -211,7 +211,7 @@ function Analytics() {
         });
 
 
-        axios.get(`http://localhost:5000/common/api/v1/analytics-and-balance/top-release-based-revenue/${userData._id}`)
+        axios.get(`https://dream-records-2025-m2m9a.ondigitalocean.app/common/api/v1/analytics-and-balance/top-release-based-revenue/${userData._id}`)
         .then(res => {
             setReleaseData(res.data.data)
         })
@@ -475,7 +475,9 @@ function Analytics() {
             <br />
 
             <div className="analytics-pie-grid">
-              <PieChartComponent data={dspTableData}/>
+                <div>
+                    <PieChartComponent data={dspTableData}/>
+                </div>
               <div className="analytics-table">
                 <AnalyticsPageTableDSPandTerritoryTable
                   columns={analyticsStorageColumn}
