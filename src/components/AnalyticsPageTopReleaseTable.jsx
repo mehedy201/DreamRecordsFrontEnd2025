@@ -53,8 +53,8 @@ const AnalyticsPageTopReleaseTable = ({columns, data}) => {
                     </td>
                     <td>{d?.labels?.map((label) => label.labelName)}</td>
                     <td>{d?.UPC ? d.UPC : "--"}</td>
-                    <td>{d?.totalStreams}</td>
-                    <td>{d?.totalRevenue.toFixed(2)}</td>
+                    <td>{d?.totalStreams || 0}</td>
+                    <td>{d?.totalRevenue?.toFixed(2) || 0}</td>
                     </tr>
                 ))}
                 </tbody>

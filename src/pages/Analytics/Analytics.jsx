@@ -17,6 +17,7 @@ import * as Select from "@radix-ui/react-select";
 import { Check, ChevronDown } from "lucide-react";
 import { Controller, useForm } from "react-hook-form";
 import SearchDropdownRelease from "../../components/SearchDropdownRelease";
+import formatStreamsNumber from "../../hooks/formatStreamsNumber";
 
 const analyticsStorageColumn = [
   { label: "Stores", key: "Stores" },
@@ -185,7 +186,7 @@ function Analytics() {
             if (isEmptyArray(res?.data?.data)) setDataNotFound(true);
             dspAndTerittoriGet(res?.data?.data);
 
-            setTotalRevenue(res?.data?.totalRevenue)
+            setTotalRevenue(res?.data?.totalRevenue.toFixed(2))
             setTotalStreams(res?.data?.totalStreams)
 
             const rawData = res?.data?.monthlyTotals;
@@ -250,7 +251,7 @@ function Analytics() {
           if (res.status === 200) {
             if (isEmptyArray(res?.data?.data)) setDataNotFound(true);
             dspAndTerittoriGet(res?.data?.data);
-            setTotalRevenue(data?.release[0]?.totalRevenue.toFixed(2))
+            setTotalRevenue(data?.release[0]?.totalRevenue?.toFixed(2))
             setTotalStreams(data?.release[0]?.totalStreams)
 
             const rawData = res?.data?.data;
@@ -430,11 +431,11 @@ function Analytics() {
             <div className="analytics-card-row">
               <div className="analytics-card">
                 <h6>Total Streams</h6>
-                <h2>{totalStreams}</h2>
+                <h2>{formatStreamsNumber(totalStreams) || 0}</h2>
               </div>
               <div className="analytics-card">
                 <h6>Total Revenue</h6>
-                <h2>&#8377; {totalRevenue}</h2>
+                <h2>&#8377; {totalRevenue || 0}</h2>
               </div>
             </div>
             <Tabs.Root
