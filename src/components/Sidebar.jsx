@@ -16,7 +16,7 @@ import helpIcon from '../assets/icons/Help.png'
 import profileIcon from '../assets/icons/Profile.png'
 import settingsIcon from '../assets/icons/Settings.png'
 
-import warner from '../assets/warner-logo.png'
+import powerdBy from '../assets/powerd-by-believe.png'
 import { useDispatch } from "react-redux";
 import { setReleaseAlbumInfo, setReleaseDate, setTrackFormat, setTracksInfo } from "../redux/features/releaseDataHandleSlice/releaseDataHandleSlice";
 
@@ -78,7 +78,7 @@ const Sidebar = () => {
       </nav>
       <div className="sidebar-bottomTxt-div">
         <p>Powered by</p>
-        <img style={{width: '100px', height: 'auto'}} src={warner} alt="" />
+        <img style={{width: '100px', height: 'auto'}} src={powerdBy} alt="" />
       </div>
     </aside>
   );
