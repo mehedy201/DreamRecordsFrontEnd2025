@@ -174,7 +174,7 @@ const Transaction = () => {
       <Flex className="page-heading">
         <div>
           <span>Total Balance</span>
-          <h2>&#8377; {userData?.balance?.amount}</h2>
+          <h2>&#8377; {userData?.balance?.amount || 0}</h2>
         </div>
         <Dialog.Root open={isOpen} onOpenChange={setIsOpen}>
           <Dialog.Trigger className="theme-btn">Withdraw</Dialog.Trigger>
@@ -185,7 +185,7 @@ const Transaction = () => {
             </p>
             <p className="modal-description">Withdrawal Amount</p>
             <h1 style={{ fontWeight: "500", margin: 0 }}>
-              &#8377; {userData?.balance?.amount}
+              &#8377; {userData?.balance?.amount || 0}
             </h1>
             <p className="modal-description">Payment Method</p>
             {/* {
