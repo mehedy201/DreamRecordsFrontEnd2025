@@ -1,25 +1,27 @@
 const formatStreamsNumber = (num) => {
   if (num < 100000) return num.toString(); // 100k এর নিচে আসল নাম্বার
 
-  // বিলিয়ন
+  //  Billion
   if (num >= 1000000000) {
-    const billions = Math.floor(num / 1000000000);
-    return billions + (num % 1000000000 === 0 ? "b" : "b+");
+    const billions = num / 1000000000;
+    return billions % 1 === 0 ? `${billions.toFixed(0)} B` : `${billions.toFixed(1)} B+`;
   }
 
-  // মিলিয়ন
+  // Million
   if (num >= 1000000) {
-    const millions = Math.floor(num / 1000000);
-    return millions + (num % 1000000 === 0 ? "m" : "m+");
+    const millions = num / 1000000;
+    return millions % 1 === 0 ? `${millions.toFixed(0)} M` : `${millions.toFixed(1)} M+`;
   }
 
-  // হাজার (k)
+  //  Thousand (k)
   if (num >= 1000) {
-    const thousands = Math.floor(num / 1000);
-    return thousands + (num % 1000 === 0 ? "k" : "k+");
+    const thousands = num / 1000;
+    return thousands % 1 === 0 ? `${thousands.toFixed(0)} K` : `${thousands.toFixed(1)} K+`;
   }
 
   return num;
 };
 
 export default formatStreamsNumber;
+
+

@@ -233,7 +233,7 @@ function Analytics() {
       formState: { errors },
     } = useForm({
         defaultValues: {
-            type: "All Release",
+            // type: "Release",
         }
     });
 
@@ -327,41 +327,52 @@ function Analytics() {
             <div className="analytics-filter-div">
               <form className="analytics_filter_div_grid" onSubmit={handleSubmit(onSubmit)}>
                 <div>
-                    <Select.Root
-                        onValueChange={(e) =>
-                        setValue("type", e, { shouldValidate: true })
-                        }
-                        defaultValue="All Release"
-                    >
-                        <Select.Trigger className="dropdown-trigger Service-modal-dropdown-trigger">
-                        <Select.Value />
-                        <Select.Icon className="select-icon">
-                            <ChevronDown />
-                        </Select.Icon>
-                        </Select.Trigger>
-                        <Select.Portal>
-                        <Select.Content
-                            className="dropdown-content"
-                            style={{ padding: 0, overflowY: "auto" }}
+                    <Controller
+                    name="type"
+                    control={control}
+                    placeholder="All Release"
+                    rules={{ required: "Type Required" }}
+                    render={({ field }) => (
+                        <>
+                        <Select.Root
+                            {...field}
+                            onValueChange={(value) => field.onChange(value)}
+                            value={field.value}
                         >
-                            <Select.Viewport>
-                            <Select.Item value="All Release" className="select-item">
-                                <Select.ItemText>All Release</Select.ItemText>
-                                <Select.ItemIndicator className="select-item-indicator">
-                                <Check size={18} />
-                                </Select.ItemIndicator>
-                            </Select.Item>
-                            </Select.Viewport>
-                        </Select.Content>
-                        </Select.Portal>
-                    </Select.Root>
-                    {errors.type && (
-                        <span style={{ color: "#ea3958" }}>Type Required</span>
+                            <Select.Trigger className="dropdown-trigger Service-modal-dropdown-trigger">
+                            <Select.Value placeholder="All Release" />
+                            <Select.Icon className="select-icon">
+                                <ChevronDown />
+                            </Select.Icon>
+                            </Select.Trigger>
+
+                            <Select.Portal>
+                            <Select.Content
+                                className="dropdown-content"
+                                style={{ padding: 0, overflowY: "auto" }}
+                            >
+                                <Select.Viewport>
+                                <Select.Item value="Release" className="select-item">
+                                    <Select.ItemText>Release</Select.ItemText>
+                                    <Select.ItemIndicator className="select-item-indicator">
+                                    <Check size={18} />
+                                    </Select.ItemIndicator>
+                                </Select.Item>
+                                </Select.Viewport>
+                            </Select.Content>
+                            </Select.Portal>
+                        </Select.Root>
+
+                        {errors.type && (
+                            <span style={{ color: "#ea3958" }}>{errors.type.message}</span>
+                        )}
+                        </>
                     )}
+                    />
                 </div>
 
                 {
-                    filterType === 'All Release' && 
+                    (filterType === 'Release' || !filterType) && 
                     <div>
                         <SearchDropdownRelease
                             items={releaseData}
@@ -389,7 +400,7 @@ function Analytics() {
                         >
                         <Select.Trigger className="dropdown-trigger Service-modal-dropdown-trigger">
                             <Select.Value placeholder="Select Year">
-                                {watch("years") || yearsList[0]} {/* 👈 Always display a value */}
+                                {watch("years") || yearsList[0]}
                             </Select.Value>
                             <Select.Icon className="select-icon">
                             <ChevronDown />
