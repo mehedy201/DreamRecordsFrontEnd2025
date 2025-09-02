@@ -440,10 +440,10 @@ function Analytics() {
             </div>
 
             <div className="analytics-card-row">
-              <div className="analytics-card">
+              {/* <div className="analytics-card">
                 <h6>Total Streams</h6>
                 <h2>{formatStreamsNumber(totalStreams) || 0}</h2>
-              </div>
+              </div> */}
               <div className="analytics-card">
                 <h6>Total Revenue</h6>
                 <h2>&#8377; {totalRevenue || 0}</h2>

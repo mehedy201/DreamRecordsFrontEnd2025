@@ -176,19 +176,20 @@ function SingleRelease() {
             const streamsData = rawData
               ?.map((item) => ({
                 month: item.reportsDate,
-                value: item.totalStreams,
+                Streams: item.totalStreams,
               }))
               .sort((a, b) => new Date(a.month) - new Date(b.month));
 
             const revenewData = rawData
               ?.map((item) => ({
                 month: item.reportsDate,
-                value: item.totalRevenue,
+                Revenue: item.totalRevenue,
               }))
               .sort((a, b) => new Date(a.month) - new Date(b.month));
 
             setChartDataStreams(streamsData);
             setChartDataRevenue(revenewData);
+            console.log(revenewData)
             setAnalyticsLoading(false);
           }
         });
@@ -455,10 +456,10 @@ function SingleRelease() {
 
           <Collapsible.Content>
             <div className="analytics-card-row">
-              <div className="analytics-card">
+              {/* <div className="analytics-card">
                 <h6>Total Streams</h6>
                 <h2>{releaseData?.totalStreams?.toFixed(2)}</h2>
-              </div>
+              </div> */}
               <div className="analytics-card">
                 <h6>Total Revenue</h6>
                 <h2>&#8377; {releaseData?.totalRevenue?.toFixed(2)}</h2>
