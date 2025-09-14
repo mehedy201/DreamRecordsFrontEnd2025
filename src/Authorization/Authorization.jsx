@@ -63,10 +63,10 @@ const Authorization = ({ children }) => {
           navigate("/sign-up-profile-info");
           return;
         }
-        // if(!res?.data?.data?.addressLine1 && !res?.data?.data?.address ){
-        //     navigate('/sign-up-address-info')
-        //     return
-        // }
+        if(!res?.data?.data?.addressLine1 || !res?.data?.data?.address ){
+            navigate('/sign-up-address-info')
+            return
+        }
         await axios.patch(
           `https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/users/last-log-in/${userId}`,
           {}
