@@ -63,7 +63,7 @@ const Authorization = ({ children }) => {
           navigate("/sign-up-profile-info");
           return;
         }
-        if(!res?.data?.data?.addressLine1 || !res?.data?.data?.address ){
+        if(!res?.data?.data?.addressLine1){
             navigate('/sign-up-address-info')
             return
         }
