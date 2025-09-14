@@ -5,10 +5,17 @@ import localDate from "../hooks/localDate";
 import { IoEyeOutline } from "react-icons/io5";
 import { Dialog } from "radix-ui";
 import Modal from "./Modal";
+import { useState } from "react";
+import FormSubmitLoading from "./FormSubmitLoading";
+
 
 const TransactionTable = ({ columns, data }) => {
   console.log(data)
-  const handleReportDownloadExcel = async (masterUserId, date) => {
+
+  const [loading, setLoading] = useState(null)
+
+  const handleReportDownloadExcel = async (masterUserId, date, id) => {
+    setLoading(id);
     try {
       const query = new URLSearchParams({ masterUserId, date }).toString();
       const response = await fetch(
@@ -30,6 +37,7 @@ const TransactionTable = ({ columns, data }) => {
       link.click();
 
       URL.revokeObjectURL(downloadUrl);
+      setLoading(null);
     } catch (error) {
       console.error("Download error:", error.message);
       alert("Could not download file");
@@ -135,21 +143,27 @@ const TransactionTable = ({ columns, data }) => {
                     Invoice
                   </button>
                 )} */}
-                {
-                  d?.type === 'Payment' && 
-                  <button
-                    style={{ cursor: "pointer" }}
-                    className="non-transjection-btn"
-                    onClick={() =>
-                      handleReportDownloadExcel(
-                        d?.masterUserId,
-                        d?.paymentReportDate
-                      )
-                    }
-                  >
-                    Download Reports
-                  </button>
-                }
+                {d?.type === "Payment" && (
+                  <>
+                    {loading === d._id ? (
+                      <FormSubmitLoading />
+                    ) : (
+                      <button
+                        style={{ cursor: "pointer" }}
+                        className="non-transjection-btn"
+                        onClick={() =>
+                          handleReportDownloadExcel(
+                            d?.masterUserId,
+                            d?.paymentReportDate,
+                            d._id
+                          )
+                        }
+                      >
+                        Download Reports
+                      </button>
+                    )}
+                  </>
+                )}
               </td>
             </tr>
           ))}
