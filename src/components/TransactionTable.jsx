@@ -127,14 +127,14 @@ const TransactionTable = ({ columns, data }) => {
                     </Dialog.Portal>
                   </Dialog.Root>
                 }
-                {(d?.type === "Withdraw" && d?.status === 'Approved') && (
+                {/* {(d?.type === "Withdraw" && d?.status === 'Approved') && (
                   <button
                     style={{ cursor: "pointer" }}
                     className="non-transjection-btn"
                   >
                     Invoice
                   </button>
-                )}
+                )} */}
                 {
                   d?.type === 'Payment' && 
                   <button
