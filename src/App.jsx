@@ -52,6 +52,7 @@ import EditSingleArtist from "./pages/Artists/components/EditSingleArtist";
 import EditLable from "./pages/Lables/components/EditLable";
 import SuspendPage from "./pages/SuspendPage/SuspendPage";
 import Analytics from "./pages/Analytics/Analytics";
+import whatsappImg from './assets/whatsapp.png';
 
 function Layout() {
   const location = useLocation();
@@ -97,6 +98,25 @@ function Layout() {
         )}
         {isMobile && <MobileFooter />}
         {loading ? <LoadingScreen /> : <Outlet />}
+
+        {/* WhatsApp Floating Button */}
+        <a
+          href="https://wa.me/917585024930" 
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{
+            position: "fixed",
+            bottom: "20px",
+            right: "20px",
+            zIndex: 9999,
+          }}
+        >
+          <img
+            src={whatsappImg}
+            alt="WhatsApp"
+            style={{ width: "60px", height: "60px", cursor: "pointer" }}
+          />
+        </a>
       </div>
     </div>
   );
