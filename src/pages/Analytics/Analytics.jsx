@@ -30,6 +30,21 @@ const analyticsTerritoriesColumn = [
   { label: "Revenue", key: "Revenue" },
 ];
 
+const monthList = [
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
+  "May",
+  "Jun",
+  "Jul",
+  "Aug",
+  "Sep",
+  "Oct",
+  "Nov",
+  "Dec",
+];
+
 const releaseColumns = [
     { label: "Release", key: "releaseName" },
     { label: "Label", key: "label" },
@@ -147,11 +162,6 @@ function Analytics() {
       totalSummaryData.revenue = Number(totalSummaryData.revenue.toFixed(2));
   
       // ========== Save State ==========
-    //   console.log('by dsp',byDsp);
-    //   console.log('by dsp',byDsp);
-    //   console.log('by territory',byTerritory);
-    //   console.log('by totalSumary',[totalSummaryData]);
-    //   setTableData(byDsp);
       setDspTableData(byDsp);
       setTerritoryTableData(byTerritory);
       setTotalSummary([totalSummaryData]);
@@ -181,7 +191,7 @@ function Analytics() {
         )
         .then((res) => {
         // console.log(res);
-        //   console.log('res.data.data', res.data)
+          // console.log('res.data.data', res.data)
         if (res.status === 200) {
             if (isEmptyArray(res?.data?.data)) setDataNotFound(true);
             dspAndTerittoriGet(res?.data?.data);
@@ -228,7 +238,6 @@ function Analytics() {
       handleSubmit,
       setValue,
       watch,
-      resetField,
       control,
       formState: { errors },
     } = useForm({
@@ -241,10 +250,12 @@ function Analytics() {
 
 
     const onSubmit = (data) =>{
+        console.log('data', data)
+        const date = `${data.mounth} ${data.years}`;
         setAnalyticsLoading(true)
         axios
         .get(
-          `https://dream-records-2025-m2m9a.ondigitalocean.app/common/api/v1/analytics-and-balance/upc-analytics?UPC=${data?.release[0]?.UPC}&years=${Number(data.years)}`
+          `https://dream-records-2025-m2m9a.ondigitalocean.app/common/api/v1/analytics-and-balance/upc-analytics?UPC=${data?.release[0]?.UPC}&date=${date}`
         )
         .then((res) => {
           // console.log(res);
@@ -432,6 +443,49 @@ function Analytics() {
                     )}
                 </div>
                 <div>
+                    <Controller
+                    name="mounth"
+                    control={control}
+                    rules={{ required: "Mounth Required" }} // 👈 Validation rule
+                    render={({ field }) => (
+                        <Select.Root
+                        value={field.value || ""}
+                        onValueChange={(value) => field.onChange(value)}
+                        >
+                        <Select.Trigger className="dropdown-trigger Service-modal-dropdown-trigger">
+                            <Select.Value placeholder="Select Mounth">
+                                {watch("mounth") || 'Jan'}
+                            </Select.Value>
+                            <Select.Icon className="select-icon">
+                            <ChevronDown />
+                            </Select.Icon>
+                        </Select.Trigger>
+                        <Select.Portal>
+                            <Select.Content
+                            className="dropdown-content"
+                            style={{ padding: 0, overflowY: "auto" }}
+                            >
+                            <Select.Viewport>
+                                {monthList.map((mounth) => (
+                                <Select.Item key={mounth} value={mounth} className="select-item">
+                                    <Select.ItemText>{mounth}</Select.ItemText>
+                                    <Select.ItemIndicator className="select-item-indicator">
+                                    <Check size={18} />
+                                    </Select.ItemIndicator>
+                                </Select.Item>
+                                ))}
+                            </Select.Viewport>
+                            </Select.Content>
+                        </Select.Portal>
+                        </Select.Root>
+                    )}
+                    />
+
+                    {errors.mounth && (
+                    <span style={{ color: "#ea3958" }}>{errors.mounth.message}</span>
+                    )}
+                </div>
+                <div>
                     <button type="submit" style={{width: '100%'}} className="theme-btn analytics-filter-btn analytics-filter-flex-item">
                         Filter
                     </button>
@@ -445,7 +499,7 @@ function Analytics() {
                 <h2>{formatStreamsNumber(totalStreams) || 0}</h2>
               </div> */}
               <div className="analytics-card">
-                <h6>Total Revenue</h6>
+                <h6>All Time Revenue</h6>
                 <h2>&#8377; {totalRevenue || 0}</h2>
               </div>
             </div>

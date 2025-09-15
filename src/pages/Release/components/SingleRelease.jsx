@@ -344,29 +344,10 @@ function SingleRelease() {
                 <p>Version/Subtittle:</p>
                 <p>{releaseData?.subTitle}</p>
               </div>
-              {/* <div className="d-flex">
-                <p>Primary Artist:</p>
-                <p>
-                  {releaseData?.artist
-                    ?.map((artist) => artist.artistName)
-                    .join(", ")}
-                </p>
-              </div> */}
               <div className="d-flex">
                 <p>Format:</p>
                 <p>{releaseData?.format}</p>
               </div>
-              {/* <div className="d-flex">
-                <p>Featuring:</p>
-                <p>
-                  {releaseData?.featuring
-                    ?.map((artist) => artist.artistName)
-                    .join(", ")}{" "}
-                  {releaseData?.featureing
-                    ?.map((artist) => artist.artistName)
-                    .join(", ")}
-                </p>
-              </div> */}
               <div className="d-flex">
                 <p>℗ line:</p>
                 <p>{releaseData?.pLine}</p>
@@ -406,10 +387,6 @@ function SingleRelease() {
                 <p>Release Date:</p>
                 <p>{releaseData.releaseDate}</p>
               </div>
-              {/* <div className="d-flex">
-                <p>Producer Catalog Number:</p>
-                <p>1111111111</p>
-              </div> */}
             </div>
             <hr />
             <h3 className="release-album-title">Tracks</h3>
@@ -461,7 +438,7 @@ function SingleRelease() {
                 <h2>{releaseData?.totalStreams?.toFixed(2)}</h2>
               </div> */}
               <div className="analytics-card">
-                <h6>Total Revenue</h6>
+                <h6>All Time Revenue</h6>
                 <h2>&#8377; {releaseData?.totalRevenue?.toFixed(2)}</h2>
               </div>
             </div>
