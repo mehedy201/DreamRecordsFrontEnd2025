@@ -258,13 +258,17 @@ const Transaction = () => {
         <div>
           <div className="bank_info_child_div">
               <p style={{color: '#838383'}}>Bank Details</p>
-              {
-                !notBankInfo &&
+              {notBankInfo ? (
+                <button onClick={() => navigate('/add-bank-info')} style={{padding: '5px 10px', color: '#EA3958', display: 'flex', alignItems: 'center', gap: '5px', background: 'none', border: '1px solid #EA3958', borderRadius: '5px', cursor: 'pointer'}}>
+                  <EditIcon size={'16'}/>
+                  Edit Bank
+                </button>
+              ) : (
                 <button onClick={() => navigate('/add-bank-info')} style={{padding: '5px 10px', color: '#EA3958', display: 'flex', alignItems: 'center', gap: '5px', background: 'none', border: '1px solid #EA3958', borderRadius: '5px', cursor: 'pointer'}}>
                   <EditIcon size={'16'}/>
                   Add Bank
                 </button>
-              }
+              )}
           </div>
           <div className="bank_info_parent_div">
             <div className="bank_info_child_div">

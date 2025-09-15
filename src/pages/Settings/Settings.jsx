@@ -215,7 +215,7 @@ function Settings() {
                 </div>
               </div>
               {/* Save Button */}
-              {/* {notBankInfo ? (
+              {notBankInfo ? (
                 <button type="submit" className="settings-save-btn">
                   Edit
                 </button>
@@ -223,12 +223,7 @@ function Settings() {
                 <button type="submit" className="settings-save-btn">
                   Save
                 </button>
-              )} */}
-              {!notBankInfo &&
-                <button type="submit" className="settings-save-btn">
-                  Save
-                </button>
-              }
+              )}
             </form>
         </div>
       </div>
