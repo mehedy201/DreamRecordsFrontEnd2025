@@ -209,7 +209,7 @@ function App() {
 
           
           <Route path="/Profile" element={<Authorization><Profile /></Authorization>} />
-          <Route path="/settings" element={<Authorization><Settings /></Authorization>} />
+          <Route path="/add-bank-info" element={<Authorization><Settings /></Authorization>} />
           <Route
             path="/Support"
             element={

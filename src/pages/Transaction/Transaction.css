@@ -123,3 +123,37 @@
     min-width: 700px;
   }
 }
+
+
+
+
+
+
+
+.transaction_top_section{
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  align-items: center;
+  gap: 20px;
+}
+
+@media screen and (max-width: 1000px) {
+  .transaction_top_section{
+    grid-template-columns: repeat(1, 1fr);
+  }
+}
+
+
+.bank_info_parent_div{
+  display: flex;
+  gap: 15px;
+  justify-content: space-between;
+  align-items: center;
+}
+.bank_info_child_div{
+  flex: 1;
+  display: flex;
+  gap: 5px;
+  justify-content: space-between;
+  align-items: center;
+}
