@@ -79,7 +79,7 @@ const Transaction = () => {
   const [totalPages, setTotalPages] = useState();
   const [loading, setLoading] = useState(false);
   const [notFound, setNotFound] = useState(false);
-  const [notBankInfo, setNotBankInfo] = useState(false);
+  const [notBankInfo, setNotBankInfo] = useState(true);
 
   // const activeBankAndSelectBank = (id, data) => {
   //   setActiveBankInfo(id);
@@ -142,7 +142,6 @@ const Transaction = () => {
       .then((res) => {
         if (res.status == 200) {
           // setBankInfo(res.data.data)
-          console.log(res);
           toast.success(res.data.message);
           setIsOpen(false);
         }

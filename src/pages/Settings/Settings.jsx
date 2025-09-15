@@ -8,9 +8,11 @@ import { useSelector } from "react-redux";
 import axios from "axios";
 import toast from "react-hot-toast";
 import isEmptyArray from "../../hooks/isEmptyArrayCheck";
+import { useNavigate } from "react-router-dom";
 
 function Settings() {
   const { userNameIdRoll } = useSelector((state) => state.userData);
+  const navigate = useNavigate();
 
   const {
     register,
@@ -22,7 +24,7 @@ function Settings() {
 
   const [bankInfo, setBankInfo] = useState();
   const [bankInfoReFetch, setBankInfoReFetch] = useState(1);
-  const [notBankInfo, setNotBankInfo] = useState(false);
+  const [notBankInfo, setNotBankInfo] = useState(true);
   useEffect(() => {
     if (userNameIdRoll) {
       axios
@@ -87,6 +89,7 @@ function Settings() {
           if (res.status === 200) {
             toast.success(res.data.message);
             setBankInfoReFetch(bankInfoReFetch + 1);
+            navigate('/transaction/1/10/All');
           }
         });
     }
