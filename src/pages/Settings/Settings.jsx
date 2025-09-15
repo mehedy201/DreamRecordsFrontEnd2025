@@ -108,7 +108,7 @@ function Settings() {
 
   return (
     <div className="main-content">
-      <h2 style={{ fontSize: "24px", fontWeight: "500" }}>Settings</h2>
+      {/* <h2 style={{ fontSize: "24px", fontWeight: "500" }}>Settings</h2> */}
       <div style={{ background: "#fff", padding: "20px", borderRadius: "8px" }}>
         <div className="settings-div">
           <h4>Payout Preference</h4>
@@ -203,6 +203,10 @@ function Settings() {
                     <div>
                       <label>UPI ID</label>
                       <input {...register("upiId")} type="text" />
+                    </div>
+                    <div>
+                      <label>bKash No:</label>
+                      <input {...register("bKash")} type="number" />
                     </div>
                   </>
                 </div>
