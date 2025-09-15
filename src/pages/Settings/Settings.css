@@ -112,3 +112,16 @@
     margin-top: 0;
   }
 }
+
+
+/* Chrome, Safari, Edge, Opera */
+.remove_arrow[type=number]::-webkit-inner-spin-button,
+.remove_arrow[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+.remove_arrow[type=number] {
+  -moz-appearance: textfield;
+}

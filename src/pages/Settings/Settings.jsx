@@ -206,13 +206,13 @@ function Settings() {
                     </div>
                     <div>
                       <label>bKash No:</label>
-                      <input {...register("bKash")} type="number" />
+                      <input className="remove_arrow" {...register("bKash")} type="number" />
                     </div>
                   </>
                 </div>
               </div>
               {/* Save Button */}
-              {notBankInfo ? (
+              {/* {notBankInfo ? (
                 <button type="submit" className="settings-save-btn">
                   Edit
                 </button>
@@ -220,7 +220,12 @@ function Settings() {
                 <button type="submit" className="settings-save-btn">
                   Save
                 </button>
-              )}
+              )} */}
+              {!notBankInfo &&
+                <button type="submit" className="settings-save-btn">
+                  Save
+                </button>
+              }
             </form>
         </div>
       </div>
