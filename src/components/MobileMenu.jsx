@@ -11,10 +11,10 @@ import labelsIcon from '../assets/icons/Labels.png'
 import analyticsIcon from '../assets/icons/analytics.png'
 import serviceRequestIcon from '../assets/icons/Service Request.png'
 import transactionsIcon from '../assets/icons/indian-rupee.png'
-import supportIcon from '../assets/icons/Support.png'
-import helpIcon from '../assets/icons/Help.png'
+// import supportIcon from '../assets/icons/Support.png'
+// import helpIcon from '../assets/icons/Help.png'
 import profileIcon from '../assets/icons/Profile.png'
-import settingsIcon from '../assets/icons/Settings.png'
+// import settingsIcon from '../assets/icons/Settings.png'
 
 
 const menuItems = [
@@ -28,7 +28,7 @@ const menuItems = [
   // { name: "Support", path: "/", icon: supportIcon, divider: true },
   // { name: "Help", path: "/", icon: helpIcon },
   { name: "Profile", path: "/profile", icon: profileIcon, divider: true },
-  { name: "My Settings", path: "/settings", icon: settingsIcon },
+  // { name: "My Settings", path: "/settings", icon: settingsIcon },
 ];
 
 const MobileMenu = ({ closeMenu }) => {
