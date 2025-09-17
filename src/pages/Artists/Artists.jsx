@@ -96,7 +96,7 @@ const Artists = () => {
   return (
     <div className="main-content">
       <Flex className="page-heading">
-        <h2>Artists</h2>
+        <h2 style={{display: 'flex', gap: '10px', alignItems: 'start'}}>Artists <span style={{fontSize: '16px', border: '1px solid #ea3958', padding: '2px 8px', borderRadius: '5px'}}>{filteredCount || 0}</span></h2>
         <Link
           to="/create-artist"
           className="theme-btn"
