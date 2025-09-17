@@ -951,3 +951,20 @@ img{
   object-fit: "cover" !important;
   object-position: "center" !important;
 }
+
+
+
+
+/* React country Select custom css  */
+
+
+/* React country Select custom css  */
+.stsearch-box{
+  padding: 2px !important;
+}
+.stsearch-box>input{
+  border: none !important;
+}
+.stdropdown-container{
+  border: 1px solid rgba(0, 9, 50, 0.12) !important;
+}

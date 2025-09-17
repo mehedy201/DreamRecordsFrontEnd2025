@@ -21,9 +21,9 @@ const AddressInformation = () => {
   // Country State Select____________________________________________________
   const [countryid, setCountryid] = useState(0);
   const [country, setCountry] = useState();
-  const [state, setState] = useState();
+  // const [state, setState] = useState();
   const [countryError, setCountryError] = useState("");
-  const [stateError, setStateError] = useState("");
+  // const [stateError, setStateError] = useState("");
 
   const [loading, setLoading] = useState(false);
   const {
@@ -37,10 +37,10 @@ const AddressInformation = () => {
       setCountryError("Please select your Country");
       return;
     }
-    if (!state) {
-      setStateError("Please select your State");
-      return
-    }
+    // if (!state) {
+    //   setStateError("Please select your State");
+    //   return
+    // }
 
     const label = {
       labelName: "Dream Records",
@@ -119,7 +119,13 @@ const AddressInformation = () => {
               </div>
               <div>
                 <label htmlFor="">Select State *</label>
-                <StateSelect
+                <input type="text" {...register("state", { required: true })} />
+                {errors.state && (
+                  <p style={{ color: "red", marginTop: "-10px" }}>
+                    State Required
+                  </p>
+                )}
+                {/* <StateSelect
                   countryid={countryid}
                   onChange={(e) => {
                     setState(e);
@@ -129,7 +135,7 @@ const AddressInformation = () => {
                 />
                 {stateError && (
                   <p className="text-red-600 pb-2">{stateError}</p>
-                )}
+                )} */}
               </div>
               <div>
                 <label htmlFor="">City *</label>

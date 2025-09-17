@@ -53,6 +53,8 @@ import EditLable from "./pages/Lables/components/EditLable";
 import SuspendPage from "./pages/SuspendPage/SuspendPage";
 import Analytics from "./pages/Analytics/Analytics";
 import whatsappImg from './assets/whatsapp.png';
+import "react-country-state-city/dist/react-country-state-city.css";
+
 
 function Layout() {
   const location = useLocation();
