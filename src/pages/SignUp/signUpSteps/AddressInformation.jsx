@@ -56,17 +56,15 @@ const AddressInformation = () => {
       userName: userData?.userName || userNameIdRoll[0],
     };
 
-    const payload = { ...data, country, state, status: "Active" };
+    const payload = { ...data, country, status: "Active" };
 
-    axios.post(
-      `https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/labels/create-labels`,
-      label
-    );
+    console.log('payload', payload)
+
+    axios.post(`https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/labels/create-labels`,label);
+      
     axios
       .patch(
-        `https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/users/${userData?._id}`,
-        payload
-      )
+        `https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/users/${userData?._id}`,payload)
       .then((res) => {
         if (res.data.status == 200) {
           navigate("/");
