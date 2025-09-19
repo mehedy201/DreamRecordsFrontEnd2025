@@ -453,7 +453,7 @@ function Analytics() {
                         onValueChange={(value) => field.onChange(value)}
                         >
                         <Select.Trigger className="dropdown-trigger Service-modal-dropdown-trigger">
-                            <Select.Value placeholder="Select Mounth">
+                            <Select.Value placeholder="Select Month">
                                 {watch("mounth") || 'Jan'}
                             </Select.Value>
                             <Select.Icon className="select-icon">

@@ -102,10 +102,10 @@ function Profile() {
       {/* Personal Information ________________________________ */}
       <div className="profile-info">
         <h5>Personal Information</h5>
-        <div style={{marginTop: '14px'}} className="d-flex">
+        {/* <div style={{marginTop: '14px'}} className="d-flex">
           <p>Registered As:</p>
           <p className="profile-value-text ">{userData?.roll == "User" ? "Individual" : userData?.roll}</p>
-        </div>
+        </div> */}
         <div className="d-flex">
           <p>First Name:</p>
           <p className="profile-value-text ">{userData?.first_name}</p>
