@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { CountrySelect, StateSelect } from "react-country-state-city";
+import { useState } from "react";
+import { CountrySelect } from "react-country-state-city";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import FormSubmitLoading from "../../../components/FormSubmitLoading";
@@ -12,11 +12,6 @@ const AddressInformation = () => {
   const dispatch = useDispatch();
   const { userNameIdRoll, userData } = useSelector((state) => state.userData);
 
-  // useEffect(() => {
-  //   if (!userData?.addressLine1) {
-  //     navigate("/");
-  //   } 
-  // },[])
 
   // Country State Select____________________________________________________
   const [country, setCountry] = useState();
@@ -34,10 +29,6 @@ const AddressInformation = () => {
       setCountryError("Please select your Country");
       return;
     }
-    // if (!state) {
-    //   setStateError("Please select your State");
-    //   return
-    // }
 
     const label = {
       labelName: "Dream Records",
@@ -47,22 +38,24 @@ const AddressInformation = () => {
       instagram: "",
       facebook: "",
       youtube: "",
-      email: userData.email? userData.email : "",
+      email: userData?.email || "",
       date: new Date().toISOString(),
-      masterUserId: userNameIdRoll[1],
+      masterUserId: userData?._id || userNameIdRoll[1],
       userName: userData?.userName || userNameIdRoll[0],
     };
 
     const payload = { ...data, country, status: "Active" };
 
-    console.log('payload', payload)
-
-    axios.post(`https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/labels/create-labels`,label);
+    axios.post(`https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/labels/create-labels`,label)
+    .then(res => {
+      console.log(res)
+    })
       
     axios
       .patch(
         `https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/users/${userData?._id}`,payload)
       .then((res) => {
+        console.log(res)
         if (res.data.status == 200) {
           navigate("/");
           const ud = { ...payload, ...userData };
@@ -99,7 +92,7 @@ const AddressInformation = () => {
                 <label htmlFor="">Select Country *</label>
                 <CountrySelect
                   onChange={(e) => {
-                    setCountryid(e.id);
+                    // setCountryid(e.id);
                     const name = e.name;
                     const emoji = e.emoji;
                     const v = { name, emoji, countryId: e.id };
