@@ -12,6 +12,12 @@ const AddressInformation = () => {
   const dispatch = useDispatch();
   const { userNameIdRoll, userData } = useSelector((state) => state.userData);
 
+  useEffect(() => {
+    if (!userData?.addressLine1) {
+      navigate("/");
+    } 
+  },[])
+
   // Country State Select____________________________________________________
   const [country, setCountry] = useState();
   const [countryError, setCountryError] = useState("");
