@@ -35,7 +35,7 @@ function NewPassword() {
 
     if (res.data.token) {
       setMessage(res.data.message);
-      localStorage.setItem("token", res.data.token); // ✅ Token save
+      localStorage.setItem("token", res.data.token); 
       navigate("/"); // redirect
       setLoading(false);
     }
