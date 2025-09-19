@@ -153,7 +153,7 @@ function Profile() {
             </div>
             <div className="d-flex">
               <p>State:</p>
-              <p className="profile-value-text">{userData?.state?.name}</p>
+              <p className="profile-value-text">{userData?.state?.name || userData?.state}</p>
             </div>
             <div className="d-flex">
               <p>Country:</p>

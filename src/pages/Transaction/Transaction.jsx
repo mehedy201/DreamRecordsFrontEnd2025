@@ -232,6 +232,11 @@ const Transaction = () => {
                 )}
                 <br />
 
+                {activePaymentMonth === false && (
+                  <p style={{ color: "#ea3958" }}>
+                    Withdrawal is not available this month.
+                  </p>
+                )}
                 {userData?.balance?.amount < 5000 && (
                   <p style={{ color: "#ea3958" }}>
                     You can withdraw your balance only if it is more than ₹5000.
@@ -300,18 +305,18 @@ const Transaction = () => {
           </div>
           <div className="bank_info_parent_div">
             <div className="bank_info_child_div">
-              <p style={{color: '#838383', margin: '8px 0px'}}>UPI ID:</p>
+              <p style={{color: '#838383', margin: '8px 0px'}}>UPI ID/bKash:</p>
               <p style={{color: '#202020', margin: '8px 0px'}}>--</p>
             </div>
             <p style={{flex: '1', color: '#838383', margin: '8px 0px'}}>{bankInfo?.upiId}</p>
           </div>
-          <div className="bank_info_parent_div">
+          {/* <div className="bank_info_parent_div">
             <div className="bank_info_child_div">
               <p style={{color: '#838383', margin: '8px 0px'}}>bKash:</p>
               <p style={{color: '#202020', margin: '8px 0px'}}>--</p>
             </div>
             <p style={{flex: '1', color: '#838383', margin: '8px 0px'}}>{bankInfo?.bKash}</p>
-          </div>
+          </div> */}
         </div>
       </div>
       <br />

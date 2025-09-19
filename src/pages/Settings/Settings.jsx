@@ -204,13 +204,13 @@ function Settings() {
                       />
                     </div>
                     <div>
-                      <label>UPI ID</label>
+                      <label>UPI ID/bKash</label>
                       <input {...register("upiId")} type="text" />
                     </div>
-                    <div>
+                    {/* <div>
                       <label>bKash No:</label>
                       <input className="remove_arrow" {...register("bKash")} type="number" />
-                    </div>
+                    </div> */}
                   </>
                 </div>
               </div>

@@ -165,7 +165,7 @@ const ServiceRequest = () => {
               <p>{serviceCount?.ClaimVideo ? serviceCount?.ClaimVideo : 0}</p>
             </div>
           </Tabs.Trigger> */}
-          <Tabs.Trigger
+          {/* <Tabs.Trigger
             onClick={() => navigate("/service-request/Blocked-Video/1/10/All")}
             className="tabs-trigger"
             value="Blocked Video"
@@ -176,7 +176,7 @@ const ServiceRequest = () => {
                 {serviceCount?.BlockedVideo ? serviceCount?.BlockedVideo : 0}
               </p>
             </div>
-          </Tabs.Trigger>
+          </Tabs.Trigger> */}
           <Tabs.Trigger
             onClick={() => navigate("/service-request/OAC/1/10/All")}
             className="tabs-trigger"

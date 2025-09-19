@@ -48,12 +48,19 @@ textarea:focus {
 
 .navbar {
   display: flex;
+  gap: 10px;
   justify-content: end;
   padding: 16px 20px;
   background-color: #fff;
   border-bottom: 1px solid #f0f0f0;
   margin-bottom: 12px;
   align-items: center;
+}
+.whatsapp_float{
+  margin-top: 4px;
+  width: 48px;
+  height: 48px;
+  cursor: pointer;
 }
 .navbar-dropdown-content {
   margin-top: -51px;
@@ -910,6 +917,10 @@ label {
   }
   .modal-content {
     max-height: 80vh; /* <--- limits height */
+  }
+  .whatsapp_float{
+    width: 36px;
+    height: 36px;
   }
 }
 
