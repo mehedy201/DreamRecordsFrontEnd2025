@@ -2,7 +2,7 @@ import * as Collapsible from "@radix-ui/react-collapsible";
 import "./Analytics.css";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import * as Tabs from "@radix-ui/react-tabs";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import PieChartComponent from "./components/PieChartComponent";
 import PaddingPieChart from "./components/PaddingPieChart";
@@ -56,6 +56,7 @@ const releaseColumns = [
 function Analytics() {
 
     const {userData} = useSelector((state) => state.userData);
+    // console.log(userData)
     const { yearsList } = useSelector((state) => state.yearsAndStatus);
 
 
@@ -174,7 +175,7 @@ function Analytics() {
   // Getting Analytics Chart and Table Data From API ________
   const [chartDataStreams, setChartDataStreams] = useState();
   const [chartDataRevenue, setChartDataRevenue] = useState();
-  const [years, setYears] = useState(Math.max(...yearsList));
+  const [years] = useState(Math.max(...yearsList));
   const [dataNotFound, setDataNotFound] = useState(false);
   const [analyticsLoading, setAnalyticsLoading] = useState(false);
   const [totalRevenue, setTotalRevenue] = useState();
@@ -190,8 +191,8 @@ function Analytics() {
         `https://dream-records-2025-m2m9a.ondigitalocean.app/common/api/v1/analytics-and-balance/masterUserId-analytics/?id=${userData._id}&years=${years}`
         )
         .then((res) => {
-        // console.log(res);
-          // console.log('res.data.data', res.data)
+        // console.log(res.data);
+          // console.log('res.data.data', res.data.data)
         if (res.status === 200) {
             if (isEmptyArray(res?.data?.data)) setDataNotFound(true);
             dspAndTerittoriGet(res?.data?.data);
@@ -242,7 +243,7 @@ function Analytics() {
       formState: { errors },
     } = useForm({
         defaultValues: {
-            // type: "Release",
+            type: "All Release",
         }
     });
 
@@ -252,49 +253,88 @@ function Analytics() {
     const onSubmit = (data) =>{
         console.log('data', data)
         const date = `${data.mounth} ${data.years}`;
-        setAnalyticsLoading(true)
-        axios
-        .get(
-          `https://dream-records-2025-m2m9a.ondigitalocean.app/common/api/v1/analytics-and-balance/upc-analytics?UPC=${data?.release[0]?.UPC}&date=${date}`
-        )
-        .then((res) => {
-          // console.log(res);
-          if (res.status === 200) {
-            if (isEmptyArray(res?.data?.data)) setDataNotFound(true);
-            dspAndTerittoriGet(res?.data?.data);
-            setTotalRevenue(data?.release[0]?.totalRevenue?.toFixed(2))
-            setTotalStreams(data?.release[0]?.totalStreams)
-
-            const rawData = res?.data?.data;
-            const streamsData = rawData
-              ?.map((item) => ({
-                month: item.reportsDate,
-                Streams: item.totalStreams,
-              }))
-              .sort((a, b) => new Date(a.month) - new Date(b.month));
-
-            const revenewData = rawData
-              ?.map((item) => ({
-                month: item.reportsDate,
-                Revenue: item.totalRevenue,
-              }))
-              .sort((a, b) => new Date(a.month) - new Date(b.month));
-
-            setChartDataStreams(streamsData);
-            setChartDataRevenue(revenewData);
-            setAnalyticsLoading(false);
-          }
-        });
-
-        axios
-        .get(
-            `https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/release/release/${data?.release[0]?._id}`
-        )
-        .then((res) => {
+        if(filterType === 'All Release'){
+          // console.log('yes all release')
+          setAnalyticsLoading(true)
+          axios.get(`https://dream-records-2025-m2m9a.ondigitalocean.app/common/api/v1/analytics-and-balance/specific-date-masterUserId-analytics?id=${userData?._id}&date=${date}`)
+            .then((res) => {
+            // console.log('all release res', res?.data);
             if (res.status === 200) {
-            setReleaseData([res.data.data]);
+              if (isEmptyArray(res?.data?.data)) setDataNotFound(true);
+              dspAndTerittoriGet(res?.data?.data);
+              setTotalRevenue(res?.data?.totalRevenue?.toFixed(2))
+              setTotalStreams(res?.data?.totalStreams)
+
+              const rawData = res?.data?.monthlyTotals;
+              const streamsData = rawData
+                ?.map((item) => ({
+                  month: item.reportsDate,
+                  Streams: item.totalStreams,
+                }))
+                .sort((a, b) => new Date(a.month) - new Date(b.month));
+
+              const revenewData = rawData
+                ?.map((item) => ({
+                  month: item.reportsDate,
+                  Revenue: item.totalRevenue,
+                }))
+                .sort((a, b) => new Date(a.month) - new Date(b.month));
+
+              setChartDataStreams(streamsData);
+              setChartDataRevenue(revenewData);
+              setAnalyticsLoading(false);
             }
-        });
+          });
+          axios.get(`https://dream-records-2025-m2m9a.ondigitalocean.app/common/api/v1/analytics-and-balance/top-release-based-revenue/${userData._id}`)
+          .then(res => {
+              setReleaseData(res.data.data)
+          })
+        }
+        if(filterType === 'Release'){
+          setAnalyticsLoading(true)
+          axios
+          .get(
+            `https://dream-records-2025-m2m9a.ondigitalocean.app/common/api/v1/analytics-and-balance/upc-analytics?UPC=${data?.release[0]?.UPC}&date=${date}`
+          )
+          .then((res) => {
+            console.log(res);
+            if (res.status === 200) {
+              if (isEmptyArray(res?.data?.data)) setDataNotFound(true);
+              dspAndTerittoriGet(res?.data?.data);
+              setTotalRevenue(data?.release[0]?.totalRevenue?.toFixed(2))
+              setTotalStreams(data?.release[0]?.totalStreams)
+  
+              const rawData = res?.data?.data;
+              const streamsData = rawData
+                ?.map((item) => ({
+                  month: item.reportsDate,
+                  Streams: item.totalStreams,
+                }))
+                .sort((a, b) => new Date(a.month) - new Date(b.month));
+  
+              const revenewData = rawData
+                ?.map((item) => ({
+                  month: item.reportsDate,
+                  Revenue: item.totalRevenue,
+                }))
+                .sort((a, b) => new Date(a.month) - new Date(b.month));
+  
+              setChartDataStreams(streamsData);
+              setChartDataRevenue(revenewData);
+              setAnalyticsLoading(false);
+            }
+          });
+  
+          axios
+          .get(
+              `https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/release/release/${data?.release[0]?._id}`
+          )
+          .then((res) => {
+              if (res.status === 200) {
+              setReleaseData([res.data.data]);
+              }
+          });
+        }
     }
 
 
@@ -363,6 +403,12 @@ function Analytics() {
                                 style={{ padding: 0, overflowY: "auto" }}
                             >
                                 <Select.Viewport>
+                                <Select.Item value="All Release" className="select-item">
+                                    <Select.ItemText>All Release</Select.ItemText>
+                                    <Select.ItemIndicator className="select-item-indicator">
+                                    <Check size={18} />
+                                    </Select.ItemIndicator>
+                                </Select.Item>
                                 <Select.Item value="Release" className="select-item">
                                     <Select.ItemText>Release</Select.ItemText>
                                     <Select.ItemIndicator className="select-item-indicator">
