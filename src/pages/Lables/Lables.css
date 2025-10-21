@@ -52,6 +52,9 @@
   font-weight: 500;
   margin: 0 0 16px 0;
 }
+.editLable-info input {
+  color: #202020;
+}
 .lables-description {
   border-radius: 8px;
   background-color: #f9f9f9;

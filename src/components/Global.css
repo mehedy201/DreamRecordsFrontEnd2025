@@ -50,22 +50,24 @@ textarea:focus {
   display: flex;
   gap: 10px;
   justify-content: end;
-  padding: 16px 20px;
+  /* padding: 16px 20px; */
   background-color: #fff;
   border-bottom: 1px solid #f0f0f0;
   margin-bottom: 12px;
   align-items: center;
+  padding: 0 12px 0 12px;
 }
-.whatsapp_float{
+.whatsapp_float {
   margin-top: 4px;
   width: 48px;
   height: 48px;
   cursor: pointer;
 }
 .navbar-dropdown-content {
-  margin-top: -51px;
-  width: 300px !important;
+  margin-top: -5px;
+  width: 130px !important;
   margin-right: 20px;
+  padding: 24px 20px !important;
 }
 .navbar-dropdown-content p {
   margin: 0;
@@ -198,7 +200,7 @@ textarea:focus {
 .artists-card {
   width: calc(20% - 18px);
   min-width: 216px;
-  margin: auto;
+  /* margin: auto; */
   text-align: center;
   border-radius: 8px;
   background-color: #fff;
@@ -800,10 +802,11 @@ label {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
+  width: 85%;
   height: 100vh;
   background: white;
   z-index: 999;
+  box-shadow: 20px 0 80px rgba(0, 0, 0, 0.666);
   /* padding: 1rem; */
 }
 .mobile-menu-overlay .nav-item {
@@ -868,7 +871,9 @@ label {
   height: 20px;
   margin-bottom: 4px;
 }
-
+.footer-item:nth-last-child(2) {
+  margin-left: 100px;
+}
 .footer-item.active {
   color: #f43f5e; /* red-500 */
 }
@@ -913,23 +918,33 @@ label {
     margin-right: 4px;
   }
   .navbar {
-    padding: 12px 15px;
+    /* padding: 12px 15px; */
   }
   .modal-content {
     max-height: 80vh; /* <--- limits height */
   }
-  .whatsapp_float{
+  .whatsapp_float {
     width: 36px;
     height: 36px;
   }
+  .footer-item:nth-last-child(2) {
+    margin-left: 70px;
+  }
 }
 
+@media screen and (max-width: 460px) {
+  .footer-item:nth-last-child(2) {
+    margin-left: 50px;
+  }
+}
 @media screen and (max-width: 387px) {
   .mobile-footer {
     width: cover;
   }
+  .footer-item:nth-last-child(2) {
+    margin-left: 40px;
+  }
 }
-
 
 /* Mehedi  */
 @media (max-width: 1020px) {
@@ -942,48 +957,58 @@ label {
     display: none;
   }
 }
-
+@media (max-height: 575px) {
+  .mobile-menu-overlay .sidebar-bottomTxt-div {
+    display: none;
+  }
+}
+@media (max-height: 545px) {
+  .sidebar .sidebar-bottomTxt-div {
+    display: none;
+  }
+}
+@media (max-width: 340px) {
+  .pagination-btn svg {
+    padding: 0px;
+  }
+}
 
 /* phone input  */
-.react-tel-input .form-control{
+.react-tel-input .form-control {
   padding-left: 45px !important;
 }
 /* country state select  */
-.stdropdown-input{
+.stdropdown-input {
   position: relative;
 }
-.stdropdown-tools{
-    position: absolute;
-    top: 17px;
-    right: 6px;
+.stdropdown-tools {
+  position: absolute;
+  top: 17px;
+  right: 6px;
 }
 
-img{
+img {
   object-fit: "cover" !important;
   object-position: "center" !important;
 }
 
-
-
-
 /* React country Select custom css  */
 
-
 /* React country Select custom css  */
-.stdropdown-container{
+.stdropdown-container {
   margin-top: 8px !important;
 }
-.stsearch-box{
+.stsearch-box {
   padding: 0px !important;
 }
-.stsearch-box>input{
+.stsearch-box > input {
   border: none !important;
   margin: 0px !important;
 }
-.stdropdown-container{
+.stdropdown-container {
   border: 1px solid rgba(0, 9, 50, 0.12) !important;
 }
 
 .stdropdown-tools {
-    top: 10px !important;
-  }
+  top: 10px !important;
+}

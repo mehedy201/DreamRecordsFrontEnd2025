@@ -11,7 +11,8 @@ import { useSelector } from "react-redux";
 import axios from "axios";
 import NotFoundComponent from "../../components/NotFoundComponent";
 import isEmptyArray from "../../hooks/isEmptyArrayCheck";
-
+import { homeCardContent } from "../../data";
+import PieChartComponent from "../../components/PieChartComponent";
 const Home = () => {
   const { userData, userNameIdRoll } = useSelector((state) => state.userData);
 
@@ -118,7 +119,14 @@ const Home = () => {
         homePageNotices?.map((notice) => (
           <div key={notice._id} className="home-notice">
             <InfoCircledIcon />
-            <p style={{whiteSpace: 'normal',wordBreak: 'break-word',overflowWrap: 'break-word',}} dangerouslySetInnerHTML={{ __html: notice?.notice }}></p>
+            <p
+              style={{
+                whiteSpace: "normal",
+                wordBreak: "break-word",
+                overflowWrap: "break-word",
+              }}
+              dangerouslySetInnerHTML={{ __html: notice?.notice }}
+            ></p>
           </div>
         ))}
       <section className="hero">
@@ -127,6 +135,45 @@ const Home = () => {
           <p>Welcome to Dream Records</p>
         </div>
       </section>
+      <div className="home-card-grid">
+        {homeCardContent.map((item, index) => (
+          <div key={index} className="home-card">
+            <div className="d-flex" style={{ alignItems: "center" }}>
+              <div>
+                <div
+                  className="card-circle"
+                  style={
+                    item.name === "QC Approval"
+                      ? { background: "#FFA552 " }
+                      : item.name === "In Review"
+                      ? { background: "#0090FF" }
+                      : item.name === "To Live"
+                      ? { background: "#2B9A66" }
+                      : { background: "#838383" }
+                  }
+                ></div>
+              </div>
+              <p
+                style={
+                  item.name === "QC Approval"
+                    ? { color: "#FFA552" }
+                    : item.name === "In Review"
+                    ? { color: "#0090FF" }
+                    : item.name === "To Live"
+                    ? { color: "#2B9A66" }
+                    : { color: "#838383" }
+                }
+              >
+                {item.name}
+              </p>
+            </div>
+            <h1>{item.value}</h1>
+          </div>
+        ))}
+      </div>
+      <div className="home-pie-div">
+        <PieChartComponent />
+      </div>
       <Flex as="span" className="artists-flex">
         <p>Artists</p>
         <Link to={"/artist/1/10"}>See All</Link>

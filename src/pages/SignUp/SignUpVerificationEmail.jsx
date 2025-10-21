@@ -14,8 +14,8 @@ function SignUpVerificationEmail() {
   const [tempData, setTempData] = useState();
   useEffect(() => {
     const token = localStorage.getItem("token");
-    if(token){
-      navigate('/')
+    if (token) {
+      navigate("/");
     }
     axios
       .get(
@@ -37,9 +37,9 @@ function SignUpVerificationEmail() {
   };
 
   const [otpErr, setOtpErr] = useState();
-  const [errorMessage, setErrorMessage] = useState()
+  const [errorMessage, setErrorMessage] = useState();
   const verifyOtp = () => {
-    setErrorMessage('')
+    setErrorMessage("");
     setOtpErr("");
     if (!otp) {
       setOtpErr("OTP Required");
@@ -63,8 +63,8 @@ function SignUpVerificationEmail() {
         if (res.status === 200) {
           localStorage.setItem("token", res.data.token);
           navigate("/sign-up-profile-info");
-        }else{
-          setErrorMessage(res.data.message)
+        } else {
+          setErrorMessage(res.data.message);
         }
       });
 
@@ -93,6 +93,7 @@ function SignUpVerificationEmail() {
       outline: "none",
       border: "none",
       caretColor: "black", // cursor color
+      boxShadow: "none",
     },
     boxWrapper: {
       display: "flex",

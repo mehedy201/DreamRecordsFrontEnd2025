@@ -1,13 +1,11 @@
 import { NavLink, useNavigate } from "react-router-dom";
 
-
-import homeIcon from '../assets/icons/home.png'
-import releaseIcon from '../assets/icons/Releases.png'
-import groupIcon from '../assets/icons/group.png'
-import labelsIcon from '../assets/icons/Labels.png'
+import homeIcon from "../assets/icons/home.png";
+import releaseIcon from "../assets/icons/Releases.png";
+import groupIcon from "../assets/icons/group.png";
+import labelsIcon from "../assets/icons/Labels.png";
 
 const MobileFooter = () => {
-
   const navigate = useNavigate();
   return (
     <div className="mobile-footer">
@@ -21,7 +19,10 @@ const MobileFooter = () => {
         <span>Releases</span>
       </NavLink>
 
-      <div onClick={() => navigate('/create-release')} className="footer-add-button">
+      <div
+        onClick={() => navigate("/create-release")}
+        className="footer-add-button"
+      >
         <button>+</button>
       </div>
 

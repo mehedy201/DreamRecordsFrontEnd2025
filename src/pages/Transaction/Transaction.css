@@ -1,13 +1,16 @@
-.page-heading div span {
-  font-size: 14px;
+.transaction-withdraw-div div span {
+  font-size: 24px;
   color: #838383;
 }
-.page-heading div h2 {
-  font-size: 28px;
+.transaction-withdraw-div div h2 {
+  font-size: 60px;
+  font-weight: 500;
   margin: 0;
 }
-.page-heading button {
+.transaction-withdraw-div button {
   height: 40px;
+  /* margin-left: auto; */
+  width: 170px;
 }
 
 .status {
@@ -19,13 +22,13 @@
 }
 .status.pending {
   color: #ffa552;
-  background: rgba(255, 165, 82, 0.09);
+  background: #ffebd8;
 }
 
 .status.success,
 .status.open {
-  color: rgba(0, 113, 63, 0.8);
-  background: rgba(0, 164, 51, 0.09);
+  color: #2b9a66;
+  background: #e6f6eb;
 }
 .status.closed {
   color: #8d8d8d;
@@ -118,42 +121,59 @@
   font-size: 12px;
   color: #838383;
 }
+
+.transaction-card {
+  background-color: #fff;
+  border-radius: 12px;
+  padding: 24px;
+  position: relative;
+}
+.transaction-withdraw-btn {
+  position: absolute;
+  bottom: 24px;
+  right: 14px;
+  display: flex;
+  justify-self: flex-end;
+}
+.transaction_top_section {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  /* align-items: center; */
+  gap: 20px;
+}
+
+.bank_info_parent_div {
+  display: flex;
+  gap: 15px;
+  justify-content: space-between;
+  align-items: center;
+}
+.bank_info_child_div {
+  flex: 1;
+  display: flex;
+  gap: 5px;
+  justify-content: space-between;
+  align-items: center;
+}
+
 @media screen and (max-width: 425px) {
   .transaction-table {
     min-width: 700px;
   }
 }
 
-
-
-
-
-
-
-.transaction_top_section{
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  align-items: center;
-  gap: 20px;
-}
-
 @media screen and (max-width: 1000px) {
-  .transaction_top_section{
+  .transaction_top_section {
     grid-template-columns: repeat(1, 1fr);
   }
+  .transaction-withdraw-div div h2 {
+    font-size: 50px;
+    margin-bottom: 2.5rem;
+  }
 }
-
-
-.bank_info_parent_div{
-  display: flex;
-  gap: 15px;
-  justify-content: space-between;
-  align-items: center;
-}
-.bank_info_child_div{
-  flex: 1;
-  display: flex;
-  gap: 5px;
-  justify-content: space-between;
-  align-items: center;
+@media screen and (max-width: 575px) {
+  .transaction-withdraw-btn {
+    position: relative;
+    bottom: 0;
+  }
 }

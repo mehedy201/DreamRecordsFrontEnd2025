@@ -7,16 +7,22 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import FormSubmitLoading from "../../components/FormSubmitLoading";
 import logo from "../../assets/Logo.png";
-
+import eyeIcon from "../../assets/icons/eye.png";
+import eyeOffIcon from "../../assets/icons/eye-off.png";
 function LogIn() {
   const navigate = useNavigate();
 
   const [searchParams] = useSearchParams();
+  const [showPassword, setShowPassword] = useState(false);
+
+  const togglePassword = () => {
+    setShowPassword((prev) => !prev);
+  };
   useEffect(() => {
     const token = searchParams.get("token");
     if (token) {
       localStorage.setItem("token", token);
-      navigate("/"); 
+      navigate("/");
     } else {
       navigate("/login");
     }
@@ -79,11 +85,25 @@ function LogIn() {
               Forget Password?
             </label>
           </Flex>
-          <input
+          {/* <input
             type="password"
             className="password-input"
             {...register("password", { required: true })}
-          />
+          /> */}
+          <div style={{ position: "relative", width: "100%" }}>
+            <input
+              type={showPassword ? "text" : "password"}
+              className="password-input"
+              {...register("password", { required: true })}
+            />
+
+            <img
+              src={showPassword ? eyeIcon : eyeOffIcon}
+              alt="Toggle visibility"
+              onClick={togglePassword}
+              className="password-input-eye-img"
+            />
+          </div>
           {errors.password && <span>Password Required</span>}
           {loading && <FormSubmitLoading />}
           {errorMassage && <p style={{ color: "red" }}>{errorMassage}</p>}

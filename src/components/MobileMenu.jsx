@@ -2,29 +2,37 @@ import { NavLink } from "react-router-dom";
 import "./Global.css";
 import PropTypes from "prop-types";
 
-import logo from '../assets/Logo.png'
+import logo from "../assets/Logo.png";
 
-import homeIcon from '../assets/icons/home.png'
-import releaseIcon from '../assets/icons/Releases.png'
-import groupIcon from '../assets/icons/group.png'
-import labelsIcon from '../assets/icons/Labels.png'
-import analyticsIcon from '../assets/icons/analytics.png'
-import serviceRequestIcon from '../assets/icons/Service Request.png'
-import transactionsIcon from '../assets/icons/indian-rupee.png'
+import homeIcon from "../assets/icons/home.png";
+import releaseIcon from "../assets/icons/Releases.png";
+import groupIcon from "../assets/icons/group.png";
+import labelsIcon from "../assets/icons/Labels.png";
+import analyticsIcon from "../assets/icons/analytics.png";
+import serviceRequestIcon from "../assets/icons/Service Request.png";
+import transactionsIcon from "../assets/icons/indian-rupee.png";
+import powerdBy from "../assets/powerd-by-believe.png";
 // import supportIcon from '../assets/icons/Support.png'
 // import helpIcon from '../assets/icons/Help.png'
-import profileIcon from '../assets/icons/Profile.png'
+import profileIcon from "../assets/icons/Profile.png";
 // import settingsIcon from '../assets/icons/Settings.png'
-
 
 const menuItems = [
   { name: "Home", path: "/", icon: homeIcon },
   { name: "Releases", path: "/releases/1/10/All", icon: releaseIcon },
   { name: "Artists", path: "/artist/1/10", icon: groupIcon },
-  { name: "Lables", path: "/labels/1/10/All", icon: labelsIcon},
-  { name: "Analytics", path: "/analytics", icon: analyticsIcon},
-  { name: "Service Request", path: "/service-request/Release-Claim/1/10/All", icon: serviceRequestIcon,},
-  { name: "Transactions", path: "/transaction/1/10/All", icon: transactionsIcon },
+  { name: "Lables", path: "/labels/1/10/All", icon: labelsIcon },
+  { name: "Analytics", path: "/analytics", icon: analyticsIcon },
+  {
+    name: "Service Request",
+    path: "/service-request/Release-Claim/1/10/All",
+    icon: serviceRequestIcon,
+  },
+  {
+    name: "Transactions",
+    path: "/transaction/1/10/All",
+    icon: transactionsIcon,
+  },
   // { name: "Support", path: "/", icon: supportIcon, divider: true },
   // { name: "Help", path: "/", icon: helpIcon },
   { name: "Profile", path: "/profile", icon: profileIcon, divider: true },
@@ -32,9 +40,6 @@ const menuItems = [
 ];
 
 const MobileMenu = ({ closeMenu }) => {
-  
-  
-
   return (
     <div className="mobile-menu-overlay">
       <button
@@ -45,12 +50,7 @@ const MobileMenu = ({ closeMenu }) => {
         ✕
       </button>
       <div className="mobile-menu">
-        <img
-          src={logo}
-          alt="Logo"
-          width={60}
-          style={{ padding: "1rem" }}
-        />
+        <img src={logo} alt="Logo" width={60} style={{ padding: "1rem" }} />
         {menuItems.map((item, index) => (
           <NavLink
             to={item.path}
@@ -59,14 +59,14 @@ const MobileMenu = ({ closeMenu }) => {
             onClick={closeMenu}
             style={{ borderBottom: "1px solid #D9D9D9" }}
           >
-            <img
-              src={item.icon}
-              alt={item.name}
-              className="nav-icon"
-            />
+            <img src={item.icon} alt={item.name} className="nav-icon" />
             {item.name}
           </NavLink>
         ))}
+      </div>
+      <div className="sidebar-bottomTxt-div">
+        <p>Powered by</p>
+        <img style={{ width: "100px", height: "auto" }} src={powerdBy} alt="" />
       </div>
     </div>
   );

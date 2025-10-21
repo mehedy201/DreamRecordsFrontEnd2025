@@ -5,7 +5,8 @@ import { useNavigate } from "react-router-dom";
 import FormSubmitLoading from "../../components/FormSubmitLoading";
 import useDebounce from "../../hooks/useDebounce";
 import toast from "react-hot-toast";
-
+import eyeIcon from "../../assets/icons/eye.png";
+import eyeOffIcon from "../../assets/icons/eye-off.png";
 const SignUpFirstPage = () => {
   const navigate = useNavigate();
 
@@ -15,7 +16,14 @@ const SignUpFirstPage = () => {
   const [availability, setAvailability] = useState(null);
   const debouncedUsername = useDebounce(userName, 600);
   const [regaxErr, setRegaxErr] = useState();
-
+  const [showPassword1, setShowPassword1] = useState(false);
+  const [showPassword2, setShowPassword2] = useState(false);
+  const togglePassword1 = () => {
+    setShowPassword1((prev) => !prev);
+  };
+  const togglePassword2 = () => {
+    setShowPassword2((prev) => !prev);
+  };
   useEffect(() => {
     const checkUsername = async () => {
       const regex = /^[a-zA-Z0-9]+$/;
@@ -146,11 +154,25 @@ const SignUpFirstPage = () => {
           )}
 
           <label>Password:</label>
-          <input
+          {/* <input
             type="text"
             {...register("password1", { required: true })}
             className="password-input"
-          />
+          /> */}
+          <div style={{ position: "relative", width: "100%" }}>
+            <input
+              type={showPassword1 ? "text" : "password"}
+              className="password-input"
+              {...register("password1", { required: true })}
+            />
+
+            <img
+              src={showPassword1 ? eyeIcon : eyeOffIcon}
+              alt="Toggle visibility"
+              onClick={togglePassword1}
+              className="password-input-eye-img"
+            />
+          </div>
           {errors.password1 && (
             <p style={{ color: "red", marginTop: "-10px" }}>
               Password Required
@@ -158,11 +180,25 @@ const SignUpFirstPage = () => {
           )}
 
           <label>Confirm Password:</label>
-          <input
+          {/* <input
             type="text"
             {...register("password2", { required: true })}
             className="password-input"
-          />
+          /> */}
+          <div style={{ position: "relative", width: "100%" }}>
+            <input
+              type={showPassword2 ? "text" : "password"}
+              className="password-input"
+              {...register("password2", { required: true })}
+            />
+
+            <img
+              src={showPassword2 ? eyeIcon : eyeOffIcon}
+              alt="Toggle visibility"
+              onClick={togglePassword2}
+              className="password-input-eye-img"
+            />
+          </div>
           {errors.password2 && (
             <p style={{ color: "red", marginTop: "-10px" }}>
               Confirm Password Required

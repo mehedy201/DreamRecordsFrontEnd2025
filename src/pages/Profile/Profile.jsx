@@ -6,18 +6,16 @@ import { FaCamera } from "react-icons/fa";
 import Modal from "../../components/Modal";
 import { useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
-import defultUserImg from '../../assets/artists/artist4.png'
+import defultUserImg from "../../assets/artists/artist4.png";
 import localDate from "../../hooks/localDate";
 import axios from "axios";
 import toast from "react-hot-toast";
 import FormSubmitLoading from "../../components/FormSubmitLoading";
 import localTime from "../../hooks/localTime";
 
-
 function Profile() {
-
   // const dispatch = useDispatch();
-  const {userData} = useSelector((state) => state.userData);
+  const { userData } = useSelector((state) => state.userData);
 
   // Handle Image Upload
   const [image, setImage] = useState(null);
@@ -32,35 +30,45 @@ function Profile() {
   // Modal Open Close ________________________
   const [open, setOpen] = useState(false);
   // Update Password Function ________________
-  const [passMatchErr, setPassMatchErr] = useState('');
-  const [loading, setLoading] = useState(false)
-  const {register, handleSubmit, formState: {errors}} = useForm();
+  const [passMatchErr, setPassMatchErr] = useState("");
+  const [loading, setLoading] = useState(false);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
   const onSubmit = async (data) => {
-    setPassMatchErr('');
+    setPassMatchErr("");
     setLoading(true);
     // First check if new passwords match
     if (data.pass1 !== data.pass2) {
-        setPassMatchErr('New passwords do not match');
-        setLoading(false);
-        return;
+      setPassMatchErr("New passwords do not match");
+      setLoading(false);
+      return;
     }
 
-    const payload = {newPassword: data.pass1, currentPass: data.currentPass, id: userData?._id}
-    axios.patch(`https://dream-records-2025-m2m9a.ondigitalocean.app/common/api/v1/authentication/change-password`, payload)
-    .then(res => {
-      if(res.data.status === 200){
-        toast.success(res.data.message)
-        setLoading(false)
-        setOpen(false)
-      }else{
-        toast.error(res.data.message)
-        setOpen(false)
-        setLoading(false)
-      }
-    })
-  }
-
-
+    const payload = {
+      newPassword: data.pass1,
+      currentPass: data.currentPass,
+      id: userData?._id,
+    };
+    axios
+      .patch(
+        `https://dream-records-2025-m2m9a.ondigitalocean.app/common/api/v1/authentication/change-password`,
+        payload
+      )
+      .then((res) => {
+        if (res.data.status === 200) {
+          toast.success(res.data.message);
+          setLoading(false);
+          setOpen(false);
+        } else {
+          toast.error(res.data.message);
+          setOpen(false);
+          setLoading(false);
+        }
+      });
+  };
 
   return (
     <div className="main-content profile-content">
@@ -95,13 +103,16 @@ function Profile() {
           )}
         </div>
         <div className="profile-img-txt">
-          <h1>{userData?.first_name} {userData?.last_name}</h1>
+          <h1>
+            {userData?.first_name} {userData?.last_name}
+          </h1>
           <h3>{userData?.userName}</h3>
         </div>
       </Flex>
       {/* Personal Information ________________________________ */}
       <div className="profile-info">
-        <h5>Personal Information</h5>
+        <h5 style={{ marginBottom: "16px" }}>Personal Information</h5>
+
         {/* <div style={{marginTop: '14px'}} className="d-flex">
           <p>Registered As:</p>
           <p className="profile-value-text ">{userData?.roll == "User" ? "Individual" : userData?.roll}</p>
@@ -133,48 +144,50 @@ function Profile() {
 
       {/* Address ________________________________ */}
       <div className="profile-info">
-          <div>
-            <h5>Address</h5>
-            <div style={{marginTop: '14px'}} className="d-flex">
-              <p>Address Line 1:</p>
-              <p className="profile-value-text">{userData?.addressLine1}</p>
-            </div>
-            <div className="d-flex">
-              <p>Address Line 2:</p>
-              <p className="profile-value-text">{userData?.addressLine2}</p>
-            </div>
-            <div className="d-flex">
-              <p>Postal Code:</p>
-              <p className="profile-value-text">{userData?.postalCode}</p>
-            </div>
-            <div className="d-flex">
-              <p>City:</p>
-              <p className="profile-value-text">{userData?.city}</p>
-            </div>
-            <div className="d-flex">
-              <p>State:</p>
-              <p className="profile-value-text">{userData?.state?.name || userData?.state}</p>
-            </div>
-            <div className="d-flex">
-              <p>Country:</p>
-              <p className="profile-value-text">{userData?.country?.name}</p>
-            </div>
+        <div>
+          <h5>Address</h5>
+          <div style={{ marginTop: "14px" }} className="d-flex">
+            <p>Address Line 1:</p>
+            <p className="profile-value-text">{userData?.addressLine1}</p>
           </div>
-      </div>     
+          <div className="d-flex">
+            <p>Address Line 2:</p>
+            <p className="profile-value-text">{userData?.addressLine2}</p>
+          </div>
+          <div className="d-flex">
+            <p>Postal Code:</p>
+            <p className="profile-value-text">{userData?.postalCode}</p>
+          </div>
+          <div className="d-flex">
+            <p>City:</p>
+            <p className="profile-value-text">{userData?.city}</p>
+          </div>
+          <div className="d-flex">
+            <p>State:</p>
+            <p className="profile-value-text">
+              {userData?.state?.name || userData?.state}
+            </p>
+          </div>
+          <div className="d-flex">
+            <p>Country:</p>
+            <p className="profile-value-text">{userData?.country?.name}</p>
+          </div>
+        </div>
+      </div>
 
       <div className="profile-info d-flex">
         <div style={{ width: "80%" }}>
-           <h5>Security Info</h5>
-            <div style={{marginTop: '10px'}}>
-              <div className="d-flex">
-                <p>Email:</p>
-                <p className="profile-value-text">{userData?.email}</p>
-              </div>
-              <div className="d-flex">
-                <p>Password:</p>
-                <p className="profile-value-text">*********</p>
-              </div>
+          <h5>Security Info</h5>
+          <div style={{ marginTop: "10px" }}>
+            <div className="d-flex">
+              <p>Email:</p>
+              <p className="profile-value-text">{userData?.email}</p>
             </div>
+            <div className="d-flex">
+              <p>Password:</p>
+              <p className="profile-value-text">*********</p>
+            </div>
+          </div>
         </div>
         <Dialog.Root open={open} onOpenChange={setOpen}>
           <Dialog.Trigger className="profile-pass-btn">
@@ -183,21 +196,29 @@ function Profile() {
           <Modal title="Change Password">
             <form onSubmit={handleSubmit(onSubmit)}>
               <div className="prodile-modal">
-                  <label>Enter current Password</label>
-                  <input type="password" placeholder="************" {...register('currentPass', {required: true})}/>
-                  {errors.currentPass && <p>Current Password Required</p>}
-                  <label>Enter New Password</label>
-                  <input type="password" placeholder="************" {...register('pass1', {required: true})}/>
-                  {errors.pass1 && <p>Password Required</p>}
-                  <label>Confirm New Password</label>
-                  <input type="password" placeholder="************" {...register('pass2', {required: true})}/>
-                  {errors.pass2 && <p>Password Required</p>}
-                  {
-                    loading && <FormSubmitLoading/>
-                  }
-                  {
-                    passMatchErr && <p>{passMatchErr}</p>
-                  }
+                <label>Enter current Password</label>
+                <input
+                  type="password"
+                  placeholder=""
+                  {...register("currentPass", { required: true })}
+                />
+                {errors.currentPass && <p>Current Password Required</p>}
+                <label>Enter New Password</label>
+                <input
+                  type="password"
+                  placeholder=""
+                  {...register("pass1", { required: true })}
+                />
+                {errors.pass1 && <p>Password Required</p>}
+                <label>Confirm New Password</label>
+                <input
+                  type="password"
+                  placeholder=""
+                  {...register("pass2", { required: true })}
+                />
+                {errors.pass2 && <p>Password Required</p>}
+                {loading && <FormSubmitLoading />}
+                {passMatchErr && <p>{passMatchErr}</p>}
               </div>
               <button type="submit" className="close-button">
                 Change Password

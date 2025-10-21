@@ -343,7 +343,10 @@ function CreateArtist({
         </div>
       </div>
 
-      <button onClick={handleSubmit} className="imgUpload-save-btn">
+      <button
+        onClick={handleSubmit}
+        className="imgUpload-save-btn createArtist-save-btn"
+      >
         Save
       </button>
     </div>

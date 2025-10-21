@@ -1,29 +1,34 @@
 import { useEffect, useState } from "react";
 import { Cell, Pie, PieChart, Tooltip, Legend } from "recharts";
 
-export default function PaddingPieChart({data}) {
-
+export default function PaddingPieChart({ data }) {
   const CustomTooltip = ({ active, payload }) => {
     if (active && payload && payload.length) {
-        const data = payload[0].payload;
-        return (
+      const data = payload[0].payload;
+      return (
         <div
-            style={{
+          style={{
             background: "#fff",
             border: "1px solid #ccc",
             padding: "8px",
             borderRadius: "8px",
             fontSize: "12px",
-            }}
+          }}
         >
-            <p><strong>Territory:</strong> {data.territory}</p>
-            <p><strong>Streams:</strong> {data?.streams?.toLocaleString() || 0}</p>
-            <p><strong>Revenue:</strong> &#8377;{data?.revenue?.toFixed(2) || 0}</p>
+          <p>
+            <strong>Territory:</strong> {data.territory}
+          </p>
+          <p>
+            <strong>Streams:</strong> {data?.streams?.toLocaleString() || 0}
+          </p>
+          <p>
+            <strong>Revenue:</strong> &#8377;{data?.revenue?.toFixed(2) || 0}
+          </p>
         </div>
-        );
+      );
     }
     return null;
-    };
+  };
 
   const COLORS_STATUS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#8e44ad"];
   const [processedData, setProcessedData] = useState([]);
@@ -47,8 +52,14 @@ export default function PaddingPieChart({data}) {
     const others = sorted.slice(topN);
 
     // Calculate "Others" total
-    const othersTotalRevenue = others.reduce((acc, cur) => acc + cur.revenue, 0);
-    const othersTotalStriems = others.reduce((acc, cur) => acc + cur.streams, 0);
+    const othersTotalRevenue = others.reduce(
+      (acc, cur) => acc + cur.revenue,
+      0
+    );
+    const othersTotalStriems = others.reduce(
+      (acc, cur) => acc + cur.streams,
+      0
+    );
 
     if (others.length > 0) {
       topTerritories.push({
@@ -70,62 +81,64 @@ export default function PaddingPieChart({data}) {
 
   // Usage in PieChart
   useEffect(() => {
-    if(data) {
+    if (data) {
       const processedDataForChart = preparePieData(data, 5);
-      setProcessedData(processedDataForChart)
+      setProcessedData(processedDataForChart);
     }
-  },[data])
-
-
+  }, [data]);
 
   return (
     <div className="chart-card">
       <h4 className="chart-title">Top Territories</h4>
       <div
-        className="second-pie-div"
-        style={{ display: "flex", maxWidth: "100%", alignItems: 'center' }} // flex container
+        className="analytics-pie-div"
+
+        // style={{ display: "flex", maxWidth: "100%", alignItems: "center" }}
       >
         {/* PieChart */}
-        <PieChart  width={300} height={250}>
+        <PieChart width={250} height={250}>
           <Pie
             data={processedData}
-            cx={100}
-                  cy={110}
-                  innerRadius={70}
-                  outerRadius={95}
-                  fill="#8884d8"
-                  paddingAngle={5}
-                  dataKey="revenue"
+            // cx={100}
+            // cy={110}
+            innerRadius={70}
+            outerRadius={95}
+            fill="#8884d8"
+            paddingAngle={5}
+            dataKey="revenue"
           >
             {processedData.map((entry, index) => (
-              <Cell key={index} fill={getColorForTerritory(entry.territory, index)} />
+              <Cell
+                key={index}
+                fill={getColorForTerritory(entry.territory, index)}
+              />
             ))}
           </Pie>
           <Tooltip content={<CustomTooltip />} />
         </PieChart>
 
         {/* Scrollable Legend */}
-        <div
+        {/* <div
           style={{
-            height: "180px",
-            width: "250px",
+            height: "210px",
+            width: "220px",
             overflowY: "auto",
             overflowX: "auto",
             marginLeft: "20px",
             position: "relative",
           }}
-        >
-          <Legend
-            layout="vertical"
-            verticalAlign="top"
-            align="left"
-            payload={processedData?.map((item, index) => ({
-              id: item.territory,
-              value: item.territory,
-              color: getColorForTerritory(item.territory, index, item?.length),
-            }))}
-          />
-        </div>
+        > */}
+        <Legend
+          layout="vertical"
+          verticalAlign="top"
+          align="left"
+          payload={processedData?.map((item, index) => ({
+            id: item.territory,
+            value: item.territory,
+            color: getColorForTerritory(item.territory, index, item?.length),
+          }))}
+        />
+        {/* </div> */}
       </div>
     </div>
   );

@@ -14,7 +14,7 @@ import LoadingScreen from "../../components/LoadingScreen";
 import isEmptyArray from "../../hooks/isEmptyArrayCheck";
 import useQueryParams from "../../hooks/useQueryParams";
 import { EditIcon } from "lucide-react";
-
+import * as RadioGroup from "@radix-ui/react-radio-group";
 const transactionColumns = [
   { label: "Type", key: "type" },
   { label: "Payment Method", key: "method" },
@@ -33,6 +33,7 @@ const Transaction = () => {
   const [activePaymentMonth, setActivePaymentMonth] = useState(false);
   const [activePaymentMonthName, setActivePaymentMonthName] = useState();
   const [userData, setUserData] = useState();
+  const [accountType, setAccountType] = useState("Current");
   useEffect(() => {
     // Active Payment Month _____________________________________________
     const currentDate = new Date();
@@ -171,7 +172,6 @@ const Transaction = () => {
         setWithdrawPageNotices(res.data.data);
       });
   }, []);
-  
 
   if (loading) {
     return <LoadingScreen />;
@@ -181,14 +181,19 @@ const Transaction = () => {
     <div className="main-content">
       <h2 style={{ fontWeight: "500" }}>Transactions</h2>
       <div className="transaction_top_section">
-        <div>
-          <Flex style={{alignItems: 'center'}} className="page-heading">
+        <div className="transaction-card">
+          <div
+            style={{ alignItems: "center" }}
+            className="transaction-withdraw-div"
+          >
             <div>
               <span>Total Balance</span>
               <h2>&#8377; {userData?.balance?.amount || 0}</h2>
             </div>
             <Dialog.Root open={isOpen} onOpenChange={setIsOpen}>
-              <Dialog.Trigger className="theme-btn">Withdraw</Dialog.Trigger>
+              <div className="transaction-withdraw-btn">
+                <Dialog.Trigger className="theme-btn">Withdraw</Dialog.Trigger>
+              </div>
               <Modal title="Withdraw Payment">
                 <p className="modal-description">
                   Are you sure that you want to withdraw the amount to your
@@ -215,15 +220,19 @@ const Transaction = () => {
                     className="modal-transaction-method"
                   >
                     <p>
-                      {bankInfo?.bank_name} {bankInfo?.payoneerID ? `Payoneer` : ""}
+                      {bankInfo?.bank_name}{" "}
+                      {bankInfo?.payoneerID ? `Payoneer` : ""}
                       {bankInfo?.paypalID ? `Paypal` : ""}
                       {bankInfo?.bKashName}
                     </p>
                     <small>
                       {bankInfo?.account_number &&
-                        `************${bankInfo?.account_number.slice(-4)}`}{" "}
+                        `************${bankInfo?.account_number.slice(
+                          -4
+                        )}`}{" "}
                       {bankInfo?.payoneerEmail} {bankInfo?.paypalEmail}{" "}
-                      {bankInfo?.bKashNumber && bankInfo?.bKashNumber.toSlice(-4)}
+                      {bankInfo?.bKashNumber &&
+                        bankInfo?.bKashNumber.toSlice(-4)}
                     </small>
                   </div>
                 )}
@@ -243,7 +252,9 @@ const Transaction = () => {
                   </p>
                 )}
                 <div className="d-flex">
-                  <Dialog.Close className="modal-cancel-btn">Cancel</Dialog.Close>
+                  <Dialog.Close className="modal-cancel-btn">
+                    Cancel
+                  </Dialog.Close>
                   {activePaymentMonth === true &&
                   userData?.balance?.amount > 5000 ? (
                     <button onClick={withdrowBalance} className="close-button">
@@ -258,57 +269,225 @@ const Transaction = () => {
                 </div>
               </Modal>
             </Dialog.Root>
-          </Flex>
+          </div>
         </div>
-        <div>
+        <div className="transaction-card">
           <div className="bank_info_child_div">
-              <p style={{color: '#838383'}}>Bank Details</p>
-              {notBankInfo ? (
-                <button onClick={() => navigate('/add-bank-info')} style={{padding: '5px 10px', color: '#EA3958', display: 'flex', alignItems: 'center', gap: '5px', background: 'none', border: '1px solid #EA3958', borderRadius: '5px', cursor: 'pointer'}}>
-                  <EditIcon size={'16'}/>
+            <p style={{ color: "#838383" }}>Bank Details</p>
+            {notBankInfo ? (
+              // <button
+              //   onClick={() => navigate("/add-bank-info")}
+              //   style={{
+              //     padding: "5px 10px",
+              //     color: "#EA3958",
+              //     display: "flex",
+              //     alignItems: "center",
+              //     gap: "5px",
+              //     background: "none",
+              //     border: "1px solid #EA3958",
+              //     borderRadius: "5px",
+              //     cursor: "pointer",
+              //   }}
+              // >
+              //   <EditIcon size={"16"} />
+              //   Edit Bank
+              // </button>
+              <Dialog.Root>
+                <Dialog.Trigger
+                  style={{
+                    padding: "5px 10px",
+                    color: "#EA3958",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "5px",
+                    background: "none",
+                    border: "1px solid #EA3958",
+                    borderRadius: "5px",
+                    cursor: "pointer",
+                  }}
+                >
+                  <EditIcon size={"16"} />
                   Edit Bank
-                </button>
-              ) : (
-                <button onClick={() => navigate('/add-bank-info')} style={{padding: '5px 10px', color: '#EA3958', display: 'flex', alignItems: 'center', gap: '5px', background: 'none', border: '1px solid #EA3958', borderRadius: '5px', cursor: 'pointer'}}>
-                  <EditIcon size={'16'}/>
-                  Add Bank
-                </button>
-              )}
+                </Dialog.Trigger>
+
+                <Modal title="Add Bank Details">
+                  <p className="modal-description">
+                    Add your payment details to receive the amount
+                  </p>
+                  <label
+                    htmlFor=""
+                    style={{
+                      display: "block",
+                      marginBottom: "8px",
+                      fontSize: "14px",
+                      color: "#202020",
+                    }}
+                  >
+                    Account Type *
+                  </label>
+                  <RadioGroup.Root
+                    className="radio-group"
+                    value={accountType}
+                    onValueChange={setAccountType}
+                    style={{ marginBottom: "18px" }}
+                  >
+                    <label className="radio-label">
+                      <RadioGroup.Item className="radio-item" value="Savings" />{" "}
+                      Savings
+                    </label>
+                    <label className="radio-label">
+                      <RadioGroup.Item className="radio-item" value="Current" />{" "}
+                      Current
+                    </label>
+                  </RadioGroup.Root>
+                  <label
+                    style={{
+                      display: "block",
+                      marginBottom: "8px",
+                      fontSize: "14px",
+                      color: "#202020",
+                    }}
+                  >
+                    Beneficiary Name *
+                  </label>
+                  <input
+                    type="text"
+                    name="Beneficiary Name"
+                    style={{ marginBottom: "16px", width: "100%" }}
+                  />
+                  <label
+                    style={{
+                      display: "block",
+                      marginBottom: "8px",
+                      fontSize: "14px",
+                      color: "#202020",
+                    }}
+                  >
+                    Bank Name *
+                  </label>
+                  <input
+                    type="text"
+                    name="Bank Name *"
+                    style={{ marginBottom: "16px", width: "100%" }}
+                  />
+                  <label
+                    style={{
+                      display: "block",
+                      marginBottom: "8px",
+                      fontSize: "14px",
+                      color: "#202020",
+                    }}
+                  >
+                    Account No *
+                  </label>
+                  <input
+                    type="text"
+                    name="Account No"
+                    style={{ marginBottom: "16px", width: "100%" }}
+                  />
+                  <label
+                    style={{
+                      display: "block",
+                      marginBottom: "8px",
+                      fontSize: "14px",
+                      color: "#202020",
+                    }}
+                  >
+                    IFSC Code/Swift Code *
+                  </label>
+                  <input
+                    type="text"
+                    name="IFSC Code"
+                    style={{ marginBottom: "16px", width: "100%" }}
+                  />
+                  <label
+                    style={{
+                      display: "block",
+                      marginBottom: "8px",
+                      fontSize: "14px",
+                      color: "#202020",
+                    }}
+                  >
+                    UPI ID
+                  </label>
+                  <input
+                    type="text"
+                    name="UPI Id"
+                    style={{ marginBottom: "16px", width: "100%" }}
+                  />
+                  <button className="close-button">Add Bank Account</button>
+                </Modal>
+              </Dialog.Root>
+            ) : (
+              <button
+                onClick={() => navigate("/add-bank-info")}
+                style={{
+                  padding: "5px 10px",
+                  color: "#EA3958",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "5px",
+                  background: "none",
+                  border: "1px solid #EA3958",
+                  borderRadius: "5px",
+                  cursor: "pointer",
+                }}
+              >
+                <EditIcon size={"16"} />
+                Add Bank
+              </button>
+            )}
           </div>
           <div className="bank_info_parent_div">
             <div className="bank_info_child_div">
-              <p style={{color: '#838383', margin: '8px 0px'}}>Beneficiary name:</p>
-              <p style={{color: '#202020', margin: '8px 0px'}}>--</p>
+              <p style={{ color: "#838383", margin: "8px 0px" }}>
+                Beneficiary name:
+              </p>
+              <p style={{ color: "#202020", margin: "8px 0px" }}>--</p>
             </div>
-            <p style={{flex: '1', color: '#838383', margin: '8px 0px'}}>{bankInfo?.account_holder_name}</p>
+            <p style={{ flex: "1", color: "#838383", margin: "8px 0px" }}>
+              {bankInfo?.account_holder_name}
+            </p>
           </div>
           <div className="bank_info_parent_div">
             <div className="bank_info_child_div">
-              <p style={{color: '#838383', margin: '8px 0px'}}>Bank Name:</p>
-              <p style={{color: '#202020', margin: '8px 0px'}}>--</p>
+              <p style={{ color: "#838383", margin: "8px 0px" }}>Bank Name:</p>
+              <p style={{ color: "#202020", margin: "8px 0px" }}>--</p>
             </div>
-            <p style={{flex: '1', color: '#838383', margin: '8px 0px'}}>{bankInfo?.bank_name}</p>
+            <p style={{ flex: "1", color: "#838383", margin: "8px 0px" }}>
+              {bankInfo?.bank_name}
+            </p>
           </div>
           <div className="bank_info_parent_div">
             <div className="bank_info_child_div">
-              <p style={{color: '#838383', margin: '8px 0px'}}>Account No:</p>
-              <p style={{color: '#202020', margin: '8px 0px'}}>--</p>
+              <p style={{ color: "#838383", margin: "8px 0px" }}>Account No:</p>
+              <p style={{ color: "#202020", margin: "8px 0px" }}>--</p>
             </div>
-            <p style={{flex: '1', color: '#838383', margin: '8px 0px'}}>{bankInfo?.account_number}</p>
+            <p style={{ flex: "1", color: "#838383", margin: "8px 0px" }}>
+              {bankInfo?.account_number}
+            </p>
           </div>
           <div className="bank_info_parent_div">
             <div className="bank_info_child_div">
-              <p style={{color: '#838383', margin: '8px 0px'}}>IFSC Code/Swift Code:</p>
-              <p style={{color: '#202020', margin: '8px 0px'}}>--</p>
+              <p style={{ color: "#838383", margin: "8px 0px" }}>
+                IFSC Code/Swift Code:
+              </p>
+              <p style={{ color: "#202020", margin: "8px 0px" }}>--</p>
             </div>
-            <p style={{flex: '1', color: '#838383', margin: '8px 0px'}}>{bankInfo?.IFSC}</p>
+            <p style={{ flex: "1", color: "#838383", margin: "8px 0px" }}>
+              {bankInfo?.IFSC}
+            </p>
           </div>
           <div className="bank_info_parent_div">
             <div className="bank_info_child_div">
-              <p style={{color: '#838383', margin: '8px 0px'}}>UPI ID/bKash:</p>
-              <p style={{color: '#202020', margin: '8px 0px'}}>--</p>
+              <p style={{ color: "#838383", margin: "8px 0px" }}>
+                UPI ID/bKash:
+              </p>
+              <p style={{ color: "#202020", margin: "8px 0px" }}>--</p>
             </div>
-            <p style={{flex: '1', color: '#838383', margin: '8px 0px'}}>{bankInfo?.upiId}</p>
+            <p style={{ flex: "1", color: "#838383", margin: "8px 0px" }}>
+              {bankInfo?.upiId}
+            </p>
           </div>
           {/* <div className="bank_info_parent_div">
             <div className="bank_info_child_div">
@@ -324,7 +503,14 @@ const Transaction = () => {
         withdrawPageNotices?.map((notice) => (
           <div key={notice._id} className="home-notice">
             <InfoCircledIcon />
-            <p style={{whiteSpace: 'normal',wordBreak: 'break-word',overflowWrap: 'break-word'}} dangerouslySetInnerHTML={{ __html: notice?.notice }}></p>
+            <p
+              style={{
+                whiteSpace: "normal",
+                wordBreak: "break-word",
+                overflowWrap: "break-word",
+              }}
+              dangerouslySetInnerHTML={{ __html: notice?.notice }}
+            ></p>
           </div>
         ))}
       {paymentDetails && (

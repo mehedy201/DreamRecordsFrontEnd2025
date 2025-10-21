@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
-import artistDemoImg from '../assets/artists/artist4.png'
+import artistDemoImg from "../assets/artists/artist4.png";
 
 const ArtistCard = ({ artistsItems }) => {
   return (
@@ -13,7 +13,15 @@ const ArtistCard = ({ artistsItems }) => {
           className="artists-card"
           style={{ cursor: "pointer" }}
         >
-          <img style={{width: '148px', height: '148px', borderRadius: '50%', objectFit: 'cover', objectPosition: 'center'}} src={item?.imgUrl ? item?.imgUrl : artistDemoImg} alt={item?.artistName} />
+          <img
+            style={{
+              borderRadius: "50%",
+              objectFit: "cover",
+              objectPosition: "center",
+            }}
+            src={item?.imgUrl ? item?.imgUrl : artistDemoImg}
+            alt={item?.artistName}
+          />
           <p>{item?.artistName}</p>
         </Link>
       ))}

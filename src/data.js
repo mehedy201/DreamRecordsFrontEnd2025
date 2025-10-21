@@ -10,7 +10,11 @@ export const artistsItems = [
   { name: "Arpita Modak", img: "artist4.png" },
   { name: "Arpita Modak", img: "artist8.png" },
 ];
-
+export const homeCardContent = [
+  { name: "QC Approval", value: "12546" },
+  { name: "To Live", value: "24" },
+  { name: "In Review", value: "56" },
+];
 export const releaseItems = [
   {
     name: "Buker Bhitor DJ Baje",
@@ -483,40 +487,39 @@ export const releaseTrackDetails = [
   { title: "ISRC Code:", value: "4395734073935" },
 ];
 export const artistSocialItems = {
-    socialLinks: [
-      {
-        name: "Spotify",
-        img: "spotify-icon.png",
-        url: "",
-        placeholder: "eg. 6kXwOyEW4VffTqJut6h7J6",
-      },
-      {
-        name: "Apple Music",
-        img: "apple-music.png",
-        url: "",
-        placeholder: "eg. 123456789",
-      },
-      {
-        name: "Facebook Page",
-        img: "facebook.png",
-        url: "",
-        placeholder: "eg. facebook.com/username",
-      },
-      {
-        name: "Instagram Profile",
-        img: "instagram.png",
-        url: "",
-        placeholder: "eg. username",
-      },
-      {
-        name: "Youtube Channel",
-        img: "youtube-icon.png",
-        url: "",
-        placeholder: "eg. youtube.com/username",
-      },
-    ],
-  }
-;
+  socialLinks: [
+    {
+      name: "Spotify",
+      img: "spotify-icon.png",
+      url: "",
+      placeholder: "eg. 6kXwOyEW4VffTqJut6h7J6",
+    },
+    {
+      name: "Apple Music",
+      img: "apple-music.png",
+      url: "",
+      placeholder: "eg. 123456789",
+    },
+    {
+      name: "Facebook Page",
+      img: "facebook.png",
+      url: "",
+      placeholder: "eg. facebook.com/username",
+    },
+    {
+      name: "Instagram Profile",
+      img: "instagram.png",
+      url: "",
+      placeholder: "eg. username",
+    },
+    {
+      name: "Youtube Channel",
+      img: "youtube-icon.png",
+      url: "",
+      placeholder: "eg. youtube.com/username",
+    },
+  ],
+};
 export const labelSocialItems = [
   {
     name: "Facebook Page",

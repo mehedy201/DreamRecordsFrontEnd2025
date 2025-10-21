@@ -7,66 +7,91 @@ import PropTypes from "prop-types";
 import { Menu } from "lucide-react";
 import { FaRegUser } from "react-icons/fa";
 import { useSelector } from "react-redux";
-import logOutImg from '../assets/icons/logout.png'
-import whatsappImg from '../assets/whatsapp.png';
+import logOutImg from "../assets/icons/logout.png";
+import whatsappImg from "../assets/whatsapp.png";
 // import whatsappImg from './assets/whatsapp.png';
 
 const Navbar = ({ toggleMobileMenu }) => {
-
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
 
-  const {userData} = useSelector((state) => state.userData);
-
+  const { userData } = useSelector((state) => state.userData);
 
   return (
     <div className="navbar">
       <div className="mobile-menu-icon" onClick={toggleMobileMenu}>
         <Menu />
       </div>
-      <div style={{display: 'flex', alignItems: 'center', gap: '10px'}}>
+      <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
         <div>
           {/* WhatsApp Floating Button */}
           <a
-            href="https://wa.me/917585024930" 
+            href="https://wa.me/917585024930"
             target="_blank"
             rel="noopener noreferrer"
-          > 
-            <img
-              src={whatsappImg}
-              className="whatsapp_float"
-              alt="WhatsApp"
-            />
+          >
+            <img src={whatsappImg} className="whatsapp_float" alt="WhatsApp" />
           </a>
         </div>
         <DropdownMenu.Root onOpenChange={setOpen}>
-          <DropdownMenu.Trigger style={{ border: "none", background: "none", display: 'flex', alignItems:'center' }}>
-            <p style={{display: 'flex', justifyContent:'center', alignItems:'center'}}  className="nav-dropdown">{userData?.first_name?.slice(0,1)}</p>{" "}
+          <DropdownMenu.Trigger
+            style={{
+              border: "none",
+              background: "none",
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
+            <p
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+              className="nav-dropdown"
+            >
+              {userData?.first_name?.slice(0, 1)}
+            </p>{" "}
             <ChevronDown className={`${open ? "rotate" : ""}`} />
           </DropdownMenu.Trigger>
           <DropdownMenu.Content className="dropdown-content navbar-dropdown-content">
-            <div className="d-flex">
-            <p style={{display: 'flex', justifyContent:'center', alignItems:'center'}} className="nav-dropdown">{userData?.first_name?.slice(0,1)}</p>
-              <div style={{paddingLeft: '5px'}}>
-                <p>{userData?.first_name} {userData?.last_name}</p>
+            {/* <div className="d-flex">
+              <p
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+                className="nav-dropdown"
+              >
+                {userData?.first_name?.slice(0, 1)}
+              </p>
+              <div style={{ paddingLeft: "5px" }}>
+                <p>
+                  {userData?.first_name} {userData?.last_name}
+                </p>
                 <small>{userData?.email}</small>
               </div>
               <ChevronUp />
             </div>
-            <br />
-            <Link to="/Profile" style={{ textDecoration: "none", color: "#fff" }}>
+            <br /> */}
+            <Link
+              to="/Profile"
+              style={{ textDecoration: "none", color: "#fff" }}
+            >
               <DropdownMenu.Item className="theme-btn">
                 <FaRegUser /> Profile
               </DropdownMenu.Item>
             </Link>
-            <hr />
+            {/* <hr /> */}
+            <br />
             <DropdownMenu.Item
               className="d-flex"
               style={{ marginLeft: "6px", cursor: "pointer" }}
-            onClick={() => {
-              localStorage.removeItem('token')
-              navigate('/login')
-            }}
+              onClick={() => {
+                localStorage.removeItem("token");
+                navigate("/login");
+              }}
             >
               <div>
                 <img src={logOutImg} width="16px" alt="" />

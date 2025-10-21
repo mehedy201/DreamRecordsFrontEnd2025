@@ -82,6 +82,10 @@
   font-weight: 500;
   margin: 0 0 16px 0;
 }
+
+.editArtist-info input {
+  color: #202020;
+}
 .singleArtist-info p {
   color: #646464;
 }
@@ -237,6 +241,9 @@
   .singleArtist-social-div {
     margin-bottom: 0;
   }
+  .createArtist-save-btn {
+    margin-top: 20px;
+  }
 }
 @media screen and (max-width: 874px) {
   .artists-card {
@@ -256,6 +263,9 @@
   }
   .singleArtist-social-div {
     margin-bottom: 20px;
+  }
+  .createArtist-save-btn {
+    margin-top: 0px;
   }
 }
 @media screen and (max-width: 690px) {
@@ -279,6 +289,9 @@
   }
   .singleArtist-dropdown-btn {
     margin: auto 20px auto auto;
+  }
+  .createArtist-save-btn {
+    margin-top: 20px;
   }
 }
 @media screen and (max-width: 487px) {
