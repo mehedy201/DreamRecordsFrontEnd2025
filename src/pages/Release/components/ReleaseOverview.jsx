@@ -11,11 +11,12 @@ import {
   setTracksInfo,
 } from "../../../redux/features/releaseDataHandleSlice/releaseDataHandleSlice";
 import axios from "axios";
-function ReleaseOverview({ step, setStep, handlePrev }) {
-
+function ReleaseOverview({ step, setStep, handlePrev, buttonLoading }) {
+  const [nextbuttonLoading, setNextButtonLoading] = useState(false);
   const pathname = window.location.pathname;
   const { userNameIdRoll, userData } = useSelector((state) => state.userData);
-  const { releaseAlbumInfo, tracksInfo, releaseDate, trackFormat } = useSelector((state) => state.releaseData);
+  const { releaseAlbumInfo, tracksInfo, releaseDate, trackFormat } =
+    useSelector((state) => state.releaseData);
 
   const dispatch = useDispatch();
 
@@ -59,11 +60,28 @@ function ReleaseOverview({ step, setStep, handlePrev }) {
       masterUserId: userNameIdRoll[1] || userData?._id,
       status: "QC Approval",
     };
-    
-    if(pathname.includes("edit-release")) {
+
+    if (pathname.includes("edit-release")) {
       axios
         .put(
-          `https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/release/update-release/${pathname.split("/").pop()}`,
+          `https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/release/update-release/${pathname
+            .split("/")
+            .pop()}`,
+          payload
+        )
+        .then((res) => {
+          if (res.status === 200) {
+            dispatch(setReleaseAlbumInfo({}));
+            dispatch(setTracksInfo([]));
+            dispatch(setTrackFormat("Single"));
+            dispatch(setReleaseDate({}));
+            setStep(4);
+          }
+        });
+    } else {
+      axios
+        .post(
+          `https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/release/create-release`,
           payload
         )
         .then((res) => {
@@ -76,22 +94,11 @@ function ReleaseOverview({ step, setStep, handlePrev }) {
           }
         });
     }
-    else {
-      axios
-      .post(
-        `https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/release/create-release`,
-        payload
-      )
-      .then((res) => {
-        if (res.status === 200) {
-          dispatch(setReleaseAlbumInfo({}));
-          dispatch(setTracksInfo([]));
-          dispatch(setTrackFormat("Single"));
-          dispatch(setReleaseDate({}));
-          setStep(4);
-        }
-      });
-    }
+    setNextButtonLoading(true);
+
+    setTimeout(() => {
+      setNextButtonLoading(false);
+    }, 700);
   };
 
   // This useEffect will run after the error message renders
@@ -123,20 +130,20 @@ function ReleaseOverview({ step, setStep, handlePrev }) {
           <div style={{ margin: "auto 10px" }}>
             <h1>{releaseAlbumInfo?.releaseTitle}</h1>
             <h2>
-              {
-                [...new Set(
-                  tracksInfo?.flatMap(track =>
-                    track?.artist?.map(a => a.artistName)
+              {[
+                ...new Set(
+                  tracksInfo?.flatMap((track) =>
+                    track?.artist?.map((a) => a.artistName)
                   )
-                )].join(', ')
-              }
-              {
-                [...new Set(
-                  tracksInfo?.flatMap(track =>
-                    track?.primaryArtist?.map(a => a.artistName)
+                ),
+              ].join(", ")}
+              {[
+                ...new Set(
+                  tracksInfo?.flatMap((track) =>
+                    track?.primaryArtist?.map((a) => a.artistName)
                   )
-                )].join(', ')
-              }
+                ),
+              ].join(", ")}
             </h2>
           </div>
         </div>
@@ -229,21 +236,33 @@ function ReleaseOverview({ step, setStep, handlePrev }) {
         </div>
       </div>
       {step === 4 || (
-        <div className="createRelease-btns">
+        <div className="createRelease-btns ">
           {step > 0 && (
             <button
-              className="theme-btn2"
+              className="theme-btn2 btn-spinner"
               style={{
                 display: "flex",
                 alignItems: "center",
+                opacity: buttonLoading ? 0.9 : 1,
+                cursor: buttonLoading ? "not-allowed" : "pointer",
               }}
               onClick={handlePrev}
+              disabled={buttonLoading}
             >
+              {buttonLoading && <span className="btn-spinner-span"></span>}{" "}
               <ArrowLeft />
               &nbsp; Back
             </button>
           )}
-          <button className="theme-btn" onClick={releaseUpload}>
+          <button
+            className="theme-btn btn-spinner"
+            onClick={releaseUpload}
+            style={{
+              opacity: nextbuttonLoading ? 0.9 : 1,
+              cursor: nextbuttonLoading ? "not-allowed" : "pointer",
+            }}
+          >
+            {nextbuttonLoading && <span className="btn-spinner-span"></span>}{" "}
             Submit &nbsp; <ArrowRight />
           </button>
         </div>

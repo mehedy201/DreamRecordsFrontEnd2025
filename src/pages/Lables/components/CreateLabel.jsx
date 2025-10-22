@@ -132,7 +132,7 @@ function CreateLabel({ fromReleaseForm, openModal, setSearchQuery }) {
     youtube: "",
   });
   const [errors, setErrors] = useState({});
-
+  const [buttonLoading, setButtonLoading] = useState(false);
   const handleChange = ({ target: { name, value } }) => {
     setFormData((prev) => ({ ...prev, [name]: value }));
     setErrors((prev) => ({ ...prev, [name]: "" }));
@@ -146,53 +146,58 @@ function CreateLabel({ fromReleaseForm, openModal, setSearchQuery }) {
   };
 
   const handleSubmit = () => {
-    const validationErrors = validate();
-    if (Object.keys(validationErrors).length > 0) {
-      setErrors(validationErrors);
-      return;
-    }
+    setButtonLoading(true);
 
-    const payload = {
-      ...formData,
-      ...uploadedImage,
-      masterUserId: userData._id,
-      userName: userData.userName,
-      email: userData.email,
-      status: "Approved",
-      date: new Date().toISOString(),
-    };
+    setTimeout(() => {
+      setButtonLoading(false);
+      const validationErrors = validate();
+      if (Object.keys(validationErrors).length > 0) {
+        setErrors(validationErrors);
+        return;
+      }
 
-    axios
-      .post(
-        `https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/labels/create-labels`,
-        payload
-      )
-      .then((res) => {
-        if (res.status === 200) {
-          if (fromReleaseForm) {
-            toast.success(
-              "Successfully created the Label, but you can't add it now. Because it is pending now!"
-            );
-            setSearchQuery("");
-            dispatch(setReFetchLabel(reFetchLabel + 1));
-            openModal(false);
-          } else {
-            navigate("/labels/1/10/All");
+      const payload = {
+        ...formData,
+        ...uploadedImage,
+        masterUserId: userData._id,
+        userName: userData.userName,
+        email: userData.email,
+        status: "Approved",
+        date: new Date().toISOString(),
+      };
+
+      axios
+        .post(
+          `https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/labels/create-labels`,
+          payload
+        )
+        .then((res) => {
+          if (res.status === 200) {
+            if (fromReleaseForm) {
+              toast.success(
+                "Successfully created the Label, but you can't add it now. Because it is pending now!"
+              );
+              setSearchQuery("");
+              dispatch(setReFetchLabel(reFetchLabel + 1));
+              openModal(false);
+            } else {
+              navigate("/labels/1/10/All");
+            }
+
+            // Reset form
+            setFormData({
+              labelName: "",
+              facebook: "",
+              instagram: "",
+              youtube: "",
+            });
           }
-
-          // Reset form
-          setFormData({
-            labelName: "",
-            facebook: "",
-            instagram: "",
-            youtube: "",
-          });
-        }
-        setUploadedImage("");
-      })
-      .catch((error) => {
-        console.error("Failed to create label:", error);
-      });
+          setUploadedImage("");
+        })
+        .catch((error) => {
+          console.error("Failed to create label:", error);
+        });
+    }, 700);
   };
 
   return (
@@ -274,8 +279,16 @@ function CreateLabel({ fromReleaseForm, openModal, setSearchQuery }) {
       </div>
 
       <br />
-      <button onClick={handleSubmit} className="imgUpload-save-btn">
-        Save
+      <button
+        onClick={handleSubmit}
+        className="imgUpload-save-btn btn-spinner"
+        disabled={buttonLoading}
+        style={{
+          opacity: buttonLoading ? 0.9 : 1,
+          cursor: buttonLoading ? "not-allowed" : "pointer",
+        }}
+      >
+        {buttonLoading && <span className="btn-spinner-span"></span>} Save
       </button>
     </div>
   );

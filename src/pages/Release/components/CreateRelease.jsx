@@ -16,10 +16,16 @@ function CreateRelease() {
   const navigate = useNavigate();
 
   const [step, setStep] = useState(0);
+  const [buttonLoading, setButtonLoading] = useState(false);
   const handlePrev = () => {
-    if (step > 0) {
-      setStep(step - 1);
-    }
+    setButtonLoading(true);
+
+    setTimeout(() => {
+      setButtonLoading(false);
+      if (step > 0) {
+        setStep(step - 1);
+      }
+    }, 700);
   };
 
   return (
@@ -87,6 +93,7 @@ function CreateRelease() {
           steps={steps}
           setStep={setStep}
           handlePrev={handlePrev}
+          buttonLoading={buttonLoading}
         />
       )}
       {step === 2 && (
@@ -95,6 +102,7 @@ function CreateRelease() {
           steps={steps}
           setStep={setStep}
           handlePrev={handlePrev}
+          buttonLoading={buttonLoading}
         />
       )}
       {step === 3 && (
@@ -103,6 +111,7 @@ function CreateRelease() {
           steps={steps}
           setStep={setStep}
           handlePrev={handlePrev}
+          buttonLoading={buttonLoading}
         />
       )}
 

@@ -31,6 +31,35 @@ textarea:focus {
   border-color: #ea3958;
   outline: none;
 }
+.btn-spinner {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  position: relative;
+}
+.btn-spinner-span {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+.upload-spinner-span {
+  width: 46px;
+  height: 46px;
+  border: 5px solid rgba(0, 0, 0, 0.5);
+  border-top-color: #050000;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+  100% {
+    transform: rotate(360deg);
+  }
+}
 .d-flex {
   display: flex;
 }
@@ -793,6 +822,46 @@ label {
   margin-bottom: 8px;
   width: 100%;
 }
+
+/* Loader.css */
+.standard-loader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 80px;
+  height: 80px;
+  margin: auto;
+  text-align: center;
+  margin-top: 18%;
+}
+
+.spinner {
+  width: 60px;
+  height: 60px;
+  border: 6px solid #e0e0e0; /* background gray ring */
+  border-top: 6px solid #9e9e9e; /* foreground gray arc */
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.visually-hidden {
+  position: absolute !important;
+  height: 1px;
+  width: 1px;
+  overflow: hidden;
+  clip: rect(1px, 1px, 1px, 1px);
+  white-space: nowrap;
+}
+
 .mobile-menu-icon {
   display: none;
   cursor: pointer;

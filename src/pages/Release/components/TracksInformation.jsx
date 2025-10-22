@@ -6,33 +6,39 @@ import TrackInformationUploadForm from "./TrackInformationUploadForm";
 import { useDispatch, useSelector } from "react-redux";
 import TrackViewCollapsSection from "./TrackViewCollapsSection";
 import { setTrackFormat } from "../../../redux/features/releaseDataHandleSlice/releaseDataHandleSlice";
-function TracksInformation({ step, setStep, steps, handlePrev}) {
-
-  
-
-  const {tracksInfo, trackFormat} = useSelector(state => state.releaseData);
+function TracksInformation({
+  step,
+  setStep,
+  steps,
+  handlePrev,
+  buttonLoading,
+}) {
+  const { tracksInfo, trackFormat } = useSelector((state) => state.releaseData);
   const dispatch = useDispatch();
 
   const [showForm, setShowForm] = useState(false);
+  const [nextButtonLoading, setnextButtonLoading] = useState(false);
   const handleAddTrackClick = () => {
     setShowForm(true);
   };
 
-
-  const [error,setError] = useState('')
+  const [error, setError] = useState("");
   const handleNext = () => {
-    setError('')
-    console.log(tracksInfo.length)
-    if (tracksInfo.length === 0) {
-      setError("Please Add Track"); 
-    } else {
-      if (step < steps.length - 1) {
-      setStep(step + 1);
-    }
-    }
-    
-  };
+    setError("");
+    setnextButtonLoading(true);
 
+    setTimeout(() => {
+      setnextButtonLoading(false);
+      console.log(tracksInfo.length);
+      if (tracksInfo.length === 0) {
+        setError("Please Add Track");
+      } else {
+        if (step < steps.length - 1) {
+          setStep(step + 1);
+        }
+      }
+    }, 700);
+  };
 
   return (
     <>
@@ -45,55 +51,45 @@ function TracksInformation({ step, setStep, steps, handlePrev}) {
           onValueChange={(value) => dispatch(setTrackFormat(value))}
         >
           <label className="radio-label">
-            <span><RadioGroup.Item className="radio-item" value="Single" />&nbsp; Single</span>
+            <span>
+              <RadioGroup.Item className="radio-item" value="Single" />
+              &nbsp; Single
+            </span>
           </label>
           <label className="radio-label">
-            <span><RadioGroup.Item className="radio-item" value="Album" />&nbsp; Album</span>
+            <span>
+              <RadioGroup.Item className="radio-item" value="Album" />
+              &nbsp; Album
+            </span>
           </label>
         </RadioGroup.Root>
 
-        {
-          trackFormat === "Single" &&
+        {trackFormat === "Single" && (
           <>
-            {
-              tracksInfo.length > 1 && 
+            {tracksInfo.length > 1 && (
               <>
-                <p style={{color: '#ea3958', border: '1px solid #ea3958', padding: '5px', borderRadius: '8px', margin: '10px'}}>We are noticing that you have previously added multiple tracks by selecting the track status album. Now you have changed the track status to single from the album. Please remove your extra tracks, otherwise only the first track will be uploaded.</p>
-                {
-                tracksInfo &&
-                tracksInfo.map((track, index) => 
-                  <div key={index}>
-                    <TrackViewCollapsSection track={track} index={index}/>
-                  </div>
-                )
-              }
+                <p
+                  style={{
+                    color: "#ea3958",
+                    border: "1px solid #ea3958",
+                    padding: "5px",
+                    borderRadius: "8px",
+                    margin: "10px",
+                  }}
+                >
+                  We are noticing that you have previously added multiple tracks
+                  by selecting the track status album. Now you have changed the
+                  track status to single from the album. Please remove your
+                  extra tracks, otherwise only the first track will be uploaded.
+                </p>
+                {tracksInfo &&
+                  tracksInfo.map((track, index) => (
+                    <div key={index}>
+                      <TrackViewCollapsSection track={track} index={index} />
+                    </div>
+                  ))}
               </>
-            }
-            <TrackInformationUploadForm
-              step={step}
-              steps={steps}
-              setStep={setStep}
-              handlePrev={handlePrev}
-              setShowForm={setShowForm}
-              />
-          </>
-        }
-        {
-          trackFormat === "Album" &&
-          <>
-          <div id="formOpenDiv">
-            <div>
-              {
-                tracksInfo &&
-                tracksInfo.map((track, index) => 
-                  <div key={index}>
-                    <TrackViewCollapsSection track={track} index={index}/>
-                  </div>
-                )
-              }
-            </div>
-          {
-            showForm &&
+            )}
             <TrackInformationUploadForm
               step={step}
               steps={steps}
@@ -101,58 +97,98 @@ function TracksInformation({ step, setStep, steps, handlePrev}) {
               handlePrev={handlePrev}
               setShowForm={setShowForm}
             />
-          }
-          </div>
-          <br /><br />
-          {
-            !showForm &&
-            <button onClick={handleAddTrackClick} className="theme-btn" style={{ width: "100%", margin: "0" }}>
-              Add Track +
-            </button>
-          }
           </>
-        }
-        
+        )}
+        {trackFormat === "Album" && (
+          <>
+            <div id="formOpenDiv">
+              <div>
+                {tracksInfo &&
+                  tracksInfo.map((track, index) => (
+                    <div key={index}>
+                      <TrackViewCollapsSection track={track} index={index} />
+                    </div>
+                  ))}
+              </div>
+              {showForm && (
+                <TrackInformationUploadForm
+                  step={step}
+                  steps={steps}
+                  setStep={setStep}
+                  handlePrev={handlePrev}
+                  setShowForm={setShowForm}
+                />
+              )}
+            </div>
+            <br />
+            <br />
+            {!showForm && (
+              <button
+                onClick={handleAddTrackClick}
+                className="theme-btn"
+                style={{ width: "100%", margin: "0" }}
+              >
+                Add Track +
+              </button>
+            )}
+          </>
+        )}
       </div>
 
       {/* This Next And Pre Button Will active if release type Album _____________ */}
-      {
-        error && <p style={{color: 'red', textAlign:'right', paddingBottom: '15px'}}>{error}</p>
-      }
-      {
-        trackFormat === 'Album' &&
+      {error && (
+        <p style={{ color: "red", textAlign: "right", paddingBottom: "15px" }}>
+          {error}
+        </p>
+      )}
+      {trackFormat === "Album" && (
         <>
           {step === 4 || (
-          <div className="createRelease-btns">
-            {step > 0 && (
-              <button
-                className="theme-btn2"
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                }}
-                onClick={handlePrev}
-              >
-                <ArrowLeft /> &nbsp; Back
-              </button>
-            )}
-            {
-              trackFormat === 'Album' && !showForm &&
-              <button className="theme-btn" onClick={handleNext}>
-                Next &nbsp; <ArrowRight />
-              </button>
-            }
-            {
-              trackFormat === 'Album' && showForm &&
-              <button style={{backgroundColor: 'gray'}} className="theme-btn">
-                Please Add Track + First &nbsp; <ArrowRight />
-              </button>
-            }
-           
-          </div>
-        )}
+            <div className="createRelease-btns">
+              {step > 0 && (
+                <button
+                  className="theme-btn2 btn-spinner"
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    opacity: buttonLoading ? 0.9 : 1,
+                    cursor: buttonLoading ? "not-allowed" : "pointer",
+                  }}
+                  onClick={handlePrev}
+                >
+                  {buttonLoading && <span className="btn-spinner-span"></span>}{" "}
+                  <ArrowLeft />
+                  &nbsp; Back
+                </button>
+              )}
+              {trackFormat === "Album" && !showForm && (
+                <button
+                  type="submit"
+                  className="theme-btn btn-spinner"
+                  onClick={handleNext}
+                  style={{
+                    opacity: nextButtonLoading ? 0.9 : 1,
+                    cursor: nextButtonLoading ? "not-allowed" : "pointer",
+                  }}
+                >
+                  {nextButtonLoading && (
+                    <span className="btn-spinner-span"></span>
+                  )}{" "}
+                  Next &nbsp; <ArrowRight />
+                </button>
+              )}
+              {trackFormat === "Album" && showForm && (
+                <button
+                  style={{ backgroundColor: "gray" }}
+                  className="theme-btn"
+                >
+                  Please Add Track + First &nbsp; <ArrowRight />
+                </button>
+              )}
+            </div>
+          )}
         </>
-      }
+      )}
     </>
   );
 }

@@ -24,6 +24,7 @@ import {
   setTrackFormat,
   setTracksInfo,
 } from "../redux/features/releaseDataHandleSlice/releaseDataHandleSlice";
+import { useState } from "react";
 
 const menuItems = [
   { name: "Home", path: "/", icon: homeIcon },
@@ -50,6 +51,23 @@ const menuItems = [
 const Sidebar = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [buttonLoading, setButtonLoading] = useState(false);
+
+  const handleCreate = () => {
+    setButtonLoading(true);
+
+    // Dispatch your actions
+    dispatch(setReleaseAlbumInfo({}));
+    dispatch(setTracksInfo([]));
+    dispatch(setTrackFormat("Single"));
+    dispatch(setReleaseDate({}));
+
+    // Simulate loading for 2 seconds before navigating
+    setTimeout(() => {
+      setButtonLoading(false);
+      navigate("/create-release");
+    }, 700);
+  };
   return (
     <aside className="sidebar">
       {/* Logo */}
@@ -60,16 +78,15 @@ const Sidebar = () => {
       {/* Create Button */}
 
       <button
-        onClick={() => {
-          dispatch(setReleaseAlbumInfo({}));
-          dispatch(setTracksInfo([]));
-          dispatch(setTrackFormat("Single"));
-          dispatch(setReleaseDate({}));
-          navigate("/create-release");
+        onClick={handleCreate}
+        className="theme-btn btn-spinner"
+        disabled={buttonLoading}
+        style={{
+          opacity: buttonLoading ? 0.9 : 1,
+          cursor: buttonLoading ? "not-allowed" : "pointer",
         }}
-        className="theme-btn"
       >
-        + Create
+        {buttonLoading && <span className="btn-spinner-span"></span>} + Create
       </button>
 
       {/* Navigation Links */}

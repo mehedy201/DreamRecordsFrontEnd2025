@@ -84,7 +84,43 @@ const ReleaseAudioUpload = ({ className, audioData, setAudioData }) => {
             }}
             className="upload-label"
           >
-            <div
+            {uploadLoading ? (
+              <div
+                style={{
+                  height: "100%",
+                  width: "100%",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  flexDirection: "column",
+                  borderRadius: "10px",
+                }}
+              >
+                <div className="upload-spinner-span"></div>
+                <p style={{ marginTop: "10px" }}>Uploading...</p>
+              </div>
+            ) : (
+              <div
+                style={{
+                  position: "absolute",
+                  top: "50%",
+                  left: "50%",
+                  transform: "translate(-50%, -50%)",
+                  textAlign: "center",
+                }}
+              >
+                <img
+                  src={uploadFileIcon}
+                  alt="upload-img"
+                  className="upload-icon"
+                />
+                <p>
+                  Drop your image here or &nbsp;
+                  <span className="browse-file">Browse File</span>
+                </p>
+              </div>
+            )}
+            {/* <div
               style={{
                 position: "absolute",
                 top: "50%",
@@ -101,7 +137,6 @@ const ReleaseAudioUpload = ({ className, audioData, setAudioData }) => {
                 Drop your audio here or &nbsp;
                 <span className="browse-file">Browse File</span>
               </p>
-              {/* <p style={{ color: "#BBBBBB" }}>Max. File size: 50MB</p> */}
             </div>
             {uploadLoading && (
               <div
@@ -117,7 +152,7 @@ const ReleaseAudioUpload = ({ className, audioData, setAudioData }) => {
                   opacity: "0.5",
                 }}
               ></div>
-            )}
+            )} */}
             <input
               style={{ height: "173.5px", width: "100%", opacity: "0" }}
               type="file"

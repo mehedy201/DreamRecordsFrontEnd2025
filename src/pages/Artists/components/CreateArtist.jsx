@@ -160,6 +160,7 @@ function CreateArtist({
     youtube: "",
   });
   const [errors, setErrors] = useState({});
+  const [buttonLoading, setButtonLoading] = useState(false);
 
   const handleChange = ({ target: { name, value } }) => {
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -174,62 +175,67 @@ function CreateArtist({
   };
 
   const handleSubmit = async () => {
-    const validationErrors = validate();
-    if (Object.keys(validationErrors).length) {
-      setErrors(validationErrors);
-      return;
-    }
+    setButtonLoading(true);
 
-    const payload = {
-      ...formData,
-      ...uploadedImage,
-      masterUserId: userNameIdRoll[1],
-      email: userData?.email,
-      userName: userData?.userName || userNameIdRoll[0],
-      date: new Date().toISOString(),
-    };
+    setTimeout(() => {
+      setButtonLoading(false);
+      const validationErrors = validate();
+      if (Object.keys(validationErrors).length) {
+        setErrors(validationErrors);
+        return;
+      }
 
-    try {
-      axios
-        .post(
-          `https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/artist/create-artist`,
-          payload
-        )
-        .then((res) => {
-          if (res.status === 200) {
-            const createdArtist = res.data.data.insertedId;
-            const formData = { ...payload, _id: createdArtist };
+      const payload = {
+        ...formData,
+        ...uploadedImage,
+        masterUserId: userNameIdRoll[1],
+        email: userData?.email,
+        userName: userData?.userName || userNameIdRoll[0],
+        date: new Date().toISOString(),
+      };
 
-            if (fromReleaseForm) {
-              const updatedSelectedItems = [...selectedItems, formData];
-              console.log(updatedSelectedItems);
-              setSelectedItems(updatedSelectedItems);
-              onSelect(updatedSelectedItems);
-              setSearchQuery("");
-              openModal(false);
-              dispatch(setReFetchArtist(reFetchArtist + 1));
-            } else {
-              navigate("/artist/1/10");
+      try {
+        axios
+          .post(
+            `https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/artist/create-artist`,
+            payload
+          )
+          .then((res) => {
+            if (res.status === 200) {
+              const createdArtist = res.data.data.insertedId;
+              const formData = { ...payload, _id: createdArtist };
+
+              if (fromReleaseForm) {
+                const updatedSelectedItems = [...selectedItems, formData];
+                console.log(updatedSelectedItems);
+                setSelectedItems(updatedSelectedItems);
+                onSelect(updatedSelectedItems);
+                setSearchQuery("");
+                openModal(false);
+                dispatch(setReFetchArtist(reFetchArtist + 1));
+              } else {
+                navigate("/artist/1/10");
+              }
+
+              // Clear form
+              setFormData({
+                artistName: "",
+                spotifyId: "",
+                appleId: "",
+                facebook: "",
+                instagramId: "",
+                youtube: "",
+              });
+              setUploadedImage("");
             }
-
-            // Clear form
-            setFormData({
-              artistName: "",
-              spotifyId: "",
-              appleId: "",
-              facebook: "",
-              instagramId: "",
-              youtube: "",
-            });
-            setUploadedImage("");
-          }
-        })
-        .catch((error) => {
-          console.error("Failed to create artist:", error);
-        });
-    } catch (error) {
-      console.error("Failed to create artist:", error);
-    }
+          })
+          .catch((error) => {
+            console.error("Failed to create artist:", error);
+          });
+      } catch (error) {
+        console.error("Failed to create artist:", error);
+      }
+    }, 700);
   };
 
   return (
@@ -345,9 +351,14 @@ function CreateArtist({
 
       <button
         onClick={handleSubmit}
-        className="imgUpload-save-btn createArtist-save-btn"
+        className="imgUpload-save-btn createArtist-save-btn btn-spinner"
+        disabled={buttonLoading}
+        style={{
+          opacity: buttonLoading ? 0.9 : 1,
+          cursor: buttonLoading ? "not-allowed" : "pointer",
+        }}
       >
-        Save
+        {buttonLoading && <span className="btn-spinner-span"></span>} Save
       </button>
     </div>
   );

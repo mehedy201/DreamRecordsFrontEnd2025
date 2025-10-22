@@ -94,38 +94,43 @@ const ReleaseImgUpload = ({
               width: "256px",
               margin: "auto",
               position: "relative",
+              overflow: "hidden",
             }}
             className="upload-label"
           >
-            <div
-              style={{
-                position: "absolute",
-                top: "50%",
-                left: "50%",
-                transform: "translate(-50%, -50%)",
-              }}
-            >
-              <img src={demoImg} alt="upload-img" className="upload-icon" />
-              <p>
-                Drop your image here or &nbsp;
-                <span className="browse-file">Browse File</span>
-              </p>
-            </div>
-            {uploadLoading && (
+            {uploadLoading ? (
               <div
                 style={{
-                  height: "256px",
-                  width: "256px",
+                  height: "100%",
+                  width: "100%",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  flexDirection: "column",
                   borderRadius: "10px",
+                }}
+              >
+                <div className="upload-spinner-span"></div>
+                <p style={{ marginTop: "10px" }}>Uploading...</p>
+              </div>
+            ) : (
+              <div
+                style={{
                   position: "absolute",
                   top: "50%",
                   left: "50%",
                   transform: "translate(-50%, -50%)",
-                  backgroundColor: "black",
-                  opacity: "0.5",
+                  textAlign: "center",
                 }}
-              ></div>
+              >
+                <img src={demoImg} alt="upload-img" className="upload-icon" />
+                <p>
+                  Drop your image here or &nbsp;
+                  <span className="browse-file">Browse File</span>
+                </p>
+              </div>
             )}
+
             <input
               style={{ height: "256px", width: "256px", opacity: "0" }}
               type="file"

@@ -5,7 +5,12 @@ import Pagination from "../../components/Pagination";
 import ArtistCard from "../../components/ArtistCard";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { HiOutlineAdjustmentsHorizontal } from "react-icons/hi2";
-import { Link, useParams, useSearchParams } from "react-router-dom";
+import {
+  Link,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from "react-router-dom";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import useQueryParams from "../../hooks/useQueryParams";
@@ -20,9 +25,19 @@ const Artists = () => {
   const [filterParams] = useSearchParams();
   const search = filterParams.get("search") || "";
   const years = filterParams.get("years") || "";
+  const navigate = useNavigate();
+  const [buttonLoading, setButtonLoading] = useState(false);
+  const handleCreate = () => {
+    setButtonLoading(true);
 
+    setTimeout(() => {
+      setButtonLoading(false);
+      navigate("/create-artist");
+    }, 700);
+  };
   // Responsive Code ____________________________
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 700);
+
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth <= 700);
@@ -96,11 +111,28 @@ const Artists = () => {
   return (
     <div className="main-content">
       <Flex className="page-heading">
-        <h2 style={{display: 'flex', gap: '10px', alignItems: 'start'}}>Artists <span style={{fontSize: '16px', border: '1px solid #ea3958', padding: '2px 8px', borderRadius: '5px'}}>{filteredCount || 0}</span></h2>
+        <h2 style={{ display: "flex", gap: "10px", alignItems: "start" }}>
+          Artists{" "}
+          <span
+            style={{
+              fontSize: "16px",
+              border: "1px solid #ea3958",
+              padding: "2px 8px",
+              borderRadius: "5px",
+            }}
+          >
+            {filteredCount || 0}
+          </span>
+        </h2>
         <Link
-          to="/create-artist"
-          className="theme-btn"
+          // to="/create-artist"
+          onClick={handleCreate}
+          className="theme-btn btn-spinner"
+          disabled={buttonLoading}
           style={{
+            opacity: buttonLoading ? 0.9 : 1,
+            cursor: buttonLoading ? "not-allowed" : "pointer",
+
             textDecoration: "none",
             marginRight: 0,
             marginLeft: "auto",
@@ -108,7 +140,8 @@ const Artists = () => {
             textAlign: "center",
           }}
         >
-          + Create New
+          {buttonLoading && <span className="btn-spinner-span"></span>} + Create
+          New
         </Link>
       </Flex>
 

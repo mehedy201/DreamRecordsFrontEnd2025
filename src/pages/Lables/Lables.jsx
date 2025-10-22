@@ -2,7 +2,12 @@ import { Flex } from "@radix-ui/themes";
 import Pagination from "../../components/Pagination";
 import { useEffect, useState } from "react";
 import "./Lables.css";
-import { Link, useParams, useSearchParams } from "react-router-dom";
+import {
+  Link,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from "react-router-dom";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { HiOutlineAdjustmentsHorizontal } from "react-icons/hi2";
 import SelectDropdown from "../../components/SelectDropdown";
@@ -25,7 +30,17 @@ const Lables = () => {
   const [filterParams] = useSearchParams();
   const search = filterParams.get("search") || "";
   const years = filterParams.get("years") || "";
+  const navigate = useNavigate();
 
+  const [buttonLoading, setButtonLoading] = useState(false);
+  const handleCreate = () => {
+    setButtonLoading(true);
+
+    setTimeout(() => {
+      setButtonLoading(false);
+      navigate("/create-label");
+    }, 700);
+  };
   const filterByYear = (yearValue) => {
     navigateWithParams(`/labels/1/10/${status}`, {
       search: search,
@@ -118,18 +133,34 @@ const Lables = () => {
   return (
     <div className="main-content">
       <Flex className="page-heading">
-        <h2 style={{display: 'flex', gap: '10px', alignItems: 'start'}}>Lables <span style={{fontSize: '16px', border: '1px solid #ea3958', padding: '2px 8px', borderRadius: '5px'}}>{filteredCount || 0}</span></h2>
+        <h2 style={{ display: "flex", gap: "10px", alignItems: "start" }}>
+          Lables{" "}
+          <span
+            style={{
+              fontSize: "16px",
+              border: "1px solid #ea3958",
+              padding: "2px 8px",
+              borderRadius: "5px",
+            }}
+          >
+            {filteredCount || 0}
+          </span>
+        </h2>
         <Link
-          to="/create-label"
-          className="theme-btn"
+          className="theme-btn btn-spinner"
+          onClick={handleCreate}
+          disabled={buttonLoading}
           style={{
+            opacity: buttonLoading ? 0.9 : 1,
+            cursor: buttonLoading ? "not-allowed" : "pointer",
             textDecoration: "none",
             marginLeft: "auto",
             width: "185px",
             textAlign: "center",
           }}
         >
-          + Create New
+          {buttonLoading && <span className="btn-spinner-span"></span>} + Create
+          New
         </Link>
       </Flex>
 

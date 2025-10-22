@@ -15,6 +15,14 @@ function EditLable() {
   const [uploadedImage, setUploadedImage] = useState();
   let imgUrl;
   let key;
+  const [buttonLoading, setButtonLoading] = useState(false);
+  const handleCreate = () => {
+    setButtonLoading(true);
+
+    setTimeout(() => {
+      setButtonLoading(false);
+    }, 700);
+  };
   useEffect(() => {
     axios
       .get(
@@ -124,8 +132,17 @@ function EditLable() {
             </div>
           </div>
           <br />
-          <button type="submit" className="imgUpload-save-btn">
-            Save
+          <button
+            type="submit"
+            className="imgUpload-save-btn btn-spinner"
+            onClick={handleCreate}
+            disabled={buttonLoading}
+            style={{
+              opacity: buttonLoading ? 0.9 : 1,
+              cursor: buttonLoading ? "not-allowed" : "pointer",
+            }}
+          >
+            {buttonLoading && <span className="btn-spinner-span"></span>} Save
           </button>
         </form>
       )}

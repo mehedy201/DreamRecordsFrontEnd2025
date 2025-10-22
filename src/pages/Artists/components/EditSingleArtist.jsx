@@ -14,6 +14,14 @@ function EditSingleArtist() {
   const [preArtistData, setPreArtistData] = useState();
   const [imgLink, setImgLink] = useState();
   const [uploadedImage, setUploadedImage] = useState();
+  const [buttonLoading, setButtonLoading] = useState(false);
+  const handleCreate = () => {
+    setButtonLoading(true);
+
+    setTimeout(() => {
+      setButtonLoading(false);
+    }, 700);
+  };
   let imgUrl;
   let key;
   useEffect(() => {
@@ -51,13 +59,17 @@ function EditSingleArtist() {
           setUploadedImage();
           navigate("/artist/1/10");
           // console.log(res);
-          axios.patch(`https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/artist/update-release-artist`, formData)
-            .then(res => {
-                if(res.status == 200){
-                    setUploadedImage()
-                    navigate('/artist/1/10')
-                }
-            })
+          axios
+            .patch(
+              `https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/artist/update-release-artist`,
+              formData
+            )
+            .then((res) => {
+              if (res.status == 200) {
+                setUploadedImage();
+                navigate("/artist/1/10");
+              }
+            });
         }
       })
       .catch((er) => console.log(er));
@@ -159,8 +171,17 @@ function EditSingleArtist() {
             </div>
           </div>
 
-          <button type="submit" className="imgUpload-save-btn">
-            Save
+          <button
+            type="submit"
+            className="imgUpload-save-btn btn-spinner"
+            onClick={handleCreate}
+            disabled={buttonLoading}
+            style={{
+              opacity: buttonLoading ? 0.9 : 1,
+              cursor: buttonLoading ? "not-allowed" : "pointer",
+            }}
+          >
+            {buttonLoading && <span className="btn-spinner-span"></span>} Save
           </button>
         </form>
       )}

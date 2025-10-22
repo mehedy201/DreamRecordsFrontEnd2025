@@ -29,7 +29,14 @@ function AlbumInformation({ step, setStep, steps }) {
     imgUrl: defaultImgURL,
     key: defaultKey,
   });
+  const [buttonLoading, setButtonLoading] = useState(false);
+  const handleCreate = () => {
+    setButtonLoading(true);
 
+    setTimeout(() => {
+      setButtonLoading(false);
+    }, 700);
+  };
   // Genre Data Get Form API ____________________________
   const [allGenre, setAllGenre] = useState();
   useEffect(() => {
@@ -85,12 +92,15 @@ function AlbumInformation({ step, setStep, steps }) {
     const albumInfoData = { ...data, ...uploadedImage };
 
     dispatch(setReleaseAlbumInfo(albumInfoData));
-    console.log(data)
+    console.log(data);
+    setButtonLoading(true);
 
-
-    if (step < steps.length - 1) {
-      setStep(step + 1);
-    }
+    setTimeout(() => {
+      setButtonLoading(false);
+      if (step < steps.length - 1) {
+        setStep(step + 1);
+      }
+    }, 700);
   };
 
   return (
@@ -330,7 +340,17 @@ function AlbumInformation({ step, setStep, steps }) {
               style={{ justifyContent: "end" }}
               className="createRelease-btns"
             >
-              <button type="submit" className="theme-btn">
+              <button
+                type="submit"
+                className="theme-btn btn-spinner"
+                // disabled={buttonLoading}
+                // onClick={handleCreate}
+                style={{
+                  opacity: buttonLoading ? 0.9 : 1,
+                  cursor: buttonLoading ? "not-allowed" : "pointer",
+                }}
+              >
+                {buttonLoading && <span className="btn-spinner-span"></span>}{" "}
                 Next &nbsp; <ArrowRight />
               </button>
             </div>

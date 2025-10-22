@@ -6,7 +6,12 @@ import { useEffect, useState } from "react";
 
 import ReleaseCard from "../../components/ReleaseCard";
 import Pagination from "../../components/Pagination";
-import { Link, useParams, useSearchParams } from "react-router-dom";
+import {
+  Link,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from "react-router-dom";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { HiOutlineAdjustmentsHorizontal } from "react-icons/hi2";
 import SelectDropdown from "../../components/SelectDropdown";
@@ -28,7 +33,16 @@ const Release = () => {
   const [filterParams] = useSearchParams();
   const search = filterParams.get("search") || "";
   const years = filterParams.get("years") || "";
+  const navigate = useNavigate();
+  const [buttonLoading, setButtonLoading] = useState(false);
+  const handleCreate = () => {
+    setButtonLoading(true);
 
+    setTimeout(() => {
+      setButtonLoading(false);
+      navigate("/create-release");
+    }, 700);
+  };
   const filterByYear = (yearValue) => {
     navigateWithParams(`/releases/1/10/${status}`, {
       search: search,
@@ -151,9 +165,13 @@ const Release = () => {
             </span>
           </h2>
           <Link
-            className="theme-btn"
-            to="/create-release"
+            onClick={handleCreate}
+            disabled={buttonLoading}
+            className="theme-btn btn-spinner"
             style={{
+              opacity: buttonLoading ? 0.9 : 1,
+              cursor: buttonLoading ? "not-allowed" : "pointer",
+
               textDecoration: "none",
               marginRight: 0,
               marginLeft: "auto",
@@ -161,7 +179,8 @@ const Release = () => {
               textAlign: "center",
             }}
           >
-            + Create New
+            {buttonLoading && <span className="btn-spinner-span"></span>} +
+            Create New
           </Link>
         </Flex>
 
