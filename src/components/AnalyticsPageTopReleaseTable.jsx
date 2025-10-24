@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import releasePlaceHolderImg from '../assets/release-placeholder.png'
+import { cdnLink } from '../hooks/cdnLink';
 
 const AnalyticsPageTopReleaseTable = ({columns, data}) => {
 
@@ -22,7 +23,7 @@ const AnalyticsPageTopReleaseTable = ({columns, data}) => {
                         style={{ color: "#1C2024", textDecoration: "none", display: 'flex', alignItems: 'center', gap: '10px' }}
                         >
                         <img
-                            src={d?.imgUrl ? d.imgUrl : releasePlaceHolderImg}
+                            src={d?.key ? cdnLink(d?.key) : releasePlaceHolderImg}
                             alt=""
                             style={{ borderRadius: "6px", width: '30px', height: '30px',}}
                         />

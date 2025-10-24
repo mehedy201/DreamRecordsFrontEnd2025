@@ -17,6 +17,7 @@ import { ChevronDown, Check } from "lucide-react";
 import SingleReleasePageTable from "../../../components/singleReleasePageTable";
 import isEmptyArray from "../../../hooks/isEmptyArrayCheck";
 import NotFoundComponent from "../../../components/NotFoundComponent";
+import { cdnLink } from "../../../hooks/cdnLink";
 
 const dspColumn = [
   { label: "DSPs", key: "DSPs" },
@@ -238,7 +239,7 @@ function SingleRelease() {
             )}
             <div className="d-flex release-overview-img-div">
               <img
-                src={releaseData?.imgUrl}
+                src={releaseData?.key ? cdnLink(releaseData?.key) : ''}
                 alt=""
                 className="release-overview-img"
               />

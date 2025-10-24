@@ -28,6 +28,7 @@ import youtubeImg from "../../../assets/social/youtube-icon.png";
 import localDate from "../../../hooks/localDate";
 import useStatusStyle from "../../../hooks/useStatusStyle";
 import LoadingScreen from "../../../components/LoadingScreen";
+import { cdnLink } from "../../../hooks/cdnLink";
 
 function SingleLable() {
   const navigate = useNavigate();
@@ -195,7 +196,7 @@ function SingleLable() {
                     objectFit: "cover",
                     objectPosition: "center",
                   }}
-                  src={label?.imgUrl ? label.imgUrl : demoLabelImage}
+                  src={label?.key ? cdnLink(label.key) : demoLabelImage}
                   className="singleLabel-image"
                   alt={label?.labelName}
                 />

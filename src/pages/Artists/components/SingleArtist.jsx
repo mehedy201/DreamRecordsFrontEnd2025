@@ -30,6 +30,7 @@ import { useSelector } from "react-redux";
 import useQueryParams from "../../../hooks/useQueryParams";
 import localDate from "../../../hooks/localDate";
 import LoadingScreen from "../../../components/LoadingScreen";
+import { cdnLink } from "../../../hooks/cdnLink";
 
 const SingleArtist = () => {
   const navigate = useNavigate();
@@ -188,7 +189,7 @@ const SingleArtist = () => {
                     objectPosition: "center",
                   }}
                   className="singleArtist-image"
-                  src={`${artist?.imgUrl ? artist.imgUrl : artistDemoImg}`}
+                  src={`${artist?.key ? cdnLink(artist.key) : artistDemoImg}`}
                   alt={artist?.artistName}
                 />
               </div>

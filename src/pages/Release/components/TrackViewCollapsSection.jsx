@@ -8,6 +8,7 @@ import { X } from "lucide-react";
 import { setTracksInfo } from "../../../redux/features/releaseDataHandleSlice/releaseDataHandleSlice";
 import axios from "axios";
 import artistDemoImg from "../../../assets/artists/artist4.png";
+import { cdnLink } from "../../../hooks/cdnLink";
 const TrackViewCollapsSection = ({ track, index }) => {
   // Get TrackInfo Data State form Redux
   const { tracksInfo } = useSelector((state) => state.releaseData);
@@ -161,7 +162,7 @@ const TrackViewCollapsSection = ({ track, index }) => {
                       {track?.artist?.map((data, index) => (
                         <div key={index} className="d-flex">
                           <img
-                            src={data?.imgUrl ? data?.imgUrl : artistDemoImg}
+                            src={data?.key ? cdnLink(data?.key) : artistDemoImg}
                             alt=""
                           />
                           <p>{data?.artistName}</p>
@@ -203,7 +204,7 @@ const TrackViewCollapsSection = ({ track, index }) => {
                       {track?.featuring?.map((data, index) => (
                         <div key={index} className="d-flex">
                           <img
-                            src={data?.imgUrl ? data?.imgUrl : artistDemoImg}
+                            src={data?.key ? cdnLink(data?.key) : artistDemoImg}
                             alt=""
                           />
                           <p>{data?.artistName}</p>
@@ -234,7 +235,7 @@ const TrackViewCollapsSection = ({ track, index }) => {
                             <div key={index} className="d-flex">
                               <img
                                 src={
-                                  data?.imgUrl ? data?.imgUrl : artistDemoImg
+                                  data?.key ? cdnLink(data?.key) : artistDemoImg
                                 }
                                 alt=""
                               />

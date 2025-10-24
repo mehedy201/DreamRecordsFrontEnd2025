@@ -5,6 +5,7 @@ import localDate from "../hooks/localDate";
 import { Dialog } from "radix-ui";
 import Modal from "./Modal";
 import { useParams } from "react-router-dom";
+import { cdnLink } from "../hooks/cdnLink";
 const Table = ({ tableFor, serviceRequestData }) => {
 
 
@@ -64,7 +65,7 @@ const Table = ({ tableFor, serviceRequestData }) => {
                       Array.isArray(data?.release) &&
                       data?.release?.map(item => 
                         <div style={{margin: '3px'}} key={item?._id} className="release-table-img-td">
-                          <img src={item?.imgUrl ? item?.imgUrl : releasePlaceHolderImg} alt="" />
+                          <img src={item?.key ? cdnLink(item?.key) : releasePlaceHolderImg} alt="" />
                           <div>
                             <p>{item?.releaseTitle}</p>
                             <small>UPC: {item?.UPC}</small>
@@ -75,7 +76,7 @@ const Table = ({ tableFor, serviceRequestData }) => {
                     {
                       typeof data?.release === 'object' && data?.release?.releaseTitle &&
                       <div className="release-table-img-td">
-                        <img src={data?.release?.imgUrl ? data?.release?.imgUrl : releasePlaceHolderImg} alt="" />
+                        <img src={data?.release?.key ? cdnLink(data?.release?.key) : releasePlaceHolderImg} alt="" />
                         <div>
                           <p>{data?.release?.releaseTitle}</p>
                           <small>UPC: {data?.release?.UPC}</small>

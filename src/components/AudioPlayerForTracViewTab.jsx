@@ -1,6 +1,7 @@
 import { useRef, useState, useEffect } from 'react';
 import { IoPauseCircleOutline, IoPlayCircleOutline } from 'react-icons/io5';
 import { RiDownloadLine } from 'react-icons/ri';
+import { cdnLink } from '../hooks/cdnLink';
 
 const formatTime = (time) => {
   if (isNaN(time)) return '00:00';
@@ -100,7 +101,7 @@ const handleDownload = (url) => {
 
         <div className="release-album-list">
             <div>
-                <audio ref={audioRef} src={data?.audioUrl} preload="metadata" />
+                <audio ref={audioRef} src={cdnLink(data?.audioKey)} preload="metadata" />
                 <button
                     onClick={togglePlay}
                     style={{

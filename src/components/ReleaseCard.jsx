@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import useStatusStyle from "../hooks/useStatusStyle";
 import releaseDemoImage from "../assets/release-placeholder.png"
 import localDate from "../hooks/localDate";
+import { cdnLink } from "../hooks/cdnLink";
 const ReleaseCard = ({ releaseData }) => {
 
   return (
@@ -16,7 +17,7 @@ const ReleaseCard = ({ releaseData }) => {
           key={index}
           className="release-card"
         >
-          <img src={item?.imgUrl ? item.imgUrl : releaseDemoImage} alt="" />
+          <img src={item?.key ? cdnLink(item?.key) : releaseDemoImage} alt="" />
           <div style={{ paddingTop: "12px" }}>
             <Flex style={{ display: "flex" }}>
               <div

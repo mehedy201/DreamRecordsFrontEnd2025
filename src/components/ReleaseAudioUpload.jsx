@@ -169,7 +169,7 @@ const ReleaseAudioUpload = ({ className, audioData, setAudioData }) => {
             {audioData.audioName}
           </p>
           <div style={{ display: "flex", alignItems: "center", gap: "20px" }}>
-            <AudioPlayerForCreateRelease audioSrc={audioData.audioUrl} />
+            <AudioPlayerForCreateRelease audioSrc={audioData.audioKey} />
             <CircleX
               style={{ color: "#EA3958", cursor: "pointer" }}
               onClick={() => handleDeleteAudio(audioData.key)}

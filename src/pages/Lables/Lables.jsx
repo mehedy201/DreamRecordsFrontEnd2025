@@ -17,6 +17,7 @@ import axios from "axios";
 import labelDemoImg from "../../assets/lables/lables-placeholder.png";
 import useStatusStyle from "../../hooks/useStatusStyle";
 import localDate from "../../hooks/localDate";
+import { cdnLink } from "../../hooks/cdnLink";
 const Lables = () => {
   // Get Data Form Redux ________________________
   const { userNameIdRoll } = useSelector((state) => state.userData);
@@ -217,7 +218,7 @@ const Lables = () => {
                   objectFit: "cover",
                   objectPosition: "center",
                 }}
-                src={item?.imgUrl ? item.imgUrl : labelDemoImg}
+                src={item?.key ? cdnLink(item.key) : labelDemoImg}
                 alt={item.labelName}
               />
               <Flex style={{ display: "flex" }}>

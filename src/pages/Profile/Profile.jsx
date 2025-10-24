@@ -12,6 +12,7 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import FormSubmitLoading from "../../components/FormSubmitLoading";
 import localTime from "../../hooks/localTime";
+import { cdnLink } from "../../hooks/cdnLink";
 
 function Profile() {
   // const dispatch = useDispatch();
@@ -84,7 +85,7 @@ function Profile() {
           ) : (
             <>
               <img
-                src={userData?.photoURL ? userData?.photoURL : defultUserImg}
+                src={userData?.imgKey ? cdnLink(userData?.imgKey) : defultUserImg}
                 alt="Profile"
                 onClick={() => document.getElementById("fileInput").click()}
               />

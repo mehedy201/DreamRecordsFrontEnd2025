@@ -1,6 +1,7 @@
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import artistDemoImg from "../assets/artists/artist4.png";
+import { cdnLink } from "../hooks/cdnLink";
 
 const ArtistCard = ({ artistsItems }) => {
   return (
@@ -19,7 +20,7 @@ const ArtistCard = ({ artistsItems }) => {
               objectFit: "cover",
               objectPosition: "center",
             }}
-            src={item?.imgUrl ? item?.imgUrl : artistDemoImg}
+            src={item?.key ? cdnLink(item?.key) : artistDemoImg}
             alt={item?.artistName}
           />
           <p>{item?.artistName}</p>
