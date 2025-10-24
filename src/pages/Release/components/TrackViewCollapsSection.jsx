@@ -182,7 +182,7 @@ const TrackViewCollapsSection = ({ track, index }) => {
                             <div key={index} className="d-flex">
                               <img
                                 src={
-                                  data?.imgUrl ? data?.imgUrl : artistDemoImg
+                                  data?.key ? cdnLink(data?.key) : artistDemoImg
                                 }
                                 alt=""
                               />
