@@ -488,7 +488,7 @@ function Analytics() {
               <Controller
                 name="mounth"
                 control={control}
-                rules={{ required: "Mounth Required" }} // 👈 Validation rule
+                rules={{ required: "Month Required" }} // 👈 Validation rule
                 render={({ field }) => (
                   <Select.Root
                     value={field.value || ""}
