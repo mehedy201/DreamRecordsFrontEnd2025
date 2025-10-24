@@ -229,7 +229,7 @@ function Analytics() {
     formState: { errors },
   } = useForm({
     defaultValues: {
-      type: "All Release",
+      type: "Release",
     },
   });
 
@@ -359,7 +359,7 @@ function Analytics() {
                       value={field.value}
                     >
                       <Select.Trigger className="dropdown-trigger Service-modal-dropdown-trigger">
-                        <Select.Value placeholder="All Release" />
+                        <Select.Value placeholder="Release" />
                         <Select.Icon className="select-icon">
                           <ChevronDown />
                         </Select.Icon>
@@ -371,7 +371,7 @@ function Analytics() {
                           style={{ padding: 0, overflowY: "auto" }}
                         >
                           <Select.Viewport>
-                            <Select.Item
+                            {/* <Select.Item
                               value="All Release"
                               className="select-item"
                             >
@@ -379,7 +379,7 @@ function Analytics() {
                               <Select.ItemIndicator className="select-item-indicator">
                                 <Check size={18} />
                               </Select.ItemIndicator>
-                            </Select.Item>
+                            </Select.Item> */}
                             <Select.Item
                               value="Release"
                               className="select-item"
