@@ -15,13 +15,7 @@ function EditSingleArtist() {
   const [imgLink, setImgLink] = useState();
   const [uploadedImage, setUploadedImage] = useState();
   const [buttonLoading, setButtonLoading] = useState(false);
-  const handleCreate = () => {
-    setButtonLoading(true);
 
-    setTimeout(() => {
-      setButtonLoading(false);
-    }, 700);
-  };
   let imgUrl;
   let key;
   useEffect(() => {
@@ -48,6 +42,7 @@ function EditSingleArtist() {
     formState: { errors },
   } = useForm();
   const onSubmit = async (data) => {
+    setButtonLoading(true);
     const formData = { ...data, ...uploadedImage };
     axios
       .patch(
@@ -67,6 +62,7 @@ function EditSingleArtist() {
             .then((res) => {
               if (res.status == 200) {
                 setUploadedImage();
+                setButtonLoading(false);
                 navigate("/artist/1/10");
               }
             });
@@ -174,8 +170,6 @@ function EditSingleArtist() {
           <button
             type="submit"
             className="imgUpload-save-btn btn-spinner"
-            onClick={handleCreate}
-            disabled={buttonLoading}
             style={{
               opacity: buttonLoading ? 0.9 : 1,
               cursor: buttonLoading ? "not-allowed" : "pointer",

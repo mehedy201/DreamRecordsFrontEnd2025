@@ -177,14 +177,6 @@ function CreateArtist({
   const handleSubmit = async () => {
     setButtonLoading(true);
 
-    setTimeout(() => {
-      setButtonLoading(false);
-      const validationErrors = validate();
-      if (Object.keys(validationErrors).length) {
-        setErrors(validationErrors);
-        return;
-      }
-
       const payload = {
         ...formData,
         ...uploadedImage,
@@ -215,6 +207,7 @@ function CreateArtist({
                 dispatch(setReFetchArtist(reFetchArtist + 1));
               } else {
                 navigate("/artist/1/10");
+                setButtonLoading(false);
               }
 
               // Clear form
@@ -235,7 +228,6 @@ function CreateArtist({
       } catch (error) {
         console.error("Failed to create artist:", error);
       }
-    }, 700);
   };
 
   return (

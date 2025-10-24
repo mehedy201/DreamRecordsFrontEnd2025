@@ -146,16 +146,7 @@ function CreateLabel({ fromReleaseForm, openModal, setSearchQuery }) {
   };
 
   const handleSubmit = () => {
-    setButtonLoading(true);
-
-    setTimeout(() => {
-      setButtonLoading(false);
-      const validationErrors = validate();
-      if (Object.keys(validationErrors).length > 0) {
-        setErrors(validationErrors);
-        return;
-      }
-
+      setButtonLoading(true);
       const payload = {
         ...formData,
         ...uploadedImage,
@@ -180,8 +171,10 @@ function CreateLabel({ fromReleaseForm, openModal, setSearchQuery }) {
               setSearchQuery("");
               dispatch(setReFetchLabel(reFetchLabel + 1));
               openModal(false);
+              setButtonLoading
             } else {
               navigate("/labels/1/10/All");
+              setButtonLoading
             }
 
             // Reset form
@@ -197,7 +190,6 @@ function CreateLabel({ fromReleaseForm, openModal, setSearchQuery }) {
         .catch((error) => {
           console.error("Failed to create label:", error);
         });
-    }, 700);
   };
 
   return (
