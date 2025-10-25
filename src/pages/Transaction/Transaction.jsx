@@ -5,7 +5,7 @@ import "./Transaction.css";
 import * as Dialog from "@radix-ui/react-dialog";
 import Modal from "../../components/Modal";
 import TransactionTable from "../../components/TransactionTable";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import toast from "react-hot-toast";
@@ -15,6 +15,7 @@ import isEmptyArray from "../../hooks/isEmptyArrayCheck";
 import useQueryParams from "../../hooks/useQueryParams";
 import { EditIcon } from "lucide-react";
 import * as RadioGroup from "@radix-ui/react-radio-group";
+import { Controller, set, useForm } from "react-hook-form";
 const transactionColumns = [
   { label: "Type", key: "type" },
   { label: "Payment Method", key: "method" },
@@ -70,7 +71,7 @@ const Transaction = () => {
   }, [userNameIdRoll]);
 
   const [paymentDetails, setPaymentDetails] = useState();
-  const [bankInfo, setBankInfo] = useState();
+  // const [bankInfo, setBankInfo] = useState();
   // const [activeBankInfo, setActiveBankInfo] = useState(null);
   // const [selectBankInfo, setSelectBankInfo] = useState("");
   const [SelectBankInfoErr, setSelectBankInfoErr] = useState("");
@@ -80,7 +81,7 @@ const Transaction = () => {
   const [totalPages, setTotalPages] = useState();
   const [loading, setLoading] = useState(false);
   const [notFound, setNotFound] = useState(false);
-  const [notBankInfo, setNotBankInfo] = useState(true);
+  // const [notBankInfo, setNotBankInfo] = useState(true);
 
   // const activeBankAndSelectBank = (id, data) => {
   //   setActiveBankInfo(id);
@@ -102,22 +103,6 @@ const Transaction = () => {
             setTotalPages(res.data.totalPages);
           }
         });
-      axios
-        .get(
-          `https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/bank-info/${userNameIdRoll[1]}`
-        )
-        .then((res) => {
-          if (res.status == 200) {
-            if (isEmptyArray(res.data.data)) {
-              setNotBankInfo(false);
-            } else {
-              setNotBankInfo(true);
-            }
-            setBankInfo(res.data.data[0]);
-            console.log(res.data.data[0]);
-          }
-        })
-        .catch((er) => console.log(er));
     }
     setLoading(false);
   }, [userNameIdRoll]);
@@ -172,6 +157,108 @@ const Transaction = () => {
         setWithdrawPageNotices(res.data.data);
       });
   }, []);
+
+
+
+
+
+
+  // const { userNameIdRoll } = useSelector((state) => state.userData);
+  // const navigate = useNavigate();
+
+  const {
+    register,
+    handleSubmit,
+    control,
+    reset,
+    formState: { errors },
+  } = useForm();
+
+  const [bankInfo, setBankInfo] = useState();
+  const [bankInfoReFetch, setBankInfoReFetch] = useState(1);
+  const [notBankInfo, setNotBankInfo] = useState(true);
+  useEffect(() => {
+    if (userNameIdRoll) {
+      axios
+        .get(
+          `https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/bank-info/${userNameIdRoll[1]}`
+        )
+        .then((res) => {
+          if (res.status == 200) {
+            if (isEmptyArray(res.data.data)) {
+              setNotBankInfo(false);
+            } else {
+              setNotBankInfo(true);
+            }
+            const bankData = res.data.data[0];
+            setBankInfo(bankData);
+            reset(bankData);
+          }
+        })
+        .catch((er) => console.log(er));
+    }
+  }, [userNameIdRoll, bankInfoReFetch, reset]);
+
+  // const [paymentMethod, setPaymentMethod] = useState("Bank Account");
+
+  // const bankAccountType = watch("bankAccountType");
+  const closeRef = useRef(null);
+  const [submitLoading, setSubmitLoading] = useState(false);
+  const onSubmit = (data) => {
+    setSubmitLoading(true);
+    if (bankInfo) {
+      let payloadData = {
+        ...data,
+        // paymentMethod,
+        masterUserId: userNameIdRoll[1],
+        userName: userNameIdRoll[0],
+        date: new Date().toISOString(),
+      };
+      axios
+        .put(
+          `https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/bank-info/${bankInfo._id}`,
+          payloadData
+        )
+        .then((res) => {
+          if (res.status === 200) {
+            toast.success(res.data.message);
+            setBankInfoReFetch(bankInfoReFetch + 1);
+            setSubmitLoading(false);
+            closeRef.current?.click(); // close modal
+          }
+        });
+    } else {
+      let payloadData = {
+        ...data,
+        // paymentMethod,
+        masterUserId: userNameIdRoll[1],
+        userName: userNameIdRoll[0],
+        date: new Date().toISOString(),
+      };
+      axios
+        .post(
+          `https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/bank-info`,
+          payloadData
+        )
+        .then((res) => {
+          if (res.status === 200) {
+            toast.success(res.data.message);
+            setBankInfoReFetch(bankInfoReFetch + 1);
+            navigate("/transaction/1/10/All");
+          }
+        });
+    }
+  };
+
+
+
+
+
+
+
+
+
+
 
   if (loading) {
     return <LoadingScreen />;
@@ -314,6 +401,12 @@ const Transaction = () => {
                   <p className="modal-description">
                     Add your payment details to receive the amount
                   </p>
+
+                  <form
+                    onSubmit={handleSubmit(onSubmit)}
+                    className="form-container"
+                    style={{ position: "relative" }}
+                  >
                   <label
                     htmlFor=""
                     style={{
@@ -325,21 +418,28 @@ const Transaction = () => {
                   >
                     Account Type *
                   </label>
-                  <RadioGroup.Root
-                    className="radio-group"
-                    value={accountType}
-                    onValueChange={setAccountType}
-                    style={{ marginBottom: "18px" }}
-                  >
-                    <label className="radio-label">
-                      <RadioGroup.Item className="radio-item" value="Savings" />{" "}
-                      Savings
-                    </label>
-                    <label className="radio-label">
-                      <RadioGroup.Item className="radio-item" value="Current" />{" "}
-                      Current
-                    </label>
-                  </RadioGroup.Root>
+                  <Controller
+                    name="bankAccountType"
+                    defaultValue="Savings"
+                    control={control}
+                    rules={{ required: true }}
+                    render={({ field }) => (
+                      <RadioGroup.Root
+                        className="radio-group"
+                        value={field.value}
+                        onValueChange={field.onChange}
+                      >
+                        <label className="radio-label">
+                          <RadioGroup.Item className="radio-item" value="Savings" />
+                          Savings
+                        </label>
+                        <label className="radio-label">
+                          <RadioGroup.Item className="radio-item" value="Current" />
+                          Current
+                        </label>
+                      </RadioGroup.Root>
+                    )}
+                  />
                   <label
                     style={{
                       display: "block",
@@ -353,8 +453,16 @@ const Transaction = () => {
                   <input
                     type="text"
                     name="Beneficiary Name"
+                    {...register("account_holder_name", {
+                        required: true,
+                    })}
                     style={{ marginBottom: "16px", width: "100%" }}
                   />
+                  {errors.account_holder_name && (
+                    <span style={{ color: "#ea3958" }}>
+                      Beneficiary Name Required *
+                    </span>
+                  )}
                   <label
                     style={{
                       display: "block",
@@ -368,8 +476,14 @@ const Transaction = () => {
                   <input
                     type="text"
                     name="Bank Name *"
+                    {...register("bank_name", { required: true })}
                     style={{ marginBottom: "16px", width: "100%" }}
                   />
+                  {errors.bank_name && (
+                      <span style={{ color: "#ea3958" }}>
+                        Bank Name Required *
+                      </span>
+                    )}
                   <label
                     style={{
                       display: "block",
@@ -383,8 +497,14 @@ const Transaction = () => {
                   <input
                     type="text"
                     name="Account No"
+                    {...register("account_number", { required: true })}
                     style={{ marginBottom: "16px", width: "100%" }}
                   />
+                  {errors.account_number && (
+                      <span style={{ color: "#ea3958" }}>
+                        Account No Required
+                      </span>
+                    )}
                   <label
                     style={{
                       display: "block",
@@ -398,8 +518,14 @@ const Transaction = () => {
                   <input
                     type="text"
                     name="IFSC Code"
+                    {...register("IFSC", { required: true })}
                     style={{ marginBottom: "16px", width: "100%" }}
                   />
+                  {errors.IFSC && (
+                      <span style={{ color: "#ea3958" }}>
+                        IFSC Required
+                      </span>
+                    )}
                   <label
                     style={{
                       display: "block",
@@ -408,14 +534,25 @@ const Transaction = () => {
                       color: "#202020",
                     }}
                   >
-                    UPI ID
+                    UPI ID/bKash
                   </label>
                   <input
                     type="text"
                     name="UPI Id"
+                    {...register("upiId")}
                     style={{ marginBottom: "16px", width: "100%" }}
                   />
-                  <button className="close-button">Add Bank Account</button>
+                  <button style={{
+                    opacity: submitLoading ? 0.9 : 1,
+                    cursor: submitLoading ? "not-allowed" : "pointer",
+                  }} type="submit" className="close-button btn-spinner">{submitLoading && <span className="btn-spinner-span"></span>} Edit Bank Account</button>
+                </form>
+
+                {/* Hidden Dialog.Close for programmatic close */}
+                  <Dialog.Close asChild>
+                    <button ref={closeRef} style={{ display: "none" }} />
+                  </Dialog.Close>
+                  
                 </Modal>
               </Dialog.Root>
             ) : (

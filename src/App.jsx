@@ -6,7 +6,6 @@ import {
   Outlet,
 } from "react-router-dom";
 import Sidebar from "./components/Sidebar";
- import Home from "./pages/home/home";
 import "@fontsource/inter";
 import "@fontsource/inter/400.css";
 import "@fontsource/inter/700.css";
@@ -53,6 +52,7 @@ import EditLable from "./pages/Lables/components/EditLable";
 import SuspendPage from "./pages/SuspendPage/SuspendPage";
 import Analytics from "./pages/Analytics/Analytics";
 import "react-country-state-city/dist/react-country-state-city.css";
+import Home from "./pages/home/Home";
 
 
 function Layout() {

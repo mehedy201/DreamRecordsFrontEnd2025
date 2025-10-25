@@ -196,6 +196,11 @@ function Settings() {
                       {...register("IFSC", { required: true })}
                       type="text"
                     />
+                    {errors.IFSC && (
+                      <span style={{ color: "#ea3958" }}>
+                        IFSC Required
+                      </span>
+                    )}
                   </div>
                   <div>
                     <label>UPI ID/bKash</label>
