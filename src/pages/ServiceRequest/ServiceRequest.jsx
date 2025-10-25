@@ -18,7 +18,6 @@ import useQueryParams from "../../hooks/useQueryParams";
 import isEmptyArray from "../../hooks/isEmptyArrayCheck";
 import LoadingScreen from "../../components/LoadingScreen";
 
-
 const ServiceRequest = () => {
   const { userNameIdRoll } = useSelector((state) => state.userData);
   const { reFetchServiceRequest } = useSelector((state) => state.reFetchSlice);
@@ -149,7 +148,11 @@ const ServiceRequest = () => {
               </p>
             </div>
           </Tabs.Trigger>
-          <Tabs.Trigger onClick={() => navigate('/service-request/Content-ID/1/10/All')} className="tabs-trigger" value="Content ID">
+          <Tabs.Trigger
+            onClick={() => navigate("/service-request/Content-ID/1/10/All")}
+            className="tabs-trigger"
+            value="Content ID"
+          >
             Content ID
             <div className="tabs-notification">
               <p>{serviceCount?.ContentID ? serviceCount?.ContentID : 0}</p>
@@ -203,7 +206,11 @@ const ServiceRequest = () => {
               </p>
             </div>
           </Tabs.Trigger>
-          <Tabs.Trigger onClick={() => navigate('/service-request/Whitelist/1/10/All')} className="tabs-trigger" value="Whitelist">
+          <Tabs.Trigger
+            onClick={() => navigate("/service-request/Whitelist/1/10/All")}
+            className="tabs-trigger"
+            value="Whitelist"
+          >
             Whitelist{" "}
             <div className="tabs-notification">
               <p>{serviceCount?.Whitelist ? serviceCount?.Whitelist : 0}</p>

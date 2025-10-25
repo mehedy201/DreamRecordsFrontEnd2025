@@ -81,9 +81,7 @@ function SingleRelease() {
     }));
 
     // sort dsp data (highest first)
-    byDsp.sort(
-      (a, b) => b.streams + b.revenue - (a.streams + a.revenue)
-    );
+    byDsp.sort((a, b) => b.streams + b.revenue - (a.streams + a.revenue));
 
     // add total row for dsp
     const totalDsp = byDsp.reduce(
@@ -118,9 +116,7 @@ function SingleRelease() {
     );
 
     // sort territory data (highest first)
-    byTerritory.sort(
-      (a, b) => b.streams + b.revenue - (a.streams + a.revenue)
-    );
+    byTerritory.sort((a, b) => b.streams + b.revenue - (a.streams + a.revenue));
 
     // add total row for territory
     const totalTerritory = byTerritory.reduce(
@@ -190,7 +186,7 @@ function SingleRelease() {
 
             setChartDataStreams(streamsData);
             setChartDataRevenue(revenewData);
-            console.log(revenewData)
+            console.log(revenewData);
             setAnalyticsLoading(false);
           }
         });
@@ -199,47 +195,51 @@ function SingleRelease() {
 
   const [analyticsCollapse, setAnalyticsCollapse] = useState(true);
 
-  
-
-
-
   return (
     <div>
       <div
         className="main-content createRelease-content-div createRelease-overview-div"
         style={{ marginBottom: "20px" }}
       >
-        {releaseData? (
+        {releaseData ? (
           <>
-            {(releaseData?.rejectionReasons && (releaseData.status === 'Error' || releaseData.status === 'Blocked' || releaseData.status === 'Takedown')) && (
-              <>
-                {
-                  releaseData?.rejectionReasons.map((reason, index) => 
+            {releaseData?.rejectionReasons &&
+              (releaseData.status === "Error" ||
+                releaseData.status === "Blocked" ||
+                releaseData.status === "Takedown") && (
+                <>
+                  {releaseData?.rejectionReasons.map((reason, index) => (
                     <div className="home-notice">
                       <FiAlertTriangle />
                       <span>{reason}</span>
                     </div>
-                  )
-                }
-              </>
-            )}
-            {(releaseData?.actionRequired && (releaseData.status === 'Error' || releaseData.status === 'Blocked' || releaseData.status === 'Takedown')) &&(
-              <>
-                <div className="home-notice">
-                  <FiAlertTriangle />
-                  <span
-                    style={{whiteSpace: 'normal',wordBreak: 'break-word',overflowWrap: 'break-word',}}
-                    dangerouslySetInnerHTML={{
-                      __html: releaseData?.actionRequired,
-                    }}
-                  ></span>
-                </div>
-                <br />
-              </>
-            )}
+                  ))}
+                </>
+              )}
+            {releaseData?.actionRequired &&
+              (releaseData.status === "Error" ||
+                releaseData.status === "Blocked" ||
+                releaseData.status === "Takedown") && (
+                <>
+                  <div className="home-notice">
+                    <FiAlertTriangle />
+                    <span
+                      style={{
+                        whiteSpace: "normal",
+                        wordBreak: "break-word",
+                        overflowWrap: "break-word",
+                      }}
+                      dangerouslySetInnerHTML={{
+                        __html: releaseData?.actionRequired,
+                      }}
+                    ></span>
+                  </div>
+                  <br />
+                </>
+              )}
             <div className="d-flex release-overview-img-div">
               <img
-                src={releaseData?.key ? cdnLink(releaseData?.key) : ''}
+                src={releaseData?.key ? cdnLink(releaseData?.key) : ""}
                 alt=""
                 className="release-overview-img"
               />
@@ -264,20 +264,20 @@ function SingleRelease() {
                   <br />
                   <h1>{releaseData?.releaseTitle}</h1>
                   <h2>
-                    {
-                      [...new Set(
-                        releaseData?.tracks?.flatMap(track =>
-                          track?.artist?.map(a => a.artistName)
+                    {[
+                      ...new Set(
+                        releaseData?.tracks?.flatMap((track) =>
+                          track?.artist?.map((a) => a.artistName)
                         )
-                      )].join(', ')
-                    }
-                    {
-                      [...new Set(
-                        releaseData?.tracks?.flatMap(track =>
-                          track?.primaryArtist?.map(a => a.artistName)
+                      ),
+                    ].join(", ")}
+                    {[
+                      ...new Set(
+                        releaseData?.tracks?.flatMap((track) =>
+                          track?.primaryArtist?.map((a) => a.artistName)
                         )
-                      )].join(', ')
-                    }
+                      ),
+                    ].join(", ")}
                   </h2>
                 </div>
 
@@ -312,8 +312,7 @@ function SingleRelease() {
                         Download Artwork
                       </Link>
                     </DropdownMenu.Item>
-                    {
-                      releaseData?.status === 'Error' &&
+                    {releaseData?.status === "Error" && (
                       <DropdownMenu.Item className="dropdown-item">
                         <Link
                           to={`/edit-release/${releaseData?._id}`}
@@ -328,8 +327,8 @@ function SingleRelease() {
                           <img src={editImg} />
                           Edit Metadata
                         </Link>
-                    </DropdownMenu.Item>
-                    }
+                      </DropdownMenu.Item>
+                    )}
                   </DropdownMenu.Content>
                 </DropdownMenu.Root>
               </div>
@@ -559,7 +558,7 @@ function SingleRelease() {
               <Tabs.Content className="tabs-content" value="Streams">
                 {dataNotFound === false && (
                   <>
-                    <Chart chartData={chartDataStreams} value='Streams'/>
+                    <Chart chartData={chartDataStreams} value="Streams" />
                     <SingleReleasePageTable
                       columns={tableColumn}
                       data={tableData}
@@ -571,7 +570,7 @@ function SingleRelease() {
               <Tabs.Content className="tabs-content" value="Revenue">
                 {dataNotFound === false && (
                   <>
-                    <Chart chartData={chartDataRevenue} value='Revenue'/>
+                    <Chart chartData={chartDataRevenue} value="Revenue" />
                     <SingleReleasePageTable
                       columns={tableColumn}
                       data={tableData}

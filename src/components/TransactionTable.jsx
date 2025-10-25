@@ -8,11 +8,10 @@ import Modal from "./Modal";
 import { useState } from "react";
 import FormSubmitLoading from "./FormSubmitLoading";
 
-
 const TransactionTable = ({ columns, data }) => {
-  console.log(data)
+  console.log(data);
 
-  const [loading, setLoading] = useState(null)
+  const [loading, setLoading] = useState(null);
 
   const handleReportDownloadExcel = async (masterUserId, date, id) => {
     setLoading(id);
@@ -21,7 +20,6 @@ const TransactionTable = ({ columns, data }) => {
       const response = await fetch(
         `https://dream-records-2025-m2m9a.ondigitalocean.app/common/api/v1/analytics-and-balance/download?${query}`
       );
-      
 
       if (!response.ok) {
         throw new Error("Download failed");
@@ -111,30 +109,40 @@ const TransactionTable = ({ columns, data }) => {
                   : d?.paymentReportDate}
               </td>
               <td>
-                {
-                  d?.status == 'Rejected' &&
+                {d?.status == "Rejected" && (
                   <Dialog.Root>
                     <Dialog.Trigger asChild>
-                        <IoEyeOutline style={{ width: "24px", height: "24px", cursor: 'pointer' }} />
+                      <IoEyeOutline
+                        style={{
+                          width: "24px",
+                          height: "24px",
+                          cursor: "pointer",
+                        }}
+                      />
                     </Dialog.Trigger>
                     <Dialog.Portal>
-                        <Dialog.Overlay className="dialog-overlay" />
-                        <Dialog.Content className="dialog-content">
+                      <Dialog.Overlay className="dialog-overlay" />
+                      <Dialog.Content className="dialog-content">
                         <Modal title="Rejected Reasons">
-                            <p className="modal-description">
-                              <span
-                                style={{whiteSpace: 'normal',wordBreak: 'break-word',overflowWrap: 'break-word', color: "#ea3958"}}
-                                dangerouslySetInnerHTML={{
-                                  __html: d?.rejectResoan,
-                                }}
-                              ></span>
-                            </p>
-                            <br />
+                          <p className="modal-description">
+                            <span
+                              style={{
+                                whiteSpace: "normal",
+                                wordBreak: "break-word",
+                                overflowWrap: "break-word",
+                                color: "#ea3958",
+                              }}
+                              dangerouslySetInnerHTML={{
+                                __html: d?.rejectResoan,
+                              }}
+                            ></span>
+                          </p>
+                          <br />
                         </Modal>
-                        </Dialog.Content>
+                      </Dialog.Content>
                     </Dialog.Portal>
                   </Dialog.Root>
-                }
+                )}
                 {/* {(d?.type === "Withdraw" && d?.status === 'Approved') && (
                   <button
                     style={{ cursor: "pointer" }}

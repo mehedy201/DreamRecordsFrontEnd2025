@@ -136,7 +136,7 @@ function BlockedVideo({
               <SearchDropdownRelease
                 items={releaseData}
                 searchTxt="Search and select Release"
-                selectRelease='Single'
+                selectRelease="Single"
                 onSelect={(items) =>
                   setValue("release", items, { shouldValidate: true })
                 }

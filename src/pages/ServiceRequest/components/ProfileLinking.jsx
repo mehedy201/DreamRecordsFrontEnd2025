@@ -105,11 +105,11 @@ function ProfileLinking({
     formState: { errors },
   } = useForm({
     defaultValues: {
-      type: "Instagram"
-    }
+      type: "Instagram",
+    },
   });
   const onSubmit = (data) => {
-    if(data.release.length < 5) {
+    if (data.release.length < 5) {
       setMinReleaseSelectErr("You must select at least 5");
       return;
     }
@@ -132,7 +132,6 @@ function ProfileLinking({
       });
   };
 
-
   const artistData = watch("artist");
   const [releaseData, setReleaseData] = useState();
   const [loading, setLoading] = useState(false);
@@ -140,19 +139,18 @@ function ProfileLinking({
     if (artistData) {
       setLoading(true);
       axios
-      .get(
-        `https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/release/artist/${artistData[0]?._id}?page=1&limit=1000&status=Live`
-      )
-      .then((res) => {
-        if (res.status == 200) {
-          setReleaseData(res.data.data);
-          setLoading(false);
-        }
-      })
-      .catch((er) => setLoading(false));
+        .get(
+          `https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/release/artist/${artistData[0]?._id}?page=1&limit=1000&status=Live`
+        )
+        .then((res) => {
+          if (res.status == 200) {
+            setReleaseData(res.data.data);
+            setLoading(false);
+          }
+        })
+        .catch((er) => setLoading(false));
     }
   }, [artistData]);
-
 
   useEffect(() => {
     resetField("release");
@@ -236,7 +234,7 @@ function ProfileLinking({
               <SearchDropdown
                 items={artist}
                 searchTxt="Search and select artist"
-                selectArtist='Single'
+                selectArtist="Single"
                 itemName="Artist"
                 register={{ ...register("artist", { required: true }) }}
                 onSelect={(items) =>
@@ -251,9 +249,9 @@ function ProfileLinking({
               <SearchDropdownRelease
                 items={releaseData}
                 searchTxt="Search and select Release"
-                onSelect={(items) =>{
-                  setMinReleaseSelectErr('')
-                  return setValue("release", items, { shouldValidate: true })
+                onSelect={(items) => {
+                  setMinReleaseSelectErr("");
+                  return setValue("release", items, { shouldValidate: true });
                 }}
                 register={{ ...register("release", { required: true }) }}
                 value={watch("release")}

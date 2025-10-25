@@ -178,7 +178,7 @@ function ReleaseClaim({
               <p style={{ fontSize: "12px" }}>Choose Release</p>
               <SearchDropdownRelease
                 items={releaseData}
-                selectRelease='Single'
+                selectRelease="Single"
                 searchTxt="Search and select Release"
                 onSelect={(items) =>
                   setValue("release", items, { shouldValidate: true })

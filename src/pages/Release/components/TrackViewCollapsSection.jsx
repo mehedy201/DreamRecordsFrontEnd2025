@@ -63,7 +63,8 @@ const TrackViewCollapsSection = ({ track, index }) => {
             {/* {
                   index && 
                 } */}
-            {(pathname == "/create-release" || pathname.includes("edit-release")) && (
+            {(pathname == "/create-release" ||
+              pathname.includes("edit-release")) && (
               <X
                 size={18}
                 onClick={() => deleteTrack(index)}

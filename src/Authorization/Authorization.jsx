@@ -49,23 +49,23 @@ const Authorization = ({ children }) => {
         );
         dispatch(setUserData(res.data.data));
         const isLocked = res.data?.data?.userLocked;
-        if (isLocked || res.data?.data?.status === 'Suspended') {
+        if (isLocked || res.data?.data?.status === "Suspended") {
           navigate(`/locked/${res?.data?.data?._id}`);
           return;
         }
 
-        if(res?.data?.data?.password !== decoded.password){
+        if (res?.data?.data?.password !== decoded.password) {
           localStorage.removeItem("token");
-          return navigate('/login');
+          return navigate("/login");
         }
 
         if (!res?.data?.data.first_name && !res?.data?.data.first_name) {
           navigate("/sign-up-profile-info");
           return;
         }
-        if(!res?.data?.data?.addressLine1){
-            navigate('/sign-up-address-info')
-            return
+        if (!res?.data?.data?.addressLine1) {
+          navigate("/sign-up-address-info");
+          return;
         }
         await axios.patch(
           `https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/users/last-log-in/${userId}`,

@@ -85,7 +85,9 @@ function Profile() {
           ) : (
             <>
               <img
-                src={userData?.imgKey ? cdnLink(userData?.imgKey) : defultUserImg}
+                src={
+                  userData?.imgKey ? cdnLink(userData?.imgKey) : defultUserImg
+                }
                 alt="Profile"
                 onClick={() => document.getElementById("fileInput").click()}
               />

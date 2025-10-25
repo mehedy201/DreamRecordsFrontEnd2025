@@ -177,57 +177,57 @@ function CreateArtist({
   const handleSubmit = async () => {
     setButtonLoading(true);
 
-      const payload = {
-        ...formData,
-        ...uploadedImage,
-        masterUserId: userNameIdRoll[1],
-        email: userData?.email,
-        userName: userData?.userName || userNameIdRoll[0],
-        date: new Date().toISOString(),
-      };
+    const payload = {
+      ...formData,
+      ...uploadedImage,
+      masterUserId: userNameIdRoll[1],
+      email: userData?.email,
+      userName: userData?.userName || userNameIdRoll[0],
+      date: new Date().toISOString(),
+    };
 
-      try {
-        axios
-          .post(
-            `https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/artist/create-artist`,
-            payload
-          )
-          .then((res) => {
-            if (res.status === 200) {
-              const createdArtist = res.data.data.insertedId;
-              const formData = { ...payload, _id: createdArtist };
+    try {
+      axios
+        .post(
+          `https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/artist/create-artist`,
+          payload
+        )
+        .then((res) => {
+          if (res.status === 200) {
+            const createdArtist = res.data.data.insertedId;
+            const formData = { ...payload, _id: createdArtist };
 
-              if (fromReleaseForm) {
-                const updatedSelectedItems = [...selectedItems, formData];
-                console.log(updatedSelectedItems);
-                setSelectedItems(updatedSelectedItems);
-                onSelect(updatedSelectedItems);
-                setSearchQuery("");
-                openModal(false);
-                dispatch(setReFetchArtist(reFetchArtist + 1));
-              } else {
-                navigate("/artist/1/10");
-                setButtonLoading(false);
-              }
-
-              // Clear form
-              setFormData({
-                artistName: "",
-                spotifyId: "",
-                appleId: "",
-                facebook: "",
-                instagramId: "",
-                youtube: "",
-              });
-              setUploadedImage("");
+            if (fromReleaseForm) {
+              const updatedSelectedItems = [...selectedItems, formData];
+              console.log(updatedSelectedItems);
+              setSelectedItems(updatedSelectedItems);
+              onSelect(updatedSelectedItems);
+              setSearchQuery("");
+              openModal(false);
+              dispatch(setReFetchArtist(reFetchArtist + 1));
+            } else {
+              navigate("/artist/1/10");
+              setButtonLoading(false);
             }
-          })
-          .catch((error) => {
-            console.error("Failed to create artist:", error);
-          });
-      } catch (error) {
-        console.error("Failed to create artist:", error);
-      }
+
+            // Clear form
+            setFormData({
+              artistName: "",
+              spotifyId: "",
+              appleId: "",
+              facebook: "",
+              instagramId: "",
+              youtube: "",
+            });
+            setUploadedImage("");
+          }
+        })
+        .catch((error) => {
+          console.error("Failed to create artist:", error);
+        });
+    } catch (error) {
+      console.error("Failed to create artist:", error);
+    }
   };
 
   return (

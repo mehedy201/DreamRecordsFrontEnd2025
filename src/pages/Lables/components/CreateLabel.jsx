@@ -146,50 +146,50 @@ function CreateLabel({ fromReleaseForm, openModal, setSearchQuery }) {
   };
 
   const handleSubmit = () => {
-      setButtonLoading(true);
-      const payload = {
-        ...formData,
-        ...uploadedImage,
-        masterUserId: userData._id,
-        userName: userData.userName,
-        email: userData.email,
-        status: "Approved",
-        date: new Date().toISOString(),
-      };
+    setButtonLoading(true);
+    const payload = {
+      ...formData,
+      ...uploadedImage,
+      masterUserId: userData._id,
+      userName: userData.userName,
+      email: userData.email,
+      status: "Approved",
+      date: new Date().toISOString(),
+    };
 
-      axios
-        .post(
-          `https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/labels/create-labels`,
-          payload
-        )
-        .then((res) => {
-          if (res.status === 200) {
-            if (fromReleaseForm) {
-              toast.success(
-                "Successfully created the Label, but you can't add it now. Because it is pending now!"
-              );
-              setSearchQuery("");
-              dispatch(setReFetchLabel(reFetchLabel + 1));
-              openModal(false);
-              setButtonLoading
-            } else {
-              navigate("/labels/1/10/All");
-              setButtonLoading
-            }
-
-            // Reset form
-            setFormData({
-              labelName: "",
-              facebook: "",
-              instagram: "",
-              youtube: "",
-            });
+    axios
+      .post(
+        `https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/labels/create-labels`,
+        payload
+      )
+      .then((res) => {
+        if (res.status === 200) {
+          if (fromReleaseForm) {
+            toast.success(
+              "Successfully created the Label, but you can't add it now. Because it is pending now!"
+            );
+            setSearchQuery("");
+            dispatch(setReFetchLabel(reFetchLabel + 1));
+            openModal(false);
+            setButtonLoading;
+          } else {
+            navigate("/labels/1/10/All");
+            setButtonLoading;
           }
-          setUploadedImage("");
-        })
-        .catch((error) => {
-          console.error("Failed to create label:", error);
-        });
+
+          // Reset form
+          setFormData({
+            labelName: "",
+            facebook: "",
+            instagram: "",
+            youtube: "",
+          });
+        }
+        setUploadedImage("");
+      })
+      .catch((error) => {
+        console.error("Failed to create label:", error);
+      });
   };
 
   return (

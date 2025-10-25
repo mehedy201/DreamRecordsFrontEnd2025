@@ -91,7 +91,7 @@ function SingleLable() {
       )
       .then((res) => {
         if (res.status == 200) {
-          console.log(res.data.data)
+          console.log(res.data.data);
           setTotalCount(res.data.totalCount);
           setFilteredCount(res.data.filteredCount);
           setReleaseData(res.data.data);
@@ -218,19 +218,18 @@ function SingleLable() {
                 </div>
               </div>
               {label.status == "Approved" && (
-              <DropdownMenu.Root>
-                <DropdownMenu.Trigger asChild>
-                  <button className="dropdown-trigger singleLabel-dropdown-btn">
-                    <img src={threedotPng} />
-                  </button>
-                </DropdownMenu.Trigger>
+                <DropdownMenu.Root>
+                  <DropdownMenu.Trigger asChild>
+                    <button className="dropdown-trigger singleLabel-dropdown-btn">
+                      <img src={threedotPng} />
+                    </button>
+                  </DropdownMenu.Trigger>
 
-                <DropdownMenu.Content
-                  align="left"
-                  side="bottom"
-                  className="dropdown-content singleArtist-dropdown-content"
-                >
-
+                  <DropdownMenu.Content
+                    align="left"
+                    side="bottom"
+                    className="dropdown-content singleArtist-dropdown-content"
+                  >
                     <>
                       <DropdownMenu.Item className="dropdown-item">
                         <Link
@@ -282,9 +281,8 @@ function SingleLable() {
                         </Dialog.Root>
                       </DropdownMenu.Item> */}
                     </>
-                  
-                </DropdownMenu.Content>
-              </DropdownMenu.Root>
+                  </DropdownMenu.Content>
+                </DropdownMenu.Root>
               )}
             </Flex>
             <div className="singleLabel-social-row">

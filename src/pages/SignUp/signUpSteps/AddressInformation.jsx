@@ -12,7 +12,6 @@ const AddressInformation = () => {
   const dispatch = useDispatch();
   const { userNameIdRoll, userData } = useSelector((state) => state.userData);
 
-
   // Country State Select____________________________________________________
   const [country, setCountry] = useState();
   const [countryError, setCountryError] = useState("");
@@ -46,16 +45,22 @@ const AddressInformation = () => {
 
     const payload = { ...data, country, status: "Active" };
 
-    axios.post(`https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/labels/create-labels`,label)
-    .then(res => {
-      console.log(res)
-    })
-      
+    axios
+      .post(
+        `https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/labels/create-labels`,
+        label
+      )
+      .then((res) => {
+        console.log(res);
+      });
+
     axios
       .patch(
-        `https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/users/${userData?._id}`,payload)
+        `https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/users/${userData?._id}`,
+        payload
+      )
       .then((res) => {
-        console.log(res)
+        console.log(res);
         if (res.data.status == 200) {
           navigate("/");
           const ud = { ...payload, ...userData };

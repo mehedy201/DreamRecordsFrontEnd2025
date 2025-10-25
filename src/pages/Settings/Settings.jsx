@@ -89,7 +89,7 @@ function Settings() {
           if (res.status === 200) {
             toast.success(res.data.message);
             setBankInfoReFetch(bankInfoReFetch + 1);
-            navigate('/transaction/1/10/All');
+            navigate("/transaction/1/10/All");
           }
         });
     }
@@ -117,114 +117,108 @@ function Settings() {
           <h4>Payout Preference</h4>
           <p>Default Payout Method</p>
           <p style={{ fontWeight: "bold", fontSize: "16px" }}>Bank Account</p>
-            <form
-              onSubmit={handleSubmit(onSubmit)}
-              className="form-container"
-              style={{ position: "relative" }}
-            >
-              {/* Dynamic Form Fields */}
-              {/* {paymentMethod === "Bank Account" ? ( */}
-              <div>
-                <p>Account Type *</p>
-                <Controller
-                  name="bankAccountType"
-                  defaultValue="Savings"
-                  control={control}
-                  rules={{ required: true }}
-                  render={({ field }) => (
-                    <RadioGroup.Root
-                      className="radio-group"
-                      value={field.value}
-                      onValueChange={field.onChange}
-                    >
-                      <label className="radio-label">
-                        <RadioGroup.Item
-                          className="radio-item"
-                          value="Savings"
-                        />
-                        Savings
-                      </label>
-                      <label className="radio-label">
-                        <RadioGroup.Item
-                          className="radio-item"
-                          value="Current"
-                        />
-                        Current
-                      </label>
-                    </RadioGroup.Root>
-                  )}
-                />
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="form-container"
+            style={{ position: "relative" }}
+          >
+            {/* Dynamic Form Fields */}
+            {/* {paymentMethod === "Bank Account" ? ( */}
+            <div>
+              <p>Account Type *</p>
+              <Controller
+                name="bankAccountType"
+                defaultValue="Savings"
+                control={control}
+                rules={{ required: true }}
+                render={({ field }) => (
+                  <RadioGroup.Root
+                    className="radio-group"
+                    value={field.value}
+                    onValueChange={field.onChange}
+                  >
+                    <label className="radio-label">
+                      <RadioGroup.Item className="radio-item" value="Savings" />
+                      Savings
+                    </label>
+                    <label className="radio-label">
+                      <RadioGroup.Item className="radio-item" value="Current" />
+                      Current
+                    </label>
+                  </RadioGroup.Root>
+                )}
+              />
 
-                <div className="settings-form-grid">
-                  {/* {bankAccountType === "Savings" ? ( */}
-                  <>
-                    <div>
-                      <label>Beneficiary Name *</label>
-                      <input
-                        {...register("account_holder_name", {
-                          required: true,
-                        })}
-                        type="text"
-                      />
-                      {errors.account_holder_name && (
-                        <span style={{ color: "#ea3958" }}>
-                          Beneficiary Name Required *
-                        </span>
-                      )}
-                    </div>
-                    <div>
-                      <label>Bank Name *</label>
-                      <input
-                        {...register("bank_name", { required: true })}
-                        type="text"
-                      />
-                      {errors.bank_name && (
-                        <span style={{ color: "#ea3958" }}>
-                          Bank Name Required *
-                        </span>
-                      )}
-                    </div>
-                    <div>
-                      <label>Account No. *</label>
-                      <input
-                        {...register("account_number", { required: true })}
-                        type="text"
-                      />
-                      {errors.account_number && (
-                        <span style={{ color: "#ea3958" }}>
-                          Account No Required
-                        </span>
-                      )}
-                    </div>
-                    <div>
-                      <label>IFSC Code/SWIFT Code *</label>
-                      <input
-                        {...register("IFSC", { required: true })}
-                        type="text"
-                      />
-                    </div>
-                    <div>
-                      <label>UPI ID/bKash</label>
-                      <input {...register("upiId")} type="text" />
-                    </div>
-                    {/* <div>
+              <div className="settings-form-grid">
+                {/* {bankAccountType === "Savings" ? ( */}
+                <>
+                  <div>
+                    <label>Beneficiary Name *</label>
+                    <input
+                      {...register("account_holder_name", {
+                        required: true,
+                      })}
+                      type="text"
+                    />
+                    {errors.account_holder_name && (
+                      <span style={{ color: "#ea3958" }}>
+                        Beneficiary Name Required *
+                      </span>
+                    )}
+                  </div>
+                  <div>
+                    <label>Bank Name *</label>
+                    <input
+                      {...register("bank_name", { required: true })}
+                      type="text"
+                    />
+                    {errors.bank_name && (
+                      <span style={{ color: "#ea3958" }}>
+                        Bank Name Required *
+                      </span>
+                    )}
+                  </div>
+                  <div>
+                    <label>Account No. *</label>
+                    <input
+                      {...register("account_number", { required: true })}
+                      type="text"
+                    />
+                    {errors.account_number && (
+                      <span style={{ color: "#ea3958" }}>
+                        Account No Required
+                      </span>
+                    )}
+                  </div>
+                  <div>
+                    <label>IFSC Code/SWIFT Code *</label>
+                    <input
+                      {...register("IFSC", { required: true })}
+                      type="text"
+                    />
+                  </div>
+                  <div>
+                    <label>UPI ID/bKash</label>
+                    <input {...register("upiId")} type="text" />
+                  </div>
+                  {/* <div>
                       <label>bKash No:</label>
                       <input className="remove_arrow" {...register("bKash")} type="number" />
                     </div> */}
-                  </>
-                </div>
+                </>
               </div>
-              {/* Save Button */}
-              {notBankInfo ? (
-                <button type="submit" className="settings-save-btn">
-                  Edit
-                </button>
-              ) : (
-                <button type="submit" className="settings-save-btn">
-                  Save
-                </button>
-              )}
-            </form>
+            </div>
+            {/* Save Button */}
+            {notBankInfo ? (
+              <button type="submit" className="settings-save-btn">
+                Edit
+              </button>
+            ) : (
+              <button type="submit" className="settings-save-btn">
+                Save
+              </button>
+            )}
+          </form>
         </div>
       </div>
     </div>

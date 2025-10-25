@@ -113,11 +113,11 @@ function Whitelist({
     formState: { errors },
   } = useForm({
     defaultValues: {
-      type: "Facebook"
-    }
+      type: "Facebook",
+    },
   });
   const onSubmit = (data) => {
-    if(data.release.length < 10) {
+    if (data.release.length < 10) {
       setMinReleaseSelectErr("You must select at least 10");
       return;
     }
@@ -140,7 +140,6 @@ function Whitelist({
       });
   };
 
-
   const chooseArtistOrLabel = watch("chooseArtistOrLabel");
   const artistData = watch("artist");
   const labelData = watch("labels");
@@ -148,50 +147,47 @@ function Whitelist({
   const [releaseData, setReleaseData] = useState();
   const [loading, setLoading] = useState(false);
   useEffect(() => {
-    if (chooseArtistOrLabel === 'Artist') {
+    if (chooseArtistOrLabel === "Artist") {
       unregister("labels");
       clearErrors("labels");
-      if(artistData){
+      if (artistData) {
         setLoading(true);
         axios
-        .get(
-          `https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/release/artist/${artistData[0]?._id}?page=1&limit=1000&status=Live`
-        )
-        .then((res) => {
-          if (res.status == 200) {
-            setReleaseData(res.data.data);
-            setLoading(false);
-          }
-        })
-        .catch((er) => setLoading(false));
+          .get(
+            `https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/release/artist/${artistData[0]?._id}?page=1&limit=1000&status=Live`
+          )
+          .then((res) => {
+            if (res.status == 200) {
+              setReleaseData(res.data.data);
+              setLoading(false);
+            }
+          })
+          .catch((er) => setLoading(false));
       }
     }
-    if (chooseArtistOrLabel === 'Label') {
+    if (chooseArtistOrLabel === "Label") {
       unregister("artist");
       clearErrors("artist");
-      if(labelData){
+      if (labelData) {
         setLoading(true);
         axios
-        .get(
-          `https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/release/labels/${labelData[0]?._id}?page=1&limit=1000&status=Live`
-        )
-        .then((res) => {
-          if (res.status == 200) {
-            setReleaseData(res.data.data);
-            setLoading(false);
-          }
-        })
-        .catch((er) => setLoading(false));
+          .get(
+            `https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/release/labels/${labelData[0]?._id}?page=1&limit=1000&status=Live`
+          )
+          .then((res) => {
+            if (res.status == 200) {
+              setReleaseData(res.data.data);
+              setLoading(false);
+            }
+          })
+          .catch((er) => setLoading(false));
       }
     }
-  }, [artistData, labelData,]);
-
+  }, [artistData, labelData]);
 
   useEffect(() => {
     resetField("release");
   }, [chooseArtistOrLabel, artistData, labelData, resetField]);
-
-
 
   return (
     <div>
@@ -291,14 +287,13 @@ function Whitelist({
                 <span style={{ color: "#ea3958" }}>Artist/Label Required</span>
               )}
 
-              {
-                chooseArtistOrLabel === 'Artist' &&
+              {chooseArtistOrLabel === "Artist" && (
                 <>
                   <p style={{ fontSize: "12px" }}>Choose Artist*</p>
                   <SearchDropdown
                     items={artist}
                     searchTxt="Search and select artist"
-                    selectArtist='Single'
+                    selectArtist="Single"
                     itemName="Artist"
                     register={{ ...register("artist", { required: true }) }}
                     onSelect={(items) =>
@@ -307,13 +302,14 @@ function Whitelist({
                     value={watch("artist")}
                   />
                   {errors.artist && (
-                    <span style={{ color: "#ea3958" }}>Please Select Artist</span>
+                    <span style={{ color: "#ea3958" }}>
+                      Please Select Artist
+                    </span>
                   )}
                 </>
-              }
+              )}
 
-              {
-                chooseArtistOrLabel === 'Label' &&
+              {chooseArtistOrLabel === "Label" && (
                 <>
                   <p style={{ fontSize: "12px" }}>Label Name *</p>
                   <SearchDropdown
@@ -327,19 +323,20 @@ function Whitelist({
                     value={watch("labels")}
                   />
                   {errors.labels && (
-                    <span style={{ color: "#ea3958" }}>Please Select Label</span>
+                    <span style={{ color: "#ea3958" }}>
+                      Please Select Label
+                    </span>
                   )}
                 </>
-              }
-
+              )}
 
               <p style={{ fontSize: "12px" }}>Choose 10 Release below</p>
               <SearchDropdownRelease
                 items={releaseData}
                 searchTxt="Search and select Release"
-                onSelect={(items) =>{
-                  setMinReleaseSelectErr('')
-                  return setValue("release", items, { shouldValidate: true })
+                onSelect={(items) => {
+                  setMinReleaseSelectErr("");
+                  return setValue("release", items, { shouldValidate: true });
                 }}
                 register={{ ...register("release", { required: true }) }}
                 value={watch("release")}
@@ -347,9 +344,11 @@ function Whitelist({
               {errors.release && (
                 <span style={{ color: "#ea3958" }}>Release Required</span>
               )}
-              {
-                minReleaseSelectErr && <span style={{ color: "#ea3958" }}>Have to select more than 10</span>
-              }
+              {minReleaseSelectErr && (
+                <span style={{ color: "#ea3958" }}>
+                  Have to select more than 10
+                </span>
+              )}
 
               <p style={{ fontSize: "12px" }}>Give the link to whitelist *</p>
               <input

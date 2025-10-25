@@ -51,7 +51,7 @@ const ImageUpload = ({
         )
         .then((res) => {
           if (res.status == 200) {
-            setUploadedImage({imgUrl: '', key: ''});
+            setUploadedImage({ imgUrl: "", key: "" });
             setImgLink();
           }
         })
@@ -64,7 +64,11 @@ const ImageUpload = ({
       <div className={`upload-box ${className || ""}`}>
         {imgLink ? (
           <div className="image-preview">
-            <img src={cdnLink(imgLink)} alt="Uploaded" className="uploaded-img" />
+            <img
+              src={cdnLink(imgLink)}
+              alt="Uploaded"
+              className="uploaded-img"
+            />
             <button
               className="img-upload-remove-btn"
               onClick={() => deleteFile(uploadedImage.key)}
