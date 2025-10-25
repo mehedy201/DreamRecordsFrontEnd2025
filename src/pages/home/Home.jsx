@@ -69,10 +69,24 @@ const Home = () => {
   const [releaseData, setReleaseData] = useState();
   const [artistNotFound, setArtistNotFound] = useState(false);
   const [releaseNotFound, setReleaseNotFound] = useState(false);
+  const [userSummary, setUserSummary] = useState();
+  const [releaseSummary, setReleaseSummary] = useState();
   useEffect(() => {
     setArtistNotFound(false);
     setReleaseNotFound(false);
     if (userNameIdRoll) {
+
+      // User Summary Get From API ___________
+      axios
+      .get(
+        `http://localhost:5000/api/v1/users/user/sammary/${userData?._id}`
+      )
+      .then((res) => {
+        if (res.status === 200) {
+          setReleaseSummary(res?.data?.data?.releaseByStatus.slice(0,3));
+          setUserSummary(res.data.data);
+        }
+      });
       // Artist Data Get From API _____________
       axios
         .get(
@@ -113,6 +127,10 @@ const Home = () => {
       });
   }, []);
 
+
+  
+
+
   return (
     <div className="main-content">
       {homePageNotices &&
@@ -136,13 +154,14 @@ const Home = () => {
         </div>
       </section>
       <div className="home-card-grid">
-        {homeCardContent.map((item, index) => (
-          <div key={index} className="home-card">
-            <div className="d-flex" style={{ alignItems: "center" }}>
-              <div>
-                <div
-                  className="card-circle"
-                  style={
+        {releaseSummary &&
+          releaseSummary?.map((item, index) => (
+            <div key={index} className="home-card">
+              <div className="d-flex" style={{ alignItems: "center" }}>
+                <div>
+                  <div
+                    className="card-circle"
+                    style={
                     item.name === "QC Approval"
                       ? { background: "#FFA552 " }
                       : item.name === "In Review"
@@ -151,29 +170,31 @@ const Home = () => {
                       ? { background: "#2B9A66" }
                       : { background: "#838383" }
                   }
-                ></div>
+                  ></div>
+                </div>
+                <p
+                  style={
+                    item.name === "QC Approval"
+                      ? { color: "#FFA552" }
+                      : item.name === "In Review"
+                      ? { color: "#0090FF" }
+                      : item.name === "To Live"
+                      ? { color: "#2B9A66" }
+                      : { color: "#838383" }
+                  }
+                >
+                  {item.name}
+                </p>
               </div>
-              <p
-                style={
-                  item.name === "QC Approval"
-                    ? { color: "#FFA552" }
-                    : item.name === "In Review"
-                    ? { color: "#0090FF" }
-                    : item.name === "To Live"
-                    ? { color: "#2B9A66" }
-                    : { color: "#838383" }
-                }
-              >
-                {item.name}
-              </p>
+              <h1>{item.count}</h1>
             </div>
-            <h1>{item.value}</h1>
-          </div>
-        ))}
+          ))}
       </div>
       <div className="home-pie-div">
-        <PieChartComponent />
+        {userSummary && <PieChartComponent releaseSummary={userSummary} />}
       </div>
+
+
       <Flex as="span" className="artists-flex">
         <p>Artists</p>
         <Link to={"/artist/1/10"}>See All</Link>

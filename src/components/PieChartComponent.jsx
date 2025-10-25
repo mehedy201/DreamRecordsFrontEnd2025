@@ -7,23 +7,13 @@ import {
   ResponsiveContainer,
   Tooltip,
 } from "recharts";
-const releaseByType = [
-  { name: "Albums", value: 9000 },
-  { name: "Singles", value: 3000 },
-];
+import formatNumber from "../hooks/formatNumber";
 
-const releaseByStatus = [
-  { name: "QC Approval", value: 3000 },
-  { name: "In Review", value: 3500 },
-  { name: "Barcode", value: 2000 },
-  { name: "Live", value: 4000 },
-  { name: "Issues", value: 2500 },
-];
 
 const COLORS_TYPE = ["#00e4a5", "#0099ff"];
 const COLORS_STATUS = ["#0099ff", "#00e4a5", "#ffb129", "#ff4f4f", "#8e44ad"];
 
-function PieChartComponent() {
+function PieChartComponent({ releaseSummary }) {
   const [pieTextVisibleSide, setPieTextVisibleSide] = useState(
     getInitialCount()
   );
@@ -50,6 +40,7 @@ function PieChartComponent() {
 
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
   return (
     <div className="charts-container">
       <div className="chart-card">
@@ -57,7 +48,9 @@ function PieChartComponent() {
         <div className="second-pie-div">
           <div>
             <p className="chart-subtitle">Total Releases</p>
-            <h2 className="chart-count">12K</h2>
+            <h2 className="chart-count">
+              {formatNumber(releaseSummary?.totalRelease)}
+            </h2>
           </div>
           <ResponsiveContainer
             width="100%"
@@ -66,7 +59,7 @@ function PieChartComponent() {
           >
             <PieChart>
               <Pie
-                data={releaseByType}
+                data={releaseSummary?.releaseBasedType}
                 dataKey="value"
                 cx="50%"
                 cy="50%"
@@ -74,7 +67,7 @@ function PieChartComponent() {
                 outerRadius={75}
                 style={{ cursor: "pointer" }}
               >
-                {releaseByType.map((entry, index) => (
+                {releaseSummary?.releaseBasedType?.map((entry, index) => (
                   <Cell
                     key={`cell-${index}`}
                     fill={COLORS_TYPE[index % COLORS_TYPE.length]}
@@ -98,7 +91,9 @@ function PieChartComponent() {
         <div className="second-pie-div">
           <div>
             <p className="chart-subtitle">Total Tracks</p>
-            <h2 className="chart-count">15K</h2>
+            <h2 className="chart-count">
+              {formatNumber(releaseSummary?.totalTrack)}
+            </h2>
           </div>
           <ResponsiveContainer
             width="100%"
@@ -107,14 +102,14 @@ function PieChartComponent() {
           >
             <PieChart>
               <Pie
-                data={releaseByStatus}
-                dataKey="value"
+                data={releaseSummary?.releaseByStatus}
+                dataKey="count"
                 cx="50%"
                 cy="50%"
                 style={{ cursor: "pointer" }}
                 outerRadius={80}
               >
-                {releaseByStatus.map((entry, index) => (
+                {releaseSummary?.releaseByStatus.map((entry, index) => (
                   <Cell
                     key={`cell-${index}`}
                     fill={COLORS_STATUS[index % COLORS_STATUS.length]}
