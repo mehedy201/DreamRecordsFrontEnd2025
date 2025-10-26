@@ -175,7 +175,7 @@ const handleDownload = (url) => {
                     ></div>
                 </div>
 
-                <button onClick={() => handleDownload(data?.audioUrl)} className="release-track-download-btn">
+                <button onClick={() => handleDownload(cdnLink(data.audioKey))} className="release-track-download-btn" style={{cursor: 'pointer'}}>
                     <RiDownloadLine /> Download
                 </button>
             </div>

@@ -298,7 +298,7 @@ function SingleRelease() {
                   >
                     <DropdownMenu.Item className="dropdown-item">
                       <Link
-                        onClick={() => window.open(releaseData?.imgUrl)}
+                        onClick={() => window.open(cdnLink(releaseData?.key))}
                         style={{
                           cursor: "pointer",
                           color: "#202020",
