@@ -127,6 +127,7 @@ function ReleaseClaim({
 
               <input
                 type="text"
+                style={{border: 'none'}}
                 value="Release Claim"
                 className="service-modal-input"
                 {...register("claimOption", { required: true })}

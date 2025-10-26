@@ -173,6 +173,7 @@ function ProfileLinking({
               </p>
               <p style={{ fontSize: "12px" }}>Service Request</p>
               <input
+                style={{border: 'none'}}
                 type="text"
                 value="Profile Linking"
                 className="service-modal-input"

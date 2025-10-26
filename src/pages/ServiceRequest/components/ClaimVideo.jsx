@@ -122,6 +122,7 @@ function ClaimVideo({
               </p>
               <p style={{ fontSize: "12px" }}>Service Request</p>
               <input
+                style={{border: 'none'}}
                 type="text"
                 value="Claim Video"
                 className="service-modal-input"

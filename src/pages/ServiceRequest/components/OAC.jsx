@@ -149,6 +149,7 @@ function OAC({
               </p>
               <p style={{ fontSize: "12px" }}>Service Request</p>
               <input
+                style={{border: 'none'}}
                 type="text"
                 value="OAC"
                 className="service-modal-input"

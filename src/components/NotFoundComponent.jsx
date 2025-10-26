@@ -1,4 +1,4 @@
-import notFoundImg from "../assets/notFoundImage.png";
+import notFoundImg from "../assets/Empty.png";
 
 const NotFoundComponent = () => {
   return (
@@ -10,7 +10,7 @@ const NotFoundComponent = () => {
       }}
     >
       <img
-        style={{ width: "150px", height: "auto", marginTop: "15px" }}
+        style={{ width: "350px", height: "auto", marginTop: "15px" }}
         src={notFoundImg}
         alt=""
       />

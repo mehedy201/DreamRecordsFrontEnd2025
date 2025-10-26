@@ -130,6 +130,7 @@ function ContentID({
               <p style={{ fontSize: "12px" }}>Service Request</p>
 
               <input
+                style={{border: 'none'}}
                 type="text"
                 value="Content ID"
                 className="service-modal-input"

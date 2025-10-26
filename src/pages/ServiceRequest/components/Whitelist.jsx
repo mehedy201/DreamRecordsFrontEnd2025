@@ -207,6 +207,7 @@ function Whitelist({
               <p style={{ fontSize: "12px" }}>Service Request</p>
               <input
                 type="text"
+                style={{border: 'none'}}
                 value="Whitelist"
                 className="service-modal-input"
                 {...register("claimOption", { required: true })}
