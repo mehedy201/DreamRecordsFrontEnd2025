@@ -79,7 +79,7 @@ const Home = () => {
       // User Summary Get From API ___________
       axios
       .get(
-        `http://localhost:5000/api/v1/users/user/sammary/${userData?._id}`
+        `https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/users/user/sammary/${userData?._id}`
       )
       .then((res) => {
         if (res.status === 200) {

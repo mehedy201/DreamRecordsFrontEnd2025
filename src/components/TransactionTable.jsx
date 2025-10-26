@@ -18,7 +18,7 @@ const TransactionTable = ({ columns, data }) => {
     try {
       const query = new URLSearchParams({ masterUserId, date }).toString();
       const response = await fetch(
-        `http://localhost:5000/common/api/v1/analytics-and-balance/download?${query}`
+        `https://dream-records-2025-m2m9a.ondigitalocean.app/common/api/v1/analytics-and-balance/download?${query}`
       );
 
       if (!response.ok) {
