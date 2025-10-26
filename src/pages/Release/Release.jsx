@@ -19,6 +19,8 @@ import { useSelector } from "react-redux";
 import useQueryParams from "../../hooks/useQueryParams";
 import axios from "axios";
 import LoadingScreen from "../../components/LoadingScreen";
+import NotFoundComponent from "../../components/NotFoundComponent";
+import isEmptyArray from "../../hooks/isEmptyArrayCheck";
 
 const Release = () => {
   // Get Data Form Redux ________________________
@@ -91,6 +93,7 @@ const Release = () => {
   const [filteredCount, setFilteredCount] = useState();
   const [totalPages, setTotalPages] = useState();
   const [loading, setLoading] = useState(false);
+  const [releaseNotFound, setReleaseNotFound] = useState(false);
   useEffect(() => {
     if (userNameIdRoll) {
       setLoading(true);
@@ -102,6 +105,7 @@ const Release = () => {
           if (res.status == 200) {
             // console.log(res.data.data);
             setReleaseData(res.data.data);
+            if (isEmptyArray(res.data.data)) setReleaseNotFound(true);
             setFilteredCount(res.data.filteredCount);
             setTotalPages(res.data.totalPages);
             setLoading(false);
@@ -221,6 +225,7 @@ const Release = () => {
           )}
         </div>
         <ReleaseCard releaseData={releaseData} />
+        {releaseNotFound === true && <NotFoundComponent />}
         <Pagination
           totalDataCount={filteredCount}
           totalPages={totalPages}

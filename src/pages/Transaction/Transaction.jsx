@@ -16,6 +16,7 @@ import useQueryParams from "../../hooks/useQueryParams";
 import { EditIcon } from "lucide-react";
 import * as RadioGroup from "@radix-ui/react-radio-group";
 import { Controller, set, useForm } from "react-hook-form";
+import NotFoundComponent from "../../components/NotFoundComponent";
 const transactionColumns = [
   { label: "Type", key: "type" },
   { label: "Payment Method", key: "method" },
@@ -653,6 +654,9 @@ const Transaction = () => {
       {paymentDetails && (
         <TransactionTable columns={transactionColumns} data={paymentDetails} />
       )}
+      {
+        isEmptyArray(paymentDetails) && <NotFoundComponent />
+      }
 
       <Pagination
         totalDataCount={filteredCount}

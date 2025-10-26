@@ -14,6 +14,8 @@ import {
 import { useSelector } from "react-redux";
 import axios from "axios";
 import useQueryParams from "../../hooks/useQueryParams";
+import isEmptyArray from "../../hooks/isEmptyArrayCheck";
+import NotFoundComponent from "../../components/NotFoundComponent";
 const Artists = () => {
   // Get Data Form Redux ________________________
   const { userNameIdRoll } = useSelector((state) => state.userData);
@@ -64,6 +66,7 @@ const Artists = () => {
   const [totalCount, setTotalCount] = useState();
   const [filteredCount, setFilteredCount] = useState();
   const [totalPages, setTotalPages] = useState();
+  const [notFound, setNotFound] = useState(false);
   useEffect(() => {
     if (userNameIdRoll) {
       axios
@@ -73,6 +76,7 @@ const Artists = () => {
         .then((res) => {
           if (res.status == 200) {
             setArtistData(res.data.data);
+            if (isEmptyArray(res.data.data)) setNotFound(true);
             setTotalCount(res.data.totalCount);
             setFilteredCount(res.data.filteredCount);
             setTotalPages(res.data.totalPages);
@@ -185,6 +189,9 @@ const Artists = () => {
       </div>
       <br />
       <ArtistCard artistsItems={artistData} />
+      {
+        notFound && <NotFoundComponent />
+      }
       <Pagination
         totalDataCount={filteredCount}
         totalPages={totalPages}

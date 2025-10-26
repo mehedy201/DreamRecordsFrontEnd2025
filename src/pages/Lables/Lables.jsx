@@ -18,6 +18,8 @@ import labelDemoImg from "../../assets/lables/lables-placeholder.png";
 import useStatusStyle from "../../hooks/useStatusStyle";
 import localDate from "../../hooks/localDate";
 import { cdnLink } from "../../hooks/cdnLink";
+import NotFoundComponent from "../../components/NotFoundComponent";
+import isEmptyArray from "../../hooks/isEmptyArrayCheck";
 const Lables = () => {
   // Get Data Form Redux ________________________
   const { userNameIdRoll } = useSelector((state) => state.userData);
@@ -87,6 +89,7 @@ const Lables = () => {
   const [totalCount, setTotalCount] = useState();
   const [filteredCount, setFilteredCount] = useState();
   const [totalPages, setTotalPages] = useState();
+  const [notFound, setNotFound] = useState(false);
   useEffect(() => {
     if (userNameIdRoll) {
       axios
@@ -96,6 +99,7 @@ const Lables = () => {
         .then((res) => {
           if (res.status == 200) {
             setLabelData(res.data.data);
+            if (isEmptyArray(res.data.data)) setNotFound(true);
             setTotalCount(res.data.totalCount);
             setFilteredCount(res.data.filteredCount);
             setTotalPages(res.data.totalPages);
@@ -236,6 +240,9 @@ const Lables = () => {
             </Link>
           ))}
       </div>
+      {
+        notFound && <NotFoundComponent />
+      }
       <Pagination
         totalDataCount={filteredCount}
         totalPages={totalPages}

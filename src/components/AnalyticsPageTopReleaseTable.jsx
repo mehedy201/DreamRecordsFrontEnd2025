@@ -1,6 +1,8 @@
 import { Link } from 'react-router-dom';
 import releasePlaceHolderImg from '../assets/release-placeholder.png'
 import { cdnLink } from '../hooks/cdnLink';
+import isEmptyArray from '../hooks/isEmptyArrayCheck';
+import emptyImg from "../assets/Empty.png";
 
 const AnalyticsPageTopReleaseTable = ({columns, data}) => {
 
@@ -60,6 +62,12 @@ const AnalyticsPageTopReleaseTable = ({columns, data}) => {
                 ))}
                 </tbody>
             </table>
+            {
+                isEmptyArray(data) && 
+                <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+                  <img style={{height: '200px', width: 'auto'}} src={emptyImg} alt="" />
+                </div>
+            }
         </div>
     );
 };

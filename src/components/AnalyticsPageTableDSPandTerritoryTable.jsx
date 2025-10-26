@@ -1,3 +1,6 @@
+import isEmptyArray from "../hooks/isEmptyArrayCheck";
+import emptyImg from "../assets/Empty.png";
+
 const AnalyticsPageTableDSPandTerritoryTable = ({ columns, data }) => {
   return (
     <div className="table-wrapper AnalyticsPg-territoryTable">
@@ -22,6 +25,12 @@ const AnalyticsPageTableDSPandTerritoryTable = ({ columns, data }) => {
           ))}
         </tbody>
       </table>
+          {
+            isEmptyArray(data) && 
+            <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+              <img style={{height: '200px', width: 'auto'}} src={emptyImg} alt="" />
+            </div>
+          }
     </div>
   );
 };
