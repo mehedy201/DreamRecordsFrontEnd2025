@@ -87,7 +87,11 @@ const ReleaseAudioUpload = ({ className, audioData, setAudioData }) => {
             {uploadLoading ? (
               <div
                 style={{
-                  height: "100%",
+                  position: "absolute",
+                  top: "50%",
+                  left: "50%",
+                  transform: "translate(-50%, -50%)",
+                  textAlign: "center",
                   width: "100%",
                   display: "flex",
                   alignItems: "center",

@@ -292,7 +292,7 @@ function Analytics() {
           if (res.status === 200) {
             if (isEmptyArray(res?.data?.data)) setDataNotFound(true);
             dspAndTerittoriGet(res?.data?.data);
-            setTotalRevenue(data?.release[0]?.totalRevenue?.toFixed(2));
+            // setTotalRevenue(data?.release[0]?.totalRevenue?.toFixed(2));
             setTotalStreams(data?.release[0]?.totalStreams);
 
             const rawData = res?.data?.data;
@@ -338,6 +338,10 @@ function Analytics() {
         <div className="">
           <div className="d-flex">
             <h5 style={{ marginBottom: "10px" }}>Analytics</h5>
+          </div>
+          <div style={{marginBottom: '20px'}} className="analytics-card">
+            <h3>All Time Revenue</h3>
+            <h2>&#8377; {totalRevenue || 0}</h2>
           </div>
         </div>
         <div className="analytics-filter-div">
@@ -550,10 +554,10 @@ function Analytics() {
                 <h6>Total Streams</h6>
                 <h2>{formatStreamsNumber(totalStreams) || 0}</h2>
               </div> */}
-        <div className="analytics-card">
+        {/* <div className="analytics-card">
           <h6>All Time Revenue</h6>
           <h2>&#8377; {totalRevenue || 0}</h2>
-        </div>
+        </div> */}
         {/* </div> */}
         <Tabs.Root
           className="tabs-root singleRelease-tabs"
