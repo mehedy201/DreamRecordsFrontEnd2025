@@ -28,7 +28,7 @@ const AnalyticsPageTableDSPandTerritoryTable = ({ columns, data }) => {
           {
             isEmptyArray(data) && 
             <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-              <img style={{height: '200px', width: 'auto'}} src={emptyImg} alt="" />
+              <img style={{height: '70px', width: 'auto', marginTop: '70px'}} src={emptyImg} alt="" />
             </div>
           }
     </div>

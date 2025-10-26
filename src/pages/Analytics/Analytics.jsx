@@ -340,7 +340,7 @@ function Analytics() {
             <h5 style={{ marginBottom: "10px" }}>Analytics</h5>
           </div>
           <div style={{marginBottom: '20px'}} className="analytics-card">
-            <h3>All Time Revenue</h3>
+            <h6>All Time Revenue</h6>
             <h2>&#8377; {totalRevenue || 0}</h2>
           </div>
         </div>

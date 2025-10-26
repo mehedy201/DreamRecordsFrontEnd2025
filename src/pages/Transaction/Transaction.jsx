@@ -276,7 +276,7 @@ const Transaction = () => {
           >
             <div>
               <span>Total Balance</span>
-              <h2 style={{fontSize: '32px', fontWeight: 'bold', marginTop: '10px'}}>&#8377; {userData?.balance?.amount || 0}</h2>
+              <h2 style={{fontSize: '45px', marginTop: '10px'}}>&#8377; {userData?.balance?.amount || 0}</h2>
             </div>
             <Dialog.Root open={isOpen} onOpenChange={setIsOpen}>
               <div className="transaction-withdraw-btn">

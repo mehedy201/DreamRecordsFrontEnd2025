@@ -9,8 +9,8 @@ const NotFoundComponent = () => {
         alignItems: "center",
       }}
     >
-      <img
-        style={{ width: "350px", height: "auto", marginTop: "15px" }}
+        <img
+        style={{ width: "70px", height: "auto", marginTop: "100px", marginBottom: "100px" }}
         src={notFoundImg}
         alt=""
       />
