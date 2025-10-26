@@ -114,8 +114,6 @@ function Settings() {
       {/* <h2 style={{ fontSize: "24px", fontWeight: "500" }}>Settings</h2> */}
       <div style={{ background: "#fff", padding: "20px", borderRadius: "8px" }}>
         <div className="settings-div">
-          <h4>Payout Preference</h4>
-          <p>Default Payout Method</p>
           <p style={{ fontWeight: "bold", fontSize: "16px" }}>Bank Account</p>
           <form
             onSubmit={handleSubmit(onSubmit)}
