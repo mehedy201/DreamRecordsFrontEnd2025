@@ -127,7 +127,7 @@ function ClaimVideo({
                 value="Claim Video"
                 className="service-modal-input"
                 {...register("claimOption", { required: true })}
-                readOnly
+                disabled
               />
               {errors.claimOption && (
                 <span style={{ color: "#ea3958" }}>Claim Video Required</span>

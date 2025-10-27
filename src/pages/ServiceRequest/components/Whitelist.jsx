@@ -211,7 +211,7 @@ function Whitelist({
                 value="Whitelist"
                 className="service-modal-input"
                 {...register("claimOption", { required: true })}
-                readOnly
+                disabled
               />
               {errors.claimOption && (
                 <span style={{ color: "#ea3958" }}>Whitelist Required</span>

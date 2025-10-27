@@ -132,7 +132,6 @@ function ReleaseClaim({
                 value="Release Claim"
                 className="service-modal-input"
                 {...register("claimOption", { required: true })}
-                // readOnly
               />
               {errors.claimOption && (
                 <span style={{ color: "#ea3958" }}>Release Claim Required</span>

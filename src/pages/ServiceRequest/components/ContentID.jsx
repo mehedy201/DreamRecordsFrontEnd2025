@@ -135,7 +135,7 @@ function ContentID({
                 value="Content ID"
                 className="service-modal-input"
                 {...register("claimOption", { required: true })}
-                readOnly
+                disabled
               />
               {errors.claimOption && (
                 <span style={{ color: "#ea3958" }}>Content ID Required</span>
