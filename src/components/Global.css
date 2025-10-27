@@ -1081,3 +1081,27 @@ img {
 .stdropdown-tools {
   top: 10px !important;
 }
+
+
+
+
+
+
+
+/* .logout-btn-initial-page {
+  position: absolute;
+  top: 30px;
+  right: 40px;
+} */
+@media screen and (min-width: 888px) {
+  .logout-btn-initial-page {
+    position: absolute;
+    top: 30px;
+    right: 40px;
+  }
+}
+@media screen and (max-width: 888px) {
+  .logout-btn-initial-page {
+    float: right;
+  }
+}

@@ -6,6 +6,7 @@ import FormSubmitLoading from "../../../components/FormSubmitLoading";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { setUserData } from "../../../redux/features/userDataHandleSlice/userDataHandleSlice";
+import { CiLogout } from "react-icons/ci";
 
 const AddressInformation = () => {
   const navigate = useNavigate();
@@ -72,6 +73,27 @@ const AddressInformation = () => {
   return (
     <div className="signup-wrapper ">
       <div className="signUp-form">
+        <div style={{display: 'flex', justifyContent: 'right', alignItems: 'center', marginTop: '20px'}}>
+          <button 
+            className="logout-btn-initial-page"
+            onClick={() => {
+                  localStorage.removeItem("token");
+                  navigate("/login");
+                }}
+            style={{
+              padding: '10px 40px', 
+              border: '1px solid lightgray', 
+              borderRadius: '6px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap:'10px',
+              fontSize: '14px',
+              backgroundColor: '#1f2d5c',
+              color: 'white',
+              cursor: 'pointer',
+              }}> <CiLogout style={{ fontWeight: 'bold', fontSize: '1.2rem' }}/> Log Out</button>
+        </div>
         <div className="form-title-txt">
           <h1>Address Information</h1>
           <p>Fill your personal details to create account</p>

@@ -61,9 +61,11 @@ function SignUpVerificationEmail() {
       )
       .then((res) => {
         if (res.status === 200) {
+          console.log('200 ok', res);
           localStorage.setItem("token", res.data.token);
           navigate("/sign-up-profile-info");
         } else {
+          console.log('no', res)
           setErrorMessage(res.data.message);
         }
       });
