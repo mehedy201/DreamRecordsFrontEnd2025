@@ -61,7 +61,6 @@ function SignUpVerificationEmail() {
       payload
     )
     .then((res) => {
-      console.log("res", res);
       localStorage.setItem("token", res.data.token);
       navigate("/sign-up-profile-info");
     })
