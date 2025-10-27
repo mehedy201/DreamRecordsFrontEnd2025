@@ -9,7 +9,6 @@ import {
 } from "recharts";
 import formatNumber from "../hooks/formatNumber";
 
-
 const COLORS_TYPE = ["#00e4a5", "#0099ff"];
 const COLORS_STATUS = ["#0099ff", "#00e4a5", "#ffb129", "#ff4f4f", "#8e44ad"];
 

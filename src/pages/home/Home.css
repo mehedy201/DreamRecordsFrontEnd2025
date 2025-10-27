@@ -258,9 +258,9 @@
   .home-pie-div .chart-card .recharts-legend-wrapper {
     right: 160px !important;
   }
-  .home-pie-div .chart-card .recharts-surface {
+  /* .home-pie-div .chart-card .recharts-surface {
     width: 100% !important;
-  }
+  } */
 }
 @media screen and (max-width: 340px) {
   .home-pie-div .chart-card {
