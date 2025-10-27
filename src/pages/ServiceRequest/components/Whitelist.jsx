@@ -204,10 +204,10 @@ function Whitelist({
                 If you want to claim a service request, please fill the details
                 below for associated tracks with appropriate links.
               </p>
-              <p style={{ fontSize: "12px" }}>Service Request</p>
+              {/* <p style={{ fontSize: "12px" }}>Service Request</p> */}
               <input
                 type="text"
-                style={{border: 'none'}}
+                style={{border: 'none', opacity: '0', position: 'absolute', top: '0px'}}
                 value="Whitelist"
                 className="service-modal-input"
                 {...register("claimOption", { required: true })}

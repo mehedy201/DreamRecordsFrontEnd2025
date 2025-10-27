@@ -14,7 +14,7 @@ const TrackViewCollapsSection = ({ track, index }) => {
   const { tracksInfo } = useSelector((state) => state.releaseData);
   const dispatch = useDispatch();
 
-  const [albumOverviewSong, setAlbumOverviewSong] = useState(false);
+  const [albumOverviewSong, setAlbumOverviewSong] = useState(true);
 
   const pathname = window.location.pathname;
 
@@ -73,9 +73,9 @@ const TrackViewCollapsSection = ({ track, index }) => {
             )}
             <Collapsible.Trigger asChild>
               {albumOverviewSong ? (
-                <MdKeyboardArrowUp className="release-album-arrowIcon" />
+                <MdKeyboardArrowUp className="release-album-arrowIcon" style={{marginRight: '25px'}}/>
               ) : (
-                <MdKeyboardArrowDown className="release-album-arrowIcon" />
+                <MdKeyboardArrowDown className="release-album-arrowIcon" style={{marginRight: '25px'}}/>
               )}
             </Collapsible.Trigger>
           </div>

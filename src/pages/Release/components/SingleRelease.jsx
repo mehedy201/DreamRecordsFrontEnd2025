@@ -49,6 +49,7 @@ function SingleRelease() {
       .then((res) => {
         if (res.status === 200) {
           setReleaseData(res.data.data);
+          console.log(res.data.data);
           setTrackData(res?.data?.data?.tracks);
           setUPC(res?.data?.data?.UPC);
         }
@@ -407,7 +408,7 @@ function SingleRelease() {
           onOpenChange={() => setAnalyticsCollapse(!analyticsCollapse)} */}
       <div className="release-analytics">
         <Collapsible.Root
-          defaultOpen={true}
+          defaultOpen={false}
           onOpenChange={setAnalyticsCollapse}
         >
           <Collapsible.Trigger asChild>
@@ -418,12 +419,12 @@ function SingleRelease() {
                   {analyticsCollapse ? (
                     <IoIosArrowUp
                       className="release-album-arrowIcon"
-                      style={{ marginRight: "17px" }}
+                      style={{ marginRight: "25px" }}
                     />
                   ) : (
                     <IoIosArrowDown
                       className="release-album-arrowIcon"
-                      style={{ marginRight: "17px" }}
+                      style={{ marginRight: "25px" }}
                     />
                   )}
                 </div>
@@ -432,14 +433,14 @@ function SingleRelease() {
           </Collapsible.Trigger>
 
           <Collapsible.Content>
-            <div className="analytics-card-row">
+            <div>
               {/* <div className="analytics-card">
                 <h6>Total Streams</h6>
                 <h2>{releaseData?.totalStreams?.toFixed(2)}</h2>
               </div> */}
               <div className="analytics-card">
                 <h6>All Time Revenue</h6>
-                <h2>&#8377; {releaseData?.totalRevenue?.toFixed(2)}</h2>
+                <h2>&#8377; {releaseData?.totalRevenue?.toFixed(2) || 0}</h2>
               </div>
             </div>
             <Tabs.Root
