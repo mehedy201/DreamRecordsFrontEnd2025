@@ -54,23 +54,25 @@ function SignUpVerificationEmail() {
       return;
     }
     const payload = { otp, id };
-    axios
-      .post(
-        `https://dream-records-2025-m2m9a.ondigitalocean.app/common/api/v1/authentication/verify-user-otp`,
-        payload
-      )
-      .then((res) => {
-        if (res.status === 200) {
-          console.log('200 ok', res);
-          localStorage.setItem("token", res.data.token);
-          navigate("/sign-up-profile-info");
-        } else {
-          console.log('no', res)
-          setErrorMessage(res.data.message);
-        }
-      });
 
-    //
+    axios
+    .post(
+      `https://dream-records-2025-m2m9a.ondigitalocean.app/common/api/v1/authentication/verify-user-otp`,
+      payload
+    )
+    .then((res) => {
+      console.log("res", res);
+      localStorage.setItem("token", res.data.token);
+      navigate("/sign-up-profile-info");
+    })
+    .catch((error) => {
+      // Extract message properly
+      if (error.response && error.response.data && error.response.data.message) {
+        setErrorMessage(error.response.data.message);
+      } else {
+        setErrorMessage("Something went wrong!"); // fallback
+      }
+    });
   };
 
   const styles = {
@@ -153,8 +155,8 @@ function SignUpVerificationEmail() {
             </div>
           </div>
         </div>
-        {otpErr && <p style={{ color: "red" }}>{otpErr}</p>}
-        {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
+        {otpErr && <p style={{ color: "red", textAlign: 'center'}}>{otpErr}</p>}
+        {errorMessage && <p style={{ color: "red", textAlign: 'center'}}>{errorMessage}</p>}
         <button
           className="theme-btn"
           style={{ width: "100%", margin: "0 0 0px 0" }}
