@@ -250,7 +250,7 @@ function Analytics() {
           if (res.status === 200) {
             if (isEmptyArray(res?.data?.data)) setDataNotFound(true);
             dspAndTerittoriGet(res?.data?.data);
-            setTotalRevenue(res?.data?.totalRevenue?.toFixed(2));
+            // setTotalRevenue(res?.data?.totalRevenue?.toFixed(2));
             setTotalStreams(res?.data?.totalStreams);
 
             const rawData = res?.data?.monthlyTotals;
@@ -315,10 +315,6 @@ function Analytics() {
             setChartDataStreams(streamsData);
             setChartDataRevenue(revenewData);
             setAnalyticsLoading(false);
-
-
-
-
 
             axios
             .get(
