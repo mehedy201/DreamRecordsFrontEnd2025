@@ -236,9 +236,9 @@ function Analytics() {
   const filterType = watch("type");
 
   const onSubmit = (data) => {
-    console.log("data", data);
+    // console.log("data", data);
     const date = `${data.mounth} ${data.years}`;
-    if (filterType === "All Release") {
+    if (!data.release) {
       // console.log('yes all release')
       setAnalyticsLoading(true);
       axios
@@ -281,15 +281,17 @@ function Analytics() {
           setReleaseData(res.data.data);
         });
     }
-    if (filterType === "Release") {
+
+    if (data.release) {
       setAnalyticsLoading(true);
       axios
         .get(
           `https://dream-records-2025-m2m9a.ondigitalocean.app/common/api/v1/analytics-and-balance/upc-analytics?UPC=${data?.release[0]?.UPC}&date=${date}`
         )
         .then((res) => {
-          console.log(res);
+          console.log('res', res.data.data);
           if (res.status === 200) {
+            let releaseSummary = res.data.data[0]
             if (isEmptyArray(res?.data?.data)) setDataNotFound(true);
             dspAndTerittoriGet(res?.data?.data);
             // setTotalRevenue(data?.release[0]?.totalRevenue?.toFixed(2));
@@ -313,18 +315,26 @@ function Analytics() {
             setChartDataStreams(streamsData);
             setChartDataRevenue(revenewData);
             setAnalyticsLoading(false);
+
+
+
+
+
+            axios
+            .get(
+              `https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/release/release/${data?.release[0]?._id}`
+            )
+            .then((res) => {
+              if (res.status === 200) {
+                const rData = res.data.data;
+                const specificMonthStreamAndRevenue = {...rData, totalRevenue: releaseSummary?.totalRevenue, totalStreams: releaseSummary?.totalStreams}
+                setReleaseData([specificMonthStreamAndRevenue]);
+              }
+            });
           }
         });
 
-      axios
-        .get(
-          `https://dream-records-2025-m2m9a.ondigitalocean.app/api/v1/release/release/${data?.release[0]?._id}`
-        )
-        .then((res) => {
-          if (res.status === 200) {
-            setReleaseData([res.data.data]);
-          }
-        });
+      
     }
   };
 
@@ -433,7 +443,7 @@ function Analytics() {
                 onSelect={(items) =>
                   setValue("release", items, { shouldValidate: true })
                 }
-                register={{ ...register("release", { required: true }) }}
+                register={{ ...register("release") }}
                 value={watch("release")}
               />
               {errors.release && (
