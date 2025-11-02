@@ -9,6 +9,8 @@ import { setTracksInfo } from "../../../redux/features/releaseDataHandleSlice/re
 import axios from "axios";
 import artistDemoImg from "../../../assets/artists/artist4.png";
 import { cdnLink } from "../../../hooks/cdnLink";
+import { Dialog } from "radix-ui";
+import Modal from "../../../components/Modal";
 const TrackViewCollapsSection = ({ track, index }) => {
   // Get TrackInfo Data State form Redux
   const { tracksInfo } = useSelector((state) => state.releaseData);
@@ -147,7 +149,19 @@ const TrackViewCollapsSection = ({ track, index }) => {
                   </div>
                   <div className="d-flex">
                     <p>Lyrics:</p>
-                    <p>{track?.lyrics}</p>
+                    {
+                      track?.Lyrics ?
+                      <>
+                      <Dialog.Root>
+                        <Dialog.Trigger className="serviceRequest-view-trigger">
+                          <p>{track?.Lyrics ? `${track?.Lyrics.slice(0, 20)}...`: ''}</p>
+                        </Dialog.Trigger>
+                        <Modal title='Lyrics'>
+                          <p>{track?.Lyrics}</p>
+                        </Modal>
+                      </Dialog.Root>
+                      </> : ''
+                    }
                   </div>
                   <div className="d-flex">
                     <p>ISRC Code:</p>
