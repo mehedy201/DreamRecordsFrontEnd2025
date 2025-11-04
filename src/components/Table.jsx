@@ -225,6 +225,18 @@ const Table = ({ tableFor, serviceRequestData }) => {
                             <p style={{ fontSize: "14px", color: "#838383" }}>
                               Reject Reason:
                             </p>
+                              {
+                                data?.rejectionReasons && 
+                                <div>
+                                  {
+                                    data?.rejectionReasons?.map((r, index) => 
+                                      <div key={index}>
+                                        <p style={{fontWeight: '14px'}}>{r}</p>
+                                      </div>
+                                    )
+                                  }
+                                </div>
+                              }
                             <div style={{whiteSpace: 'normal',wordBreak: 'break-word',overflowWrap: 'break-word',}} dangerouslySetInnerHTML={{ __html: data?.actionRequired }} />
                           </div>
                         }
