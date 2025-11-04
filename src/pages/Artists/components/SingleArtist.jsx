@@ -31,6 +31,7 @@ import useQueryParams from "../../../hooks/useQueryParams";
 import localDate from "../../../hooks/localDate";
 import LoadingScreen from "../../../components/LoadingScreen";
 import { cdnLink } from "../../../hooks/cdnLink";
+import formatSocialUrl from "../../../hooks/formatSocialUrl";
 
 const SingleArtist = () => {
   const navigate = useNavigate();
@@ -169,6 +170,9 @@ const SingleArtist = () => {
     );
   };
 
+
+  
+
   if (deleteLoading == true) {
     return <LoadingScreen />;
   }
@@ -286,7 +290,7 @@ const SingleArtist = () => {
                     <a
                       className="social-div"
                       target="_blank"
-                      href={`https://music.apple.com/profile/${artist.appleId}`}
+                      href={formatSocialUrl("apple", artist.appleId)}
                     >
                       <img src={appleImg} alt={appleImg} />
                     </a>
@@ -295,7 +299,7 @@ const SingleArtist = () => {
                     <a
                       className="social-div"
                       target="_blank"
-                      href={`https://open.spotify.com/user/${artist.spotifyId}`}
+                      href={formatSocialUrl("spotify", artist.spotifyId)}
                     >
                       <img src={spotifyImg} alt={spotifyImg} />
                     </a>
@@ -304,7 +308,7 @@ const SingleArtist = () => {
                     <a
                       className="social-div"
                       target="_blank"
-                      href={`https://www.instagram.com/${artist.instagramId}`}
+                      href={formatSocialUrl("instagram", artist.instagramId)}
                     >
                       <img src={instagramImg} alt={instagramImg} />
                     </a>
@@ -313,7 +317,7 @@ const SingleArtist = () => {
                     <a
                       className="social-div"
                       target="_blank"
-                      href={artist.facebook}
+                      href={formatSocialUrl("facebook", artist.facebook)}
                     >
                       <img src={facebookImg} alt={facebookImg} />
                     </a>
@@ -322,7 +326,7 @@ const SingleArtist = () => {
                     <a
                       className="social-div"
                       target="_blank"
-                      href={artist.youtube}
+                      href={formatSocialUrl("youtube", artist.youtube)}
                     >
                       <img src={youtubeImg} alt={youtubeImg} />
                     </a>

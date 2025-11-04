@@ -8,6 +8,7 @@ import youtubeImg from '../../../assets/social/youtube-icon.png'
 import appleImg from '../../../assets/social/apple-music.png'
 import { cdnLink } from "../../../hooks/cdnLink";
 import notFoundImg from "../../../assets/Empty.png";
+import formatSocialUrl from "../../../hooks/formatSocialUrl";
 
 
 const ArtistDetailsForModal = ({data}) => {
@@ -43,7 +44,7 @@ const ArtistDetailsForModal = ({data}) => {
                 <a
                     className="social-div"
                     target="_blank"
-                    href={`https://music.apple.com/profile/${data?.appleId}`}
+                    href={formatSocialUrl("apple", data.appleId)}
                 >
                     <img style={{height: '16px', width: 'auto'}} src={appleImg} alt={appleImg} />
                 </a>
@@ -52,7 +53,7 @@ const ArtistDetailsForModal = ({data}) => {
                 <a
                     className="social-div"
                     target="_blank"
-                    href={`https://open.spotify.com/user/${data?.spotifyId}`}
+                    href={formatSocialUrl("spotify", data.spotifyId)}
                 >
                     <img style={{height: '16px', width: 'auto'}} src={spotifyImg} alt={spotifyImg} />
                 </a>
@@ -61,7 +62,7 @@ const ArtistDetailsForModal = ({data}) => {
                 <a
                     className="social-div"
                     target="_blank"
-                    href={`https://www.instagram.com/${data?.instagramId}`}
+                    href={formatSocialUrl("instagram", data.instagramId)}
                 >
                     <img style={{height: '16px', width: 'auto'}} src={instagramImg} alt={instagramImg} />
                 </a>
@@ -70,7 +71,7 @@ const ArtistDetailsForModal = ({data}) => {
                 <a
                     className="social-div"
                     target="_blank"
-                    href={data.facebook}
+                    href={formatSocialUrl("facebook", data.facebook)}
                 >
                     <img style={{height: '16px', width: 'auto'}} src={facebookImg} alt={facebookImg} />
                 </a>
@@ -79,7 +80,7 @@ const ArtistDetailsForModal = ({data}) => {
                 <a
                     className="social-div"
                     target="_blank"
-                    href={data.youtube}
+                    href={formatSocialUrl("youtube", data.youtube)}
                 >
                     <img style={{height: '16px', width: 'auto'}} src={youtubeImg} alt={youtubeImg} />
                 </a>
