@@ -176,20 +176,40 @@ const TrackViewCollapsSection = ({ track, index }) => {
                     <p className="releaseCredit-items-title">Primary Atrist</p>
                     <div>
                       {track?.artist?.map((data, index) => (
-                        <Dialog.Root key={index}>
-                          <Dialog.Trigger className="serviceRequest-view-trigger">
-                            <div key={index} className="d-flex">
-                              <img
-                                src={data?.key ? cdnLink(data?.key) : artistDemoImg}
-                                alt=""
-                              />
-                              <p>{data?.artistName}</p>
-                            </div>
-                          </Dialog.Trigger>
-                          <Modal title='Primary Artist'>
-                            <ArtistDetailsForModal data={data}/>
-                          </Modal>
-                        </Dialog.Root>
+                        <div>
+                          <Dialog.Root key={index}>
+                            <Dialog.Trigger className="serviceRequest-view-trigger">
+                              <div key={index} className="d-flex">
+                                {/* <img
+                                  src={data?.key ? cdnLink(data?.key) : artistDemoImg}
+                                  alt=""
+                                /> */}
+                                <p>{data?.artistName}</p>
+                              </div>
+                            </Dialog.Trigger>
+                            <Modal title='Primary Artist'>
+                              <ArtistDetailsForModal data={data}/>
+                            </Modal>
+                          </Dialog.Root>
+                        </div>
+                      ))}
+                      {track?.artist?.map((data, index) => (
+                        <div>
+                          <Dialog.Root key={index}>
+                            <Dialog.Trigger className="serviceRequest-view-trigger">
+                              <div key={index} className="d-flex">
+                                {/* <img
+                                  src={data?.key ? cdnLink(data?.key) : artistDemoImg}
+                                  alt=""
+                                /> */}
+                                <p>{data?.artistName}</p>
+                              </div>
+                            </Dialog.Trigger>
+                            <Modal title='Primary Artist'>
+                              <ArtistDetailsForModal data={data}/>
+                            </Modal>
+                          </Dialog.Root>
+                        </div>
                       ))}
                     </div>
                   </div>
@@ -205,10 +225,10 @@ const TrackViewCollapsSection = ({ track, index }) => {
                             <Dialog.Root key={index}>
                               <Dialog.Trigger className="serviceRequest-view-trigger">
                                 <div key={index} className="d-flex">
-                                  <img
+                                  {/* <img
                                     src={data?.key ? cdnLink(data?.key) : artistDemoImg}
                                     alt=""
-                                  />
+                                  /> */}
                                   <p>{data?.artistName}</p>
                                 </div>
                               </Dialog.Trigger>
@@ -230,20 +250,22 @@ const TrackViewCollapsSection = ({ track, index }) => {
                     <p className="releaseCredit-items-title">Featuring</p>
                     <div>
                       {track?.featuring?.map((data, index) => (
-                        <Dialog.Root key={index}>
-                          <Dialog.Trigger className="serviceRequest-view-trigger">
-                            <div key={index} className="d-flex">
-                              <img
-                                src={data?.key ? cdnLink(data?.key) : artistDemoImg}
-                                alt=""
-                              />
-                              <p>{data?.artistName}</p>
-                            </div>
-                          </Dialog.Trigger>
-                          <Modal title='Featuring'>
-                            <ArtistDetailsForModal data={data}/>
-                          </Modal>
-                        </Dialog.Root>
+                        <div>
+                          <Dialog.Root key={index}>
+                            <Dialog.Trigger className="serviceRequest-view-trigger">
+                              <div key={index} className="d-flex">
+                                {/* <img
+                                  src={data?.key ? cdnLink(data?.key) : artistDemoImg}
+                                  alt=""
+                                /> */}
+                                <p>{data?.artistName}</p>
+                              </div>
+                            </Dialog.Trigger>
+                            <Modal title='Featuring'>
+                              <ArtistDetailsForModal data={data}/>
+                            </Modal>
+                          </Dialog.Root>
+                        </div>
                       ))}
                     </div>
                   </div>
@@ -270,10 +292,10 @@ const TrackViewCollapsSection = ({ track, index }) => {
                             <Dialog.Root key={index}>
                               <Dialog.Trigger className="serviceRequest-view-trigger">
                                 <div key={index} className="d-flex">
-                                  <img
+                                  {/* <img
                                     src={data?.key ? cdnLink(data?.key) : artistDemoImg}
                                     alt=""
-                                  />
+                                  /> */}
                                   <p>{data?.artistName}</p>
                                 </div>
                               </Dialog.Trigger>
