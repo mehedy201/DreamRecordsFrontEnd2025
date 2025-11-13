@@ -116,9 +116,9 @@ const PersonalDetails = () => {
               style={{marginTop: '6px'}}
             />
             {phoneErr && <p style={{ color: "red" }}>{phoneErr}</p>}
-            {loading && <FormSubmitLoading />}
             <div className="signUp-buttons">
-              <button className="signUp-next-btn" type="submit">
+              <button style={{display: "flex", justifyContent: "center", alignItems: "center", gap: '10px'}} className="signUp-next-btn" type="submit">
+                {loading && <span className="btn-spinner-span"></span>}
                 Continue
               </button>
             </div>

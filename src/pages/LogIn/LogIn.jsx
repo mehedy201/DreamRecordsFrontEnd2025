@@ -105,13 +105,13 @@ function LogIn() {
             />
           </div>
           {errors.password && <span>Password Required</span>}
-          {loading && <FormSubmitLoading />}
           {errorMassage && <p style={{ color: "red" }}>{errorMassage}</p>}
           <button
             type="submit"
             className="theme-btn"
-            style={{ width: "100%", margin: "0 0 24px 0" }}
+            style={{ width: "100%", margin: "0 0 24px 0", display: "flex", justifyContent: "center", alignItems: "center", gap: '10px' }}
           >
+            {loading && <span className="btn-spinner-span"></span>}
             Log In
           </button>
         </form>

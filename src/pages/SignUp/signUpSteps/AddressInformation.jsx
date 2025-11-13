@@ -174,7 +174,6 @@ const AddressInformation = () => {
                 )}
               </div>
             </div>
-            {loading && <FormSubmitLoading />}
             <div className="signUp-buttons">
               <button
                 className="theme-btn2"
@@ -185,7 +184,8 @@ const AddressInformation = () => {
               >
                 Back
               </button>
-              <button className="signUp-next-btn" type="submit">
+              <button style={{display: "flex", justifyContent: "center", alignItems: "center", gap: '10px'}} className="signUp-next-btn" type="submit">
+                {loading && <span className="btn-spinner-span"></span>}
                 Continue
               </button>
             </div>

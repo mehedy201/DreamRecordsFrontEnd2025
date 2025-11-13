@@ -204,7 +204,6 @@ const SignUpFirstPage = () => {
               Confirm Password Required
             </p>
           )}
-          {loading && <FormSubmitLoading />}
           {errorMassage && (
             <p style={{ color: "red", marginTop: "-10px" }}>{errorMassage}</p>
           )}
@@ -212,8 +211,9 @@ const SignUpFirstPage = () => {
           <button
             type="submit"
             className="theme-btn"
-            style={{ width: "100%", margin: "0 0 24px 0" }}
+            style={{ width: "100%", margin: "0 0 24px 0", display: "flex", justifyContent: "center", alignItems: "center", gap: '10px' }}
           >
+            {loading && <span className="btn-spinner-span"></span>}
             Sign Up
           </button>
           <button onClick={() => navigate("/login")} className="theme-btn2">

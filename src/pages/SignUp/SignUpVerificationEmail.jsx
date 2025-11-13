@@ -8,7 +8,7 @@ function SignUpVerificationEmail() {
   const navigate = useNavigate();
 
   const { id } = useParams();
-  console.log(id);
+
   const [otp, setOtp] = useState("");
 
   const [tempData, setTempData] = useState();
@@ -38,7 +38,9 @@ function SignUpVerificationEmail() {
 
   const [otpErr, setOtpErr] = useState();
   const [errorMessage, setErrorMessage] = useState();
+  const [loading, setLoading] = useState(false);
   const verifyOtp = () => {
+    setLoading(true);
     setErrorMessage("");
     setOtpErr("");
     if (!otp) {
@@ -62,10 +64,12 @@ function SignUpVerificationEmail() {
     )
     .then((res) => {
       localStorage.setItem("token", res.data.token);
+      setLoading(false);
       navigate("/sign-up-profile-info");
     })
     .catch((error) => {
       // Extract message properly
+      setLoading(false);
       if (error.response && error.response.data && error.response.data.message) {
         setErrorMessage(error.response.data.message);
       } else {
@@ -158,9 +162,10 @@ function SignUpVerificationEmail() {
         {errorMessage && <p style={{ color: "red", textAlign: 'center'}}>{errorMessage}</p>}
         <button
           className="theme-btn"
-          style={{ width: "100%", margin: "0 0 0px 0" }}
+          style={{ width: "100%", margin: "0 0 0px 0", display: "flex", justifyContent: "center", alignItems: "center", gap: '10px' }}
           onClick={verifyOtp}
         >
+          {loading && <span className="btn-spinner-span"></span>}
           Continue
         </button>
         <p className="signUp-resend-txt">
