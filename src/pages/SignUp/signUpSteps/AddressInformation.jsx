@@ -27,13 +27,15 @@ const AddressInformation = () => {
     setLoading(true);
     if (!country) {
       setCountryError("Please select your Country");
+      setLoading(false);
       return;
     }
 
     const label = {
       labelName: "Dream Records",
       imgUrl:
-        "https://dream-records-2024.s3.ap-south-1.amazonaws.com/release-image/1754129130799-119804724-Dream%20Records%20Logo%20%28Dark%29.png",
+        "https://s3.ap-southeast-1.wasabisys.com/dream-records-2024/label-image/Dream%20Records%20Logo%20(Dark).png",
+      key: 'label-image/Dream Records Logo (Dark).png',
       status: "Approved",
       instagram: "",
       facebook: "",
@@ -129,7 +131,7 @@ const AddressInformation = () => {
                   placeHolder="Select Country"
                 />
                 {countryError && (
-                  <p className="text-red-600 pb-2">{countryError}</p>
+                  <p style={{ color: "red", marginTop: "-10px" }}>{countryError}</p>
                 )}
               </div>
               <div>
