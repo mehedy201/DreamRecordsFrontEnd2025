@@ -3,6 +3,7 @@ import "./SignUp.css";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { set } from "react-hook-form";
 
 function SignUpVerificationEmail() {
   const navigate = useNavigate();
@@ -45,14 +46,17 @@ function SignUpVerificationEmail() {
     setOtpErr("");
     if (!otp) {
       setOtpErr("OTP Required");
+      setLoading(false);
       return;
     }
     if (otp.length !== 4) {
       setOtpErr("OTP must have to 4 character");
+      setLoading(false);
       return;
     }
     if (!tempData) {
       setOtpErr("User not found");
+      setLoading(false);
       return;
     }
     const payload = { otp, id };

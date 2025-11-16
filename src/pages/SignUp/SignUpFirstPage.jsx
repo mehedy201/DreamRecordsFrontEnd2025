@@ -75,14 +75,20 @@ const SignUpFirstPage = () => {
     setLoading(true);
     if (!userName) {
       setUserNameErr("User Name Required");
+      setLoading(false);
+      return;
     }
     let password;
     if (data.password1 === data.password2) {
       password = data.password1;
     } else {
       setErrorMassage("Password Not Match");
+      setLoading(false);
+      return;
     }
     if (availability !== "available") {
+      setUserNameErr("Please choose a different username");
+      setLoading(false);
       return;
     }
 

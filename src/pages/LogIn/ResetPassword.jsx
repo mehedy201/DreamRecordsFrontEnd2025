@@ -1,6 +1,6 @@
 import { useState } from "react";
 import "./logIn.css";
-import { useForm } from "react-hook-form";
+import { set, useForm } from "react-hook-form";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import FormSubmitLoading from "../../components/FormSubmitLoading";
@@ -32,6 +32,7 @@ function ResetPassword() {
       setMessage(
         err.response?.data?.message || "Something went wrong. Try again."
       );
+      setLoading(false);
     } finally {
       setLoading(false);
     }

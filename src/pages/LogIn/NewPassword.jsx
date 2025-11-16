@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { set, useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
 import FormSubmitLoading from "../../components/FormSubmitLoading";
 
@@ -24,6 +24,7 @@ function NewPassword() {
       newPassword = data.password1;
     } else {
       setMessage("Password Not Match");
+      setLoading(false);
       return;
     }
 
