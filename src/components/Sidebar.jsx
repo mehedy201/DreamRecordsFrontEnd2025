@@ -30,7 +30,7 @@ const menuItems = [
   { name: "Home", path: "/", icon: homeIcon },
   { name: "Releases", path: "/releases/1/10/All", icon: releaseIcon },
   { name: "Artists", path: "/artist/1/10", icon: groupIcon },
-  { name: "Lables", path: "/labels/1/10/All", icon: labelsIcon },
+  { name: "Labels", path: "/labels/1/10/All", icon: labelsIcon },
   { name: "Analytics", path: "/analytics", icon: analyticsIcon },
   {
     name: "Service Request",
